@@ -1,0 +1,14 @@
+{
+	"type": "code",
+	"name": "Block Interactions Demo",
+	"modid": "interactions",
+	"version": "1.0.0",
+	
+	"description" : "Demo for the block interaction events.",
+	"website": "https://github.com/bluelightning32/vs-interactions-demo",
+	"authors": [ "bluelightning32" ],
+	
+	"dependencies": {
+		"game": "1.19.8"
+	}
+}
