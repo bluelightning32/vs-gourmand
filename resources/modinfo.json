@@ -1,11 +1,11 @@
 {
 	"type": "code",
-	"name": "Block Interactions Demo",
-	"modid": "interactions",
+	"name": "Gourmand",
+	"modid": "gourmand",
 	"version": "1.0.0",
 	
-	"description" : "Demo for the block interaction events.",
-	"website": "https://github.com/bluelightning32/vs-interactions-demo",
+	"description" : "Health buff for eating a greater variety of foods.",
+	"website": "https://github.com/bluelightning32/vs-gourmand",
 	"authors": [ "bluelightning32" ],
 	
 	"dependencies": {

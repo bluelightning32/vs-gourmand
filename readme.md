@@ -1,6 +1,6 @@
-# Vintage Story Block Interactions Demo
+# Gourmand Vintage Story Mod
 
-This mod shows which interaction events are fired when a block is right clicked.
+This mod gives the player a health buff after food diversity points are earned by eating foods that match food achievements.
 
 ## Building
 

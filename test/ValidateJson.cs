@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Interactions.Tests;
+namespace Gourmand.Tests;
 
 [TestClass]
 public class ValidateJson {

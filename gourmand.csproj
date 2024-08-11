@@ -9,7 +9,7 @@
   The build target can be overridden on the command line with the -target
   option. For example, the following builds the "Build" target, which skips the
   "Package" target:
-    dotnet build interactions.csproj -target:build -c Debug
+    dotnet build gourmand.csproj -target:build -c Debug
 
   By default dotnet will build the sln instead of the csproj. Every custom
   target gets lifted to the solution. However, the solution filters out the

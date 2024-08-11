@@ -5,9 +5,9 @@ using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
 
-namespace Interactions;
+namespace Gourmand;
 
-public class InteractionsSystem : ModSystem {
+public class GourmandSystem : ModSystem {
   private ICoreAPI _api;
   public override void Start(ICoreAPI api) {
     _api = api;
