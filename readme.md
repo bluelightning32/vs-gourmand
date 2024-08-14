@@ -1,3 +1,5 @@
+NOTE: this mod is in pre-alpha and missing most features
+
 # Gourmand Vintage Story Mod
 
 This mod gives the player a health buff after food diversity points are earned by eating foods that match food achievements.
