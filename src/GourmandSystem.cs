@@ -9,7 +9,5 @@ namespace Gourmand;
 
 public class GourmandSystem : ModSystem {
   private ICoreAPI _api;
-  public override void Start(ICoreAPI api) {
-    _api = api;
-  }
+  public override void Start(ICoreAPI api) { _api = api; }
 }
