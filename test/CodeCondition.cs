@@ -23,7 +23,7 @@ public class CodeCondition {
     Gourmand.CodeCondition cond =
         JsonObject.FromJson(json).AsObject<Gourmand.CodeCondition>(null,
                                                                    "gourmand");
-    Assert.AreEqual(Array.Empty<AssetLocation>(), cond.Output);
+    Assert.AreEqual(Array.Empty<AssetLocation>(), cond.Outputs);
     Assert.AreEqual(new AssetLocation("gourmand", "fruit"), cond.Match);
   }
 
@@ -93,10 +93,10 @@ public class CodeCondition {
     Gourmand.CodeCondition cond =
         JsonObject.FromJson(json).AsObject<Gourmand.CodeCondition>(null,
                                                                    "gourmand");
-    Dictionary<AssetLocation, IAttribute> categories =
+    Dictionary<AssetLocation, IAttribute[]> categories =
         new(cond.GetCategories(LoadAssets.GetItem("game", "fruit-pineapple")));
     CollectionAssert.AreEqual(
-        categories, Array.Empty<KeyValuePair<AssetLocation, IAttribute>>());
+        categories, Array.Empty<KeyValuePair<AssetLocation, IAttribute[]>>());
   }
 
   [TestMethod]
@@ -104,13 +104,13 @@ public class CodeCondition {
     string json = @"
     {
       match: ""game:fruit-*"",
-      output: [""category1"", ""category2""]
+      outputs: [""category1"", ""category2""]
     }
     ";
     Gourmand.CodeCondition cond =
         JsonObject.FromJson(json).AsObject<Gourmand.CodeCondition>(null,
                                                                    "gourmand");
-    Dictionary<AssetLocation, IAttribute> categories =
+    Dictionary<AssetLocation, IAttribute[]> categories =
         new(cond.GetCategories(LoadAssets.GetItem("game", "fruit-pineapple")));
     LoadAssets.AssertCategoriesEqual(
         new Dictionary<AssetLocation, IAttribute> {
@@ -127,15 +127,17 @@ public class CodeCondition {
     string json = @"
     {
       match: ""game:fruit-*"",
-      output: [""category1"", ""category2""]
+      outputs: [""category1"", ""category2""]
     }
     ";
     Gourmand.CodeCondition cond =
         JsonObject.FromJson(json).AsObject<Gourmand.CodeCondition>(null,
                                                                    "gourmand");
-    CollectionAssert.AreEquivalent(new List<AssetLocation>() {
+    CollectionAssert.AreEquivalent(
+        new List<AssetLocation>() {
           new("gourmand", "category1"),
           new("gourmand", "category2"),
-        }, cond.Categories.ToList());
+        },
+        cond.Categories.ToList());
   }
 }

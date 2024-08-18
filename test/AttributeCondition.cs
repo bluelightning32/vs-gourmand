@@ -25,7 +25,7 @@ public class AttributeCondition {
             null, "gourmand");
     CollectionAssert.AreEqual(Array.Empty<AssetLocation>(), cond.Path);
     Assert.AreEqual(null, cond.Value);
-    CollectionAssert.AreEqual(Array.Empty<AssetLocation>(), cond.Output);
+    CollectionAssert.AreEqual(Array.Empty<AssetLocation>(), cond.Outputs);
   }
 
   [TestMethod]
@@ -109,13 +109,13 @@ public class AttributeCondition {
     string json = @"
     {
       path: [""nutritionPropsWhenInMeal"", ""foodcategory""],
-      output: [""category1"", ""category2""]
+      outputs: [""category1"", ""category2""]
     }
     ";
     Gourmand.AttributeCondition cond =
         JsonObject.FromJson(json).AsObject<Gourmand.AttributeCondition>(
             null, "gourmand");
-    Dictionary<AssetLocation, IAttribute> categories =
+    Dictionary<AssetLocation, IAttribute[]> categories =
         new(cond.GetCategories(LoadAssets.GetItem("game", "fruit-pineapple")));
     LoadAssets.AssertCategoriesEqual(
         new Dictionary<AssetLocation, IAttribute> {

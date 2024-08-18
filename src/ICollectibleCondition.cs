@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-
 using System.Collections.Generic;
 
 using Vintagestory.API.Common;
@@ -14,7 +12,7 @@ public interface ICollectibleCondition {
   /// </summary>
   /// <param name="match">the collectible to check</param>
   /// <returns>an enumerable of all the categories and their values</returns>
-  public IEnumerable<KeyValuePair<AssetLocation, IAttribute>>
+  public IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>>
   GetCategories(CollectibleObject match);
 
   public IEnumerable<AssetLocation> Categories { get; }

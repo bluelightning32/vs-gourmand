@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using Vintagestory.API.Common;
+using Vintagestory.API.Datastructures;
 using Vintagestory.API.Util;
 
 namespace Gourmand;
@@ -14,6 +15,9 @@ public class MatchResolver {
   private Dictionary<string, List<Item>> _itemVariantsByPrefix;
   private Dictionary<string, List<Block>> _blockVariantsByPrefix;
   public readonly IWorldAccessor Resolver;
+  private readonly Dictionary<AssetLocation, IAttribute> _categories = new();
+  public IReadOnlyDictionary<AssetLocation, IAttribute> Categories =>
+      _categories;
 
   // An dictionary of all item variants, indexed by the first part of their code
   // (everything up to the first '-'). Only items that have a '-' in their code

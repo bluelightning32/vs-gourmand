@@ -15,14 +15,14 @@ public class CodeCondition : ICollectibleCondition {
   readonly public AssetLocation Match;
 
   [JsonProperty]
-  public readonly AssetLocation[] Output;
+  public readonly AssetLocation[] Outputs;
 
   public CodeCondition(AssetLocation match, AssetLocation[] output) {
     Match = match;
-    Output = output ?? Array.Empty<AssetLocation>();
+    Outputs = output ?? Array.Empty<AssetLocation>();
   }
 
-  public IEnumerable<AssetLocation> Categories => Output;
+  public IEnumerable<AssetLocation> Categories => Outputs;
 
   public void EnumerateMatches(MatchResolver resolver, EnumItemClass itemClass,
                                ref List<CollectibleObject> matches) {
@@ -33,11 +33,12 @@ public class CodeCondition : ICollectibleCondition {
     matches.RemoveAll((c) => !WildcardUtil.Match(Match, c.Code));
   }
 
-  public IEnumerable<KeyValuePair<AssetLocation, IAttribute>>
+  public IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>>
   GetCategories(CollectibleObject match) {
-    foreach (AssetLocation category in Output) {
-      yield return new KeyValuePair<AssetLocation, IAttribute>(
-          category, new StringAttribute(match.Code.ToString()));
+    foreach (AssetLocation category in Outputs) {
+      yield return new KeyValuePair<AssetLocation, IAttribute[]>(
+          category,
+          new IAttribute[1] { new StringAttribute(match.Code.ToString()) });
     }
   }
 }

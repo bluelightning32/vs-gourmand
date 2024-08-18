@@ -7,14 +7,13 @@ using Vintagestory.API.Datastructures;
 namespace Gourmand;
 
 abstract public class AggregateCondition : ICollectibleCondition {
-  public AggregateCondition() { }
+  public AggregateCondition() {}
 
   public abstract IEnumerable<ICollectibleCondition> Conditions { get; }
 
   public IEnumerable<AssetLocation> Categories {
     get {
-      IEnumerable<AssetLocation> result =
-          Enumerable.Empty<AssetLocation>();
+      IEnumerable<AssetLocation> result = Enumerable.Empty<AssetLocation>();
       foreach (ICollectibleCondition cond in Conditions) {
         result = Enumerable.Concat(result, cond.Categories);
       }
@@ -22,10 +21,10 @@ abstract public class AggregateCondition : ICollectibleCondition {
     }
   }
 
-  public IEnumerable<KeyValuePair<AssetLocation, IAttribute>>
+  public IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>>
   GetCategories(CollectibleObject match) {
-    IEnumerable<KeyValuePair<AssetLocation, IAttribute>> result =
-        Enumerable.Empty<KeyValuePair<AssetLocation, IAttribute>>();
+    IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>> result =
+        Enumerable.Empty<KeyValuePair<AssetLocation, IAttribute[]>>();
     foreach (ICollectibleCondition cond in Conditions) {
       result = Enumerable.Concat(result, cond.GetCategories(match));
     }

@@ -7,7 +7,6 @@ using System.Linq;
 
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
-using Vintagestory.API.Util;
 
 namespace Gourmand;
 
@@ -17,26 +16,26 @@ public class AttributeCondition : ICollectibleCondition {
   [JsonProperty]
   public readonly JToken Value;
   [JsonProperty]
-  public readonly AssetLocation[] Output;
+  public readonly AssetLocation[] Outputs;
 
-  public IEnumerable<AssetLocation> Categories => Output;
+  public IEnumerable<AssetLocation> Categories => Outputs;
 
   public AttributeCondition(string[] path, JToken value,
                             AssetLocation[] output) {
     Path = path;
     Value = value;
-    Output = output ?? Array.Empty<AssetLocation>();
+    Outputs = output ?? Array.Empty<AssetLocation>();
   }
 
-  public IEnumerable<KeyValuePair<AssetLocation, IAttribute>>
+  public IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>>
   GetCategories(CollectibleObject match) {
     JsonObject found = match.Attributes;
     foreach (string name in Path) {
       found = found[name];
     }
-    foreach (AssetLocation category in Output) {
-      yield return new KeyValuePair<AssetLocation, IAttribute>(
-          category, found.ToAttribute());
+    foreach (AssetLocation category in Outputs) {
+      yield return new KeyValuePair<AssetLocation, IAttribute[]>(
+          category, new IAttribute[1] { found.ToAttribute() });
     }
   }
 

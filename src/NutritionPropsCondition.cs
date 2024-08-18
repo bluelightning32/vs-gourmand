@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 using System;
 using System.Collections.Generic;
@@ -13,11 +12,11 @@ namespace Gourmand;
 
 abstract public class NutritionConditionBase : ICollectibleCondition {
   [JsonProperty]
-  public readonly AssetLocation[] Output;
+  public readonly AssetLocation[] Outputs;
 
-  public IEnumerable<AssetLocation> Categories => Output;
+  public IEnumerable<AssetLocation> Categories => Outputs;
 
-  public NutritionConditionBase(AssetLocation[] output) { Output = output; }
+  public NutritionConditionBase(AssetLocation[] output) { Outputs = output; }
 
   public void EnumerateMatches(MatchResolver resolver, EnumItemClass itemClass,
                                ref List<CollectibleObject> matches) {
@@ -35,11 +34,12 @@ abstract public class NutritionConditionBase : ICollectibleCondition {
   abstract public IAttribute
   GetCategoryValue(FoodNutritionProperties nutrition);
 
-  public IEnumerable<KeyValuePair<AssetLocation, IAttribute>>
+  public IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>>
   GetCategories(CollectibleObject match) {
-    foreach (AssetLocation category in Output) {
-      yield return new KeyValuePair<AssetLocation, IAttribute>(
-          category, GetCategoryValue(match.NutritionProps));
+    foreach (AssetLocation category in Outputs) {
+      yield return new KeyValuePair<AssetLocation, IAttribute[]>(
+          category,
+          new IAttribute[] { GetCategoryValue(match.NutritionProps) });
     }
   }
 }

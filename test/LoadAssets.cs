@@ -4,6 +4,7 @@ using PrefixClassName.MsTest;
 
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
+using Vintagestory.Common;
 using Vintagestory.Server;
 
 namespace Gourmand.Tests;
@@ -45,18 +46,27 @@ public class LoadAssets {
   }
 
   public static void AssertCategoriesEqual(
-      IEnumerable<KeyValuePair<AssetLocation, IAttribute>> expected,
-      IEnumerable<KeyValuePair<AssetLocation, IAttribute>> actual) {
+      IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>> expected,
+      IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>> actual) {
     CollectionAssert.AreEquivalent(
         expected
-            .Select<KeyValuePair<AssetLocation, IAttribute>,
+            .Select<KeyValuePair<AssetLocation, IAttribute[]>,
                     Tuple<AssetLocation, Type, string>>(
                 (p) => new(p.Key, p.Value.GetType(), p.Value.ToString()))
             .ToList(),
         actual
-            .Select<KeyValuePair<AssetLocation, IAttribute>,
+            .Select<KeyValuePair<AssetLocation, IAttribute[]>,
                     Tuple<AssetLocation, Type, string>>(
                 (p) => new(p.Key, p.Value.GetType(), p.Value.ToString()))
             .ToList());
+  }
+
+  public static void AssertCategoriesEqual(
+      IEnumerable<KeyValuePair<AssetLocation, IAttribute>> expected,
+      IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>> actual) {
+    AssertCategoriesEqual(
+        expected.Select((p) => new KeyValuePair<AssetLocation, IAttribute[]>(
+                            p.Key, new IAttribute[] { p.Value })),
+        actual);
   }
 }

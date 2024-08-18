@@ -131,18 +131,18 @@ public class NutritionPropsCondition {
     {{
       category: {{
         value: ""Fruit"",
-        output: [ ""category1"", ""category2"" ]
+        outputs: [ ""category1"", ""category2"" ]
       }},
       satiety: {{
         min: {pineapple.NutritionProps.Satiety},
         max: {pineapple.NutritionProps.Satiety},
-        output: [ ""category1"", ""category2"" ]
+        outputs: [ ""category1"", ""category2"" ]
       }}
     }}";
     Gourmand.NutritionPropsCondition cond =
         JsonObject.FromJson(json).AsObject<Gourmand.NutritionPropsCondition>(
             null, "gourmand");
-    IEnumerable<KeyValuePair<AssetLocation, IAttribute>> categories =
+    IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>> categories =
         cond.GetCategories(LoadAssets.GetItem("game", "fruit-pineapple"));
     LoadAssets.AssertCategoriesEqual(
         new List<KeyValuePair<AssetLocation, IAttribute>> {
