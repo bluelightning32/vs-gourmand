@@ -14,6 +14,7 @@
     <PackageReference Include="coverlet.collector" Version="3.1.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Moq" Version="4.20.70" />
+    <PackageReference Include="PrefixClassName.MsTest" Version="1.2.1" />
     <Reference Include="VintagestoryAPI">
       <HintPath>$(VINTAGE_STORY)/VintagestoryAPI.dll</HintPath>
       <Private>false</Private>
@@ -58,7 +59,7 @@
   <!--
     Add an empty target so that DllOnly builds just the main dll when run for
     the solution. -->
-  <Target Name="DllOnly"/>
+  <Target Name="DllOnly" />
 
   <Target Name="setproperties" BeforeTargets="VSTest">
     <PropertyGroup>

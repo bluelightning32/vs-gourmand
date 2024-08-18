@@ -2,16 +2,18 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Moq;
 
+using PrefixClassName.MsTest;
+
 using Vintagestory.API.Common;
 
 namespace Gourmand.Tests;
 
-[TestClass]
-public class MatchResolverTest {
+[PrefixTestClass]
+public class MatchResolver {
   private readonly Mock<IWorldAccessor> _mock = new Mock<IWorldAccessor>();
-  private readonly MatchResolver _resolver;
+  private readonly Gourmand.MatchResolver _resolver;
 
-  public MatchResolverTest() {
+  public MatchResolver() {
     _mock.Setup(x => x.GetItem(It.IsAny<AssetLocation>()))
         .Returns<AssetLocation>(LoadAssets.Server.GetItem);
     _mock.Setup(x => x.SearchItems(It.IsAny<AssetLocation>()))

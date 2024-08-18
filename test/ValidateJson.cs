@@ -3,9 +3,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
+using PrefixClassName.MsTest;
+
 namespace Gourmand.Tests;
 
-[TestClass]
+[PrefixTestClass]
 public class ValidateJson {
   // This property is set by the test framework:
   // https://learn.microsoft.com/en-us/visualstudio/test/how-to-create-a-data-driven-unit-test?view=vs-2022#add-a-testcontext-to-the-test-class
