@@ -19,6 +19,8 @@ public class AttributeCondition : ICollectibleCondition {
   [JsonProperty]
   public readonly AssetLocation[] Output;
 
+  public IEnumerable<AssetLocation> Categories => Output;
+
   public AttributeCondition(string[] path, JToken value,
                             AssetLocation[] output) {
     Path = path;

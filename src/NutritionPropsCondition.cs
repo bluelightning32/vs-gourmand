@@ -15,6 +15,8 @@ abstract public class NutritionConditionBase : ICollectibleCondition {
   [JsonProperty]
   public readonly AssetLocation[] Output;
 
+  public IEnumerable<AssetLocation> Categories => Output;
+
   public NutritionConditionBase(AssetLocation[] output) { Output = output; }
 
   public void EnumerateMatches(MatchResolver resolver, EnumItemClass itemClass,

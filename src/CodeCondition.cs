@@ -22,6 +22,8 @@ public class CodeCondition : ICollectibleCondition {
     Output = output ?? Array.Empty<AssetLocation>();
   }
 
+  public IEnumerable<AssetLocation> Categories => Output;
+
   public void EnumerateMatches(MatchResolver resolver, EnumItemClass itemClass,
                                ref List<CollectibleObject> matches) {
     if (matches == null) {

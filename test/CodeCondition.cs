@@ -121,4 +121,21 @@ public class CodeCondition {
         },
         categories);
   }
+
+  [TestMethod]
+  public void Categories2() {
+    string json = @"
+    {
+      match: ""game:fruit-*"",
+      output: [""category1"", ""category2""]
+    }
+    ";
+    Gourmand.CodeCondition cond =
+        JsonObject.FromJson(json).AsObject<Gourmand.CodeCondition>(null,
+                                                                   "gourmand");
+    CollectionAssert.AreEquivalent(new List<AssetLocation>() {
+          new("gourmand", "category1"),
+          new("gourmand", "category2"),
+        }, cond.Categories.ToList());
+  }
 }

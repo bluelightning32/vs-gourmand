@@ -17,6 +17,8 @@ public interface ICollectibleCondition {
   public IEnumerable<KeyValuePair<AssetLocation, IAttribute>>
   GetCategories(CollectibleObject match);
 
+  public IEnumerable<AssetLocation> Categories { get; }
+
   /// <summary>
   /// List collectibles that match this condition
   /// </summary>
