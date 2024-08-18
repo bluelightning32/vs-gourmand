@@ -18,7 +18,8 @@ public class LoadAssets {
   [AssemblyInitialize()]
   public static void AssemblyInitialize(TestContext context) {
     Dictionary<AssetCategory, HashSet<string>> allow = new();
-    allow[AssetCategory.itemtypes] = new() { "fruit.json", "firestarter.json" };
+    allow[AssetCategory.itemtypes] =
+        new() { "fruit.json", "firestarter.json", "fish.json" };
     allow[AssetCategory.blocktypes] = new() { "egg.json" };
     Server = ServerApiWithAssets.Create(allow);
   }
@@ -44,7 +45,7 @@ public class LoadAssets {
   }
 
   public static void AssertCategoriesEqual(
-      Dictionary<AssetLocation, IAttribute> expected,
+      IEnumerable<KeyValuePair<AssetLocation, IAttribute>> expected,
       IEnumerable<KeyValuePair<AssetLocation, IAttribute>> actual) {
     CollectionAssert.AreEquivalent(
         expected
