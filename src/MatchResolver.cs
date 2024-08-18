@@ -172,13 +172,10 @@ public class MatchResolver {
 
   public IReadOnlyList<CollectibleObject>
   GetMatchingCollectibles(AssetLocation wildcard, EnumItemClass itemClass) {
-    switch (itemClass) {
-    case EnumItemClass.Block:
-      return GetMatchingBlocks(wildcard);
-    case EnumItemClass.Item:
-      return GetMatchingItems(wildcard);
-    default:
-      throw new ArgumentException("Invalid enum value", "itemClass");
-    }
+    return itemClass switch {
+      EnumItemClass.Block => GetMatchingBlocks(wildcard),
+      EnumItemClass.Item => GetMatchingItems(wildcard),
+      _ => throw new ArgumentException("Invalid enum value", nameof(itemClass)),
+    };
   }
 }
