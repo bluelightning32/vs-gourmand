@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PrefixClassName.MsTest;
 
 using Vintagestory.API.Common;
+using Vintagestory.API.Datastructures;
 using Vintagestory.Server;
 
 namespace Gourmand.Tests;
@@ -40,5 +41,21 @@ public class LoadAssets {
     Assert.IsNotNull(pineapple);
     Assert.AreEqual(EnumFoodCategory.Fruit,
                     pineapple.NutritionProps.FoodCategory);
+  }
+
+  public static void AssertCategoriesEqual(
+      Dictionary<AssetLocation, IAttribute> expected,
+      IEnumerable<KeyValuePair<AssetLocation, IAttribute>> actual) {
+    CollectionAssert.AreEquivalent(
+        expected
+            .Select<KeyValuePair<AssetLocation, IAttribute>,
+                    Tuple<AssetLocation, Type, string>>(
+                (p) => new(p.Key, p.Value.GetType(), p.Value.ToString()))
+            .ToList(),
+        actual
+            .Select<KeyValuePair<AssetLocation, IAttribute>,
+                    Tuple<AssetLocation, Type, string>>(
+                (p) => new(p.Key, p.Value.GetType(), p.Value.ToString()))
+            .ToList());
   }
 }

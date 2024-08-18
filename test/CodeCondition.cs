@@ -23,7 +23,7 @@ public class CodeCondition {
     Gourmand.CodeCondition cond =
         JsonObject.FromJson(json).AsObject<Gourmand.CodeCondition>(null,
                                                                    "gourmand");
-    Assert.IsNull(cond.Output);
+    Assert.AreEqual(Array.Empty<AssetLocation>(), cond.Output);
     Assert.AreEqual(new AssetLocation("gourmand", "fruit"), cond.Match);
   }
 
@@ -84,7 +84,7 @@ public class CodeCondition {
   }
 
   [TestMethod]
-  public void GetMatchValue() {
+  public void GetCategoriesOutputEmpty() {
     string json = @"
     {
       match: ""game:fruit-*"",
@@ -93,9 +93,32 @@ public class CodeCondition {
     Gourmand.CodeCondition cond =
         JsonObject.FromJson(json).AsObject<Gourmand.CodeCondition>(null,
                                                                    "gourmand");
-    Assert.AreEqual(
-        new StringAttribute("game:fruit-pineapple").ToString(),
-        cond.GetMatchValue(LoadAssets.GetItem("game", "fruit-pineapple"))
-            .ToString());
+    Dictionary<AssetLocation, IAttribute> categories =
+        new(cond.GetCategories(LoadAssets.GetItem("game", "fruit-pineapple")));
+    CollectionAssert.AreEqual(
+        categories, Array.Empty<KeyValuePair<AssetLocation, IAttribute>>());
+  }
+
+  [TestMethod]
+  public void GetCategoriesOutput2() {
+    string json = @"
+    {
+      match: ""game:fruit-*"",
+      output: [""category1"", ""category2""]
+    }
+    ";
+    Gourmand.CodeCondition cond =
+        JsonObject.FromJson(json).AsObject<Gourmand.CodeCondition>(null,
+                                                                   "gourmand");
+    Dictionary<AssetLocation, IAttribute> categories =
+        new(cond.GetCategories(LoadAssets.GetItem("game", "fruit-pineapple")));
+    LoadAssets.AssertCategoriesEqual(
+        new Dictionary<AssetLocation, IAttribute> {
+          { new AssetLocation("gourmand", "category1"),
+            new StringAttribute("game:fruit-pineapple") },
+          { new AssetLocation("gourmand", "category2"),
+            new StringAttribute("game:fruit-pineapple") }
+        },
+        categories);
   }
 }
