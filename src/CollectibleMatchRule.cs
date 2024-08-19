@@ -28,6 +28,8 @@ public class CollectibleMatchRuleJson {
   [JsonProperty]
   public readonly CodeCondition Code;
   [JsonProperty]
+  public readonly CollectibleCategoryCondition[] Categories;
+  [JsonProperty]
   public readonly NutritionPropsCondition NutritionProp;
   [JsonProperty]
   public readonly AttributeCondition[] Attributes;
@@ -36,11 +38,13 @@ public class CollectibleMatchRuleJson {
   public CollectibleMatchRuleJson(
       float priority, IReadOnlyDictionary<string, JToken[]> rawOutputs,
       AssetLocation[] deletes, CodeCondition code,
+      CollectibleCategoryCondition[] categories,
       NutritionPropsCondition nutritionProp, AttributeCondition[] attributes) {
     Priority = priority;
     RawOutputs = rawOutputs ?? new Dictionary<string, JToken[]>();
     Deletes = deletes ?? Array.Empty<AssetLocation>();
     Code = code;
+    Categories = categories ?? Array.Empty<CollectibleCategoryCondition>();
     NutritionProp = nutritionProp;
     Attributes = attributes;
   }
@@ -50,6 +54,7 @@ public class CollectibleMatchRuleJson {
     RawOutputs = copy.RawOutputs;
     Deletes = copy.Deletes;
     Code = copy.Code;
+    Categories = copy.Categories;
     NutritionProp = copy.NutritionProp;
     Attributes = copy.Attributes;
   }
@@ -135,8 +140,9 @@ public class CollectibleMatchRule : CollectibleMatchRuleJson {
     Outputs = outputs;
     List<ICollectibleCondition> conditions = new() {
       Code,
-      NutritionProp,
     };
+    conditions.AddRange(Categories);
+    conditions.Add(NutritionProp);
     conditions.RemoveAll(c => c == null);
     if (Attributes != null) {
       conditions.AddRange(Attributes);
@@ -147,7 +153,7 @@ public class CollectibleMatchRule : CollectibleMatchRuleJson {
   /// <summary>
   /// All categories that this match rule produces.
   /// </summary>
-  public HashSet<AssetLocation> Categories {
+  public HashSet<AssetLocation> OutputCategories {
     get {
       List<IEnumerable<AssetLocation>> categoryLists =
           new() { Outputs.Select((p) => p.Key), Deletes,
@@ -157,7 +163,7 @@ public class CollectibleMatchRule : CollectibleMatchRuleJson {
   }
 
   public HashSet<AssetLocation> Dependencies {
-    get { return new(); }
+    get { return new(Categories.Select(c => c.Input)); }
   }
 
   public List<CollectibleObject> EnumerateMatches(MatchResolver resolver) {
