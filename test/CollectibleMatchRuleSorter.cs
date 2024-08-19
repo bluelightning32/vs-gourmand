@@ -39,13 +39,20 @@ public class CollectibleMatchRuleSorter {
     ]";
     List<Gourmand.CollectibleMatchRule> rules = ParseRules(json);
     Gourmand.CollectibleMatchRuleSorter sorter = new(rules);
-    // The first rule does not depend on anything. So it should be processed
-    // first.
-    Assert.AreEqual(rules[0], sorter.Result[0]);
-    Assert.AreEqual(rules[1], sorter.Result[1]);
+    void Validate() {
+      // The first rule does not depend on anything. So it should be processed
+      // first.
+      Assert.AreEqual(rules[0], sorter.Result[0].Rule);
+      Assert.AreEqual(new AssetLocation("gourmand", "cat1"),
+                      sorter.Result[1].Category);
+      Assert.AreEqual(rules[1], sorter.Result[2].Rule);
+      Assert.AreEqual(new AssetLocation("gourmand", "cat2"),
+                      sorter.Result[3].Category);
+    }
+    Validate();
+
     sorter = new(rules.AsEnumerable().Reverse());
-    Assert.AreEqual(rules[0], sorter.Result[0]);
-    Assert.AreEqual(rules[1], sorter.Result[1]);
+    Validate();
   }
 
   [TestMethod]
@@ -79,21 +86,33 @@ public class CollectibleMatchRuleSorter {
     List<Gourmand.CollectibleMatchRule> rules = ParseRules(json);
     Gourmand.CollectibleMatchRuleSorter sorter =
         new(rules.AsEnumerable().Reverse());
-    // The final rule does not depend on anything. So it should be processed
-    // first.
-    Assert.AreEqual(rules[3], sorter.Result[0]);
-    Assert.IsTrue(sorter.Result[1] == rules[1] || sorter.Result[1] == rules[2]);
-    Assert.IsTrue(sorter.Result[2] == rules[1] || sorter.Result[2] == rules[2]);
-    Assert.AreNotEqual(sorter.Result[1], sorter.Result[2]);
-    // The start rule depends on everything. So it should be processed last.
-    Assert.AreEqual(rules[0], sorter.Result[3]);
+    void Validate() {
+      // The final rule does not depend on anything. So it should be processed
+      // first.
+      Assert.AreEqual(rules[3], sorter.Result[0].Rule);
+      Assert.AreEqual(new AssetLocation("gourmand", "final"),
+                      sorter.Result[1].Category);
+      Assert.IsTrue(sorter.Result[2].Rule == rules[1] ||
+                    sorter.Result[2].Rule == rules[2]);
+      Assert.IsTrue(
+          sorter.Result[3].Category == new AssetLocation("gourmand", "a") ||
+          sorter.Result[3].Category == new AssetLocation("gourmand", "b"));
+      Assert.IsTrue(sorter.Result[4].Rule == rules[1] ||
+                    sorter.Result[4].Rule == rules[2]);
+      Assert.IsTrue(
+          sorter.Result[5].Category == new AssetLocation("gourmand", "a") ||
+          sorter.Result[5].Category == new AssetLocation("gourmand", "b"));
+      Assert.AreNotEqual(sorter.Result[2].Rule, sorter.Result[4].Rule);
+      Assert.AreNotEqual(sorter.Result[3].Category, sorter.Result[5].Category);
+      // The start rule depends on everything. So it should be processed last.
+      Assert.AreEqual(rules[0], sorter.Result[6].Rule);
+      Assert.AreEqual(new AssetLocation("gourmand", "start"),
+                      sorter.Result[7].Category);
+    }
+    Validate();
 
     sorter = new(rules);
-    Assert.AreEqual(rules[3], sorter.Result[0]);
-    Assert.IsTrue(sorter.Result[1] == rules[1] || sorter.Result[1] == rules[2]);
-    Assert.IsTrue(sorter.Result[2] == rules[1] || sorter.Result[2] == rules[2]);
-    Assert.AreNotEqual(sorter.Result[1], sorter.Result[2]);
-    Assert.AreEqual(rules[0], sorter.Result[3]);
+    Validate();
   }
 
   [TestMethod]
