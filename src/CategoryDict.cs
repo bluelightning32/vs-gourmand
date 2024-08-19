@@ -84,3 +84,52 @@ public class CategoryDict : IReadonlyCategoryDict {
     return _byObj.Get(ValueTuple.Create(c, category));
   }
 }
+
+public class CategoryDictAccumulator {
+  readonly Dictionary<AssetLocation,
+                      Dictionary<CollectibleObject, CategoryValue>> _byCat =
+      new();
+
+  public CategoryDictAccumulator() {}
+
+  public bool TryGetValue(AssetLocation category, CollectibleObject collectible,
+                          out CategoryValue value) {
+    if (!_byCat.TryGetValue(
+            category,
+            out Dictionary<CollectibleObject, CategoryValue> catDict)) {
+      value = default;
+      return false;
+    }
+    return catDict.TryGetValue(collectible, out value);
+  }
+
+  public CategoryValue Get(AssetLocation category,
+                           CollectibleObject collectible) {
+    if (!TryGetValue(category, collectible, out CategoryValue value)) {
+      return null;
+    }
+    return value;
+  }
+
+  public void Add(AssetLocation category, CollectibleObject collectible,
+                  CategoryValue value) {
+    if (!_byCat.TryGetValue(
+            category,
+            out Dictionary<CollectibleObject, CategoryValue> catDict)) {
+      catDict = new();
+      _byCat.Add(category, catDict);
+    }
+    catDict.Add(collectible, value);
+  }
+
+  public void Set(AssetLocation category, CollectibleObject collectible,
+                  CategoryValue value) {
+    if (!_byCat.TryGetValue(
+            category,
+            out Dictionary<CollectibleObject, CategoryValue> catDict)) {
+      catDict = new();
+      _byCat.Add(category, catDict);
+    }
+    catDict[collectible] = value;
+  }
+}

@@ -183,19 +183,18 @@ public class CollectibleMatchRule : CollectibleMatchRuleJson {
   /// output)</param>
   /// <exception cref="FormatException">a delete category
   /// conflicts with an output category</exception>
-  public void
-  UpdateCategories(CollectibleObject collectible,
-                   IReadonlyCategoryDict existingCategories,
-                   Dictionary<AssetLocation, CategoryValue> categories,
-                   HashSet<AssetLocation> emitted) {
+  public void UpdateCategories(CollectibleObject collectible,
+                               IReadonlyCategoryDict existingCategories,
+                               CategoryDictAccumulator categories,
+                               HashSet<AssetLocation> emitted) {
     emitted.Clear();
     foreach (KeyValuePair<AssetLocation, IAttribute[]> p in Outputs) {
-      UpdateCategory(categories, p.Key, p.Value, emitted);
+      UpdateCategory(categories, p.Key, collectible, p.Value, emitted);
     }
     foreach (ICollectibleCondition condition in Conditions) {
       foreach (KeyValuePair<AssetLocation, IAttribute[]> p in condition
                    .GetCategories(existingCategories, collectible)) {
-        UpdateCategory(categories, p.Key, p.Value, emitted);
+        UpdateCategory(categories, p.Key, collectible, p.Value, emitted);
       }
     }
     foreach (AssetLocation c in Deletes) {
@@ -203,23 +202,24 @@ public class CollectibleMatchRule : CollectibleMatchRuleJson {
         throw new FormatException(
             $"{c.ToString()} is listed to delete but already present in the same rule.");
       }
-      if (categories.TryGetValue(c, out CategoryValue value)) {
+      if (categories.TryGetValue(c, collectible, out CategoryValue value)) {
         if (value.Priority < Priority) {
           value.Priority = Priority;
           value.Value = null;
           emitted.Add(c);
         }
       } else {
-        categories.Add(c, new CategoryValue(Priority, null));
+        categories.Add(c, collectible, new CategoryValue(Priority, null));
       }
     }
   }
 
-  private void
-  UpdateCategory(Dictionary<AssetLocation, CategoryValue> categories,
-                 AssetLocation key, IAttribute[] value,
-                 HashSet<AssetLocation> emitted) {
-    if (categories.TryGetValue(key, out CategoryValue categoryValue)) {
+  private void UpdateCategory(CategoryDictAccumulator categories,
+                              AssetLocation key, CollectibleObject collectible,
+                              IAttribute[] value,
+                              HashSet<AssetLocation> emitted) {
+    if (categories.TryGetValue(key, collectible,
+                               out CategoryValue categoryValue)) {
       if (!emitted.Contains(key)) {
         // This rule has not touched this category yet.
         if (categoryValue.Priority >= Priority) {
@@ -234,7 +234,8 @@ public class CollectibleMatchRule : CollectibleMatchRuleJson {
         categoryValue.Value.AddRange(value);
       }
     } else {
-      categories.Add(key, new CategoryValue(Priority, value.ToList()));
+      categories.Add(key, collectible,
+                     new CategoryValue(Priority, value.ToList()));
       emitted.Add(key);
     }
   }
