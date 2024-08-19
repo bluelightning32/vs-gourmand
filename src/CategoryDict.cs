@@ -32,7 +32,8 @@ public class CategoryValue : IEquatable<CategoryValue> {
       return false;
     }
     for (int i = 0; i < Value.Count; ++i) {
-      // The attribute values have to be specially compared to avoid the StringAttribute Equals method, because it is broken.
+      // The attribute values have to be specially compared to avoid the
+      // StringAttribute Equals method, because it is broken.
       if (!Value[i].GetValue().Equals(other.Value[i].GetValue())) {
         return false;
       }

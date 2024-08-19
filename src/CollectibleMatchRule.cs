@@ -62,6 +62,26 @@ public class CollectibleMatchRuleJson {
 /// </summary>
 public class CollectibleMatchRuleConverter
     : JsonConverter<CollectibleMatchRule> {
+  private EnumItemClass _itemClass;
+
+  public static JsonSerializerSettings
+  AddConverter(EnumItemClass itemClass,
+               JsonSerializerSettings settings = null) {
+    settings ??= new();
+    foreach (JsonConverter converter in settings.Converters) {
+      if (converter is CollectibleMatchRuleConverter cconverter) {
+        cconverter._itemClass = itemClass;
+        return settings;
+      }
+    }
+    settings.Converters.Add(new CollectibleMatchRuleConverter(itemClass));
+    return settings;
+  }
+
+  public CollectibleMatchRuleConverter(EnumItemClass itemClass) {
+    _itemClass = itemClass;
+  }
+
   public override void WriteJson(JsonWriter writer, CollectibleMatchRule value,
                                  JsonSerializer serializer) {
     // This shouldn't be called because CanWrite returns false.
@@ -77,24 +97,35 @@ public class CollectibleMatchRuleConverter
     foreach (JsonConverter converter in serializer.Converters) {
       if (converter is AssetLocationJsonParser parser) {
         FieldInfo domainField =
-            typeof(AssetLocationJsonParser).GetField("domain", BindingFlags.Instance | BindingFlags.NonPublic);
+            typeof(AssetLocationJsonParser)
+                .GetField("domain",
+                          BindingFlags.Instance | BindingFlags.NonPublic);
         domain = (string)domainField.GetValue(converter);
       }
     }
-    return new CollectibleMatchRule(domain, json);
+    return new CollectibleMatchRule(_itemClass, domain, json);
   }
 
   public override bool CanWrite => false;
 }
 
-[JsonConverter(typeof(CollectibleMatchRuleConverter))]
 public class CollectibleMatchRule : CollectibleMatchRuleJson {
   readonly public IReadOnlyDictionary<AssetLocation, IAttribute[]> Outputs;
 
   public readonly IReadOnlyList<ICollectibleCondition> Conditions;
+  public readonly EnumItemClass ItemClass;
 
-  public CollectibleMatchRule(string domain, CollectibleMatchRuleJson json)
+  /// <summary>
+  /// Construct a CollectibleMatchRule. To create this from json, call
+  /// CollectibleMatchRuleConverter.AddConverter first.
+  /// </summary>
+  /// <param name="itemClass">whether this rule matches blocks or items</param>
+  /// <param name="domain">the default domain for assets</param>
+  /// <param name="json">the unresolved json data</param>
+  public CollectibleMatchRule(EnumItemClass itemClass, string domain,
+                              CollectibleMatchRuleJson json)
       : base(json) {
+    ItemClass = itemClass;
     Dictionary<AssetLocation, IAttribute[]> outputs = new(RawOutputs.Count);
     foreach (KeyValuePair<string, JToken[]> p in RawOutputs) {
       outputs.Add(
@@ -129,11 +160,10 @@ public class CollectibleMatchRule : CollectibleMatchRuleJson {
     get { return new(); }
   }
 
-  public List<CollectibleObject> EnumerateMatches(MatchResolver resolver,
-                                                  EnumItemClass itemClass) {
+  public List<CollectibleObject> EnumerateMatches(MatchResolver resolver) {
     List<CollectibleObject> matches = null;
     foreach (ICollectibleCondition condition in Conditions) {
-      condition.EnumerateMatches(resolver, itemClass, ref matches);
+      condition.EnumerateMatches(resolver, ItemClass, ref matches);
     }
     return matches;
   }

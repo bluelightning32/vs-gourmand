@@ -1,5 +1,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 using PrefixClassName.MsTest;
 
 using Vintagestory.API.Common;
@@ -21,8 +24,9 @@ public class CollectibleMatchRule {
     }
     ";
     Gourmand.CollectibleMatchRule rule =
-        JsonObject.FromJson(json).AsObject<Gourmand.CollectibleMatchRule>(
-            null, "gourmand");
+        JsonUtil.ToObject<Gourmand.CollectibleMatchRule>(
+            json, "gourmand",
+            CollectibleMatchRuleConverter.AddConverter(EnumItemClass.Item));
     Assert.AreEqual(1.0, rule.Priority);
     CollectionAssert.AreEqual(
         Array.Empty<KeyValuePair<AssetLocation, IAttribute[]>>(),
@@ -42,12 +46,12 @@ public class CollectibleMatchRule {
     }
     ";
     Gourmand.CollectibleMatchRule rule =
-        JsonObject.FromJson(json).AsObject<Gourmand.CollectibleMatchRule>(
-            null, "gourmand");
+        JsonUtil.ToObject<Gourmand.CollectibleMatchRule>(
+            json, "gourmand",
+            CollectibleMatchRuleConverter.AddConverter(EnumItemClass.Item));
     LoadAssets.AssertCategoriesEqual(
         new Dictionary<AssetLocation, IAttribute> {
-          { new ("gourmand", "category"),
-            new StringAttribute("value") }
+          { new("gourmand", "category"), new StringAttribute("value") }
         },
         rule.Outputs);
   }
@@ -63,10 +67,10 @@ public class CollectibleMatchRule {
     }
     ";
     Gourmand.CollectibleMatchRule rule =
-        JsonObject.FromJson(json).AsObject<Gourmand.CollectibleMatchRule>(
-            null, "gourmand");
-    List<CollectibleObject> matches =
-        rule.EnumerateMatches(_resolver, EnumItemClass.Item);
+        JsonUtil.ToObject<Gourmand.CollectibleMatchRule>(
+            json, "gourmand",
+            CollectibleMatchRuleConverter.AddConverter(EnumItemClass.Item));
+    List<CollectibleObject> matches = rule.EnumerateMatches(_resolver);
 
     CollectionAssert.Contains(matches,
                               LoadAssets.GetItem("game", "fruit-pineapple"));
@@ -88,8 +92,9 @@ public class CollectibleMatchRule {
     }
     ";
     Gourmand.CollectibleMatchRule rule =
-        JsonObject.FromJson(json).AsObject<Gourmand.CollectibleMatchRule>(
-            null, "gourmand");
+        JsonUtil.ToObject<Gourmand.CollectibleMatchRule>(
+            json, "gourmand",
+            CollectibleMatchRuleConverter.AddConverter(EnumItemClass.Item));
     Dictionary<AssetLocation, CategoryValue> categories =
         new() { { new AssetLocation("gourmand", "category"),
                   new CategoryValue(2, null) } };
@@ -115,8 +120,9 @@ public class CollectibleMatchRule {
     }
     ";
     Gourmand.CollectibleMatchRule rule =
-        JsonObject.FromJson(json).AsObject<Gourmand.CollectibleMatchRule>(
-            null, "gourmand");
+        JsonUtil.ToObject<Gourmand.CollectibleMatchRule>(
+            json, "gourmand",
+            CollectibleMatchRuleConverter.AddConverter(EnumItemClass.Item));
     Dictionary<AssetLocation, CategoryValue> categories =
         new() { { new AssetLocation("gourmand", "category"),
                   new CategoryValue(0, null) } };
@@ -126,15 +132,16 @@ public class CollectibleMatchRule {
         new AssetLocation[] { new("gourmand", "category"),
                               new("gourmand", "category2") },
         emitted.ToList());
-    Assert.AreEqual(new CategoryValue(1, new List<IAttribute>() {
-                      new StringAttribute("value"),
-                      new StringAttribute("game:fruit-pineapple")
-                    }),
-                    categories[new AssetLocation("gourmand", "category")]);
+    Assert.AreEqual(
+        new CategoryValue(
+            1, new List<IAttribute>() { new StringAttribute("value"),
+                                        new StringAttribute(
+                                            "game:fruit-pineapple") }),
+        categories[new AssetLocation("gourmand", "category")]);
     Assert.AreEqual(
         new CategoryValue(
             1, new List<IAttribute>() { new StringAttribute("value2") }),
-            categories[new AssetLocation("gourmand", "category2")]);
+        categories[new AssetLocation("gourmand", "category2")]);
   }
 
   [TestMethod]
@@ -150,23 +157,24 @@ public class CollectibleMatchRule {
     }
     ";
     Gourmand.CollectibleMatchRule rule =
-        JsonObject.FromJson(json).AsObject<Gourmand.CollectibleMatchRule>(
-            null, "gourmand");
-    Dictionary<AssetLocation, CategoryValue> categories =
-        new() { { new AssetLocation("gourmand", "category2"),
-                  new CategoryValue(0, new List<IAttribute>() {
-                      new StringAttribute("value")
-                    }) } };
+        JsonUtil.ToObject<Gourmand.CollectibleMatchRule>(
+            json, "gourmand",
+            CollectibleMatchRuleConverter.AddConverter(EnumItemClass.Item));
+    Dictionary<AssetLocation, CategoryValue> categories = new() {
+      { new AssetLocation("gourmand", "category2"),
+        new CategoryValue(
+            0, new List<IAttribute>() { new StringAttribute("value") }) }
+    };
     HashSet<AssetLocation> emitted = new();
     rule.UpdateCategories(pineapple, categories, emitted);
     CollectionAssert.AreEquivalent(
         new AssetLocation[] { new("gourmand", "category"),
                               new("gourmand", "category2") },
         emitted.ToList());
-    Assert.AreEqual(new CategoryValue(1, new List<IAttribute>() {
-                      new StringAttribute("game:fruit-pineapple")
-                    }),
-                    categories[new AssetLocation("gourmand", "category")]);
+    Assert.AreEqual(
+        new CategoryValue(1, new List<IAttribute>() { new StringAttribute(
+                                 "game:fruit-pineapple") }),
+        categories[new AssetLocation("gourmand", "category")]);
     Assert.AreEqual(new CategoryValue(1, null),
                     categories[new AssetLocation("gourmand", "category2")]);
   }
