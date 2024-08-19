@@ -156,7 +156,7 @@ public class CollectibleMatchRule : CollectibleMatchRuleJson {
     }
   }
 
-  public List<AssetLocation> Dependencies {
+  public HashSet<AssetLocation> Dependencies {
     get { return new(); }
   }
 
@@ -179,6 +179,7 @@ public class CollectibleMatchRule : CollectibleMatchRuleJson {
   /// conflicts with an output category</exception>
   public void
   UpdateCategories(CollectibleObject collectible,
+                   IReadonlyCategoryDict existingCategories,
                    Dictionary<AssetLocation, CategoryValue> categories,
                    HashSet<AssetLocation> emitted) {
     emitted.Clear();
@@ -187,7 +188,7 @@ public class CollectibleMatchRule : CollectibleMatchRuleJson {
     }
     foreach (ICollectibleCondition condition in Conditions) {
       foreach (KeyValuePair<AssetLocation, IAttribute[]> p in condition
-                   .GetCategories(collectible)) {
+                   .GetCategories(existingCategories, collectible)) {
         UpdateCategory(categories, p.Key, p.Value, emitted);
       }
     }

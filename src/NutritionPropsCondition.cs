@@ -35,7 +35,7 @@ abstract public class NutritionConditionBase : ICollectibleCondition {
   GetCategoryValue(FoodNutritionProperties nutrition);
 
   public IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>>
-  GetCategories(CollectibleObject match) {
+  GetCategories(IReadonlyCategoryDict catdict, CollectibleObject match) {
     foreach (AssetLocation category in Outputs) {
       yield return new KeyValuePair<AssetLocation, IAttribute[]>(
           category,

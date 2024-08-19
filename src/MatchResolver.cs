@@ -18,6 +18,8 @@ public class MatchResolver {
   private readonly Dictionary<AssetLocation, IAttribute> _categories = new();
   public IReadOnlyDictionary<AssetLocation, IAttribute> Categories =>
       _categories;
+  private readonly CategoryDict _catdict = new();
+  public IReadonlyCategoryDict CatDict => _catdict;
 
   // An dictionary of all item variants, indexed by the first part of their code
   // (everything up to the first '-'). Only items that have a '-' in their code

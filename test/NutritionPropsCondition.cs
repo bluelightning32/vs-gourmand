@@ -143,7 +143,8 @@ public class NutritionPropsCondition {
         JsonObject.FromJson(json).AsObject<Gourmand.NutritionPropsCondition>(
             null, "gourmand");
     IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>> categories =
-        cond.GetCategories(LoadAssets.GetItem("game", "fruit-pineapple"));
+        cond.GetCategories(_resolver.CatDict,
+                           LoadAssets.GetItem("game", "fruit-pineapple"));
     LoadAssets.AssertCategoriesEqual(
         new List<KeyValuePair<AssetLocation, IAttribute>> {
           new(new AssetLocation("gourmand", "category1"),

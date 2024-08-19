@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
+using Vintagestory.API.Util;
 
 namespace Gourmand;
 
@@ -58,5 +60,27 @@ public class CategoryValue : IEquatable<CategoryValue> {
     }
     builder.Append("]}");
     return builder.ToString();
+  }
+}
+
+public interface IReadonlyCategoryDict {
+  /// <summary>
+  /// Look up the value of a category for the given collectible.
+  /// </summary>
+  /// <param name="c">the item/block to look up the category value for</param>
+  /// <param name="category">the category to look up</param>
+  /// <returns>the value, or null if the collectible does not match the
+  /// category</returns>
+  CategoryValue GetValue(CollectibleObject c, AssetLocation category);
+}
+
+public class CategoryDict : IReadonlyCategoryDict {
+  readonly Dictionary<ValueTuple<CollectibleObject, AssetLocation>,
+                      CategoryValue> _byObj = new();
+
+  public CategoryDict() {}
+
+  public CategoryValue GetValue(CollectibleObject c, AssetLocation category) {
+    return _byObj.Get(ValueTuple.Create(c, category));
   }
 }
