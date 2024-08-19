@@ -35,13 +35,11 @@ public class CollectibleCategoryCondition : ICollectibleCondition {
 
   public void EnumerateMatches(MatchResolver resolver, EnumItemClass itemClass,
                                ref List<CollectibleObject> matches) {
-    matches ??= itemClass switch {
-      EnumItemClass.Block =>
-          resolver.Resolver.Blocks.ToList<CollectibleObject>(),
-      EnumItemClass.Item => resolver.Resolver.Items.ToList<CollectibleObject>(),
-      _ => throw new ArgumentException("Invalid enum value", nameof(itemClass)),
-    };
-    matches.RemoveAll((c) => !IsMatch(resolver.CatDict, c));
+    if (matches == null) {
+      matches = resolver.CatDict.EnumerateMatches(Input).ToList();
+    } else {
+      matches.RemoveAll((c) => !IsMatch(resolver.CatDict, c));
+    }
   }
 
   private bool IsMatch(IReadonlyCategoryDict catdict, CollectibleObject c) {

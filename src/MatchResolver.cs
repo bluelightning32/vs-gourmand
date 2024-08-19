@@ -15,9 +15,6 @@ public class MatchResolver {
   private Dictionary<string, List<Item>> _itemVariantsByPrefix;
   private Dictionary<string, List<Block>> _blockVariantsByPrefix;
   public readonly IWorldAccessor Resolver;
-  private readonly Dictionary<AssetLocation, IAttribute> _categories = new();
-  public IReadOnlyDictionary<AssetLocation, IAttribute> Categories =>
-      _categories;
   private readonly CategoryDict _catdict = new();
   public IReadonlyCategoryDict CatDict => _catdict;
 

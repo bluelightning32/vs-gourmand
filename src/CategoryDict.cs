@@ -72,16 +72,37 @@ public interface IReadonlyCategoryDict {
   /// <returns>the value, or null if the collectible does not match the
   /// category</returns>
   CategoryValue GetValue(CollectibleObject c, AssetLocation category);
+
+  /// <summary>
+  /// Find all collectible objects that match any value in a category.
+  /// </summary>
+  /// <param name="category">the category to search</param>
+  /// <returns>an enumeration of the matching collectibles</returns>
+  IEnumerable<CollectibleObject> EnumerateMatches(AssetLocation category);
 }
 
 public class CategoryDict : IReadonlyCategoryDict {
   readonly Dictionary<ValueTuple<CollectibleObject, AssetLocation>,
                       CategoryValue> _byObj = new();
 
+  readonly Dictionary<AssetLocation,
+                      Dictionary<CategoryValue, CollectibleObject>> _byCat =
+      new();
+
   public CategoryDict() {}
 
   public CategoryValue GetValue(CollectibleObject c, AssetLocation category) {
     return _byObj.Get(ValueTuple.Create(c, category));
+  }
+
+  public IEnumerable<CollectibleObject>
+  EnumerateMatches(AssetLocation category) {
+    if (!_byCat.TryGetValue(
+            category,
+            out Dictionary<CategoryValue, CollectibleObject> byValue)) {
+      return Array.Empty<CollectibleObject>();
+    }
+    return byValue.Values;
   }
 }
 
