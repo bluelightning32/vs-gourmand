@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 using System;
 using System.Collections.Generic;
@@ -26,7 +25,7 @@ public class CollectibleCategoryCondition : ICollectibleCondition {
 
   public IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>>
   GetCategories(IReadonlyCategoryDict catdict, CollectibleObject match) {
-    CategoryValue value = catdict.GetValue(match, Input);
+    CategoryValue value = catdict.GetValue(Input, match);
     foreach (AssetLocation category in Outputs) {
       yield return new KeyValuePair<AssetLocation, IAttribute[]>(
           category, value.Value.ToArray());
@@ -43,6 +42,6 @@ public class CollectibleCategoryCondition : ICollectibleCondition {
   }
 
   private bool IsMatch(IReadonlyCategoryDict catdict, CollectibleObject c) {
-    return catdict.GetValue(c, Input)?.Value != null;
+    return catdict.GetValue(Input, c)?.Value != null;
   }
 }

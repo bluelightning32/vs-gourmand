@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 
 using Vintagestory.API.Common;
-using Vintagestory.API.Datastructures;
 using Vintagestory.API.Util;
 
 namespace Gourmand;
@@ -180,5 +179,29 @@ public class MatchResolver {
       EnumItemClass.Item => GetMatchingItems(wildcard),
       _ => throw new ArgumentException("Invalid enum value", nameof(itemClass)),
     };
+  }
+
+  /// <summary>
+  /// Loads the result of the rules into <see cref="CatDict"/>. It is
+  /// recommended to only load rules once. If another set of rules are loaded,
+  /// then they must affect different collectibles than the previously loaded
+  /// rules.
+  /// </summary>
+  /// <param name="rules">The rules to load</param>
+  public void Load(IEnumerable<CollectibleMatchRule> rules) {
+    CollectibleMatchRuleSorter sorter = new(rules);
+    CategoryDict accum = new();
+    HashSet<AssetLocation> emitted = new();
+    foreach (RuleOrCategory entry in sorter.Result) {
+      if (entry.Rule != null) {
+        foreach (CollectibleObject collectible in entry.Rule.EnumerateMatches(
+                     this)) {
+          entry.Rule.UpdateCategories(collectible, CatDict, accum, emitted);
+        }
+      }
+      if (entry.Category != null) {
+        accum.Transfer(entry.Category, _catdict);
+      }
+    }
   }
 }

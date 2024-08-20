@@ -67,11 +67,11 @@ public interface IReadonlyCategoryDict {
   /// <summary>
   /// Look up the value of a category for the given collectible.
   /// </summary>
-  /// <param name="c">the item/block to look up the category value for</param>
   /// <param name="category">the category to look up</param>
+  /// <param name="c">the item/block to look up the category value for</param>
   /// <returns>the value, or null if the collectible does not match the
   /// category</returns>
-  CategoryValue GetValue(CollectibleObject c, AssetLocation category);
+  CategoryValue GetValue(AssetLocation category, CollectibleObject c);
 
   /// <summary>
   /// Find all collectible objects that match any value in a category.
@@ -82,54 +82,50 @@ public interface IReadonlyCategoryDict {
 }
 
 public class CategoryDict : IReadonlyCategoryDict {
-  readonly Dictionary<ValueTuple<CollectibleObject, AssetLocation>,
-                      CategoryValue> _byObj = new();
-
   readonly Dictionary<AssetLocation,
-                      Dictionary<CategoryValue, CollectibleObject>> _byCat =
+                      Dictionary<CollectibleObject, CategoryValue>> _byCat =
       new();
 
   public CategoryDict() {}
 
-  public CategoryValue GetValue(CollectibleObject c, AssetLocation category) {
-    return _byObj.Get(ValueTuple.Create(c, category));
+  public CategoryValue GetValue(AssetLocation category, CollectibleObject c) {
+    if (!_byCat.TryGetValue(
+            category,
+            out Dictionary<CollectibleObject, CategoryValue> collectibles)) {
+      return null;
+    }
+    return collectibles.Get(c);
   }
 
   public IEnumerable<CollectibleObject>
   EnumerateMatches(AssetLocation category) {
     if (!_byCat.TryGetValue(
             category,
-            out Dictionary<CategoryValue, CollectibleObject> byValue)) {
-      return Array.Empty<CollectibleObject>();
+            out Dictionary<CollectibleObject, CategoryValue> collectibles)) {
+      yield break;
     }
-    return byValue.Values;
-  }
-}
-
-public class CategoryDictAccumulator {
-  readonly Dictionary<AssetLocation,
-                      Dictionary<CollectibleObject, CategoryValue>> _byCat =
-      new();
-
-  public CategoryDictAccumulator() {}
-
-  public bool TryGetValue(AssetLocation category, CollectibleObject collectible,
-                          out CategoryValue value) {
-    if (!_byCat.TryGetValue(
-            category,
-            out Dictionary<CollectibleObject, CategoryValue> catDict)) {
-      value = default;
-      return false;
+    foreach (KeyValuePair<CollectibleObject, CategoryValue> kv in
+                 collectibles) {
+      // Deleted categories have a null value.
+      if (kv.Value.Value != null) {
+        yield return kv.Key;
+      }
     }
-    return catDict.TryGetValue(collectible, out value);
   }
 
-  public CategoryValue Get(AssetLocation category,
-                           CollectibleObject collectible) {
-    if (!TryGetValue(category, collectible, out CategoryValue value)) {
-      return null;
-    }
-    return value;
+  /// <summary>
+  /// Add new entries to the dictionary. These category-collectible combinations
+  /// must not already exist in the dictionary.
+  /// </summary>
+  /// <param name="category">
+  ///   the category that all of the collectibles belong to
+  /// </param>
+  /// <param name="collectibles">
+  ///   the collectible in the category along with its category value
+  /// </param>
+  public void Add(AssetLocation category,
+                  Dictionary<CollectibleObject, CategoryValue> collectibles) {
+    _byCat.Add(category, collectibles);
   }
 
   public void Add(AssetLocation category, CollectibleObject collectible,
@@ -152,5 +148,13 @@ public class CategoryDictAccumulator {
       _byCat.Add(category, catDict);
     }
     catDict[collectible] = value;
+  }
+
+  public void Transfer(AssetLocation category, CategoryDict to) {
+    if (_byCat.Remove(
+            category,
+            out Dictionary<CollectibleObject, CategoryValue> collectibles)) {
+      to.Add(category, collectibles);
+    }
   }
 }

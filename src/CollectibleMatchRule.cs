@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -178,23 +177,24 @@ public class CollectibleMatchRule : CollectibleMatchRuleJson {
   /// Update the categories dictionary for a matched collectible.
   /// </summary>
   /// <param name="collectible">the collectible that matches this rule</param>
-  /// <param name="categories">the collectible's category dictionary</param>
+  /// <param name="existingCategories">the already processed, immutable
+  /// categories</param> <param name="accum">the categories to update</param>
   /// <param name="emitted">the set of categories modified by this rule (on
   /// output)</param>
   /// <exception cref="FormatException">a delete category
   /// conflicts with an output category</exception>
   public void UpdateCategories(CollectibleObject collectible,
                                IReadonlyCategoryDict existingCategories,
-                               CategoryDictAccumulator categories,
+                               CategoryDict accum,
                                HashSet<AssetLocation> emitted) {
     emitted.Clear();
     foreach (KeyValuePair<AssetLocation, IAttribute[]> p in Outputs) {
-      UpdateCategory(categories, p.Key, collectible, p.Value, emitted);
+      UpdateCategory(accum, p.Key, collectible, p.Value, emitted);
     }
     foreach (ICollectibleCondition condition in Conditions) {
       foreach (KeyValuePair<AssetLocation, IAttribute[]> p in condition
                    .GetCategories(existingCategories, collectible)) {
-        UpdateCategory(categories, p.Key, collectible, p.Value, emitted);
+        UpdateCategory(accum, p.Key, collectible, p.Value, emitted);
       }
     }
     foreach (AssetLocation c in Deletes) {
@@ -202,24 +202,24 @@ public class CollectibleMatchRule : CollectibleMatchRuleJson {
         throw new FormatException(
             $"{c.ToString()} is listed to delete but already present in the same rule.");
       }
-      if (categories.TryGetValue(c, collectible, out CategoryValue value)) {
+      CategoryValue value = accum.GetValue(c, collectible);
+      if (value != null) {
         if (value.Priority < Priority) {
           value.Priority = Priority;
           value.Value = null;
           emitted.Add(c);
         }
       } else {
-        categories.Add(c, collectible, new CategoryValue(Priority, null));
+        accum.Add(c, collectible, new CategoryValue(Priority, null));
       }
     }
   }
 
-  private void UpdateCategory(CategoryDictAccumulator categories,
-                              AssetLocation key, CollectibleObject collectible,
-                              IAttribute[] value,
+  private void UpdateCategory(CategoryDict accum, AssetLocation key,
+                              CollectibleObject collectible, IAttribute[] value,
                               HashSet<AssetLocation> emitted) {
-    if (categories.TryGetValue(key, collectible,
-                               out CategoryValue categoryValue)) {
+    CategoryValue categoryValue = accum.GetValue(key, collectible);
+    if (categoryValue != null) {
       if (!emitted.Contains(key)) {
         // This rule has not touched this category yet.
         if (categoryValue.Priority >= Priority) {
@@ -234,8 +234,7 @@ public class CollectibleMatchRule : CollectibleMatchRuleJson {
         categoryValue.Value.AddRange(value);
       }
     } else {
-      categories.Add(key, collectible,
-                     new CategoryValue(Priority, value.ToList()));
+      accum.Add(key, collectible, new CategoryValue(Priority, value.ToList()));
       emitted.Add(key);
     }
   }

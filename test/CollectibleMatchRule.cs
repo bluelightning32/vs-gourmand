@@ -95,16 +95,16 @@ public class CollectibleMatchRule {
         JsonUtil.ToObject<Gourmand.CollectibleMatchRule>(
             json, "gourmand",
             CollectibleMatchRuleConverter.AddConverter(EnumItemClass.Item));
-    CategoryDictAccumulator categories = new();
+    CategoryDict categories = new();
     categories.Set(new AssetLocation("gourmand", "category"), pineapple,
                    new CategoryValue(2, null));
     HashSet<AssetLocation> emitted = new();
     rule.UpdateCategories(pineapple, _resolver.CatDict, categories, emitted);
     CollectionAssert.DoesNotContain(emitted.ToList(),
                                     new AssetLocation("gourmand", "category"));
-    Assert.AreEqual(
-        categories.Get(new AssetLocation("gourmand", "category"), pineapple),
-        new CategoryValue(2, null));
+    Assert.AreEqual(categories.GetValue(
+                        new AssetLocation("gourmand", "category"), pineapple),
+                    new CategoryValue(2, null));
   }
 
   [TestMethod]
@@ -124,7 +124,7 @@ public class CollectibleMatchRule {
         JsonUtil.ToObject<Gourmand.CollectibleMatchRule>(
             json, "gourmand",
             CollectibleMatchRuleConverter.AddConverter(EnumItemClass.Item));
-    CategoryDictAccumulator categories = new();
+    CategoryDict categories = new();
     categories.Set(new AssetLocation("gourmand", "category"), pineapple,
                    new CategoryValue(0, null));
     HashSet<AssetLocation> emitted = new();
@@ -138,11 +138,13 @@ public class CollectibleMatchRule {
             1, new List<IAttribute>() { new StringAttribute("value"),
                                         new StringAttribute(
                                             "game:fruit-pineapple") }),
-        categories.Get(new AssetLocation("gourmand", "category"), pineapple));
+        categories.GetValue(new AssetLocation("gourmand", "category"),
+                            pineapple));
     Assert.AreEqual(
         new CategoryValue(
             1, new List<IAttribute>() { new StringAttribute("value2") }),
-        categories.Get(new AssetLocation("gourmand", "category2"), pineapple));
+        categories.GetValue(new AssetLocation("gourmand", "category2"),
+                            pineapple));
   }
 
   [TestMethod]
@@ -161,7 +163,7 @@ public class CollectibleMatchRule {
         JsonUtil.ToObject<Gourmand.CollectibleMatchRule>(
             json, "gourmand",
             CollectibleMatchRuleConverter.AddConverter(EnumItemClass.Item));
-    CategoryDictAccumulator categories = new();
+    CategoryDict categories = new();
     categories.Set(
         new AssetLocation("gourmand", "category2"), pineapple,
         new CategoryValue(
@@ -175,9 +177,10 @@ public class CollectibleMatchRule {
     Assert.AreEqual(
         new CategoryValue(1, new List<IAttribute>() { new StringAttribute(
                                  "game:fruit-pineapple") }),
-        categories.Get(new AssetLocation("gourmand", "category"), pineapple));
-    Assert.AreEqual(
-        new CategoryValue(1, null),
-        categories.Get(new AssetLocation("gourmand", "category2"), pineapple));
+        categories.GetValue(new AssetLocation("gourmand", "category"),
+                            pineapple));
+    Assert.AreEqual(new CategoryValue(1, null),
+                    categories.GetValue(
+                        new AssetLocation("gourmand", "category2"), pineapple));
   }
 }
