@@ -124,8 +124,8 @@ public class CollectibleCategoryCondition {
         _resolver.CatDict, LoadAssets.GetItem("game", "fruit-pineapple")));
     LoadAssets.AssertCategoriesEqual(
         new Dictionary<AssetLocation, IAttribute> {
-          { new AssetLocation("gourmand", "output1"), new IntAttribute(11) },
-          { new AssetLocation("gourmand", "output2"), new IntAttribute(11) }
+          { new AssetLocation("gourmand", "output1"), new LongAttribute(11) },
+          { new AssetLocation("gourmand", "output2"), new LongAttribute(11) }
         },
         categories);
   }

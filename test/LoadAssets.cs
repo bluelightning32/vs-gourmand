@@ -51,13 +51,13 @@ public class LoadAssets {
     CollectionAssert.AreEquivalent(
         expected
             .Select<KeyValuePair<AssetLocation, IAttribute[]>,
-                    Tuple<AssetLocation, Type, string>>(
-                (p) => new(p.Key, p.Value.GetType(), p.Value.ToString()))
+                    KeyValuePair<AssetLocation, CategoryValue>>(
+                (p) => new(p.Key, new(1, p.Value.ToList())))
             .ToList(),
         actual
             .Select<KeyValuePair<AssetLocation, IAttribute[]>,
-                    Tuple<AssetLocation, Type, string>>(
-                (p) => new(p.Key, p.Value.GetType(), p.Value.ToString()))
+                    KeyValuePair<AssetLocation, CategoryValue>>(
+                (p) => new(p.Key, new(1, p.Value.ToList())))
             .ToList());
   }
 

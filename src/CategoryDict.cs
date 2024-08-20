@@ -24,23 +24,7 @@ public class CategoryValue : IEquatable<CategoryValue> {
     if (Priority != other.Priority) {
       return false;
     }
-    if (Value == null) {
-      return other.Value == null;
-    }
-    if (other.Value == null) {
-      return false;
-    }
-    if (Value.Count != other.Value.Count) {
-      return false;
-    }
-    for (int i = 0; i < Value.Count; ++i) {
-      // The attribute values have to be specially compared to avoid the
-      // StringAttribute Equals method, because it is broken.
-      if (!Value[i].GetValue().Equals(other.Value[i].GetValue())) {
-        return false;
-      }
-    }
-    return true;
+    return ValuesEqual(Value, other.Value);
   }
 
   public override bool Equals(object obj) {
@@ -61,6 +45,37 @@ public class CategoryValue : IEquatable<CategoryValue> {
     builder.Append("]}");
     return builder.ToString();
   }
+
+  public static bool ValuesEqual(IReadOnlyCollection<IAttribute> value1,
+                                 IReadOnlyCollection<IAttribute> value2) {
+    if (value1 == null) {
+      return value2 == null;
+    }
+    if (value2 == null) {
+      return false;
+    }
+
+    using IEnumerator<IAttribute> enum1 = value1.GetEnumerator();
+    using IEnumerator<IAttribute> enum2 = value2.GetEnumerator();
+    // Before the first call to enum.MoveNext, enum1.Current points before the
+    // first element and is invalid.
+    while (enum1.MoveNext()) {
+      if (!enum2.MoveNext()) {
+        // enum1 has more elements than enum2
+        return false;
+      }
+      // The attribute values have to be specially compared to avoid the
+      // StringAttribute Equals method, because it is broken.
+      if (!enum1.Current.GetValue().Equals(enum2.Current.GetValue())) {
+        return false;
+      }
+    }
+    if (enum2.MoveNext()) {
+      // enum2 has more elements than enum1
+      return false;
+    }
+    return true;
+  }
 }
 
 public interface IReadonlyCategoryDict {
@@ -72,6 +87,16 @@ public interface IReadonlyCategoryDict {
   /// <returns>the value, or null if the collectible does not match the
   /// category</returns>
   CategoryValue GetValue(AssetLocation category, CollectibleObject c);
+
+  /// <summary>
+  /// Check whether the collectible is in a category
+  /// </summary>
+  /// <param name="category">the category to check</param>
+  /// <param name="c">the collectible that may be in the category</param>
+  /// <returns>true if it is in the category</returns>
+  bool InCategory(AssetLocation category, CollectibleObject c) {
+    return GetValue(category, c)?.Value != null;
+  }
 
   /// <summary>
   /// Find all collectible objects that match any value in a category.
