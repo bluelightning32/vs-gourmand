@@ -20,7 +20,7 @@ public interface ICollectibleCondition {
   /// <summary>
   /// List collectibles that match this condition
   /// </summary>
-  /// <param name="existing">An existing list of collectibles to further refine
+  /// <param name="matches">An existing list of collectibles to further refine
   /// based on this condition. Pass null for this condition to start a new
   /// list.</param>
   public void EnumerateMatches(MatchResolver resolver, EnumItemClass itemClass,
