@@ -6,7 +6,7 @@ using Vintagestory.Common;
 using Vintagestory.GameContent;
 using Vintagestory.Server;
 
-namespace Gourmand.Tests;
+namespace Gourmand.Test;
 
 public class FilterOrigin : IAssetOrigin {
   private readonly IAssetOrigin _original;

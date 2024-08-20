@@ -6,12 +6,14 @@ using PrefixClassName.MsTest;
 
 using Vintagestory.API.Common;
 
-namespace Gourmand.Tests;
+namespace Gourmand.Test.Collectibles;
+
+using Real = Gourmand.Collectibles;
 
 [PrefixTestClass]
 public class MatchResolver {
   private readonly Mock<IWorldAccessor> _mock = new Mock<IWorldAccessor>();
-  private readonly Gourmand.MatchResolver _resolver;
+  private readonly Real.MatchResolver _resolver;
 
   public MatchResolver() {
     _mock.Setup(x => x.GetItem(It.IsAny<AssetLocation>()))

@@ -1,7 +1,7 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace Gourmand.Tests;
+namespace Gourmand.Test;
 
 // This class allows the Vintagestory dlls to be loaded from $(VINTAGE_STORY).
 public class AddVintageStoryPath {

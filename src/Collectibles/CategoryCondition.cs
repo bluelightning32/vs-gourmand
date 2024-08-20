@@ -7,9 +7,9 @@ using System.Linq;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 
-namespace Gourmand;
+namespace Gourmand.Collectibles;
 
-public class CollectibleCategoryCondition : ICollectibleCondition {
+public class CategoryCondition : ICondition {
   [JsonProperty(Required = Required.Always)]
   readonly public AssetLocation Input;
   [JsonProperty]
@@ -17,8 +17,7 @@ public class CollectibleCategoryCondition : ICollectibleCondition {
 
   public IEnumerable<AssetLocation> Categories => Outputs;
 
-  public CollectibleCategoryCondition(AssetLocation input,
-                                      AssetLocation[] output) {
+  public CategoryCondition(AssetLocation input, AssetLocation[] output) {
     Input = input;
     Outputs = output ?? Array.Empty<AssetLocation>();
   }

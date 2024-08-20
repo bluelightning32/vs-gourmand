@@ -8,9 +8,9 @@ using System.Linq;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 
-namespace Gourmand;
+namespace Gourmand.Collectibles;
 
-abstract public class NutritionConditionBase : ICollectibleCondition {
+abstract public class NutritionConditionBase : ICondition {
   [JsonProperty]
   public readonly AssetLocation[] Outputs;
 
@@ -110,7 +110,7 @@ public class NutritionPropsCondition : AggregateCondition {
     Satiety = satiety;
   }
 
-  public override IEnumerable<ICollectibleCondition> Conditions {
+  public override IEnumerable<ICondition> Conditions {
     get {
       yield return Category;
       yield return Satiety;

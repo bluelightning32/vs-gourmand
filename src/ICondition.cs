@@ -5,14 +5,14 @@ using Vintagestory.API.Datastructures;
 
 namespace Gourmand;
 
-public interface IItemStackCondition {
+public interface ICondition {
   /// <summary>
   /// Determine whether the given ItemStack matches the condition
   /// </summary>
   /// <param name="catdict">a precomputed dictionary of categories for
   /// collectible objects</param> <param name="stack">the ItemStack to
   /// check</param> <returns>true, if it is a match</returns>
-  bool IsMatch(IReadonlyCategoryDict catdict, ItemStack stack);
+  bool IsMatch(Collectibles.IReadonlyCategoryDict catdict, ItemStack stack);
 
   /// <summary>
   /// Gets the value of a category of a match. The result is undefined if the
@@ -23,7 +23,7 @@ public interface IItemStackCondition {
   /// collectible objects</param> <param name="category">the category to look
   /// up</param> <param name="stack">the stack to look up</param> <returns>the
   /// category value's attribute array</returns>
-  public List<IAttribute> GetValue(IReadonlyCategoryDict catdict,
+  public List<IAttribute> GetValue(Collectibles.IReadonlyCategoryDict catdict,
                                    AssetLocation category, ItemStack stack);
 
   /// <summary>
@@ -40,6 +40,6 @@ public interface IItemStackCondition {
   ///   based on this condition. Pass null for this condition to start a new
   ///   list.
   /// </param>
-  public void EnumerateMatches(IReadonlyCategoryDict catdict,
+  public void EnumerateMatches(Collectibles.IReadonlyCategoryDict catdict,
                                ref List<ItemStack> matches);
 }

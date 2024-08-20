@@ -5,13 +5,17 @@ using PrefixClassName.MsTest;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 
-namespace Gourmand.Tests;
+using Gourmand.Collectibles;
+
+namespace Gourmand.Test.Collectibles;
+
+using Real = Gourmand.Collectibles;
 
 [PrefixTestClass]
-public class CollectibleCategoryCondition {
-  private readonly Gourmand.MatchResolver _resolver;
+public class CategoryCondition {
+  private readonly Real.MatchResolver _resolver;
 
-  public CollectibleCategoryCondition() {
+  public CategoryCondition() {
     _resolver = new(LoadAssets.Server.World);
     string rulesJson = @"
     [
@@ -29,15 +33,13 @@ public class CollectibleCategoryCondition {
         ]
       }
     ]";
-    List<Gourmand.CollectibleMatchRule> rules = ParseItemRules(rulesJson);
+    List<Real.MatchRule> rules = ParseItemRules(rulesJson);
     _resolver.Load(rules);
   }
 
-  private static List<Gourmand.CollectibleMatchRule>
-  ParseItemRules(string json) {
-    return JsonUtil.ToObject<List<Gourmand.CollectibleMatchRule>>(
-        json, "gourmand",
-        CollectibleMatchRuleConverter.AddConverter(EnumItemClass.Item));
+  private static List<Real.MatchRule> ParseItemRules(string json) {
+    return JsonUtil.ToObject<List<Real.MatchRule>>(
+        json, "gourmand", MatchRuleConverter.AddConverter(EnumItemClass.Item));
   }
 
   [TestMethod]
@@ -47,9 +49,9 @@ public class CollectibleCategoryCondition {
       input: ""cat1"",
     }
     ";
-    Gourmand.CollectibleCategoryCondition cond =
-        JsonObject.FromJson(json)
-            .AsObject<Gourmand.CollectibleCategoryCondition>(null, "gourmand");
+    Real.CategoryCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.CategoryCondition>(null,
+                                                                   "gourmand");
 
     List<CollectibleObject> matches = null;
     cond.EnumerateMatches(_resolver, EnumItemClass.Item, ref matches);
@@ -71,9 +73,9 @@ public class CollectibleCategoryCondition {
       input: ""cat1"",
     }
     ";
-    Gourmand.CollectibleCategoryCondition cond =
-        JsonObject.FromJson(json)
-            .AsObject<Gourmand.CollectibleCategoryCondition>(null, "gourmand");
+    Real.CategoryCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.CategoryCondition>(null,
+                                                                   "gourmand");
 
     List<CollectibleObject> matches =
         new() { LoadAssets.GetItem("game", "fruit-pineapple"),
@@ -98,9 +100,9 @@ public class CollectibleCategoryCondition {
       input: ""cat1"",
     }
     ";
-    Gourmand.CollectibleCategoryCondition cond =
-        JsonObject.FromJson(json)
-            .AsObject<Gourmand.CollectibleCategoryCondition>(null, "gourmand");
+    Real.CategoryCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.CategoryCondition>(null,
+                                                                   "gourmand");
 
     Dictionary<AssetLocation, IAttribute[]> categories = new(cond.GetCategories(
         _resolver.CatDict, LoadAssets.GetItem("game", "fruit-pineapple")));
@@ -116,9 +118,9 @@ public class CollectibleCategoryCondition {
       output: [ ""output1"", ""output2"" ]
     }
     ";
-    Gourmand.CollectibleCategoryCondition cond =
-        JsonObject.FromJson(json)
-            .AsObject<Gourmand.CollectibleCategoryCondition>(null, "gourmand");
+    Real.CategoryCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.CategoryCondition>(null,
+                                                                   "gourmand");
 
     Dictionary<AssetLocation, IAttribute[]> categories = new(cond.GetCategories(
         _resolver.CatDict, LoadAssets.GetItem("game", "fruit-pineapple")));
@@ -138,9 +140,9 @@ public class CollectibleCategoryCondition {
       output: [ ""output1"", ""output2"" ]
     }
     ";
-    Gourmand.CollectibleCategoryCondition cond =
-        JsonObject.FromJson(json)
-            .AsObject<Gourmand.CollectibleCategoryCondition>(null, "gourmand");
+    Real.CategoryCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.CategoryCondition>(null,
+                                                                   "gourmand");
 
     CollectionAssert.AreEquivalent(
         new List<AssetLocation>() {

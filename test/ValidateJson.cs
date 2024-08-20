@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 using PrefixClassName.MsTest;
 
-namespace Gourmand.Tests;
+namespace Gourmand.Test;
 
 [PrefixTestClass]
 public class ValidateJson {

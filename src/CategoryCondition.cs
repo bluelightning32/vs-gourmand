@@ -9,7 +9,7 @@ using Vintagestory.API.Datastructures;
 
 namespace Gourmand;
 
-public class ItemStackCategoryCondition : IItemStackCondition {
+public class CategoryCondition : ICondition {
   [JsonProperty(Required = Required.Always)]
   readonly public AssetLocation Input;
   [JsonProperty]
@@ -17,17 +17,17 @@ public class ItemStackCategoryCondition : IItemStackCondition {
 
   public IEnumerable<AssetLocation> Categories => Outputs;
 
-  public ItemStackCategoryCondition(AssetLocation input,
-                                    AssetLocation[] output) {
+  public CategoryCondition(AssetLocation input, AssetLocation[] output) {
     Input = input;
     Outputs = output ?? Array.Empty<AssetLocation>();
   }
 
-  public bool IsMatch(IReadonlyCategoryDict catdict, ItemStack stack) {
+  public bool IsMatch(Collectibles.IReadonlyCategoryDict catdict,
+                      ItemStack stack) {
     return catdict.InCategory(Input, stack.Collectible);
   }
 
-  public List<IAttribute> GetValue(IReadonlyCategoryDict catdict,
+  public List<IAttribute> GetValue(Collectibles.IReadonlyCategoryDict catdict,
                                    AssetLocation category, ItemStack stack) {
     // All of the output categories have the same value for any given ItemStack.
     // The behavior is undefined if stack is not in the category. So skip
@@ -35,7 +35,7 @@ public class ItemStackCategoryCondition : IItemStackCondition {
     return catdict.GetValue(Input, stack.Collectible).Value;
   }
 
-  public void EnumerateMatches(IReadonlyCategoryDict catdict,
+  public void EnumerateMatches(Collectibles.IReadonlyCategoryDict catdict,
                                ref List<ItemStack> matches) {
     if (matches == null) {
       matches = catdict.EnumerateMatches(Input)

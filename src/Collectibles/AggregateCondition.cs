@@ -4,17 +4,17 @@ using System.Linq;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 
-namespace Gourmand;
+namespace Gourmand.Collectibles;
 
-abstract public class AggregateCondition : ICollectibleCondition {
+abstract public class AggregateCondition : ICondition {
   public AggregateCondition() {}
 
-  public abstract IEnumerable<ICollectibleCondition> Conditions { get; }
+  public abstract IEnumerable<ICondition> Conditions { get; }
 
   public IEnumerable<AssetLocation> Categories {
     get {
       IEnumerable<AssetLocation> result = Enumerable.Empty<AssetLocation>();
-      foreach (ICollectibleCondition cond in Conditions) {
+      foreach (ICondition cond in Conditions) {
         result = Enumerable.Concat(result, cond.Categories);
       }
       return result;
@@ -25,7 +25,7 @@ abstract public class AggregateCondition : ICollectibleCondition {
   GetCategories(IReadonlyCategoryDict catdict, CollectibleObject match) {
     IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>> result =
         Enumerable.Empty<KeyValuePair<AssetLocation, IAttribute[]>>();
-    foreach (ICollectibleCondition cond in Conditions) {
+    foreach (ICondition cond in Conditions) {
       result = Enumerable.Concat(result, cond.GetCategories(catdict, match));
     }
     return result;
@@ -33,7 +33,7 @@ abstract public class AggregateCondition : ICollectibleCondition {
 
   public void EnumerateMatches(MatchResolver resolver, EnumItemClass itemClass,
                                ref List<CollectibleObject> matches) {
-    foreach (ICollectibleCondition cond in Conditions) {
+    foreach (ICondition cond in Conditions) {
       if (cond == null) {
         continue;
       }

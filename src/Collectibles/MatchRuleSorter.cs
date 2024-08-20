@@ -4,33 +4,33 @@ using System.Text;
 
 using Vintagestory.API.Common;
 
-namespace Gourmand;
+namespace Gourmand.Collectibles;
 
 public struct RuleOrCategory {
-  public CollectibleMatchRule Rule = null;
+  public MatchRule Rule = null;
   public AssetLocation Category = null;
 
-  public RuleOrCategory(CollectibleMatchRule rule) { Rule = rule; }
+  public RuleOrCategory(MatchRule rule) { Rule = rule; }
 
   public RuleOrCategory(AssetLocation category) { Category = category; }
 }
 
-public class CollectibleMatchRuleSorter {
+public class MatchRuleSorter {
   public readonly List<RuleOrCategory> Result = new();
 
   // Tracks all categories and which rules generate those categories.
-  private readonly Dictionary<AssetLocation, List<CollectibleMatchRule>>
+  private readonly Dictionary<AssetLocation, List<MatchRule>>
       _categoryGenerators = new();
   private readonly int _totalRules = 0;
-  private readonly HashSet<CollectibleMatchRule> _visitedRules = new();
+  private readonly HashSet<MatchRule> _visitedRules = new();
   private readonly HashSet<AssetLocation> _visitedCategories = new();
   private readonly List<AssetLocation> _path = new();
 
-  public CollectibleMatchRuleSorter(IEnumerable<CollectibleMatchRule> rules) {
-    foreach (CollectibleMatchRule rule in rules) {
+  public MatchRuleSorter(IEnumerable<MatchRule> rules) {
+    foreach (MatchRule rule in rules) {
       foreach (AssetLocation category in rule.OutputCategories) {
-        if (!_categoryGenerators.TryGetValue(
-                category, out List<CollectibleMatchRule> generators)) {
+        if (!_categoryGenerators.TryGetValue(category,
+                                             out List<MatchRule> generators)) {
           generators = new();
           _categoryGenerators.Add(category, generators);
         }
@@ -39,7 +39,7 @@ public class CollectibleMatchRuleSorter {
       ++_totalRules;
     }
 
-    foreach (KeyValuePair<AssetLocation, List<CollectibleMatchRule>> kv in
+    foreach (KeyValuePair<AssetLocation, List<MatchRule>> kv in
                  _categoryGenerators) {
       VisitCategory(kv.Key);
     }
@@ -51,7 +51,7 @@ public class CollectibleMatchRuleSorter {
     }
     _path.Add(category);
     CheckForCycle();
-    foreach (CollectibleMatchRule rule in _categoryGenerators[category]) {
+    foreach (MatchRule rule in _categoryGenerators[category]) {
       VisitRule(rule);
     }
     Result.Add(new RuleOrCategory(category));
@@ -75,7 +75,7 @@ public class CollectibleMatchRuleSorter {
     throw new InvalidOperationException(b.ToString());
   }
 
-  private void VisitRule(CollectibleMatchRule rule) {
+  private void VisitRule(MatchRule rule) {
     if (_visitedRules.Contains(rule)) {
       return;
     }

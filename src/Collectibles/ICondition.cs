@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 
-namespace Gourmand;
+namespace Gourmand.Collectibles;
 
-public interface ICollectibleCondition {
+public interface ICondition {
   /// <summary>
   /// Gets the categories of a match. The result is undefined if the given
   /// object is not a match.

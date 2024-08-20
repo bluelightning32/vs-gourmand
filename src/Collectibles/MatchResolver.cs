@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Vintagestory.API.Common;
 using Vintagestory.API.Util;
 
-namespace Gourmand;
+namespace Gourmand.Collectibles;
 
 /// <summary>
 /// Temporarily holds the state necessary to resolve the matchers. This is
@@ -188,8 +188,8 @@ public class MatchResolver {
   /// rules.
   /// </summary>
   /// <param name="rules">The rules to load</param>
-  public void Load(IEnumerable<CollectibleMatchRule> rules) {
-    CollectibleMatchRuleSorter sorter = new(rules);
+  public void Load(IEnumerable<MatchRule> rules) {
+    MatchRuleSorter sorter = new(rules);
     CategoryDict accum = new();
     HashSet<AssetLocation> emitted = new();
     foreach (RuleOrCategory entry in sorter.Result) {

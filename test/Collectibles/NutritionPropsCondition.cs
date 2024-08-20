@@ -5,11 +5,13 @@ using PrefixClassName.MsTest;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 
-namespace Gourmand.Tests;
+namespace Gourmand.Test.Collectibles;
+
+using Real = Gourmand.Collectibles;
 
 [PrefixTestClass]
 public class NutritionPropsCondition {
-  private readonly Gourmand.MatchResolver _resolver;
+  private readonly Real.MatchResolver _resolver;
 
   public NutritionPropsCondition() { _resolver = new(LoadAssets.Server.World); }
 
@@ -19,8 +21,8 @@ public class NutritionPropsCondition {
     {
     }
     ";
-    Gourmand.NutritionPropsCondition cond =
-        JsonObject.FromJson(json).AsObject<Gourmand.NutritionPropsCondition>(
+    Real.NutritionPropsCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.NutritionPropsCondition>(
             null, "gourmand");
     Assert.AreEqual(null, cond.Category);
     Assert.AreEqual(null, cond.Satiety);
@@ -33,8 +35,8 @@ public class NutritionPropsCondition {
       category: { }
     }
     ";
-    Gourmand.NutritionPropsCondition cond =
-        JsonObject.FromJson(json).AsObject<Gourmand.NutritionPropsCondition>(
+    Real.NutritionPropsCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.NutritionPropsCondition>(
             null, "gourmand");
     List<CollectibleObject> matches = null;
     cond.EnumerateMatches(_resolver, EnumItemClass.Item, ref matches);
@@ -54,8 +56,8 @@ public class NutritionPropsCondition {
       category: { value: ""Fruit"" }
     }
     ";
-    Gourmand.NutritionPropsCondition cond =
-        JsonObject.FromJson(json).AsObject<Gourmand.NutritionPropsCondition>(
+    Real.NutritionPropsCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.NutritionPropsCondition>(
             null, "gourmand");
     List<CollectibleObject> matches = null;
     cond.EnumerateMatches(_resolver, EnumItemClass.Item, ref matches);
@@ -80,8 +82,8 @@ public class NutritionPropsCondition {
         max: {pineapple.NutritionProps.Satiety}
       }}
     }}";
-    Gourmand.NutritionPropsCondition cond =
-        JsonObject.FromJson(json).AsObject<Gourmand.NutritionPropsCondition>(
+    Real.NutritionPropsCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.NutritionPropsCondition>(
             null, "gourmand");
     List<CollectibleObject> matches = null;
     cond.EnumerateMatches(_resolver, EnumItemClass.Item, ref matches);
@@ -105,8 +107,8 @@ public class NutritionPropsCondition {
         max: {pineapple.NutritionProps.Satiety}
       }}
     }}";
-    Gourmand.NutritionPropsCondition cond =
-        JsonObject.FromJson(json).AsObject<Gourmand.NutritionPropsCondition>(
+    Real.NutritionPropsCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.NutritionPropsCondition>(
             null, "gourmand");
     List<CollectibleObject> matches =
         new() { LoadAssets.GetItem("game", "fruit-pineapple"),
@@ -139,8 +141,8 @@ public class NutritionPropsCondition {
         outputs: [ ""category1"", ""category2"" ]
       }}
     }}";
-    Gourmand.NutritionPropsCondition cond =
-        JsonObject.FromJson(json).AsObject<Gourmand.NutritionPropsCondition>(
+    Real.NutritionPropsCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.NutritionPropsCondition>(
             null, "gourmand");
     IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>> categories =
         cond.GetCategories(_resolver.CatDict,

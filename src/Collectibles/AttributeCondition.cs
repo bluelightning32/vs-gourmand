@@ -8,9 +8,9 @@ using System.Linq;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 
-namespace Gourmand;
+namespace Gourmand.Collectibles;
 
-public class AttributeCondition : ICollectibleCondition {
+public class AttributeCondition : ICondition {
   [JsonProperty(Required = Required.Always)]
   readonly public string[] Path;
   [JsonProperty]

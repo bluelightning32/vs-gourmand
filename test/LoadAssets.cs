@@ -7,7 +7,7 @@ using Vintagestory.API.Datastructures;
 using Vintagestory.Common;
 using Vintagestory.Server;
 
-namespace Gourmand.Tests;
+namespace Gourmand.Test;
 
 [PrefixTestClass]
 public class LoadAssets {

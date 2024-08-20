@@ -5,11 +5,13 @@ using PrefixClassName.MsTest;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 
-namespace Gourmand.Tests;
+namespace Gourmand.Test.Collectibles;
+
+using Real = Gourmand.Collectibles;
 
 [PrefixTestClass]
 public class AttributeCondition {
-  private readonly Gourmand.MatchResolver _resolver;
+  private readonly Real.MatchResolver _resolver;
 
   public AttributeCondition() { _resolver = new(LoadAssets.Server.World); }
 
@@ -20,9 +22,9 @@ public class AttributeCondition {
       path: [],
     }
     ";
-    Gourmand.AttributeCondition cond =
-        JsonObject.FromJson(json).AsObject<Gourmand.AttributeCondition>(
-            null, "gourmand");
+    Real.AttributeCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.AttributeCondition>(null,
+                                                                    "gourmand");
     CollectionAssert.AreEqual(Array.Empty<AssetLocation>(), cond.Path);
     Assert.AreEqual(null, cond.Value);
     CollectionAssert.AreEqual(Array.Empty<AssetLocation>(), cond.Outputs);
@@ -36,8 +38,8 @@ public class AttributeCondition {
     {
     }
     ";
-    JsonObject.FromJson(json).AsObject<Gourmand.AttributeCondition>(null,
-                                                                    "gourmand");
+    JsonObject.FromJson(json).AsObject<Real.AttributeCondition>(null,
+                                                                "gourmand");
   }
 
   [TestMethod]
@@ -47,9 +49,9 @@ public class AttributeCondition {
       path: [""nutritionPropsWhenInMeal"", ""foodcategory""]
     }
     ";
-    Gourmand.AttributeCondition cond =
-        JsonObject.FromJson(json).AsObject<Gourmand.AttributeCondition>(
-            null, "gourmand");
+    Real.AttributeCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.AttributeCondition>(null,
+                                                                    "gourmand");
     List<CollectibleObject> matches = null;
     cond.EnumerateMatches(_resolver, EnumItemClass.Item, ref matches);
 
@@ -69,9 +71,9 @@ public class AttributeCondition {
       value: ""Fruit""
     }
     ";
-    Gourmand.AttributeCondition cond =
-        JsonObject.FromJson(json).AsObject<Gourmand.AttributeCondition>(
-            null, "gourmand");
+    Real.AttributeCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.AttributeCondition>(null,
+                                                                    "gourmand");
     List<CollectibleObject> matches = null;
     cond.EnumerateMatches(_resolver, EnumItemClass.Item, ref matches);
 
@@ -88,9 +90,9 @@ public class AttributeCondition {
       path: [""nutritionPropsWhenInMeal"", ""foodcategory""]
     }
     ";
-    Gourmand.AttributeCondition cond =
-        JsonObject.FromJson(json).AsObject<Gourmand.AttributeCondition>(
-            null, "gourmand");
+    Real.AttributeCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.AttributeCondition>(null,
+                                                                    "gourmand");
     List<CollectibleObject> matches =
         new() { LoadAssets.GetItem("game", "fruit-pineapple"),
                 LoadAssets.GetItem("game", "firestarter") };
@@ -112,9 +114,9 @@ public class AttributeCondition {
       outputs: [""category1"", ""category2""]
     }
     ";
-    Gourmand.AttributeCondition cond =
-        JsonObject.FromJson(json).AsObject<Gourmand.AttributeCondition>(
-            null, "gourmand");
+    Real.AttributeCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.AttributeCondition>(null,
+                                                                    "gourmand");
     Dictionary<AssetLocation, IAttribute[]> categories = new(cond.GetCategories(
         _resolver.CatDict, LoadAssets.GetItem("game", "fruit-pineapple")));
     LoadAssets.AssertCategoriesEqual(

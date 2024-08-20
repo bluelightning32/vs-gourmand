@@ -8,9 +8,9 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.Util;
 
-namespace Gourmand;
+namespace Gourmand.Collectibles;
 
-public class CodeCondition : ICollectibleCondition {
+public class CodeCondition : ICondition {
   [JsonProperty(Required = Required.Always)]
   readonly public AssetLocation Match;
 

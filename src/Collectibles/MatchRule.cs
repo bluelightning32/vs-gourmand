@@ -11,9 +11,9 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 
-namespace Gourmand;
+namespace Gourmand.Collectibles;
 
-public class CollectibleMatchRuleJson {
+public class MatchRuleJson {
   [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
   [DefaultValue(1.0)]
   public readonly float Priority;
@@ -27,28 +27,29 @@ public class CollectibleMatchRuleJson {
   [JsonProperty]
   public readonly CodeCondition Code;
   [JsonProperty]
-  public readonly CollectibleCategoryCondition[] Categories;
+  public readonly CategoryCondition[] Categories;
   [JsonProperty]
   public readonly NutritionPropsCondition NutritionProp;
   [JsonProperty]
   public readonly AttributeCondition[] Attributes;
 
   [JsonConstructor]
-  public CollectibleMatchRuleJson(
-      float priority, IReadOnlyDictionary<string, JToken[]> rawOutputs,
-      AssetLocation[] deletes, CodeCondition code,
-      CollectibleCategoryCondition[] categories,
-      NutritionPropsCondition nutritionProp, AttributeCondition[] attributes) {
+  public MatchRuleJson(float priority,
+                       IReadOnlyDictionary<string, JToken[]> rawOutputs,
+                       AssetLocation[] deletes, CodeCondition code,
+                       CategoryCondition[] categories,
+                       NutritionPropsCondition nutritionProp,
+                       AttributeCondition[] attributes) {
     Priority = priority;
     RawOutputs = rawOutputs ?? new Dictionary<string, JToken[]>();
     Deletes = deletes ?? Array.Empty<AssetLocation>();
     Code = code;
-    Categories = categories ?? Array.Empty<CollectibleCategoryCondition>();
+    Categories = categories ?? Array.Empty<CategoryCondition>();
     NutritionProp = nutritionProp;
     Attributes = attributes;
   }
 
-  public CollectibleMatchRuleJson(CollectibleMatchRuleJson copy) {
+  public MatchRuleJson(MatchRuleJson copy) {
     Priority = copy.Priority;
     RawOutputs = copy.RawOutputs;
     Deletes = copy.Deletes;
@@ -64,8 +65,7 @@ public class CollectibleMatchRuleJson {
 /// category names from strings to AssetLocations, while respecting the
 /// serializer's current domain.
 /// </summary>
-public class CollectibleMatchRuleConverter
-    : JsonConverter<CollectibleMatchRule> {
+public class MatchRuleConverter : JsonConverter<MatchRule> {
   private EnumItemClass _itemClass;
 
   public static JsonSerializerSettings
@@ -73,30 +73,28 @@ public class CollectibleMatchRuleConverter
                JsonSerializerSettings settings = null) {
     settings ??= new();
     foreach (JsonConverter converter in settings.Converters) {
-      if (converter is CollectibleMatchRuleConverter cconverter) {
+      if (converter is MatchRuleConverter cconverter) {
         cconverter._itemClass = itemClass;
         return settings;
       }
     }
-    settings.Converters.Add(new CollectibleMatchRuleConverter(itemClass));
+    settings.Converters.Add(new MatchRuleConverter(itemClass));
     return settings;
   }
 
-  public CollectibleMatchRuleConverter(EnumItemClass itemClass) {
-    _itemClass = itemClass;
-  }
+  public MatchRuleConverter(EnumItemClass itemClass) { _itemClass = itemClass; }
 
-  public override void WriteJson(JsonWriter writer, CollectibleMatchRule value,
+  public override void WriteJson(JsonWriter writer, MatchRule value,
                                  JsonSerializer serializer) {
     // This shouldn't be called because CanWrite returns false.
     throw new NotImplementedException();
   }
 
-  public override CollectibleMatchRule ReadJson(
-      JsonReader reader, Type objectType, CollectibleMatchRule existingValue,
-      bool hasExistingValue, JsonSerializer serializer) {
-    CollectibleMatchRuleJson json =
-        serializer.Deserialize<CollectibleMatchRuleJson>(reader);
+  public override MatchRule ReadJson(JsonReader reader, Type objectType,
+                                     MatchRule existingValue,
+                                     bool hasExistingValue,
+                                     JsonSerializer serializer) {
+    MatchRuleJson json = serializer.Deserialize<MatchRuleJson>(reader);
     string domain = GlobalConstants.DefaultDomain;
     foreach (JsonConverter converter in serializer.Converters) {
       if (converter is AssetLocationJsonParser parser) {
@@ -107,16 +105,16 @@ public class CollectibleMatchRuleConverter
         domain = (string)domainField.GetValue(converter);
       }
     }
-    return new CollectibleMatchRule(_itemClass, domain, json);
+    return new MatchRule(_itemClass, domain, json);
   }
 
   public override bool CanWrite => false;
 }
 
-public class CollectibleMatchRule : CollectibleMatchRuleJson {
+public class MatchRule : MatchRuleJson {
   readonly public IReadOnlyDictionary<AssetLocation, IAttribute[]> Outputs;
 
-  public readonly IReadOnlyList<ICollectibleCondition> Conditions;
+  public readonly IReadOnlyList<ICondition> Conditions;
   public readonly EnumItemClass ItemClass;
 
   /// <summary>
@@ -126,8 +124,7 @@ public class CollectibleMatchRule : CollectibleMatchRuleJson {
   /// <param name="itemClass">whether this rule matches blocks or items</param>
   /// <param name="domain">the default domain for assets</param>
   /// <param name="json">the unresolved json data</param>
-  public CollectibleMatchRule(EnumItemClass itemClass, string domain,
-                              CollectibleMatchRuleJson json)
+  public MatchRule(EnumItemClass itemClass, string domain, MatchRuleJson json)
       : base(json) {
     ItemClass = itemClass;
     Dictionary<AssetLocation, IAttribute[]> outputs = new(RawOutputs.Count);
@@ -137,7 +134,7 @@ public class CollectibleMatchRule : CollectibleMatchRuleJson {
           p.Value.Select((a) => new JsonObject(a).ToAttribute()).ToArray());
     }
     Outputs = outputs;
-    List<ICollectibleCondition> conditions = new() {
+    List<ICondition> conditions = new() {
       Code,
     };
     conditions.AddRange(Categories);
@@ -167,7 +164,7 @@ public class CollectibleMatchRule : CollectibleMatchRuleJson {
 
   public List<CollectibleObject> EnumerateMatches(MatchResolver resolver) {
     List<CollectibleObject> matches = null;
-    foreach (ICollectibleCondition condition in Conditions) {
+    foreach (ICondition condition in Conditions) {
       condition.EnumerateMatches(resolver, ItemClass, ref matches);
     }
     return matches;
@@ -191,7 +188,7 @@ public class CollectibleMatchRule : CollectibleMatchRuleJson {
     foreach (KeyValuePair<AssetLocation, IAttribute[]> p in Outputs) {
       UpdateCategory(accum, p.Key, collectible, p.Value, emitted);
     }
-    foreach (ICollectibleCondition condition in Conditions) {
+    foreach (ICondition condition in Conditions) {
       foreach (KeyValuePair<AssetLocation, IAttribute[]> p in condition
                    .GetCategories(existingCategories, collectible)) {
         UpdateCategory(accum, p.Key, collectible, p.Value, emitted);

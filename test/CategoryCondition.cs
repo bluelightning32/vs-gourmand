@@ -5,13 +5,15 @@ using PrefixClassName.MsTest;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 
-namespace Gourmand.Tests;
+namespace Gourmand.Test;
+
+using Real = Gourmand;
 
 [PrefixTestClass]
-public class ItemStackCategoryCondition {
-  private readonly Gourmand.MatchResolver _resolver;
+public class CategoryCondition {
+  private readonly Real.Collectibles.MatchResolver _resolver;
 
-  public ItemStackCategoryCondition() {
+  public CategoryCondition() {
     _resolver = new(LoadAssets.Server.World);
     string rulesJson = @"
     [
@@ -29,15 +31,14 @@ public class ItemStackCategoryCondition {
         ]
       }
     ]";
-    List<Gourmand.CollectibleMatchRule> rules = ParseItemRules(rulesJson);
+    List<Real.Collectibles.MatchRule> rules = ParseItemRules(rulesJson);
     _resolver.Load(rules);
   }
 
-  private static List<Gourmand.CollectibleMatchRule>
-  ParseItemRules(string json) {
-    return JsonUtil.ToObject<List<Gourmand.CollectibleMatchRule>>(
+  private static List<Real.Collectibles.MatchRule> ParseItemRules(string json) {
+    return JsonUtil.ToObject<List<Real.Collectibles.MatchRule>>(
         json, "gourmand",
-        CollectibleMatchRuleConverter.AddConverter(EnumItemClass.Item));
+        Real.Collectibles.MatchRuleConverter.AddConverter(EnumItemClass.Item));
   }
 
   [TestMethod]
@@ -47,9 +48,9 @@ public class ItemStackCategoryCondition {
       input: ""cat1"",
     }
     ";
-    Gourmand.ItemStackCategoryCondition cond =
-        JsonObject.FromJson(json).AsObject<Gourmand.ItemStackCategoryCondition>(
-            null, "gourmand");
+    Real.CategoryCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.CategoryCondition>(null,
+                                                                   "gourmand");
 
     Assert.IsTrue(cond.IsMatch(
         _resolver.CatDict,
@@ -69,9 +70,9 @@ public class ItemStackCategoryCondition {
       input: ""cat1"",
     }
     ";
-    Gourmand.ItemStackCategoryCondition cond =
-        JsonObject.FromJson(json).AsObject<Gourmand.ItemStackCategoryCondition>(
-            null, "gourmand");
+    Real.CategoryCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.CategoryCondition>(null,
+                                                                   "gourmand");
 
     List<ItemStack> matches = null;
     cond.EnumerateMatches(_resolver.CatDict, ref matches);
@@ -95,9 +96,9 @@ public class ItemStackCategoryCondition {
       input: ""cat1"",
     }
     ";
-    Gourmand.ItemStackCategoryCondition cond =
-        JsonObject.FromJson(json).AsObject<Gourmand.ItemStackCategoryCondition>(
-            null, "gourmand");
+    Real.CategoryCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.CategoryCondition>(null,
+                                                                   "gourmand");
 
     List<ItemStack> matches =
         new() { new ItemStack(LoadAssets.GetItem("game", "fruit-pineapple"), 2),
@@ -127,9 +128,9 @@ public class ItemStackCategoryCondition {
       output: [ ""output1"", ""output2"" ]
     }
     ";
-    Gourmand.ItemStackCategoryCondition cond =
-        JsonObject.FromJson(json).AsObject<Gourmand.ItemStackCategoryCondition>(
-            null, "gourmand");
+    Real.CategoryCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.CategoryCondition>(null,
+                                                                   "gourmand");
 
     CollectionAssert.AreEquivalent(
         new List<AssetLocation>() {
@@ -147,9 +148,9 @@ public class ItemStackCategoryCondition {
       output: [ ""output1"", ""output2"" ]
     }
     ";
-    Gourmand.ItemStackCategoryCondition cond =
-        JsonObject.FromJson(json).AsObject<Gourmand.ItemStackCategoryCondition>(
-            null, "gourmand");
+    Real.CategoryCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.CategoryCondition>(null,
+                                                                   "gourmand");
 
     ItemStack stack = new(LoadAssets.GetItem("game", "fruit-pineapple"));
     IAttribute[] expected = { new LongAttribute(11) };

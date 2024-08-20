@@ -1,24 +1,22 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
 using PrefixClassName.MsTest;
 
 using Vintagestory.API.Common;
-using Vintagestory.API.Datastructures;
-using Vintagestory.Common;
 
-namespace Gourmand.Tests;
+using Gourmand.Collectibles;
+
+namespace Gourmand.Test.Collectibles;
+
+using Real = Gourmand.Collectibles;
 
 [PrefixTestClass]
-public class CollectibleMatchRuleSorter {
-  public CollectibleMatchRuleSorter() {}
+public class MatchRuleSorter {
+  public MatchRuleSorter() {}
 
-  private static List<Gourmand.CollectibleMatchRule> ParseRules(string json) {
-    return JsonUtil.ToObject<List<Gourmand.CollectibleMatchRule>>(
-        json, "gourmand",
-        CollectibleMatchRuleConverter.AddConverter(EnumItemClass.Item));
+  private static List<Real.MatchRule> ParseRules(string json) {
+    return JsonUtil.ToObject<List<Real.MatchRule>>(
+        json, "gourmand", MatchRuleConverter.AddConverter(EnumItemClass.Item));
   }
 
   [TestMethod]
@@ -37,8 +35,8 @@ public class CollectibleMatchRuleSorter {
         }
       }
     ]";
-    List<Gourmand.CollectibleMatchRule> rules = ParseRules(json);
-    Gourmand.CollectibleMatchRuleSorter sorter = new(rules);
+    List<Real.MatchRule> rules = ParseRules(json);
+    Real.MatchRuleSorter sorter = new(rules);
     void Validate() {
       // The first rule does not depend on anything. So it should be processed
       // first.
@@ -83,9 +81,8 @@ public class CollectibleMatchRuleSorter {
         }
       },
     ]";
-    List<Gourmand.CollectibleMatchRule> rules = ParseRules(json);
-    Gourmand.CollectibleMatchRuleSorter sorter =
-        new(rules.AsEnumerable().Reverse());
+    List<Real.MatchRule> rules = ParseRules(json);
+    Real.MatchRuleSorter sorter = new(rules.AsEnumerable().Reverse());
     void Validate() {
       // The final rule does not depend on anything. So it should be processed
       // first.
@@ -134,7 +131,7 @@ public class CollectibleMatchRuleSorter {
         }
       }
     ]";
-    List<Gourmand.CollectibleMatchRule> rules = ParseRules(json);
-    _ = new Gourmand.CollectibleMatchRuleSorter(rules.AsEnumerable().Reverse());
+    List<Real.MatchRule> rules = ParseRules(json);
+    _ = new Real.MatchRuleSorter(rules.AsEnumerable().Reverse());
   }
 }
