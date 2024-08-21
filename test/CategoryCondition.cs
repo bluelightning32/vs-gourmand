@@ -160,4 +160,21 @@ public class CategoryCondition {
         cond.GetValue(_resolver.CatDict, new("gourmand", "output2"), stack);
     Assert.IsTrue(CategoryValue.ValuesEqual(actual, expected));
   }
+
+  [TestMethod]
+  public void GetValueNullCat() {
+    string json = @"
+    {
+      input: ""cat1""
+    }
+    ";
+    Real.CategoryCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.CategoryCondition>(null,
+                                                                   "gourmand");
+
+    ItemStack stack = new(LoadAssets.GetItem("game", "fruit-pineapple"));
+    IAttribute[] expected = { new LongAttribute(11) };
+    List<IAttribute> actual = cond.GetValue(_resolver.CatDict, null, stack);
+    Assert.IsTrue(CategoryValue.ValuesEqual(actual, expected));
+  }
 }
