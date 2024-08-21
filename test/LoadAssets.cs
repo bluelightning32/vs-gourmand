@@ -21,7 +21,7 @@ public class LoadAssets {
     Dictionary<AssetCategory, HashSet<string>> allow = new();
     allow[AssetCategory.itemtypes] =
         new() { "fruit.json", "firestarter.json", "fish.json" };
-    allow[AssetCategory.blocktypes] = new() { "egg.json" };
+    allow[AssetCategory.blocktypes] = new() { "egg.json", "pie.json" };
     Server = ServerApiWithAssets.Create(allow);
   }
 

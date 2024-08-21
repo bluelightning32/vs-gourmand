@@ -96,6 +96,7 @@ public class MatchRuleConverter : JsonConverter<MatchRule> {
 }
 
 [JsonConverter(typeof(MatchRuleConverter))]
+[JsonObject(MemberSerialization.OptIn)]
 public class MatchRule : MatchRuleJson {
   readonly public IReadOnlyDictionary<AssetLocation, IAttribute[]> Outputs;
 
