@@ -22,12 +22,14 @@ public class CategoryCondition : ICondition {
     Outputs = output ?? Array.Empty<AssetLocation>();
   }
 
-  public bool IsMatch(Collectibles.IReadonlyCategoryDict catdict,
+  public bool IsMatch(IWorldAccessor resolver,
+                      Collectibles.IReadonlyCategoryDict catdict,
                       ItemStack stack) {
     return catdict.InCategory(Input, stack.Collectible);
   }
 
-  public List<IAttribute> GetValue(Collectibles.IReadonlyCategoryDict catdict,
+  public List<IAttribute> GetValue(IWorldAccessor resolver,
+                                   Collectibles.IReadonlyCategoryDict catdict,
                                    AssetLocation category, ItemStack stack) {
     // All of the output categories have the same value for any given ItemStack.
     // The behavior is undefined if stack is not in the category. So skip
@@ -35,14 +37,15 @@ public class CategoryCondition : ICondition {
     return catdict.GetValue(Input, stack.Collectible).Value;
   }
 
-  public void EnumerateMatches(Collectibles.IReadonlyCategoryDict catdict,
+  public void EnumerateMatches(IWorldAccessor resolver,
+                               Collectibles.IReadonlyCategoryDict catdict,
                                ref List<ItemStack> matches) {
     if (matches == null) {
       matches = catdict.EnumerateMatches(Input)
                     .Select(c => new ItemStack(c))
                     .ToList();
     } else {
-      matches.RemoveAll((c) => !IsMatch(catdict, c));
+      matches.RemoveAll((c) => !IsMatch(resolver, catdict, c));
     }
   }
 }

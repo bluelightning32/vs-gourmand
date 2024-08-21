@@ -12,7 +12,8 @@ public interface ICondition {
   /// <param name="catdict">a precomputed dictionary of categories for
   /// collectible objects</param> <param name="stack">the ItemStack to
   /// check</param> <returns>true, if it is a match</returns>
-  bool IsMatch(Collectibles.IReadonlyCategoryDict catdict, ItemStack stack);
+  bool IsMatch(IWorldAccessor resolver,
+               Collectibles.IReadonlyCategoryDict catdict, ItemStack stack);
 
   /// <summary>
   /// Gets the value of a category of a match. The result is undefined if the
@@ -27,7 +28,8 @@ public interface ICondition {
   /// collectible objects</param> <param name="category">the category to look
   /// up</param> <param name="stack">the stack to look up</param> <returns>the
   /// category value's attribute array</returns>
-  public List<IAttribute> GetValue(Collectibles.IReadonlyCategoryDict catdict,
+  public List<IAttribute> GetValue(IWorldAccessor resolver,
+                                   Collectibles.IReadonlyCategoryDict catdict,
                                    AssetLocation category, ItemStack stack);
 
   /// <summary>
@@ -44,6 +46,7 @@ public interface ICondition {
   ///   based on this condition. Pass null for this condition to start a new
   ///   list.
   /// </param>
-  public void EnumerateMatches(Collectibles.IReadonlyCategoryDict catdict,
+  public void EnumerateMatches(IWorldAccessor resolver,
+                               Collectibles.IReadonlyCategoryDict catdict,
                                ref List<ItemStack> matches);
 }

@@ -28,22 +28,22 @@ public class AttributeCondition {
                                                                     "gourmand");
 
     ItemStack stack = new(LoadAssets.GetBlock("game", "pie-perfect"));
-    Assert.IsFalse(cond.IsMatch(_resolver.CatDict, stack));
+    Assert.IsFalse(cond.IsMatch(_resolver.Resolver, _resolver.CatDict, stack));
 
     stack.Attributes.SetInt("pieSize", 1);
-    Assert.IsTrue(cond.IsMatch(_resolver.CatDict, stack));
+    Assert.IsTrue(cond.IsMatch(_resolver.Resolver, _resolver.CatDict, stack));
 
     stack.Attributes.SetLong("pieSize", 1);
-    Assert.IsTrue(cond.IsMatch(_resolver.CatDict, stack));
+    Assert.IsTrue(cond.IsMatch(_resolver.Resolver, _resolver.CatDict, stack));
 
     stack.Attributes.SetString("pieSize", "1");
-    Assert.IsTrue(cond.IsMatch(_resolver.CatDict, stack));
+    Assert.IsTrue(cond.IsMatch(_resolver.Resolver, _resolver.CatDict, stack));
 
     stack.Attributes.SetLong("pieSize", 2);
-    Assert.IsFalse(cond.IsMatch(_resolver.CatDict, stack));
+    Assert.IsFalse(cond.IsMatch(_resolver.Resolver, _resolver.CatDict, stack));
 
     stack.Attributes["pieSize"] = new IntArrayAttribute(new int[] { 1 });
-    Assert.IsFalse(cond.IsMatch(_resolver.CatDict, stack));
+    Assert.IsFalse(cond.IsMatch(_resolver.Resolver, _resolver.CatDict, stack));
   }
 
   [TestMethod]
@@ -60,22 +60,22 @@ public class AttributeCondition {
                                                                     "gourmand");
 
     ItemStack stack = new(LoadAssets.GetBlock("game", "pie-perfect"));
-    Assert.IsFalse(cond.IsMatch(_resolver.CatDict, stack));
+    Assert.IsFalse(cond.IsMatch(_resolver.Resolver, _resolver.CatDict, stack));
 
     stack.Attributes.SetInt("pieSize", 1);
-    Assert.IsFalse(cond.IsMatch(_resolver.CatDict, stack));
+    Assert.IsFalse(cond.IsMatch(_resolver.Resolver, _resolver.CatDict, stack));
 
     stack.Attributes.SetLong("pieSize", 1);
-    Assert.IsTrue(cond.IsMatch(_resolver.CatDict, stack));
+    Assert.IsTrue(cond.IsMatch(_resolver.Resolver, _resolver.CatDict, stack));
 
     stack.Attributes.SetString("pieSize", "1");
-    Assert.IsFalse(cond.IsMatch(_resolver.CatDict, stack));
+    Assert.IsFalse(cond.IsMatch(_resolver.Resolver, _resolver.CatDict, stack));
 
     stack.Attributes.SetLong("pieSize", 2);
-    Assert.IsFalse(cond.IsMatch(_resolver.CatDict, stack));
+    Assert.IsFalse(cond.IsMatch(_resolver.Resolver, _resolver.CatDict, stack));
 
     stack.Attributes["pieSize"] = new IntArrayAttribute(new int[] { 1 });
-    Assert.IsFalse(cond.IsMatch(_resolver.CatDict, stack));
+    Assert.IsFalse(cond.IsMatch(_resolver.Resolver, _resolver.CatDict, stack));
   }
 
   [TestMethod]
@@ -91,7 +91,7 @@ public class AttributeCondition {
                                                                     "gourmand");
 
     List<ItemStack> matches = null;
-    cond.EnumerateMatches(_resolver.CatDict, ref matches);
+    cond.EnumerateMatches(_resolver.Resolver, _resolver.CatDict, ref matches);
     CollectionAssert.AreEqual(Array.Empty<ItemStack>(), matches);
   }
 
@@ -112,7 +112,7 @@ public class AttributeCondition {
                 new ItemStack(LoadAssets.GetBlock("game", "pie-charred"), 2) };
     originalMatches[1].Attributes.SetInt("pieSize", 5);
     List<ItemStack> matches = originalMatches.ToList();
-    cond.EnumerateMatches(_resolver.CatDict, ref matches);
+    cond.EnumerateMatches(_resolver.Resolver, _resolver.CatDict, ref matches);
 
     CollectionAssert.AreEqual(
         originalMatches.Select(c => c.Collectible).ToList(),
@@ -157,10 +157,11 @@ public class AttributeCondition {
     stack.Attributes.SetInt("pieSize", 5);
     IAttribute[] expected = { new IntAttribute(5) };
     List<IAttribute> actual =
-        cond.GetValue(_resolver.CatDict, new("gourmand", "output1"), stack);
+        cond.GetValue(_resolver.Resolver, _resolver.CatDict,
+                      new("gourmand", "output1"), stack);
     Assert.IsTrue(CategoryValue.ValuesEqual(actual, expected));
-    actual =
-        cond.GetValue(_resolver.CatDict, new("gourmand", "output2"), stack);
+    actual = cond.GetValue(_resolver.Resolver, _resolver.CatDict,
+                           new("gourmand", "output2"), stack);
     Assert.IsTrue(CategoryValue.ValuesEqual(actual, expected));
   }
 
@@ -178,7 +179,8 @@ public class AttributeCondition {
     ItemStack stack = new(LoadAssets.GetItem("game", "fruit-pineapple"));
     stack.Attributes.SetInt("pieSize", 5);
     IAttribute[] expected = { new IntAttribute(5) };
-    List<IAttribute> actual = cond.GetValue(_resolver.CatDict, null, stack);
+    List<IAttribute> actual =
+        cond.GetValue(_resolver.Resolver, _resolver.CatDict, null, stack);
     Assert.IsTrue(CategoryValue.ValuesEqual(actual, expected));
   }
 }

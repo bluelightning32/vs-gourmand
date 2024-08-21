@@ -51,7 +51,8 @@ public class AttributeCondition : ICondition {
     return attributes;
   }
 
-  public bool IsMatch(Collectibles.IReadonlyCategoryDict catdict,
+  public bool IsMatch(IWorldAccessor resolver,
+                      Collectibles.IReadonlyCategoryDict catdict,
                       ItemStack stack) {
     IAttribute attribute = GetAttribute(stack);
     if (attribute == null) {
@@ -73,7 +74,8 @@ public class AttributeCondition : ICondition {
     return compareValue.Equals(stackValue);
   }
 
-  public List<IAttribute> GetValue(Collectibles.IReadonlyCategoryDict catdict,
+  public List<IAttribute> GetValue(IWorldAccessor resolver,
+                                   Collectibles.IReadonlyCategoryDict catdict,
                                    AssetLocation category, ItemStack stack) {
     // It is the caller's responsibility to ensure the stack is a match, and the
     // category is one of the output categories. So with that assumed, the value
@@ -87,7 +89,8 @@ public class AttributeCondition : ICondition {
   /// </summary>
   /// <param name="catdict">category dictionary</param>
   /// <param name="matches">input and output list of matched item stacks</param>
-  public void EnumerateMatches(Collectibles.IReadonlyCategoryDict catdict,
+  public void EnumerateMatches(IWorldAccessor resolver,
+                               Collectibles.IReadonlyCategoryDict catdict,
                                ref List<ItemStack> matches) {
     matches ??= new();
     foreach (ItemStack stack in matches) {

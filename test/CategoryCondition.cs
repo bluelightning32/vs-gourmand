@@ -52,13 +52,13 @@ public class CategoryCondition {
                                                                    "gourmand");
 
     Assert.IsTrue(cond.IsMatch(
-        _resolver.CatDict,
+        _resolver.Resolver, _resolver.CatDict,
         new ItemStack(LoadAssets.GetItem("game", "fruit-pineapple"))));
     Assert.IsFalse(cond.IsMatch(
-        _resolver.CatDict,
+        _resolver.Resolver, _resolver.CatDict,
         new ItemStack(LoadAssets.GetItem("game", "fruit-cranberry"))));
     Assert.IsFalse(
-        cond.IsMatch(_resolver.CatDict,
+        cond.IsMatch(_resolver.Resolver, _resolver.CatDict,
                      new ItemStack(LoadAssets.GetItem("game", "firestarter"))));
   }
 
@@ -74,7 +74,7 @@ public class CategoryCondition {
                                                                    "gourmand");
 
     List<ItemStack> matches = null;
-    cond.EnumerateMatches(_resolver.CatDict, ref matches);
+    cond.EnumerateMatches(_resolver.Resolver, _resolver.CatDict, ref matches);
 
     List<CollectibleObject> collectibles =
         matches.Select(c => c.Collectible).ToList();
@@ -103,7 +103,7 @@ public class CategoryCondition {
         new() { new ItemStack(LoadAssets.GetItem("game", "fruit-pineapple"), 2),
                 new ItemStack(LoadAssets.GetItem("game", "fruit-cranberry"), 2),
                 new ItemStack(LoadAssets.GetItem("game", "firestarter"), 2) };
-    cond.EnumerateMatches(_resolver.CatDict, ref matches);
+    cond.EnumerateMatches(_resolver.Resolver, _resolver.CatDict, ref matches);
 
     List<CollectibleObject> collectibles =
         matches.Select(c => c.Collectible).ToList();
@@ -154,10 +154,11 @@ public class CategoryCondition {
     ItemStack stack = new(LoadAssets.GetItem("game", "fruit-pineapple"));
     IAttribute[] expected = { new LongAttribute(11) };
     List<IAttribute> actual =
-        cond.GetValue(_resolver.CatDict, new("gourmand", "output1"), stack);
+        cond.GetValue(_resolver.Resolver, _resolver.CatDict,
+                      new("gourmand", "output1"), stack);
     Assert.IsTrue(CategoryValue.ValuesEqual(actual, expected));
-    actual =
-        cond.GetValue(_resolver.CatDict, new("gourmand", "output2"), stack);
+    actual = cond.GetValue(_resolver.Resolver, _resolver.CatDict,
+                           new("gourmand", "output2"), stack);
     Assert.IsTrue(CategoryValue.ValuesEqual(actual, expected));
   }
 
@@ -174,7 +175,8 @@ public class CategoryCondition {
 
     ItemStack stack = new(LoadAssets.GetItem("game", "fruit-pineapple"));
     IAttribute[] expected = { new LongAttribute(11) };
-    List<IAttribute> actual = cond.GetValue(_resolver.CatDict, null, stack);
+    List<IAttribute> actual =
+        cond.GetValue(_resolver.Resolver, _resolver.CatDict, null, stack);
     Assert.IsTrue(CategoryValue.ValuesEqual(actual, expected));
   }
 }
