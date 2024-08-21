@@ -20,13 +20,13 @@ public class CategoryCondition {
     string rulesJson = @"
     [
       {
-        code: { match: ""game:fruit-*"" },
+        code: { match: ""game:fruit-*"", type: ""item"" },
         outputs: {
           ""cat1"": [ 11 ]
         }
       },
       {
-        code: { match: ""game:fruit-cranberry"" },
+        code: { match: ""game:fruit-cranberry"", type: ""item"" },
         priority: 2,
         deletes: [
           ""cat1""
@@ -38,8 +38,7 @@ public class CategoryCondition {
   }
 
   private static List<Real.MatchRule> ParseItemRules(string json) {
-    return JsonUtil.ToObject<List<Real.MatchRule>>(
-        json, "gourmand", MatchRuleConverter.AddConverter(EnumItemClass.Item));
+    return JsonUtil.ToObject<List<Real.MatchRule>>(json, "gourmand");
   }
 
   [TestMethod]
@@ -54,7 +53,7 @@ public class CategoryCondition {
                                                                    "gourmand");
 
     List<CollectibleObject> matches = null;
-    cond.EnumerateMatches(_resolver, EnumItemClass.Item, ref matches);
+    cond.EnumerateMatches(_resolver, ref matches);
 
     CollectionAssert.Contains(matches,
                               LoadAssets.GetItem("game", "fruit-pineapple"));
@@ -81,7 +80,7 @@ public class CategoryCondition {
         new() { LoadAssets.GetItem("game", "fruit-pineapple"),
                 LoadAssets.GetItem("game", "fruit-cranberry"),
                 LoadAssets.GetItem("game", "firestarter") };
-    cond.EnumerateMatches(_resolver, EnumItemClass.Item, ref matches);
+    cond.EnumerateMatches(_resolver, ref matches);
 
     CollectionAssert.Contains(matches,
                               LoadAssets.GetItem("game", "fruit-pineapple"));

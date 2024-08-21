@@ -23,8 +23,7 @@ public class MatchRule {
     {
     }
     ";
-    Real.MatchRule rule = JsonUtil.ToObject<Real.MatchRule>(
-        json, "gourmand", MatchRuleConverter.AddConverter(EnumItemClass.Item));
+    Real.MatchRule rule = JsonUtil.ToObject<Real.MatchRule>(json, "gourmand");
     Assert.AreEqual(1.0, rule.Priority);
     CollectionAssert.AreEqual(
         Array.Empty<KeyValuePair<AssetLocation, IAttribute[]>>(),
@@ -43,8 +42,7 @@ public class MatchRule {
       }
     }
     ";
-    Real.MatchRule rule = JsonUtil.ToObject<Real.MatchRule>(
-        json, "gourmand", MatchRuleConverter.AddConverter(EnumItemClass.Item));
+    Real.MatchRule rule = JsonUtil.ToObject<Real.MatchRule>(json, "gourmand");
     LoadAssets.AssertCategoriesEqual(
         new Dictionary<AssetLocation, IAttribute> {
           { new("gourmand", "category"), new StringAttribute("value") }
@@ -56,14 +54,13 @@ public class MatchRule {
   public void EnumerateMatches() {
     string json = @"
     {
-      code: { match: ""game:fruit-*"", outputs: [ ""category"" ] },
+      code: { match: ""game:fruit-*"", type: ""item"", outputs: [ ""category"" ] },
       outputs: {
         ""category"" : [ ""value"" ]
       }
     }
     ";
-    Real.MatchRule rule = JsonUtil.ToObject<Real.MatchRule>(
-        json, "gourmand", MatchRuleConverter.AddConverter(EnumItemClass.Item));
+    Real.MatchRule rule = JsonUtil.ToObject<Real.MatchRule>(json, "gourmand");
     List<CollectibleObject> matches = rule.EnumerateMatches(_resolver);
 
     CollectionAssert.Contains(matches,
@@ -79,14 +76,13 @@ public class MatchRule {
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
     string json = @"
     {
-      code: { match: ""game:fruit-*"", outputs: [ ""category"" ] },
+      code: { match: ""game:fruit-*"", type: ""item"", outputs: [ ""category"" ] },
       outputs: {
         ""category"" : [ ""value"" ]
       }
     }
     ";
-    Real.MatchRule rule = JsonUtil.ToObject<Real.MatchRule>(
-        json, "gourmand", MatchRuleConverter.AddConverter(EnumItemClass.Item));
+    Real.MatchRule rule = JsonUtil.ToObject<Real.MatchRule>(json, "gourmand");
     Real.CategoryDict categories = new();
     categories.Set(new AssetLocation("gourmand", "category"), pineapple,
                    new CategoryValue(2, null));
@@ -109,11 +105,12 @@ public class MatchRule {
         ""category"" : [ ""value"" ],
         ""category2"" : [ ""value2"" ]
       },
-      code: { match: ""game:fruit-*"", outputs: [ ""category"" ] }
+      code: {
+        match: ""game:fruit-*"", type: ""item"", outputs: [ ""category"" ]
+      }
     }
     ";
-    Real.MatchRule rule = JsonUtil.ToObject<Real.MatchRule>(
-        json, "gourmand", MatchRuleConverter.AddConverter(EnumItemClass.Item));
+    Real.MatchRule rule = JsonUtil.ToObject<Real.MatchRule>(json, "gourmand");
     Real.CategoryDict categories = new();
     categories.Set(new AssetLocation("gourmand", "category"), pineapple,
                    new CategoryValue(0, null));
@@ -146,11 +143,12 @@ public class MatchRule {
       deletes: [
         ""category2""
       ],
-      code: { match: ""game:fruit-*"", outputs: [ ""category"" ] }
+      code: {
+        match: ""game:fruit-*"", type: ""item"", outputs: [ ""category"" ]
+      }
     }
     ";
-    Real.MatchRule rule = JsonUtil.ToObject<Real.MatchRule>(
-        json, "gourmand", MatchRuleConverter.AddConverter(EnumItemClass.Item));
+    Real.MatchRule rule = JsonUtil.ToObject<Real.MatchRule>(json, "gourmand");
     Real.CategoryDict categories = new();
     categories.Set(
         new AssetLocation("gourmand", "category2"), pineapple,

@@ -31,13 +31,13 @@ abstract public class AggregateCondition : ICondition {
     return result;
   }
 
-  public void EnumerateMatches(MatchResolver resolver, EnumItemClass itemClass,
+  public void EnumerateMatches(MatchResolver resolver,
                                ref List<CollectibleObject> matches) {
     foreach (ICondition cond in Conditions) {
       if (cond == null) {
         continue;
       }
-      cond.EnumerateMatches(resolver, itemClass, ref matches);
+      cond.EnumerateMatches(resolver, ref matches);
     }
   }
 }

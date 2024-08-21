@@ -66,23 +66,7 @@ public class MatchRuleJson {
 /// serializer's current domain.
 /// </summary>
 public class MatchRuleConverter : JsonConverter<MatchRule> {
-  private EnumItemClass _itemClass;
-
-  public static JsonSerializerSettings
-  AddConverter(EnumItemClass itemClass,
-               JsonSerializerSettings settings = null) {
-    settings ??= new();
-    foreach (JsonConverter converter in settings.Converters) {
-      if (converter is MatchRuleConverter cconverter) {
-        cconverter._itemClass = itemClass;
-        return settings;
-      }
-    }
-    settings.Converters.Add(new MatchRuleConverter(itemClass));
-    return settings;
-  }
-
-  public MatchRuleConverter(EnumItemClass itemClass) { _itemClass = itemClass; }
+  public MatchRuleConverter() {}
 
   public override void WriteJson(JsonWriter writer, MatchRule value,
                                  JsonSerializer serializer) {
@@ -105,17 +89,17 @@ public class MatchRuleConverter : JsonConverter<MatchRule> {
         domain = (string)domainField.GetValue(converter);
       }
     }
-    return new MatchRule(_itemClass, domain, json);
+    return new MatchRule(domain, json);
   }
 
   public override bool CanWrite => false;
 }
 
+[JsonConverter(typeof(MatchRuleConverter))]
 public class MatchRule : MatchRuleJson {
   readonly public IReadOnlyDictionary<AssetLocation, IAttribute[]> Outputs;
 
   public readonly IReadOnlyList<ICondition> Conditions;
-  public readonly EnumItemClass ItemClass;
 
   /// <summary>
   /// Construct a CollectibleMatchRule. To create this from json, call
@@ -124,9 +108,7 @@ public class MatchRule : MatchRuleJson {
   /// <param name="itemClass">whether this rule matches blocks or items</param>
   /// <param name="domain">the default domain for assets</param>
   /// <param name="json">the unresolved json data</param>
-  public MatchRule(EnumItemClass itemClass, string domain, MatchRuleJson json)
-      : base(json) {
-    ItemClass = itemClass;
+  public MatchRule(string domain, MatchRuleJson json) : base(json) {
     Dictionary<AssetLocation, IAttribute[]> outputs = new(RawOutputs.Count);
     foreach (KeyValuePair<string, JToken[]> p in RawOutputs) {
       outputs.Add(
@@ -165,7 +147,7 @@ public class MatchRule : MatchRuleJson {
   public List<CollectibleObject> EnumerateMatches(MatchResolver resolver) {
     List<CollectibleObject> matches = null;
     foreach (ICondition condition in Conditions) {
-      condition.EnumerateMatches(resolver, ItemClass, ref matches);
+      condition.EnumerateMatches(resolver, ref matches);
     }
     return matches;
   }

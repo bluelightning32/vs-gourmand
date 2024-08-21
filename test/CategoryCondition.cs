@@ -18,13 +18,13 @@ public class CategoryCondition {
     string rulesJson = @"
     [
       {
-        code: { match: ""game:fruit-*"" },
+        code: { match: ""game:fruit-*"", type: ""item"" },
         outputs: {
           ""cat1"": [ 11 ]
         }
       },
       {
-        code: { match: ""game:fruit-cranberry"" },
+        code: { match: ""game:fruit-cranberry"", type: ""item"" },
         priority: 2,
         deletes: [
           ""cat1""
@@ -36,9 +36,8 @@ public class CategoryCondition {
   }
 
   private static List<Real.Collectibles.MatchRule> ParseItemRules(string json) {
-    return JsonUtil.ToObject<List<Real.Collectibles.MatchRule>>(
-        json, "gourmand",
-        Real.Collectibles.MatchRuleConverter.AddConverter(EnumItemClass.Item));
+    return JsonUtil.ToObject<List<Real.Collectibles.MatchRule>>(json,
+                                                                "gourmand");
   }
 
   [TestMethod]

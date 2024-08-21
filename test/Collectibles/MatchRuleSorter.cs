@@ -15,8 +15,7 @@ public class MatchRuleSorter {
   public MatchRuleSorter() {}
 
   private static List<Real.MatchRule> ParseRules(string json) {
-    return JsonUtil.ToObject<List<Real.MatchRule>>(
-        json, "gourmand", MatchRuleConverter.AddConverter(EnumItemClass.Item));
+    return JsonUtil.ToObject<List<Real.MatchRule>>(json, "gourmand");
   }
 
   [TestMethod]

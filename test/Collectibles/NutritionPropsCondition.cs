@@ -39,7 +39,7 @@ public class NutritionPropsCondition {
         JsonObject.FromJson(json).AsObject<Real.NutritionPropsCondition>(
             null, "gourmand");
     List<CollectibleObject> matches = null;
-    cond.EnumerateMatches(_resolver, EnumItemClass.Item, ref matches);
+    cond.EnumerateMatches(_resolver, ref matches);
 
     CollectionAssert.Contains(matches,
                               LoadAssets.GetItem("game", "fruit-pineapple"));
@@ -60,7 +60,7 @@ public class NutritionPropsCondition {
         JsonObject.FromJson(json).AsObject<Real.NutritionPropsCondition>(
             null, "gourmand");
     List<CollectibleObject> matches = null;
-    cond.EnumerateMatches(_resolver, EnumItemClass.Item, ref matches);
+    cond.EnumerateMatches(_resolver, ref matches);
 
     CollectionAssert.Contains(matches,
                               LoadAssets.GetItem("game", "fruit-pineapple"));
@@ -86,7 +86,7 @@ public class NutritionPropsCondition {
         JsonObject.FromJson(json).AsObject<Real.NutritionPropsCondition>(
             null, "gourmand");
     List<CollectibleObject> matches = null;
-    cond.EnumerateMatches(_resolver, EnumItemClass.Item, ref matches);
+    cond.EnumerateMatches(_resolver, ref matches);
 
     CollectionAssert.Contains(matches,
                               LoadAssets.GetItem("game", "fruit-pineapple"));
@@ -114,7 +114,7 @@ public class NutritionPropsCondition {
         new() { LoadAssets.GetItem("game", "fruit-pineapple"),
                 LoadAssets.GetItem("game", "fish-raw"),
                 LoadAssets.GetItem("game", "firestarter") };
-    cond.EnumerateMatches(_resolver, EnumItemClass.Item, ref matches);
+    cond.EnumerateMatches(_resolver, ref matches);
 
     CollectionAssert.Contains(matches,
                               LoadAssets.GetItem("game", "fruit-pineapple"));

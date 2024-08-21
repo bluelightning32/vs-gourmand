@@ -39,18 +39,18 @@ public class AttributeCondition : ICondition {
     }
   }
 
-  public void EnumerateMatches(MatchResolver resolver, EnumItemClass itemClass,
+  public void EnumerateMatches(MatchResolver resolver,
                                ref List<CollectibleObject> matches) {
-    matches ??= itemClass switch {
-      EnumItemClass.Block =>
-          resolver.Resolver.Blocks.ToList<CollectibleObject>(),
-      EnumItemClass.Item => resolver.Resolver.Items.ToList<CollectibleObject>(),
-      _ => throw new ArgumentException("Invalid enum value", nameof(itemClass)),
-    };
+    matches ??= resolver.Resolver.Blocks
+                    .Concat<CollectibleObject>(resolver.Resolver.Items)
+                    .ToList();
     matches.RemoveAll((c) => !IsMatch(c.Attributes));
   }
 
   private bool IsMatch(JsonObject attributes) {
+    if (attributes == null) {
+      return false;
+    }
     foreach (string name in Path) {
       attributes = attributes[name];
     }

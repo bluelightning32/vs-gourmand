@@ -31,7 +31,7 @@ public class CategoryCondition : ICondition {
     }
   }
 
-  public void EnumerateMatches(MatchResolver resolver, EnumItemClass itemClass,
+  public void EnumerateMatches(MatchResolver resolver,
                                ref List<CollectibleObject> matches) {
     if (matches == null) {
       matches = resolver.CatDict.EnumerateMatches(Input).ToList();

@@ -20,6 +20,7 @@ public class CodeCondition {
     string json = @"
     {
       match: ""fruit"",
+      type: ""item""
     }
     ";
     Real.CodeCondition cond =
@@ -44,14 +45,14 @@ public class CodeCondition {
   public void EnumerateMatchesExistingNull() {
     string json = @"
     {
-      match: ""game:fruit-*"",
+      match: ""game:fruit-*"", type: ""item""
     }
     ";
     Real.CodeCondition cond =
         JsonObject.FromJson(json).AsObject<Real.CodeCondition>(null,
                                                                "gourmand");
     List<CollectibleObject> matches = null;
-    cond.EnumerateMatches(_resolver, EnumItemClass.Item, ref matches);
+    cond.EnumerateMatches(_resolver, ref matches);
 
     CollectionAssert.Contains(matches,
                               LoadAssets.GetItem("game", "fruit-pineapple"));
@@ -65,7 +66,7 @@ public class CodeCondition {
   public void EnumerateMatchesExisting() {
     string json = @"
     {
-      match: ""game:fruit-*"",
+      match: ""game:fruit-*"", type: ""item""
     }
     ";
     Real.CodeCondition cond =
@@ -74,7 +75,7 @@ public class CodeCondition {
     List<CollectibleObject> matches =
         new() { LoadAssets.GetItem("game", "fruit-pineapple"),
                 LoadAssets.GetItem("game", "firestarter") };
-    cond.EnumerateMatches(_resolver, EnumItemClass.Item, ref matches);
+    cond.EnumerateMatches(_resolver, ref matches);
 
     CollectionAssert.Contains(matches,
                               LoadAssets.GetItem("game", "fruit-pineapple"));
@@ -88,7 +89,7 @@ public class CodeCondition {
   public void GetCategoriesOutputEmpty() {
     string json = @"
     {
-      match: ""game:fruit-*"",
+      match: ""game:fruit-*"", type: ""item""
     }
     ";
     Real.CodeCondition cond =
@@ -104,7 +105,7 @@ public class CodeCondition {
   public void GetCategoriesOutput2() {
     string json = @"
     {
-      match: ""game:fruit-*"",
+      match: ""game:fruit-*"", type: ""item"",
       outputs: [""category1"", ""category2""]
     }
     ";
@@ -127,7 +128,7 @@ public class CodeCondition {
   public void Categories2() {
     string json = @"
     {
-      match: ""game:fruit-*"",
+      match: ""game:fruit-*"", type: ""item"",
       outputs: [""category1"", ""category2""]
     }
     ";

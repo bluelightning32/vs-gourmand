@@ -14,23 +14,29 @@ public class CodeCondition : ICondition {
   [JsonProperty(Required = Required.Always)]
   readonly public AssetLocation Match;
 
+  [JsonProperty(Required = Required.Always)]
+  readonly public EnumItemClass Type;
+
   [JsonProperty]
   public readonly AssetLocation[] Outputs;
 
-  public CodeCondition(AssetLocation match, AssetLocation[] output) {
+  public CodeCondition(AssetLocation match, EnumItemClass type,
+                       AssetLocation[] output) {
     Match = match;
+    Type = type;
     Outputs = output ?? Array.Empty<AssetLocation>();
   }
 
   public IEnumerable<AssetLocation> Categories => Outputs;
 
-  public void EnumerateMatches(MatchResolver resolver, EnumItemClass itemClass,
+  public void EnumerateMatches(MatchResolver resolver,
                                ref List<CollectibleObject> matches) {
     if (matches == null) {
-      matches = resolver.GetMatchingCollectibles(Match, itemClass).ToList();
+      matches = resolver.GetMatchingCollectibles(Match, Type).ToList();
       return;
     }
-    matches.RemoveAll((c) => !WildcardUtil.Match(Match, c.Code));
+    matches.RemoveAll((c) => c.ItemClass != Type ||
+                             !WildcardUtil.Match(Match, c.Code));
   }
 
   public IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>>
