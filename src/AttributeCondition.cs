@@ -40,19 +40,22 @@ public class AttributeCondition : ICondition {
     }
     Path = path;
     RawValue = value;
+    if ((value != null) && (enumerateValues != null)) {
+      throw new ArgumentException("Only one of 'value' or 'enumerateValues' may be present.");
+    }
+
     if (value != null) {
       Value = new JsonObject(value).ToAttribute();
-    } else {
-      Value = null;
-    }
-    if (enumerateValues != null) {
-      EnumerateValues =
-          enumerateValues.Select(v => new JsonObject(v).ToAttribute())
-              .ToArray();
-    } else if (Value != null) {
       EnumerateValues = new IAttribute[] { Value };
     } else {
-      EnumerateValues = Array.Empty<IAttribute>();
+      Value = null;
+      if (enumerateValues != null) {
+        EnumerateValues =
+            enumerateValues.Select(v => new JsonObject(v).ToAttribute())
+                .ToArray();
+      } else {
+        EnumerateValues = Array.Empty<IAttribute>();
+      }
     }
     AllowCast = allowCast;
 
