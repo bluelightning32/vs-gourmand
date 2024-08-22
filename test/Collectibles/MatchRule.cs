@@ -5,10 +5,9 @@ using PrefixClassName.MsTest;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 
-using Gourmand.Collectibles;
-
 namespace Gourmand.Test.Collectibles;
 
+using CategoryValue = Gourmand.CategoryValue;
 using Real = Gourmand.Collectibles;
 
 [PrefixTestClass]

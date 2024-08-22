@@ -4,8 +4,9 @@ using PrefixClassName.MsTest;
 
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
-using Vintagestory.Common;
 using Vintagestory.Server;
+
+using Real = Gourmand;
 
 namespace Gourmand.Test;
 
@@ -51,12 +52,12 @@ public class LoadAssets {
     CollectionAssert.AreEquivalent(
         expected
             .Select<KeyValuePair<AssetLocation, IAttribute[]>,
-                    KeyValuePair<AssetLocation, CategoryValue>>(
+                    KeyValuePair<AssetLocation, Real.CategoryValue>>(
                 (p) => new(p.Key, new(1, p.Value.ToList())))
             .ToList(),
         actual
             .Select<KeyValuePair<AssetLocation, IAttribute[]>,
-                    KeyValuePair<AssetLocation, CategoryValue>>(
+                    KeyValuePair<AssetLocation, Real.CategoryValue>>(
                 (p) => new(p.Key, new(1, p.Value.ToList())))
             .ToList());
   }

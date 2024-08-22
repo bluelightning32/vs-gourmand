@@ -159,10 +159,10 @@ public class AttributeCondition {
     List<IAttribute> actual =
         cond.GetValue(_resolver.Resolver, _resolver.CatDict,
                       new("gourmand", "output1"), stack);
-    Assert.IsTrue(CategoryValue.ValuesEqual(actual, expected));
+    Assert.IsTrue(Real.CategoryValue.ValuesEqual(actual, expected));
     actual = cond.GetValue(_resolver.Resolver, _resolver.CatDict,
                            new("gourmand", "output2"), stack);
-    Assert.IsTrue(CategoryValue.ValuesEqual(actual, expected));
+    Assert.IsTrue(Real.CategoryValue.ValuesEqual(actual, expected));
   }
 
   [TestMethod]
@@ -181,6 +181,6 @@ public class AttributeCondition {
     IAttribute[] expected = { new IntAttribute(5) };
     List<IAttribute> actual =
         cond.GetValue(_resolver.Resolver, _resolver.CatDict, null, stack);
-    Assert.IsTrue(CategoryValue.ValuesEqual(actual, expected));
+    Assert.IsTrue(Real.CategoryValue.ValuesEqual(actual, expected));
   }
 }

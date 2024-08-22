@@ -30,7 +30,7 @@ public class CategoryValue : IEquatable<CategoryValue> {
   }
 
   public override int GetHashCode() {
-    return Priority.GetHashCode() ^ (Value?.GetHashCode() ?? 0);
+    return Priority.GetHashCode() ^ ValuesGetHashCode(Value);
   }
 
   public override string ToString() {
@@ -42,6 +42,19 @@ public class CategoryValue : IEquatable<CategoryValue> {
     }
     builder.Append("]}");
     return builder.ToString();
+  }
+
+  public static int ValuesGetHashCode(IReadOnlyCollection<IAttribute> value) {
+    int total = 0;
+    if (value != null) {
+      foreach (IAttribute a in value) {
+        total += 0xE;
+        // Rotate total to the left 13 bits.
+        total = (total << 13) | (total >> (32 - 13));
+        total ^= a.GetHashCode();
+      }
+    }
+    return total;
   }
 
   public static bool ValuesEqual(IReadOnlyCollection<IAttribute> value1,
