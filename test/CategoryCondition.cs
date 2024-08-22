@@ -140,7 +140,7 @@ public class CategoryCondition {
   }
 
   [TestMethod]
-  public void GetValue() {
+  public void AppendValue() {
     string json = @"
     {
       input: ""cat1"",
@@ -153,12 +153,13 @@ public class CategoryCondition {
 
     ItemStack stack = new(LoadAssets.GetItem("game", "fruit-pineapple"));
     IAttribute[] expected = { new LongAttribute(11) };
-    List<IAttribute> actual =
-        cond.GetValue(_resolver.Resolver, _resolver.CatDict,
-                      new("gourmand", "output1"), stack);
+    List<IAttribute> actual = new();
+    cond.AppendValue(_resolver.Resolver, _resolver.CatDict,
+                     new("gourmand", "output1"), stack, actual);
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(actual, expected));
-    actual = cond.GetValue(_resolver.Resolver, _resolver.CatDict,
-                           new("gourmand", "output2"), stack);
+    actual.Clear();
+    cond.AppendValue(_resolver.Resolver, _resolver.CatDict,
+                     new("gourmand", "output2"), stack, actual);
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(actual, expected));
   }
 }

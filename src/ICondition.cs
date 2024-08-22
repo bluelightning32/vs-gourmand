@@ -16,17 +16,20 @@ public interface ICondition {
                Collectibles.IReadonlyCategoryDict catdict, ItemStack stack);
 
   /// <summary>
-  /// Gets the value of a category of a match. The result is undefined if the
-  /// given stack is not a match, or if this condition does not output the given
-  /// category.
+  /// Appends the value of a category of a match to an existing list. The result
+  /// is undefined if the given stack is not a match, or if this condition does
+  /// not output the given category.
   /// </summary>
-  /// <param name="catdict">a precomputed dictionary of categories for
-  /// collectible objects</param> <param name="category">the category to look
-  /// up</param> <param name="stack">the stack to look up</param> <returns>the
-  /// category value's attribute array</returns>
-  public List<IAttribute> GetValue(IWorldAccessor resolver,
-                                   Collectibles.IReadonlyCategoryDict catdict,
-                                   AssetLocation category, ItemStack stack);
+  /// <param name="catdict">
+  /// a precomputed dictionary of categories for collectible objects</param>
+  /// <param name="category">
+  /// the category to look up</param>
+  /// <param name="stack">the stack to look up</param>
+  /// <param name="result">the list to append the result to</param>
+  public void AppendValue(IWorldAccessor resolver,
+                          Collectibles.IReadonlyCategoryDict catdict,
+                          AssetLocation category, ItemStack stack,
+                          List<IAttribute> result);
 
   /// <summary>
   /// All categories outputted by this condition for matches.

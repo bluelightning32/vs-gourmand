@@ -171,7 +171,7 @@ public class AttributeCondition {
   }
 
   [TestMethod]
-  public void GetValue() {
+  public void AppendValue() {
     string json = @"
     {
       path: [""pieSize""],
@@ -185,12 +185,13 @@ public class AttributeCondition {
     ItemStack stack = new(LoadAssets.GetItem("game", "fruit-pineapple"));
     stack.Attributes.SetInt("pieSize", 5);
     IAttribute[] expected = { new IntAttribute(5) };
-    List<IAttribute> actual =
-        cond.GetValue(_resolver.Resolver, _resolver.CatDict,
-                      new("gourmand", "output1"), stack);
+    List<IAttribute> actual = new();
+    cond.AppendValue(_resolver.Resolver, _resolver.CatDict,
+                     new("gourmand", "output1"), stack, actual);
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(actual, expected));
-    actual = cond.GetValue(_resolver.Resolver, _resolver.CatDict,
-                           new("gourmand", "output2"), stack);
+    actual.Clear();
+    cond.AppendValue(_resolver.Resolver, _resolver.CatDict,
+                     new("gourmand", "output2"), stack, actual);
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(actual, expected));
   }
 }

@@ -94,13 +94,14 @@ public class AttributeCondition : ICondition {
     return compareValue.Equals(stackValue);
   }
 
-  public List<IAttribute> GetValue(IWorldAccessor resolver,
-                                   Collectibles.IReadonlyCategoryDict catdict,
-                                   AssetLocation category, ItemStack stack) {
+  public void AppendValue(IWorldAccessor resolver,
+                          Collectibles.IReadonlyCategoryDict catdict,
+                          AssetLocation category, ItemStack stack,
+                          List<IAttribute> result) {
     // It is the caller's responsibility to ensure the stack is a match, and the
     // category is one of the output categories. So with that assumed, the value
     // can be directly returned.
-    return new List<IAttribute>() { GetAttribute(stack) };
+    result.Add(GetAttribute(stack));
   }
 
   /// <summary>

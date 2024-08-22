@@ -28,13 +28,14 @@ public class CategoryCondition : ICondition {
     return catdict.InCategory(Input, stack.Collectible);
   }
 
-  public List<IAttribute> GetValue(IWorldAccessor resolver,
-                                   Collectibles.IReadonlyCategoryDict catdict,
-                                   AssetLocation category, ItemStack stack) {
+  public void AppendValue(IWorldAccessor resolver,
+                          Collectibles.IReadonlyCategoryDict catdict,
+                          AssetLocation category, ItemStack stack,
+                          List<IAttribute> result) {
     // All of the output categories have the same value for any given ItemStack.
     // The behavior is undefined if stack is not in the category. So skip
     // checking whether the stack is in the Input category.
-    return catdict.GetValue(Input, stack.Collectible).Value;
+    result.AddRange(catdict.GetValue(Input, stack.Collectible).Value);
   }
 
   public void EnumerateMatches(IWorldAccessor resolver,
