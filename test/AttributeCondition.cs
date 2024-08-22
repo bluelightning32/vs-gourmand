@@ -121,6 +121,35 @@ public class AttributeCondition {
   }
 
   [TestMethod]
+  public void EnumerateMatchesEnumerateValues() {
+    string json = @"
+    {
+      path: [""pieSize""],
+      enumerateValues: [1, 2]
+    }
+    ";
+    Real.AttributeCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.AttributeCondition>(null,
+                                                                    "gourmand");
+
+    List<ItemStack> originalMatches =
+        new() { new ItemStack(LoadAssets.GetBlock("game", "pie-perfect"), 2),
+                new ItemStack(LoadAssets.GetBlock("game", "pie-charred"), 2) };
+    originalMatches[1].Attributes.SetInt("pieSize", 5);
+    List<ItemStack> matches = originalMatches.ToList();
+    cond.EnumerateMatches(_resolver.Resolver, _resolver.CatDict, ref matches);
+
+    CollectionAssert.AreEqual(
+        originalMatches.Select(c => c.Collectible).ToHashSet().ToList(),
+        matches.Select(c => c.Collectible).ToHashSet().ToList());
+    Assert.AreEqual(2,
+                    matches.Count(i => i.Attributes.GetAsInt("pieSize") == 1));
+    Assert.AreEqual(2,
+                    matches.Count(i => i.Attributes.GetAsInt("pieSize") == 2));
+    Assert.AreEqual(originalMatches.Count * 2, matches.Count);
+  }
+
+  [TestMethod]
   public void Categories2() {
     string json = @"
     {

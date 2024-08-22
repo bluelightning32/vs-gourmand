@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
@@ -18,6 +19,11 @@ public class AttributeCondition : ICondition {
   [JsonProperty("value")]
   public readonly JToken RawValue;
   public readonly IAttribute Value;
+
+  [JsonProperty("enumerateValues")]
+  public readonly JToken[] RawEnumerateValues;
+  public readonly IAttribute[] EnumerateValues;
+
   [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
   [DefaultValue(true)]
   public readonly bool AllowCast;
@@ -26,7 +32,8 @@ public class AttributeCondition : ICondition {
 
   public IEnumerable<AssetLocation> Categories => Outputs;
 
-  public AttributeCondition(string[] path, JToken value, bool allowCast,
+  public AttributeCondition(string[] path, JToken value,
+                            JToken[] enumerateValues, bool allowCast,
                             AssetLocation[] output) {
     if (path.Length < 1) {
       throw new FormatException("Path must have at least one element.");
@@ -37,6 +44,15 @@ public class AttributeCondition : ICondition {
       Value = new JsonObject(value).ToAttribute();
     } else {
       Value = null;
+    }
+    if (enumerateValues != null) {
+      EnumerateValues =
+          enumerateValues.Select(v => new JsonObject(v).ToAttribute())
+              .ToArray();
+    } else if (Value != null) {
+      EnumerateValues = new IAttribute[] { Value };
+    } else {
+      EnumerateValues = Array.Empty<IAttribute>();
     }
     AllowCast = allowCast;
 
@@ -85,7 +101,8 @@ public class AttributeCondition : ICondition {
 
   /// <summary>
   /// Set or add the attribute on all existing matches. Only existing item
-  /// stacks in matches are modified. No new item stacks are added.
+  /// stacks in matches are modified. Any added item stacks are only copies of
+  /// existing stacks with a different attribute value set.
   /// </summary>
   /// <param name="catdict">category dictionary</param>
   /// <param name="matches">input and output list of matched item stacks</param>
@@ -93,12 +110,27 @@ public class AttributeCondition : ICondition {
                                Collectibles.IReadonlyCategoryDict catdict,
                                ref List<ItemStack> matches) {
     matches ??= new();
-    foreach (ItemStack stack in matches) {
-      ITreeAttribute attributes = stack.Attributes;
-      for (int i = 0; i < Path.Length - 1; ++i) {
-        attributes = attributes.GetOrAddTreeAttribute(Path[i]);
-      }
-      attributes[Path[^1]] = Value.Clone();
+    if (EnumerateValues.Length == 0) {
+      matches.Clear();
+      return;
     }
+    int matchesCount = matches.Count;
+    for (int matchIndex = 0; matchIndex < matchesCount; ++matchIndex) {
+      ItemStack stack = matches[matchIndex];
+      SetAttribute(stack.Attributes, EnumerateValues[0]);
+      for (int valueIndex = 1; valueIndex < EnumerateValues.Length;
+           ++valueIndex) {
+        ItemStack newStack = stack.Clone();
+        SetAttribute(stack.Attributes, EnumerateValues[valueIndex]);
+        matches.Add(newStack);
+      }
+    }
+  }
+
+  private void SetAttribute(ITreeAttribute attributes, IAttribute value) {
+    for (int i = 0; i < Path.Length - 1; ++i) {
+      attributes = attributes.GetOrAddTreeAttribute(Path[i]);
+    }
+    attributes[Path[^1]] = value.Clone();
   }
 }
