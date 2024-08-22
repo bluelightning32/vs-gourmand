@@ -193,23 +193,4 @@ public class AttributeCondition {
                            new("gourmand", "output2"), stack);
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(actual, expected));
   }
-
-  [TestMethod]
-  public void GetValueNullCat() {
-    string json = @"
-    {
-      path: [""pieSize""]
-    }
-    ";
-    Real.AttributeCondition cond =
-        JsonObject.FromJson(json).AsObject<Real.AttributeCondition>(null,
-                                                                    "gourmand");
-
-    ItemStack stack = new(LoadAssets.GetItem("game", "fruit-pineapple"));
-    stack.Attributes.SetInt("pieSize", 5);
-    IAttribute[] expected = { new IntAttribute(5) };
-    List<IAttribute> actual =
-        cond.GetValue(_resolver.Resolver, _resolver.CatDict, null, stack);
-    Assert.IsTrue(Real.CategoryValue.ValuesEqual(actual, expected));
-  }
 }

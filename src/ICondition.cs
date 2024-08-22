@@ -17,12 +17,8 @@ public interface ICondition {
 
   /// <summary>
   /// Gets the value of a category of a match. The result is undefined if the
-  /// given stack is not a match. The result is also undefined if the category
-  /// is non-null and this condition does not output the given category.
-  ///
-  /// If the category is null, then output a list of all category values that
-  /// this condition could output, if it were configured to output to
-  /// categories.
+  /// given stack is not a match, or if this condition does not output the given
+  /// category.
   /// </summary>
   /// <param name="catdict">a precomputed dictionary of categories for
   /// collectible objects</param> <param name="category">the category to look
