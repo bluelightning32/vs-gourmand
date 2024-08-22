@@ -87,4 +87,74 @@ public class CategoryValue : IEquatable<CategoryValue> {
     }
     return true;
   }
+
+  public static int CompareAttributes(IAttribute x, IAttribute y) {
+    if (x == null) {
+      if (y == null) {
+        return 0;
+      } else {
+        return -1;
+      }
+    }
+    if (y == null) {
+      return 1;
+    }
+    int attrDiff = x.GetAttributeId() - y.GetAttributeId();
+    if (attrDiff != 0) {
+      return attrDiff;
+    }
+    object xValue = x.GetValue();
+    object yValue = y.GetValue();
+    if (xValue is IComparable comparable) {
+      return comparable.CompareTo(yValue);
+    }
+    return xValue.GetHashCode() - yValue.GetHashCode();
+  }
+
+  /// <summary>
+  /// Performs a lexicographical comparison between two arrays of attributes
+  /// </summary>
+  /// <param name="x">first attribute array</param>
+  /// <param name="y">second attribute array</param>
+  /// <returns>less than 0 if x is less than y, 0 if they are equal, or greater
+  /// than 0 if x is greater than y</returns>
+  public static int
+  CompareAttributeCollections(IReadOnlyCollection<IAttribute> x,
+                              IReadOnlyCollection<IAttribute> y) {
+    if (x == null) {
+      if (y == null) {
+        return 0;
+      } else {
+        return -1;
+      }
+    }
+    if (y == null) {
+      return 1;
+    }
+    using IEnumerator<IAttribute> xe = x.GetEnumerator();
+    using IEnumerator<IAttribute> ye = y.GetEnumerator();
+    // Before the first call to xe.MoveNext, xe.Current points before the
+    // first element and is invalid.
+    while (xe.MoveNext()) {
+      if (!ye.MoveNext()) {
+        // xe has more elements than ye
+        return 1;
+      }
+      int comparison = CompareAttributes(xe.Current, ye.Current);
+      if (comparison != 0) {
+        return comparison;
+      }
+    }
+    if (ye.MoveNext()) {
+      // enum2 has more elements than enum1
+      return -1;
+    }
+    return 0;
+  }
+}
+
+public class ListIAttributeComparer : IComparer<List<IAttribute>> {
+  public int Compare(List<IAttribute> x, List<IAttribute> y) {
+    return CategoryValue.CompareAttributeCollections(x, y);
+  }
 }

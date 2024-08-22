@@ -41,7 +41,8 @@ public class AttributeCondition : ICondition {
     Path = path;
     RawValue = value;
     if ((value != null) && (enumerateValues != null)) {
-      throw new ArgumentException("Only one of 'value' or 'enumerateValues' may be present.");
+      throw new ArgumentException(
+          "Only one of 'value' or 'enumerateValues' may be present.");
     }
 
     if (value != null) {
