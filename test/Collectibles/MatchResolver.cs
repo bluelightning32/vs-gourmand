@@ -85,4 +85,20 @@ public class MatchResolver {
     Assert.IsTrue(blocks.Any((block) => block.Code.Path == "egg-chicken-1"));
     _mock.Verify(x => x.SearchBlocks(It.IsAny<AssetLocation>()), Times.Never);
   }
+
+  [TestMethod]
+  public void SearchAllBlocks() {
+    IReadOnlyList<Block> blocks =
+        _resolver.GetMatchingBlocks(new AssetLocation("*", "*"));
+    Assert.AreEqual(_resolver.AllBlocks, blocks);
+    _mock.Verify(x => x.SearchBlocks(It.IsAny<AssetLocation>()), Times.Never);
+  }
+
+  [TestMethod]
+  public void SearchAllItems() {
+    IReadOnlyList<Item> items =
+        _resolver.GetMatchingItems(new AssetLocation("*", "*"));
+    Assert.AreEqual(_resolver.Resolver.Items, items);
+    _mock.Verify(x => x.SearchItems(It.IsAny<AssetLocation>()), Times.Never);
+  }
 }

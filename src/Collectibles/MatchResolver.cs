@@ -1,10 +1,26 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 using Vintagestory.API.Common;
 using Vintagestory.API.Util;
 
 namespace Gourmand.Collectibles;
+
+public class ListAdapter<X> : IReadOnlyList<X> {
+  private readonly IList<X> _list;
+
+  public ListAdapter(IList<X> list) { _list = list; }
+
+  public X this[int index] => _list[index];
+
+  public int Count => _list.Count;
+
+  public IEnumerator<X> GetEnumerator() { return _list.GetEnumerator(); }
+
+  IEnumerator IEnumerable.GetEnumerator() { return _list.GetEnumerator(); }
+}
 
 /// <summary>
 /// Temporarily holds the state necessary to resolve the matchers. This is
@@ -16,6 +32,8 @@ public class MatchResolver {
   public readonly IWorldAccessor Resolver;
   private readonly CategoryDict _catdict = new();
   public IReadonlyCategoryDict CatDict => _catdict;
+  private IReadOnlyList<Item> _allItems = null;
+  private IReadOnlyList<Block> _allBlocks = null;
 
   // An dictionary of all item variants, indexed by the first part of their code
   // (everything up to the first '-'). Only items that have a '-' in their code
@@ -38,6 +56,30 @@ public class MatchResolver {
         }
       }
       return _itemVariantsByPrefix;
+    }
+  }
+
+  public IReadOnlyList<Item> AllItems {
+    get {
+      if (_allItems == null) {
+        _allItems = Resolver.Items as IReadOnlyList<Item>;
+        if (_allItems == null) {
+          _allItems = new ListAdapter<Item>(Resolver.Items);
+        }
+      }
+      return _allItems;
+    }
+  }
+
+  public IReadOnlyList<Block> AllBlocks {
+    get {
+      if (_allBlocks == null) {
+        _allBlocks = Resolver.Blocks as IReadOnlyList<Block>;
+        if (_allBlocks == null) {
+          _allBlocks = new ListAdapter<Block>(Resolver.Blocks);
+        }
+      }
+      return _allBlocks;
     }
   }
 
@@ -70,7 +112,7 @@ public class MatchResolver {
   private static IReadOnlyList<X> GetMatchingCollectibles<X>(
       AssetLocation wildcard,
       System.Func<string, AssetLocation, IReadOnlyList<X>> acceleratedSearch,
-      System.Func<AssetLocation, IReadOnlyList<X>> search,
+      IReadOnlyList<X> all, System.Func<AssetLocation, IReadOnlyList<X>> search,
       System.Func<AssetLocation, IReadOnlyList<X>> getDirect)
       where X : CollectibleObject {
     if (wildcard.Path[0] == '@') {
@@ -104,8 +146,12 @@ public class MatchResolver {
         return getDirect(wildcard);
       }
       if (wildcard.Path[pos] == '*') {
-        // The asterisk came before the hyphen. This cannot be accelerated.
-        return search(wildcard);
+        if (pos == 0 && wildcard.Domain == "*") {
+          return all;
+        } else {
+          // The asterisk came before the hyphen. This cannot be accelerated.
+          return search(wildcard);
+        }
       }
     }
     // The path was not a wildcard.
@@ -138,7 +184,7 @@ public class MatchResolver {
 
   public IReadOnlyList<Item> GetMatchingItems(AssetLocation wildcard) {
     return GetMatchingCollectibles(wildcard, AcceleratedGetMatchingItems,
-                                   Resolver.SearchItems,
+                                   AllItems, Resolver.SearchItems,
                                    GetMatchingItemsWithoutWildcard);
   }
 
@@ -168,7 +214,7 @@ public class MatchResolver {
 
   public IReadOnlyList<Block> GetMatchingBlocks(AssetLocation wildcard) {
     return GetMatchingCollectibles(wildcard, AcceleratedGetMatchingBlocks,
-                                   Resolver.SearchBlocks,
+                                   AllBlocks, Resolver.SearchBlocks,
                                    GetMatchingBlocksWithoutWildcard);
   }
 
