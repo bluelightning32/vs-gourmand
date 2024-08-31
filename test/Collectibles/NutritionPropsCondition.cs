@@ -39,6 +39,8 @@ public class NutritionPropsCondition {
     Real.NutritionPropsCondition cond =
         JsonObject.FromJson(json).AsObject<Real.NutritionPropsCondition>(
             null, "gourmand");
+    Assert.IsNull(cond.Category.Value);
+
     List<CollectibleObject> matches = null;
     cond.EnumerateMatches(_resolver, ref matches);
 
@@ -46,6 +48,8 @@ public class NutritionPropsCondition {
                               LoadAssets.GetItem("game", "fruit-pineapple"));
     CollectionAssert.Contains(matches,
                               LoadAssets.GetItem("game", "fruit-blueberry"));
+    CollectionAssert.Contains(matches,
+                              LoadAssets.GetItem("game", "vegetable-onion"));
     CollectionAssert.DoesNotContain(matches,
                                     LoadAssets.GetItem("game", "firestarter"));
   }

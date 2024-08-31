@@ -45,7 +45,7 @@ public class NutritionCategoryCondition : NutritionConditionBase {
   [JsonProperty]
   public readonly EnumFoodCategory? Value;
 
-  public NutritionCategoryCondition(EnumFoodCategory value,
+  public NutritionCategoryCondition(EnumFoodCategory? value,
                                     AssetLocation[] outputs)
       : base(outputs) {
     Value = value;
