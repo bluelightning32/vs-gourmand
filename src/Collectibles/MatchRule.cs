@@ -29,7 +29,7 @@ public class MatchRuleJson {
   [JsonProperty]
   public readonly CategoryCondition[] Categories;
   [JsonProperty]
-  public readonly NutritionPropsCondition NutritionProp;
+  public readonly NutritionPropsCondition NutritionProps;
   [JsonProperty]
   public readonly AttributeCondition[] Attributes;
 
@@ -45,7 +45,7 @@ public class MatchRuleJson {
     Deletes = deletes ?? Array.Empty<AssetLocation>();
     Code = code;
     Categories = categories ?? Array.Empty<CategoryCondition>();
-    NutritionProp = nutritionProp;
+    NutritionProps = nutritionProp;
     Attributes = attributes;
   }
 
@@ -55,7 +55,7 @@ public class MatchRuleJson {
     Deletes = copy.Deletes;
     Code = copy.Code;
     Categories = copy.Categories;
-    NutritionProp = copy.NutritionProp;
+    NutritionProps = copy.NutritionProps;
     Attributes = copy.Attributes;
   }
 }
@@ -121,7 +121,7 @@ public class MatchRule : MatchRuleJson {
       Code,
     };
     conditions.AddRange(Categories);
-    conditions.Add(NutritionProp);
+    conditions.Add(NutritionProps);
     conditions.RemoveAll(c => c == null);
     if (Attributes != null) {
       conditions.AddRange(Attributes);
