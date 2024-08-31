@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 
 using Vintagestory.API.Common;
+using Vintagestory.API.Datastructures;
 using Vintagestory.API.Util;
 
 namespace Gourmand.Collectibles;
@@ -31,6 +32,8 @@ public interface IReadonlyCategoryDict {
   /// <param name="category">the category to search</param>
   /// <returns>an enumeration of the matching collectibles</returns>
   IEnumerable<CollectibleObject> EnumerateMatches(AssetLocation category);
+  IEnumerable<CollectibleObject> EnumerateMatches(AssetLocation input,
+                                                  int enumeratePerDistinct);
 }
 
 public class CategoryDict : IReadonlyCategoryDict {
@@ -107,6 +110,30 @@ public class CategoryDict : IReadonlyCategoryDict {
             category,
             out Dictionary<CollectibleObject, CategoryValue> collectibles)) {
       to.Add(category, collectibles);
+    }
+  }
+
+  public IEnumerable<CollectibleObject>
+  EnumerateMatches(AssetLocation category, int enumeratePerDistinct) {
+    Dictionary<List<IAttribute>, int> distinctCounts =
+        new(new ListIAttributeComparer());
+    if (!_byCat.TryGetValue(
+            category,
+            out Dictionary<CollectibleObject, CategoryValue> collectibles)) {
+      yield break;
+    }
+    foreach (KeyValuePair<CollectibleObject, CategoryValue> kv in
+                 collectibles) {
+      // Deleted categories have a null value.
+      if (kv.Value.Value == null) {
+        continue;
+      }
+      int count = distinctCounts.GetValueOrDefault(kv.Value.Value, 0);
+      if (count < enumeratePerDistinct) {
+        ++count;
+        distinctCounts[kv.Value.Value] = count;
+        yield return kv.Key;
+      }
     }
   }
 }

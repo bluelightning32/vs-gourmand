@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 using Vintagestory.API.Datastructures;
@@ -153,8 +154,17 @@ public class CategoryValue : IEquatable<CategoryValue> {
   }
 }
 
-public class ListIAttributeComparer : IComparer<List<IAttribute>> {
+public class ListIAttributeComparer : IComparer<List<IAttribute>>,
+                                      IEqualityComparer<List<IAttribute>> {
   public int Compare(List<IAttribute> x, List<IAttribute> y) {
     return CategoryValue.CompareAttributeCollections(x, y);
+  }
+
+  public bool Equals(List<IAttribute> x, List<IAttribute> y) {
+    return CategoryValue.ValuesEqual(x, y);
+  }
+
+  public int GetHashCode([DisallowNull] List<IAttribute> obj) {
+    return CategoryValue.ValuesGetHashCode(obj);
   }
 }
