@@ -4,6 +4,7 @@ using PrefixClassName.MsTest;
 
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
+using Vintagestory.Common;
 
 namespace Gourmand.Test.Collectibles;
 
@@ -124,6 +125,52 @@ public class NutritionPropsCondition {
                                     LoadAssets.GetItem("game", "fish-raw"));
     CollectionAssert.DoesNotContain(matches,
                                     LoadAssets.GetItem("game", "firestarter"));
+  }
+
+  [TestMethod]
+  public void CategoriesBoth() {
+    Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
+    string json = @"
+    {
+      category: {
+        value: ""Fruit"",
+        outputs: [ ""category1"", ""category2"" ]
+      },
+      satiety: {
+        min: 1,
+        max: 2,
+        outputs: [ ""category1"", ""category3"" ]
+      }
+    }";
+    Real.NutritionPropsCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.NutritionPropsCondition>(
+            null, "gourmand");
+    CollectionAssert.AreEquivalent(
+        new List<AssetLocation>() {
+          new("gourmand", "category1"),
+          new("gourmand", "category2"),
+          new("gourmand", "category3"),
+        },
+        cond.Categories.Distinct().ToList());
+  }
+
+  [TestMethod]
+  public void CategoriesCategoryOnly() {
+    Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
+    string json = @"
+    {
+      category: {
+        value: ""Fruit"",
+        outputs: [ ""category1"", ""category2"" ]
+      }
+    }";
+    Real.NutritionPropsCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.NutritionPropsCondition>(
+            null, "gourmand");
+    CollectionAssert.AreEquivalent(
+        new List<AssetLocation>() { new("gourmand", "category1"),
+                                    new("gourmand", "category2") },
+        cond.Categories.Distinct().ToList());
   }
 
   [TestMethod]

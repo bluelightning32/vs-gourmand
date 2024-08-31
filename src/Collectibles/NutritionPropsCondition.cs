@@ -110,8 +110,12 @@ public class NutritionPropsCondition : AggregateCondition {
 
   public override IEnumerable<ICondition> Conditions {
     get {
-      yield return Category;
-      yield return Satiety;
+      if (Category != null) {
+        yield return Category;
+      }
+      if (Satiety != null) {
+        yield return Satiety;
+      }
     }
   }
 }

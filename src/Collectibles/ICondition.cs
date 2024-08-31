@@ -15,6 +15,10 @@ public interface ICondition {
   public IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>>
   GetCategories(IReadonlyCategoryDict catdict, CollectibleObject match);
 
+  /// <summary>
+  /// The categories outputed by this condition. The enumerable may contain
+  /// duplicates.
+  /// </summary>
   public IEnumerable<AssetLocation> Categories { get; }
 
   /// <summary>
