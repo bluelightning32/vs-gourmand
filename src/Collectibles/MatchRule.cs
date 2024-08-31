@@ -25,9 +25,9 @@ public class MatchRuleJson {
   public readonly AssetLocation[] Deletes;
 
   [JsonProperty]
-  public readonly CodeCondition Code;
-  [JsonProperty]
   public readonly CategoryCondition[] Categories;
+  [JsonProperty]
+  public readonly CodeCondition Code;
   [JsonProperty]
   public readonly NutritionPropsCondition NutritionProps;
   [JsonProperty]
@@ -36,25 +36,25 @@ public class MatchRuleJson {
   [JsonConstructor]
   public MatchRuleJson(float priority,
                        IReadOnlyDictionary<string, JToken[]> rawOutputs,
-                       AssetLocation[] deletes, CodeCondition code,
-                       CategoryCondition[] categories,
+                       AssetLocation[] deletes, CategoryCondition[] categories,
+                       CodeCondition code,
                        NutritionPropsCondition nutritionProp,
                        AttributeCondition[] attributes) {
     Priority = priority;
     RawOutputs = rawOutputs ?? new Dictionary<string, JToken[]>();
     Deletes = deletes ?? Array.Empty<AssetLocation>();
-    Code = code;
     Categories = categories ?? Array.Empty<CategoryCondition>();
+    Code = code;
     NutritionProps = nutritionProp;
-    Attributes = attributes;
+    Attributes = attributes ?? Array.Empty<AttributeCondition>();
   }
 
   public MatchRuleJson(MatchRuleJson copy) {
     Priority = copy.Priority;
     RawOutputs = copy.RawOutputs;
     Deletes = copy.Deletes;
-    Code = copy.Code;
     Categories = copy.Categories;
+    Code = copy.Code;
     NutritionProps = copy.NutritionProps;
     Attributes = copy.Attributes;
   }
@@ -117,15 +117,9 @@ public class MatchRule : MatchRuleJson {
           p.Value.Select((a) => new JsonObject(a).ToAttribute()).ToArray());
     }
     Outputs = outputs;
-    List<ICondition> conditions = new() {
-      Code,
-    };
-    conditions.AddRange(Categories);
-    conditions.Add(NutritionProps);
+    List<ICondition> conditions = new(Categories) { Code, NutritionProps };
+    conditions.AddRange(Attributes);
     conditions.RemoveAll(c => c == null);
-    if (Attributes != null) {
-      conditions.AddRange(Attributes);
-    }
     Conditions = conditions;
   }
 
