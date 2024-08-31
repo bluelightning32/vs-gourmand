@@ -17,9 +17,9 @@ public class CategoryCondition : ICondition {
 
   public IEnumerable<AssetLocation> Categories => Outputs;
 
-  public CategoryCondition(AssetLocation input, AssetLocation[] output) {
+  public CategoryCondition(AssetLocation input, AssetLocation[] outputs) {
     Input = input;
-    Outputs = output ?? Array.Empty<AssetLocation>();
+    Outputs = outputs ?? Array.Empty<AssetLocation>();
   }
 
   public IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>>

@@ -21,10 +21,10 @@ public class AttributeCondition : ICondition {
   public IEnumerable<AssetLocation> Categories => Outputs;
 
   public AttributeCondition(string[] path, JToken value,
-                            AssetLocation[] output) {
+                            AssetLocation[] outputs) {
     Path = path;
     Value = value;
-    Outputs = output ?? Array.Empty<AssetLocation>();
+    Outputs = outputs ?? Array.Empty<AssetLocation>();
   }
 
   public IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>>

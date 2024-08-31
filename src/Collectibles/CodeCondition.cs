@@ -21,10 +21,10 @@ public class CodeCondition : ICondition {
   public readonly AssetLocation[] Outputs;
 
   public CodeCondition(AssetLocation match, EnumItemClass type,
-                       AssetLocation[] output) {
+                       AssetLocation[] outputs) {
     Match = match;
     Type = type;
-    Outputs = output ?? Array.Empty<AssetLocation>();
+    Outputs = outputs ?? Array.Empty<AssetLocation>();
   }
 
   public IEnumerable<AssetLocation> Categories => Outputs;

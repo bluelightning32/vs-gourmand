@@ -114,7 +114,7 @@ public class CategoryCondition {
     string json = @"
     {
       input: ""cat1"",
-      output: [ ""output1"", ""output2"" ]
+      outputs: [ ""output1"", ""output2"" ]
     }
     ";
     Real.CategoryCondition cond =
@@ -136,7 +136,7 @@ public class CategoryCondition {
     string json = @"
     {
       input: ""cat1"",
-      output: [ ""output1"", ""output2"" ]
+      outputs: [ ""output1"", ""output2"" ]
     }
     ";
     Real.CategoryCondition cond =

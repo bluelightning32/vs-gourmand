@@ -16,7 +16,7 @@ abstract public class NutritionConditionBase : ICondition {
 
   public IEnumerable<AssetLocation> Categories => Outputs;
 
-  public NutritionConditionBase(AssetLocation[] output) { Outputs = output; }
+  public NutritionConditionBase(AssetLocation[] outputs) { Outputs = outputs; }
 
   public void EnumerateMatches(MatchResolver resolver,
                                ref List<CollectibleObject> matches) {
@@ -46,8 +46,8 @@ public class NutritionCategoryCondition : NutritionConditionBase {
   public readonly EnumFoodCategory? Value;
 
   public NutritionCategoryCondition(EnumFoodCategory value,
-                                    AssetLocation[] output)
-      : base(output) {
+                                    AssetLocation[] outputs)
+      : base(outputs) {
     Value = value;
   }
 
@@ -75,8 +75,9 @@ public class NutritionSatietyCondition : NutritionConditionBase {
   [DefaultValue(float.PositiveInfinity)]
   public readonly float Max;
 
-  public NutritionSatietyCondition(float min, float max, AssetLocation[] output)
-      : base(output) {
+  public NutritionSatietyCondition(float min, float max,
+                                   AssetLocation[] outputs)
+      : base(outputs) {
     Min = min;
     Max = max;
   }

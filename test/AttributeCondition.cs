@@ -155,7 +155,7 @@ public class AttributeCondition {
     {
       path: [""pieSize""],
       value: 1,
-      output: [ ""output1"", ""output2"" ]
+      outputs: [ ""output1"", ""output2"" ]
     }
     ";
     Real.AttributeCondition cond =
@@ -175,7 +175,7 @@ public class AttributeCondition {
     string json = @"
     {
       path: [""pieSize""],
-      output: [ ""output1"", ""output2"" ]
+      outputs: [ ""output1"", ""output2"" ]
     }
     ";
     Real.AttributeCondition cond =

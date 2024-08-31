@@ -1,5 +1,7 @@
 using Newtonsoft.Json;
 
+using Gourmand.Collectibles;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,21 +19,19 @@ public class CategoryCondition : ICondition {
 
   public IEnumerable<AssetLocation> Categories => Outputs;
 
-  public CategoryCondition(AssetLocation input, AssetLocation[] output) {
+  public CategoryCondition(AssetLocation input, AssetLocation[] outputs) {
     Input = input;
-    Outputs = output ?? Array.Empty<AssetLocation>();
+    Outputs = outputs ?? Array.Empty<AssetLocation>();
   }
 
-  public bool IsMatch(IWorldAccessor resolver,
-                      Collectibles.IReadonlyCategoryDict catdict,
+  public bool IsMatch(IWorldAccessor resolver, IReadonlyCategoryDict catdict,
                       ItemStack stack) {
     return catdict.InCategory(Input, stack.Collectible);
   }
 
   public void AppendValue(IWorldAccessor resolver,
-                          Collectibles.IReadonlyCategoryDict catdict,
-                          AssetLocation category, ItemStack stack,
-                          List<IAttribute> result) {
+                          IReadonlyCategoryDict catdict, AssetLocation category,
+                          ItemStack stack, List<IAttribute> result) {
     // All of the output categories have the same value for any given ItemStack.
     // The behavior is undefined if stack is not in the category. So skip
     // checking whether the stack is in the Input category.
@@ -39,7 +39,7 @@ public class CategoryCondition : ICondition {
   }
 
   public void EnumerateMatches(IWorldAccessor resolver,
-                               Collectibles.IReadonlyCategoryDict catdict,
+                               IReadonlyCategoryDict catdict,
                                ref List<ItemStack> matches) {
     if (matches == null) {
       matches = catdict.EnumerateMatches(Input)

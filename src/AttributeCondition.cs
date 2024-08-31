@@ -34,7 +34,7 @@ public class AttributeCondition : ICondition {
 
   public AttributeCondition(string[] path, JToken value,
                             JToken[] enumerateValues, bool allowCast,
-                            AssetLocation[] output) {
+                            AssetLocation[] outputs) {
     if (path.Length < 1) {
       throw new FormatException("Path must have at least one element.");
     }
@@ -60,7 +60,7 @@ public class AttributeCondition : ICondition {
     }
     AllowCast = allowCast;
 
-    Outputs = output ?? Array.Empty<AssetLocation>();
+    Outputs = outputs ?? Array.Empty<AssetLocation>();
   }
 
   private IAttribute GetAttribute(ItemStack stack) {
