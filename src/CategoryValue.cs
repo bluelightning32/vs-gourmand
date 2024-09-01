@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Text;
 
 using Vintagestory.API.Datastructures;
@@ -58,8 +59,8 @@ public class CategoryValue : IEquatable<CategoryValue> {
     return total;
   }
 
-  public static bool ValuesEqual(IReadOnlyCollection<IAttribute> value1,
-                                 IReadOnlyCollection<IAttribute> value2) {
+  public static bool ValuesEqual(IEnumerable<IAttribute> value1,
+                                 IEnumerable<IAttribute> value2) {
     if (value1 == null) {
       return value2 == null;
     }
@@ -87,6 +88,14 @@ public class CategoryValue : IEquatable<CategoryValue> {
       return false;
     }
     return true;
+  }
+
+  public static bool
+  ValuesEqualEitherOrder(IReadOnlyCollection<IAttribute> expected1,
+                         IReadOnlyCollection<IAttribute> expected2,
+                         IReadOnlyCollection<IAttribute> actual) {
+    return ValuesEqual(expected1.Concat(expected2), actual) ||
+           ValuesEqual(expected2.Concat(expected1), actual);
   }
 
   public static int CompareAttributes(IAttribute x, IAttribute y) {
