@@ -10,10 +10,10 @@ namespace Gourmand.Test;
 using Real = Gourmand;
 
 [PrefixTestClass]
-public class ContentsCondition {
+public class SlotCondition {
   private static readonly Real.Collectibles.MatchResolver _resolver;
 
-  static ContentsCondition() {
+  static SlotCondition() {
     _resolver = new(LoadAssets.Server.World);
 
     string rulesJson = @"
@@ -128,9 +128,9 @@ public class ContentsCondition {
       min: 2
     }
     ";
-    Real.ContentsCondition cond =
-        JsonObject.FromJson(json).AsObject<Real.ContentsCondition>(null,
-                                                                   "gourmand");
+    Real.SlotCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.SlotCondition>(null,
+                                                               "gourmand");
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
     ItemStack[] contents;
 
@@ -166,9 +166,9 @@ public class ContentsCondition {
       max: 2
     }
     ";
-    Real.ContentsCondition cond =
-        JsonObject.FromJson(json).AsObject<Real.ContentsCondition>(null,
-                                                                   "gourmand");
+    Real.SlotCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.SlotCondition>(null,
+                                                               "gourmand");
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
     ItemStack[] contents;
 
@@ -209,9 +209,9 @@ public class ContentsCondition {
       min: 2
     }
     ";
-    Real.ContentsCondition cond =
-        JsonObject.FromJson(json).AsObject<Real.ContentsCondition>(null,
-                                                                   "gourmand");
+    Real.SlotCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.SlotCondition>(null,
+                                                               "gourmand");
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
     ItemStack[] contents;
 
@@ -277,9 +277,9 @@ public class ContentsCondition {
       ]
     }
     ";
-    Real.ContentsCondition cond =
-        JsonObject.FromJson(json).AsObject<Real.ContentsCondition>(null,
-                                                                   "gourmand");
+    Real.SlotCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.SlotCondition>(null,
+                                                               "gourmand");
     Item blueberry = LoadAssets.GetItem("game", "fruit-blueberry");
     Item cranberry = LoadAssets.GetItem("game", "fruit-cranberry");
     Item firestarter = LoadAssets.GetItem("game", "firestarter");
@@ -321,9 +321,9 @@ public class ContentsCondition {
       ]
     }
     ";
-    Real.ContentsCondition cond =
-        JsonObject.FromJson(json).AsObject<Real.ContentsCondition>(null,
-                                                                   "gourmand");
+    Real.SlotCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.SlotCondition>(null,
+                                                               "gourmand");
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
     Item cranberry = LoadAssets.GetItem("game", "fruit-cranberry");
     Item blackcurrant = LoadAssets.GetItem("game", "fruit-blackcurrant");
@@ -384,9 +384,9 @@ public class ContentsCondition {
       ]
     }
     ";
-    Real.ContentsCondition cond =
-        JsonObject.FromJson(json).AsObject<Real.ContentsCondition>(null,
-                                                                   "gourmand");
+    Real.SlotCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.SlotCondition>(null,
+                                                               "gourmand");
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
     Item cranberry = LoadAssets.GetItem("game", "fruit-cranberry");
     Item blackcurrant = LoadAssets.GetItem("game", "fruit-blackcurrant");
@@ -440,9 +440,9 @@ public class ContentsCondition {
       ]
     }
     ";
-    Real.ContentsCondition cond =
-        JsonObject.FromJson(json).AsObject<Real.ContentsCondition>(null,
-                                                                   "gourmand");
+    Real.SlotCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.SlotCondition>(null,
+                                                               "gourmand");
     CollectionAssert.AreEqual(
         new List<AssetLocation>() { new("gourmand", "extra1"),
                                     new("gourmand", "pie-contents"),
@@ -460,9 +460,9 @@ public class ContentsCondition {
       countOutputs: [ ""count"" ]
     }
     ";
-    Real.ContentsCondition cond =
-        JsonObject.FromJson(json).AsObject<Real.ContentsCondition>(null,
-                                                                   "gourmand");
+    Real.SlotCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.SlotCondition>(null,
+                                                               "gourmand");
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
     for (int i = 2; i < 5; ++i) {
       ItemStack[] contents =
@@ -495,9 +495,9 @@ public class ContentsCondition {
       ]
     }
     ";
-    Real.ContentsCondition cond =
-        JsonObject.FromJson(json).AsObject<Real.ContentsCondition>(null,
-                                                                   "gourmand");
+    Real.SlotCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.SlotCondition>(null,
+                                                               "gourmand");
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
     Item cranberry = LoadAssets.GetItem("game", "fruit-cranberry");
     Item blackcurrant = LoadAssets.GetItem("game", "fruit-blackcurrant");
@@ -581,9 +581,9 @@ public class ContentsCondition {
       enumerateMax: 1
     }
     ";
-    Real.ContentsCondition cond =
-        JsonObject.FromJson(json).AsObject<Real.ContentsCondition>(null,
-                                                                   "gourmand");
+    Real.SlotCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.SlotCondition>(null,
+                                                               "gourmand");
     ItemStack[] contents = new ItemStack[5];
     Real.ContentBuilder builder = new(contents);
     int enumerated = 0;
@@ -618,9 +618,9 @@ public class ContentsCondition {
       enumerateMax: 1000
     }
     ";
-    Real.ContentsCondition cond =
-        JsonObject.FromJson(json).AsObject<Real.ContentsCondition>(null,
-                                                                   "gourmand");
+    Real.SlotCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.SlotCondition>(null,
+                                                               "gourmand");
     ItemStack[] contents = new ItemStack[5];
     Real.ContentBuilder builder = new(contents);
     List<CollectibleObject> expected =
@@ -659,9 +659,9 @@ public class ContentsCondition {
       enumerateMax: 1000
     }
     ";
-    Real.ContentsCondition cond =
-        JsonObject.FromJson(json).AsObject<Real.ContentsCondition>(null,
-                                                                   "gourmand");
+    Real.SlotCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.SlotCondition>(null,
+                                                               "gourmand");
     Real.ContentBuilder builder = new(Array.Empty<ItemStack>());
     List<CollectibleObject> expected =
         new() { LoadAssets.GetItem("game", "fruit-pineapple"),
@@ -699,9 +699,9 @@ public class ContentsCondition {
       enumerateMax: 1000
     }
     ";
-    Real.ContentsCondition cond =
-        JsonObject.FromJson(json).AsObject<Real.ContentsCondition>(null,
-                                                                   "gourmand");
+    Real.SlotCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.SlotCondition>(null,
+                                                               "gourmand");
     Real.ContentBuilder builder = new(Array.Empty<ItemStack>());
     List<CollectibleObject> allowed =
         cond.EnumerateAllowedStacks(_resolver.Resolver, _resolver.CatDict)
@@ -754,9 +754,9 @@ public class ContentsCondition {
       enumerateMax: 1000
     }
     ";
-    Real.ContentsCondition cond =
-        JsonObject.FromJson(json).AsObject<Real.ContentsCondition>(null,
-                                                                   "gourmand");
+    Real.SlotCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.SlotCondition>(null,
+                                                               "gourmand");
     Real.ContentBuilder builder = new(Array.Empty<ItemStack>());
     List<CollectibleObject> allowed =
         cond.EnumerateAllowedStacks(_resolver.Resolver, _resolver.CatDict)
@@ -809,9 +809,9 @@ public class ContentsCondition {
       enumerateMax: 1000
     }
     ";
-    Real.ContentsCondition cond =
-        JsonObject.FromJson(json).AsObject<Real.ContentsCondition>(null,
-                                                                   "gourmand");
+    Real.SlotCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.SlotCondition>(null,
+                                                               "gourmand");
     Real.ContentBuilder builder = new(Array.Empty<ItemStack>());
     List<CollectibleObject> allowed =
         cond.EnumerateAllowedStacks(_resolver.Resolver, _resolver.CatDict)
@@ -863,9 +863,9 @@ public class ContentsCondition {
       enumerateMax: 1000
     }
     ";
-    Real.ContentsCondition cond =
-        JsonObject.FromJson(json).AsObject<Real.ContentsCondition>(null,
-                                                                   "gourmand");
+    Real.SlotCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.SlotCondition>(null,
+                                                               "gourmand");
     Real.ContentBuilder builder = new(Array.Empty<ItemStack>());
     List<CollectibleObject> allowed =
         cond.EnumerateAllowedStacks(_resolver.Resolver, _resolver.CatDict)
@@ -926,9 +926,9 @@ public class ContentsCondition {
       enumerateMax: 1000
     }
     ";
-    Real.ContentsCondition cond =
-        JsonObject.FromJson(json).AsObject<Real.ContentsCondition>(null,
-                                                                   "gourmand");
+    Real.SlotCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.SlotCondition>(null,
+                                                               "gourmand");
     Real.ContentBuilder builder = new(Array.Empty<ItemStack>());
 
     List<CollectibleObject> initialObjects = new() {

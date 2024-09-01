@@ -69,7 +69,7 @@ public enum Arrangement {
 }
 
 [JsonObject(MemberSerialization.OptIn)]
-public class ContentsCondition {
+public class SlotCondition {
   [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
   [DefaultValue(0)]
   readonly public int SlotBegin;
@@ -100,9 +100,8 @@ public class ContentsCondition {
   [JsonProperty]
   public readonly AssetLocation[] CountOutputs;
 
-  public ContentsCondition(int slotBegin, int slotEnd,
-                           ContentCategory[] categories,
-                           AssetLocation[] countOutputs) {
+  public SlotCondition(int slotBegin, int slotEnd, ContentCategory[] categories,
+                       AssetLocation[] countOutputs) {
     SlotBegin = slotBegin;
     SlotEnd = slotEnd < 0 ? int.MaxValue : slotEnd;
     if (SlotBegin < 0) {
