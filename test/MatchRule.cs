@@ -12,10 +12,10 @@ using Real = Gourmand;
 
 [PrefixTestClass]
 public class MatchRule {
-  private static readonly Real.Collectibles.MatchResolver _resolver;
+  private static readonly Real.Collectibles.MatchResolver Resolver;
 
   static MatchRule() {
-    _resolver = new(LoadAssets.Server.World);
+    Resolver = new(LoadAssets.Server.World);
 
     string rulesJson = @"
     [
@@ -52,7 +52,7 @@ public class MatchRule {
         JsonUtil.ToObject<List<Real.Collectibles.MatchRule>>(rulesJson,
                                                              "gourmand");
 
-    _resolver.Load(rules);
+    Resolver.Load(rules);
   }
 
   [TestMethod]
@@ -67,11 +67,11 @@ public class MatchRule {
     Real.MatchRule rule =
         JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
     Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
-    Assert.IsTrue(rule.IsMatch(_resolver.Resolver, _resolver.CatDict,
-                               new ItemStack(bowl)));
+    Assert.IsTrue(
+        rule.IsMatch(Resolver.Resolver, Resolver.CatDict, new ItemStack(bowl)));
 
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
-    Assert.IsFalse(rule.IsMatch(_resolver.Resolver, _resolver.CatDict,
+    Assert.IsFalse(rule.IsMatch(Resolver.Resolver, Resolver.CatDict,
                                 new ItemStack(pineapple)));
   }
 
@@ -90,12 +90,12 @@ public class MatchRule {
         JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
     Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
 
-    Assert.IsFalse(rule.IsMatch(_resolver.Resolver, _resolver.CatDict,
-                                new ItemStack(bowl)));
+    Assert.IsFalse(
+        rule.IsMatch(Resolver.Resolver, Resolver.CatDict, new ItemStack(bowl)));
 
     ItemStack meal = new(bowl);
     meal.Attributes["recipeCode"] = new StringAttribute("meatystew");
-    Assert.IsTrue(rule.IsMatch(_resolver.Resolver, _resolver.CatDict, meal));
+    Assert.IsTrue(rule.IsMatch(Resolver.Resolver, Resolver.CatDict, meal));
   }
 
   [TestMethod]
@@ -141,25 +141,25 @@ public class MatchRule {
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
 
     // Not a match without contents
-    Assert.IsFalse(rule.IsMatch(_resolver.Resolver, _resolver.CatDict, meal));
+    Assert.IsFalse(rule.IsMatch(Resolver.Resolver, Resolver.CatDict, meal));
 
-    Real.ContentBuilder.SetContents(_resolver.Resolver, meal,
+    Real.ContentBuilder.SetContents(Resolver.Resolver, meal,
                                     new ItemStack[] {
                                       new(fish_raw),
                                       new(fish_raw),
                                       new(pineapple),
                                     });
-    Assert.IsTrue(rule.IsMatch(_resolver.Resolver, _resolver.CatDict, meal));
+    Assert.IsTrue(rule.IsMatch(Resolver.Resolver, Resolver.CatDict, meal));
 
     // Not a match with too much fruit.
-    Real.ContentBuilder.SetContents(_resolver.Resolver, meal,
+    Real.ContentBuilder.SetContents(Resolver.Resolver, meal,
                                     new ItemStack[] {
                                       new(fish_raw),
                                       new(fish_raw),
                                       new(pineapple),
                                       new(pineapple),
                                     });
-    Assert.IsFalse(rule.IsMatch(_resolver.Resolver, _resolver.CatDict, meal));
+    Assert.IsFalse(rule.IsMatch(Resolver.Resolver, Resolver.CatDict, meal));
   }
 
   [TestMethod]
@@ -181,7 +181,7 @@ public class MatchRule {
         JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
     Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
     List<ItemStack> matches =
-        rule.EnumerateMatches(_resolver.Resolver, _resolver.CatDict);
+        rule.EnumerateMatches(Resolver.Resolver, Resolver.CatDict);
     CollectionAssert.AreEquivalent(new CollectibleObject[] { bowl, bowl },
                                    matches.Select(s => s.Collectible).ToList());
     CollectionAssert.AreEquivalent(
@@ -232,14 +232,14 @@ public class MatchRule {
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
 
     List<ItemStack> matches =
-        rule.EnumerateMatches(_resolver.Resolver, _resolver.CatDict);
+        rule.EnumerateMatches(Resolver.Resolver, Resolver.CatDict);
     Assert.IsTrue(matches.Select(s => s.Collectible).All(c => c == bowl));
     Assert.IsTrue(
         matches.Select(s => (string)s.Attributes["recipeCode"].GetValue())
             .All(r => r == "meatystew"));
     List<List<CollectibleObject>> matchContents =
         matches
-            .Select(s => Real.ContentBuilder.GetContents(_resolver.Resolver, s)
+            .Select(s => Real.ContentBuilder.GetContents(Resolver.Resolver, s)
                              .Select(s => s.Collectible)
                              .ToList())
             .ToList();
@@ -363,7 +363,7 @@ public class MatchRule {
     Item fish_raw = LoadAssets.GetItem("game", "fish-raw");
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
 
-    Real.ContentBuilder.SetContents(_resolver.Resolver, meal,
+    Real.ContentBuilder.SetContents(Resolver.Resolver, meal,
                                     new ItemStack[] {
                                       new(fish_raw),
                                       new(fish_raw),
@@ -371,16 +371,16 @@ public class MatchRule {
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(
         new IAttribute[] { new StringAttribute(fish_raw.Code.ToString()) },
         rule.GetValue(
-            _resolver.Resolver, _resolver.CatDict,
+            Resolver.Resolver, Resolver.CatDict,
             new AssetLocation("gourmand", "contains-meal-protein-base"),
             meal)));
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(
         new IAttribute[] {},
-        rule.GetValue(_resolver.Resolver, _resolver.CatDict,
+        rule.GetValue(Resolver.Resolver, Resolver.CatDict,
                       new AssetLocation("gourmand", "contains-meal-fruit"),
                       meal)));
 
-    Real.ContentBuilder.SetContents(_resolver.Resolver, meal,
+    Real.ContentBuilder.SetContents(Resolver.Resolver, meal,
                                     new ItemStack[] {
                                       new(fish_raw),
                                       new(fish_raw),
@@ -389,12 +389,12 @@ public class MatchRule {
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(
         new IAttribute[] { new StringAttribute(fish_raw.Code.ToString()) },
         rule.GetValue(
-            _resolver.Resolver, _resolver.CatDict,
+            Resolver.Resolver, Resolver.CatDict,
             new AssetLocation("gourmand", "contains-meal-protein-base"),
             meal)));
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(
         new IAttribute[] { new StringAttribute(pineapple.Code.ToString()) },
-        rule.GetValue(_resolver.Resolver, _resolver.CatDict,
+        rule.GetValue(Resolver.Resolver, Resolver.CatDict,
                       new AssetLocation("gourmand", "contains-meal-fruit"),
                       meal)));
   }
@@ -418,7 +418,7 @@ public class MatchRule {
 
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(
         new IAttribute[] { new LongAttribute(1) },
-        rule.GetValue(_resolver.Resolver, _resolver.CatDict,
+        rule.GetValue(Resolver.Resolver, Resolver.CatDict,
                       new AssetLocation("gourmand", "edible"), meal)));
   }
 }
