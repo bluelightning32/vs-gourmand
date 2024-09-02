@@ -156,6 +156,15 @@ class ServerApiWithAssets {
     server.AssetManager.AddExternalAssets(api.Logger, loader);
 
     loader.RunModPhase(ModRunPhase.AssetsLoaded);
+
+    // OnLoadedNative is usually called by ServerSystemBlockSimulation, but this
+    // simplified server does not start that.
+    foreach (Item item in server.World.Items) {
+      item.OnLoadedNative(api);
+    }
+    foreach (Block block in server.World.Blocks) {
+      block.OnLoadedNative(api);
+    }
     return server;
   }
 }
