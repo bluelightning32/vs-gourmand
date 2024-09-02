@@ -23,7 +23,8 @@ public class LoadAssets {
     allow[AssetCategory.itemtypes] =
         new() { "fruit.json", "firestarter.json", "fish.json", "tongs.json",
                 "vegetable.json" };
-    allow[AssetCategory.blocktypes] = new() { "egg.json", "pie.json" };
+    allow[AssetCategory.blocktypes] =
+        new() { "bowl-meal.json", "egg.json", "pie.json" };
     Server = ServerApiWithAssets.Create(allow);
   }
 

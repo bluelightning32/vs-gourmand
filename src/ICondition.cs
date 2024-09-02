@@ -10,8 +10,10 @@ public interface ICondition {
   /// Determine whether the given ItemStack matches the condition
   /// </summary>
   /// <param name="catdict">a precomputed dictionary of categories for
-  /// collectible objects</param> <param name="stack">the ItemStack to
-  /// check</param> <returns>true, if it is a match</returns>
+  /// collectible objects</param>
+  /// <param name="stack">the ItemStack to
+  /// check</param>
+  /// <returns>true, if it is a match</returns>
   bool IsMatch(IWorldAccessor resolver,
                Collectibles.IReadonlyCategoryDict catdict, ItemStack stack);
 
@@ -20,6 +22,7 @@ public interface ICondition {
   /// is undefined if the given stack is not a match, or if this condition does
   /// not output the given category.
   /// </summary>
+  /// <param name="resolver">resolver</param>
   /// <param name="catdict">
   /// a precomputed dictionary of categories for collectible objects</param>
   /// <param name="category">
@@ -40,7 +43,8 @@ public interface ICondition {
   /// List collectibles that match this condition
   /// </summary>
   /// <param name="catdict">a precomputed dictionary of categories for
-  /// collectible objects</param> <param name="matches">
+  /// collectible objects</param>
+  /// <param name="matches">
   ///   An existing list of ItemStacks to further refine
   ///   based on this condition. Pass null for this condition to start a new
   ///   list.

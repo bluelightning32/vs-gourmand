@@ -61,7 +61,7 @@ public class MatchRuleJson {
 }
 
 /// <summary>
-/// Json converter for CollectibleMatchRule. This is necessary to convert the
+/// Json converter for <see cref="MatchRule"/>. This is necessary to convert the
 /// category names from strings to AssetLocations, while respecting the
 /// serializer's current domain.
 /// </summary>
@@ -79,6 +79,11 @@ public class MatchRuleConverter : JsonConverter<MatchRule> {
                                      bool hasExistingValue,
                                      JsonSerializer serializer) {
     MatchRuleJson json = serializer.Deserialize<MatchRuleJson>(reader);
+    string domain = GetDomain(serializer);
+    return new MatchRule(domain, json);
+  }
+
+  public static string GetDomain(JsonSerializer serializer) {
     string domain = GlobalConstants.DefaultDomain;
     foreach (JsonConverter converter in serializer.Converters) {
       if (converter is AssetLocationJsonParser parser) {
@@ -89,7 +94,7 @@ public class MatchRuleConverter : JsonConverter<MatchRule> {
         domain = (string)domainField.GetValue(converter);
       }
     }
-    return new MatchRule(domain, json);
+    return domain;
   }
 
   public override bool CanWrite => false;
