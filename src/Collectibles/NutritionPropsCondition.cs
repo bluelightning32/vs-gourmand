@@ -16,7 +16,9 @@ abstract public class NutritionConditionBase : ICondition {
 
   public IEnumerable<AssetLocation> Categories => Outputs;
 
-  public NutritionConditionBase(AssetLocation[] outputs) { Outputs = outputs; }
+  public NutritionConditionBase(AssetLocation[] outputs) {
+    Outputs = outputs ?? Array.Empty<AssetLocation>();
+  }
 
   public void EnumerateMatches(MatchResolver resolver,
                                ref List<CollectibleObject> matches) {

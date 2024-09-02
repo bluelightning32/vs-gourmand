@@ -211,4 +211,23 @@ public class NutritionPropsCondition {
         },
         categories);
   }
+
+  [TestMethod]
+  public void CategoriesEmpty() {
+    Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
+    string json = $@"
+    {{
+      category: {{
+      }},
+      satiety: {{
+        min: {pineapple.NutritionProps.Satiety},
+        max: {pineapple.NutritionProps.Satiety},
+      }}
+    }}";
+    Real.NutritionPropsCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.NutritionPropsCondition>(
+            null, "gourmand");
+    CollectionAssert.AreEquivalent(Array.Empty<AssetLocation>(),
+                                   cond.Categories.ToList());
+  }
 }
