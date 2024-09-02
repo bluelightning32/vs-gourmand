@@ -165,6 +165,15 @@ class ServerApiWithAssets {
     foreach (Block block in server.World.Blocks) {
       block.OnLoadedNative(api);
     }
+
+    IAsset sunlight =
+        server.AssetManager.Get("textures/environment/sunlight.png");
+    FieldInfo gameWorldCalendarField = server.GetType().GetField(
+        "GameWorldCalendar", BindingFlags.Instance | BindingFlags.NonPublic);
+    GameCalendar calendar = (GameCalendar)Activator.CreateInstance(
+        typeof(GameCalendar), BindingFlags.NonPublic | BindingFlags.Instance,
+        null, new object[] { sunlight, 0, 1L }, null);
+    gameWorldCalendarField.SetValue(server, calendar);
     return server;
   }
 }
