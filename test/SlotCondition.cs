@@ -11,10 +11,10 @@ using Real = Gourmand;
 
 [PrefixTestClass]
 public class SlotCondition {
-  private static readonly Real.Collectibles.MatchResolver _resolver;
+  private static readonly Real.Collectibles.MatchResolver Resolver;
 
   static SlotCondition() {
-    _resolver = new(LoadAssets.Server.World);
+    Resolver = new(LoadAssets.Server.World);
 
     string rulesJson = @"
     [
@@ -110,14 +110,14 @@ public class SlotCondition {
         JsonUtil.ToObject<List<Real.Collectibles.MatchRule>>(rulesJson,
                                                              "gourmand");
 
-    _resolver.Load(rules);
+    Resolver.Load(rules);
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
-    Assert.IsTrue(_resolver.CatDict.InCategory(
+    Assert.IsTrue(Resolver.CatDict.InCategory(
         new AssetLocation("gourmand", "pie-filling"), pineapple));
     Item onion = LoadAssets.GetItem("game", "vegetable-onion");
-    Assert.IsTrue(_resolver.CatDict.InCategory(
+    Assert.IsTrue(Resolver.CatDict.InCategory(
         new AssetLocation("gourmand", "food-category"), onion));
-    Assert.IsTrue(_resolver.CatDict.InCategory(
+    Assert.IsTrue(Resolver.CatDict.InCategory(
         new AssetLocation("gourmand", "pie-filling"), onion));
   }
 
@@ -136,23 +136,20 @@ public class SlotCondition {
 
     // When the minimum is not met, then the match fails and nothing is removed.
     contents = new ItemStack[] { new(pineapple) };
-    Assert.IsFalse(
-        cond.IsMatch(_resolver.Resolver, _resolver.CatDict, contents));
+    Assert.IsFalse(cond.IsMatch(Resolver.Resolver, Resolver.CatDict, contents));
     CollectionAssert.AllItemsAreNotNull(contents);
 
     // When the minimum is met, the match succeeds and the matching stacks are
     // taken.
     contents = new ItemStack[] { new(pineapple), new(pineapple) };
-    Assert.IsTrue(
-        cond.IsMatch(_resolver.Resolver, _resolver.CatDict, contents));
+    Assert.IsTrue(cond.IsMatch(Resolver.Resolver, Resolver.CatDict, contents));
     Assert.IsNull(contents[0]);
     Assert.IsNull(contents[1]);
 
     // Without a maximum, all matching stacks are accepted.
     contents =
         new ItemStack[] { new(pineapple), new(pineapple), new(pineapple) };
-    Assert.IsTrue(
-        cond.IsMatch(_resolver.Resolver, _resolver.CatDict, contents));
+    Assert.IsTrue(cond.IsMatch(Resolver.Resolver, Resolver.CatDict, contents));
     Assert.IsNull(contents[0]);
     Assert.IsNull(contents[1]);
     Assert.IsNull(contents[2]);
@@ -174,27 +171,23 @@ public class SlotCondition {
 
     // 0 item stacks are accepted, because it is below the maximum.
     contents = new ItemStack[] {};
-    Assert.IsTrue(
-        cond.IsMatch(_resolver.Resolver, _resolver.CatDict, contents));
+    Assert.IsTrue(cond.IsMatch(Resolver.Resolver, Resolver.CatDict, contents));
 
     // 1 item stack is accepted, because it is below the maximum.
     contents = new ItemStack[] { new(pineapple) };
-    Assert.IsTrue(
-        cond.IsMatch(_resolver.Resolver, _resolver.CatDict, contents));
+    Assert.IsTrue(cond.IsMatch(Resolver.Resolver, Resolver.CatDict, contents));
     Assert.IsNull(contents[0]);
 
     // 2 item stacks are accepted, because they is below the maximum.
     contents = new ItemStack[] { new(pineapple), new(pineapple) };
-    Assert.IsTrue(
-        cond.IsMatch(_resolver.Resolver, _resolver.CatDict, contents));
+    Assert.IsTrue(cond.IsMatch(Resolver.Resolver, Resolver.CatDict, contents));
     Assert.IsNull(contents[0]);
     Assert.IsNull(contents[1]);
 
     // Only 2 out of 3 item stacks are accepted, because the maximum is 2.
     contents =
         new ItemStack[] { new(pineapple), new(pineapple), new(pineapple) };
-    Assert.IsTrue(
-        cond.IsMatch(_resolver.Resolver, _resolver.CatDict, contents));
+    Assert.IsTrue(cond.IsMatch(Resolver.Resolver, Resolver.CatDict, contents));
     Assert.IsNull(contents[0]);
     Assert.IsNull(contents[1]);
     Assert.IsNotNull(contents[2]);
@@ -217,15 +210,13 @@ public class SlotCondition {
 
     // The minimum is not met within the slot range.
     contents = new ItemStack[] { new(pineapple), new(pineapple) };
-    Assert.IsFalse(
-        cond.IsMatch(_resolver.Resolver, _resolver.CatDict, contents));
+    Assert.IsFalse(cond.IsMatch(Resolver.Resolver, Resolver.CatDict, contents));
     CollectionAssert.AllItemsAreNotNull(contents);
 
     // The minimum is met at the start of the range.
     contents = new ItemStack[] { new(pineapple), new(pineapple), new(pineapple),
                                  null };
-    Assert.IsTrue(
-        cond.IsMatch(_resolver.Resolver, _resolver.CatDict, contents));
+    Assert.IsTrue(cond.IsMatch(Resolver.Resolver, Resolver.CatDict, contents));
     Assert.IsNotNull(contents[0]);
     Assert.IsNull(contents[1]);
     Assert.IsNull(contents[2]);
@@ -235,8 +226,7 @@ public class SlotCondition {
     contents =
         new ItemStack[] { new(pineapple), null,           null,
                           new(pineapple), new(pineapple), new(pineapple) };
-    Assert.IsTrue(
-        cond.IsMatch(_resolver.Resolver, _resolver.CatDict, contents));
+    Assert.IsTrue(cond.IsMatch(Resolver.Resolver, Resolver.CatDict, contents));
     // Unchanged
     Assert.IsNotNull(contents[0]);
     Assert.IsNull(contents[1]);
@@ -251,8 +241,7 @@ public class SlotCondition {
     contents =
         new ItemStack[] { new(pineapple), null,           null,          null,
                           new(pineapple), new(pineapple), new(pineapple) };
-    Assert.IsFalse(
-        cond.IsMatch(_resolver.Resolver, _resolver.CatDict, contents));
+    Assert.IsFalse(cond.IsMatch(Resolver.Resolver, Resolver.CatDict, contents));
     Assert.IsNotNull(contents[0]);
     Assert.IsNull(contents[1]);
     Assert.IsNull(contents[2]);
@@ -287,20 +276,17 @@ public class SlotCondition {
 
     // blueberry is not in the overlap category
     contents = new ItemStack[] { new(blueberry) };
-    Assert.IsFalse(
-        cond.IsMatch(_resolver.Resolver, _resolver.CatDict, contents));
+    Assert.IsFalse(cond.IsMatch(Resolver.Resolver, Resolver.CatDict, contents));
     CollectionAssert.AllItemsAreNotNull(contents);
 
     // firestarter is not in the overlap category
     contents = new ItemStack[] { new(firestarter) };
-    Assert.IsFalse(
-        cond.IsMatch(_resolver.Resolver, _resolver.CatDict, contents));
+    Assert.IsFalse(cond.IsMatch(Resolver.Resolver, Resolver.CatDict, contents));
     CollectionAssert.AllItemsAreNotNull(contents);
 
     // cranberry is in both
     contents = new ItemStack[] { new(cranberry) };
-    Assert.IsTrue(
-        cond.IsMatch(_resolver.Resolver, _resolver.CatDict, contents));
+    Assert.IsTrue(cond.IsMatch(Resolver.Resolver, Resolver.CatDict, contents));
     Assert.IsNull(contents[0]);
   }
 
@@ -333,35 +319,30 @@ public class SlotCondition {
     // not enough of either category
     contents =
         new ItemStack[] { new(pineapple), new(pineapple), new(pineapple) };
-    Assert.IsFalse(
-        cond.IsMatch(_resolver.Resolver, _resolver.CatDict, contents));
+    Assert.IsFalse(cond.IsMatch(Resolver.Resolver, Resolver.CatDict, contents));
     CollectionAssert.AllItemsAreNotNull(contents);
 
     // not enough of the pie-filling-category category
     contents =
         new ItemStack[] { new(pineapple), new(cranberry), new(blackcurrant) };
-    Assert.IsFalse(
-        cond.IsMatch(_resolver.Resolver, _resolver.CatDict, contents));
+    Assert.IsFalse(cond.IsMatch(Resolver.Resolver, Resolver.CatDict, contents));
     CollectionAssert.AllItemsAreNotNull(contents);
 
     // not enough of the pie-filling category
     contents = new ItemStack[] { new(pineapple), new(onion), new(onion) };
-    Assert.IsFalse(
-        cond.IsMatch(_resolver.Resolver, _resolver.CatDict, contents));
+    Assert.IsFalse(cond.IsMatch(Resolver.Resolver, Resolver.CatDict, contents));
     CollectionAssert.AllItemsAreNotNull(contents);
 
     // enough of both categories
     contents =
         new ItemStack[] { new(pineapple), new(onion), new(blackcurrant) };
-    Assert.IsTrue(
-        cond.IsMatch(_resolver.Resolver, _resolver.CatDict, contents));
+    Assert.IsTrue(cond.IsMatch(Resolver.Resolver, Resolver.CatDict, contents));
     Assert.IsTrue(contents.All(c => c == null));
 
     // enough of both categories, and more than enough of the pie-filling
     contents = new ItemStack[] { new(pineapple), new(onion), new(blackcurrant),
                                  new(cranberry) };
-    Assert.IsTrue(
-        cond.IsMatch(_resolver.Resolver, _resolver.CatDict, contents));
+    Assert.IsTrue(cond.IsMatch(Resolver.Resolver, Resolver.CatDict, contents));
     // All of the fruit should be accepted, even though they are above the
     // distinctMin.
     Assert.IsTrue(contents.All(c => c == null));
@@ -396,27 +377,23 @@ public class SlotCondition {
     // The same repeated item is not too much of either
     contents =
         new ItemStack[] { new(pineapple), new(pineapple), new(pineapple) };
-    Assert.IsTrue(
-        cond.IsMatch(_resolver.Resolver, _resolver.CatDict, contents));
+    Assert.IsTrue(cond.IsMatch(Resolver.Resolver, Resolver.CatDict, contents));
     Assert.IsTrue(contents.All(c => c == null));
 
     // 2 different pie-fillings is okay
     contents = new ItemStack[] { new(pineapple), new(cranberry) };
-    Assert.IsTrue(
-        cond.IsMatch(_resolver.Resolver, _resolver.CatDict, contents));
+    Assert.IsTrue(cond.IsMatch(Resolver.Resolver, Resolver.CatDict, contents));
     Assert.IsTrue(contents.All(c => c == null));
 
     // 3 different pie-fillings is too much
     contents =
         new ItemStack[] { new(pineapple), new(cranberry), new(blackcurrant) };
-    Assert.IsFalse(
-        cond.IsMatch(_resolver.Resolver, _resolver.CatDict, contents));
+    Assert.IsFalse(cond.IsMatch(Resolver.Resolver, Resolver.CatDict, contents));
     CollectionAssert.AllItemsAreNotNull(contents);
 
     // 2 different pie-filling-categories is too much
     contents = new ItemStack[] { new(pineapple), new(onion) };
-    Assert.IsFalse(
-        cond.IsMatch(_resolver.Resolver, _resolver.CatDict, contents));
+    Assert.IsFalse(cond.IsMatch(Resolver.Resolver, Resolver.CatDict, contents));
     CollectionAssert.AllItemsAreNotNull(contents);
   }
 
@@ -469,7 +446,7 @@ public class SlotCondition {
           Enumerable.Repeat(new ItemStack(pineapple), i).ToArray();
 
       List<IAttribute> result = new();
-      cond.AppendValue(_resolver.Resolver, _resolver.CatDict,
+      cond.AppendValue(Resolver.Resolver, Resolver.CatDict,
                        new AssetLocation("gourmand", "count"), contents,
                        result);
       Assert.IsTrue(contents.All(c => c == null));
@@ -511,8 +488,8 @@ public class SlotCondition {
     contents =
         new ItemStack[] { new(pineapple), new(pineapple), new(pineapple) };
     result = new();
-    cond.AppendValue(_resolver.Resolver, _resolver.CatDict, pieFilling,
-                     contents, result);
+    cond.AppendValue(Resolver.Resolver, Resolver.CatDict, pieFilling, contents,
+                     result);
     Assert.IsTrue(contents.All(c => c == null));
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(
         new IAttribute[] { new StringAttribute("item"),
@@ -522,7 +499,7 @@ public class SlotCondition {
     contents =
         new ItemStack[] { new(pineapple), new(pineapple), new(pineapple) };
     result = new();
-    cond.AppendValue(_resolver.Resolver, _resolver.CatDict, pieType, contents,
+    cond.AppendValue(Resolver.Resolver, Resolver.CatDict, pieType, contents,
                      result);
     Assert.IsTrue(contents.All(c => c == null));
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(
@@ -531,8 +508,8 @@ public class SlotCondition {
     // Two different fruits
     contents = new ItemStack[] { new(pineapple), new(cranberry) };
     result = new();
-    cond.AppendValue(_resolver.Resolver, _resolver.CatDict, pieFilling,
-                     contents, result);
+    cond.AppendValue(Resolver.Resolver, Resolver.CatDict, pieFilling, contents,
+                     result);
     Assert.IsTrue(contents.All(c => c == null));
     Assert.IsTrue(Real.CategoryValue.ValuesEqualEitherOrder(
         new IAttribute[] { new StringAttribute("item"),
@@ -543,7 +520,7 @@ public class SlotCondition {
 
     contents = new ItemStack[] { new(pineapple), new(cranberry) };
     result = new();
-    cond.AppendValue(_resolver.Resolver, _resolver.CatDict, pieType, contents,
+    cond.AppendValue(Resolver.Resolver, Resolver.CatDict, pieType, contents,
                      result);
     Assert.IsTrue(contents.All(c => c == null));
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(
@@ -552,8 +529,8 @@ public class SlotCondition {
     // Two different categories
     contents = new ItemStack[] { new(pineapple), new(onion) };
     result = new();
-    cond.AppendValue(_resolver.Resolver, _resolver.CatDict, pieFilling,
-                     contents, result);
+    cond.AppendValue(Resolver.Resolver, Resolver.CatDict, pieFilling, contents,
+                     result);
     Assert.IsTrue(contents.All(c => c == null));
     Assert.IsTrue(Real.CategoryValue.ValuesEqualEitherOrder(
         new IAttribute[] { new StringAttribute("item"),
@@ -564,7 +541,7 @@ public class SlotCondition {
 
     contents = new ItemStack[] { new(pineapple), new(onion) };
     result = new();
-    cond.AppendValue(_resolver.Resolver, _resolver.CatDict, pieType, contents,
+    cond.AppendValue(Resolver.Resolver, Resolver.CatDict, pieType, contents,
                      result);
     Assert.IsTrue(contents.All(c => c == null));
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(
@@ -587,8 +564,8 @@ public class SlotCondition {
     ItemStack[] contents = new ItemStack[5];
     Real.ContentBuilder builder = new(contents);
     int enumerated = 0;
-    foreach (var _ in cond.EnumerateMatchContents(_resolver.Resolver,
-                                                  _resolver.CatDict, builder,
+    foreach (var _ in cond.EnumerateMatchContents(Resolver.Resolver,
+                                                  Resolver.CatDict, builder,
                                                   new ValueTuple[] { new() })) {
       Assert.AreEqual(5, builder.Contents.Count);
       Assert.IsNotNull(builder.Contents[0]);
@@ -627,8 +604,8 @@ public class SlotCondition {
         new() { LoadAssets.GetItem("game", "fruit-pineapple"),
                 LoadAssets.GetItem("game", "fruit-cranberry") };
     int enumerated = 0;
-    foreach (var _ in cond.EnumerateMatchContents(_resolver.Resolver,
-                                                  _resolver.CatDict, builder,
+    foreach (var _ in cond.EnumerateMatchContents(Resolver.Resolver,
+                                                  Resolver.CatDict, builder,
                                                   new ValueTuple[] { new() })) {
       Assert.AreEqual(5, builder.Contents.Count);
 
@@ -668,8 +645,8 @@ public class SlotCondition {
                 LoadAssets.GetItem("game", "fruit-cranberry") };
     int enumerated = 0;
     HashSet<int> found = new();
-    foreach (var _ in cond.EnumerateMatchContents(_resolver.Resolver,
-                                                  _resolver.CatDict, builder,
+    foreach (var _ in cond.EnumerateMatchContents(Resolver.Resolver,
+                                                  Resolver.CatDict, builder,
                                                   new ValueTuple[] { new() })) {
       int id = 0;
       for (int i = 0; i < 3; ++i) {
@@ -704,7 +681,7 @@ public class SlotCondition {
                                                                "gourmand");
     Real.ContentBuilder builder = new(Array.Empty<ItemStack>());
     List<CollectibleObject> allowed =
-        cond.EnumerateAllowedStacks(_resolver.Resolver, _resolver.CatDict)
+        cond.EnumerateAllowedStacks(Resolver.Resolver, Resolver.CatDict)
             .Select(i => i.Collectible)
             .ToList();
     CollectionAssert.AreEquivalent(
@@ -715,8 +692,8 @@ public class SlotCondition {
     allowed.Add(null);
     int enumerated = 0;
     HashSet<int> found = new();
-    foreach (var _ in cond.EnumerateMatchContents(_resolver.Resolver,
-                                                  _resolver.CatDict, builder,
+    foreach (var _ in cond.EnumerateMatchContents(Resolver.Resolver,
+                                                  Resolver.CatDict, builder,
                                                   new ValueTuple[] { new() })) {
       int id = 0;
       int last = -1;
@@ -759,7 +736,7 @@ public class SlotCondition {
                                                                "gourmand");
     Real.ContentBuilder builder = new(Array.Empty<ItemStack>());
     List<CollectibleObject> allowed =
-        cond.EnumerateAllowedStacks(_resolver.Resolver, _resolver.CatDict)
+        cond.EnumerateAllowedStacks(Resolver.Resolver, Resolver.CatDict)
             .Select(i => i.Collectible)
             .ToList();
     CollectionAssert.AreEquivalent(
@@ -770,8 +747,8 @@ public class SlotCondition {
     allowed.Add(null);
     int enumerated = 0;
     HashSet<int> found = new();
-    foreach (var _ in cond.EnumerateMatchContents(_resolver.Resolver,
-                                                  _resolver.CatDict, builder,
+    foreach (var _ in cond.EnumerateMatchContents(Resolver.Resolver,
+                                                  Resolver.CatDict, builder,
                                                   new ValueTuple[] { new() })) {
       int id = 0;
       int last = -1;
@@ -814,7 +791,7 @@ public class SlotCondition {
                                                                "gourmand");
     Real.ContentBuilder builder = new(Array.Empty<ItemStack>());
     List<CollectibleObject> allowed =
-        cond.EnumerateAllowedStacks(_resolver.Resolver, _resolver.CatDict)
+        cond.EnumerateAllowedStacks(Resolver.Resolver, Resolver.CatDict)
             .Select(i => i.Collectible)
             .ToList();
     CollectionAssert.AreEquivalent(
@@ -825,8 +802,8 @@ public class SlotCondition {
     allowed.Add(null);
     int enumerated = 0;
     HashSet<int> found = new();
-    foreach (var _ in cond.EnumerateMatchContents(_resolver.Resolver,
-                                                  _resolver.CatDict, builder,
+    foreach (var _ in cond.EnumerateMatchContents(Resolver.Resolver,
+                                                  Resolver.CatDict, builder,
                                                   new ValueTuple[] { new() })) {
       int id = 0;
       int last = -1;
@@ -868,7 +845,7 @@ public class SlotCondition {
                                                                "gourmand");
     Real.ContentBuilder builder = new(Array.Empty<ItemStack>());
     List<CollectibleObject> allowed =
-        cond.EnumerateAllowedStacks(_resolver.Resolver, _resolver.CatDict)
+        cond.EnumerateAllowedStacks(Resolver.Resolver, Resolver.CatDict)
             .Select(i => i.Collectible)
             .ToList();
     CollectionAssert.AreEquivalent(
@@ -881,8 +858,8 @@ public class SlotCondition {
         allowed);
     int enumerated = 0;
     HashSet<int> found = new();
-    foreach (var _ in cond.EnumerateMatchContents(_resolver.Resolver,
-                                                  _resolver.CatDict, builder,
+    foreach (var _ in cond.EnumerateMatchContents(Resolver.Resolver,
+                                                  Resolver.CatDict, builder,
                                                   new ValueTuple[] { new() })) {
       HashSet<int> foundCollectibles = new();
       int id = 0;
@@ -945,7 +922,7 @@ public class SlotCondition {
     };
 
     List<CollectibleObject> allowed =
-        cond.EnumerateAllowedStacks(_resolver.Resolver, _resolver.CatDict)
+        cond.EnumerateAllowedStacks(Resolver.Resolver, Resolver.CatDict)
             .Select(i => i.Collectible)
             .ToList();
     CollectionAssert.AreEquivalent(
@@ -956,9 +933,8 @@ public class SlotCondition {
 
     int enumerated = 0;
     HashSet<int> found = new();
-    foreach (var _ in cond.EnumerateMatchContents(_resolver.Resolver,
-                                                  _resolver.CatDict, builder,
-                                                  GetInitial())) {
+    foreach (var _ in cond.EnumerateMatchContents(
+                 Resolver.Resolver, Resolver.CatDict, builder, GetInitial())) {
       int id = 0;
       for (int i = 0; i < 1; ++i) {
         CollectibleObject c = null;

@@ -32,7 +32,7 @@ public interface IReadonlyCategoryDict {
   /// <param name="category">the category to search</param>
   /// <returns>an enumeration of the matching collectibles</returns>
   IEnumerable<CollectibleObject> EnumerateMatches(AssetLocation category);
-  IEnumerable<CollectibleObject> EnumerateMatches(AssetLocation input,
+  IEnumerable<CollectibleObject> EnumerateMatches(AssetLocation category,
                                                   int enumeratePerDistinct);
 }
 

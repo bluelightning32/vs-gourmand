@@ -398,4 +398,27 @@ public class MatchRule {
                       new AssetLocation("gourmand", "contains-meal-fruit"),
                       meal)));
   }
+
+  [TestMethod]
+  public void GetValueOutputs() {
+    string json = @"
+    {
+      category: {
+        input: ""edible-meal-container"",
+      },
+      outputs: {
+        ""edible"": [ 1 ]
+      }
+    }
+    ";
+    Real.MatchRule rule =
+        JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
+    Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
+    ItemStack meal = new(bowl);
+
+    Assert.IsTrue(Real.CategoryValue.ValuesEqual(
+        new IAttribute[] { new LongAttribute(1) },
+        rule.GetValue(_resolver.Resolver, _resolver.CatDict,
+                      new AssetLocation("gourmand", "edible"), meal)));
+  }
 }

@@ -82,7 +82,7 @@ public class MatchRuleConverter : JsonConverter<MatchRule> {
 [JsonConverter(typeof(MatchRuleConverter))]
 [JsonObject(MemberSerialization.OptIn)]
 public class MatchRule : MatchRuleJson {
-  public readonly IReadOnlyDictionary<AssetLocation, IAttribute[]> Outputs;
+  public readonly IReadOnlyDictionary<AssetLocation, List<IAttribute>> Outputs;
 
   public readonly IReadOnlyList<ICondition> Conditions;
 
@@ -98,11 +98,11 @@ public class MatchRule : MatchRuleJson {
   /// <param name="domain">the default domain for assets</param>
   /// <param name="json">the unresolved json data</param>
   public MatchRule(string domain, MatchRuleJson json) : base(json) {
-    Dictionary<AssetLocation, IAttribute[]> outputs = new(RawOutputs.Count);
+    Dictionary<AssetLocation, List<IAttribute>> outputs = new(RawOutputs.Count);
     foreach (KeyValuePair<string, JToken[]> p in RawOutputs) {
       outputs.Add(
           AssetLocation.Create(p.Key, domain),
-          p.Value.Select((a) => new JsonObject(a).ToAttribute()).ToArray());
+          p.Value.Select((a) => new JsonObject(a).ToAttribute()).ToList());
     }
     Outputs = outputs;
     List<ICondition> conditions = new();
@@ -123,7 +123,7 @@ public class MatchRule : MatchRuleJson {
         // This duplicate key was already processed.
         continue;
       }
-      if (Deletes.Contains(category)) {
+      if (Deletes.Contains(category) || Outputs.Keys.Contains(category)) {
         _conditionsByCategory.Add(category, null);
       } else {
         _conditionsByCategory.Add(
@@ -173,8 +173,10 @@ public class MatchRule : MatchRuleJson {
   /// a precomputed dictionary of categories for collectible objects</param>
   /// <param name="category">
   /// The category to look up. The result is undefined if this category is not
-  /// an output category.</param> <param name="stack">The stack to look up. The
-  /// result is undefined if this stack is not a match.</param> <returns>the
+  /// an output category.</param>
+  /// <param name="stack">The stack to look up. The
+  /// result is undefined if this stack is not a match.</param>
+  /// <returns>the
   /// category value, or null if this match deletes the category match</returns>
   public List<IAttribute> GetValue(IWorldAccessor resolver,
                                    Collectibles.IReadonlyCategoryDict catdict,
@@ -182,6 +184,9 @@ public class MatchRule : MatchRuleJson {
 
     List<ICondition> conditions = _conditionsByCategory[category];
     if (conditions == null) {
+      if (Outputs.TryGetValue(category, out List<IAttribute> value)) {
+        return value;
+      }
       return null;
     }
     List<IAttribute> result = new();
