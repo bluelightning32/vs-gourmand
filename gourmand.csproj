@@ -67,6 +67,10 @@
             <HintPath>$(VINTAGE_STORY)/Lib/Newtonsoft.Json.dll</HintPath>
             <Private>false</Private>
         </Reference>
+        <Reference Include="VSSurvivalMod">
+            <HintPath>$(VINTAGE_STORY)/Mods/VSSurvivalMod.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
 
         <!--
             Store the list of files to package in a zip file in the @(Package)

@@ -27,17 +27,20 @@ public class MatchRuleJson {
   public readonly CategoryCondition Category;
   [JsonProperty]
   public readonly AttributeCondition[] Attributes;
+  [JsonProperty("contents")]
+  public readonly SlotCondition[] Slots;
 
   [JsonConstructor]
   public MatchRuleJson(float priority,
                        IReadOnlyDictionary<string, JToken[]> rawOutputs,
                        AssetLocation[] deletes, CategoryCondition category,
-                       AttributeCondition[] attributes) {
+                       AttributeCondition[] attributes, SlotCondition[] slots) {
     Priority = priority;
     RawOutputs = rawOutputs ?? new Dictionary<string, JToken[]>();
     Deletes = deletes ?? Array.Empty<AssetLocation>();
     Category = category;
     Attributes = attributes ?? Array.Empty<AttributeCondition>();
+    Slots = slots;
   }
 
   public MatchRuleJson(MatchRuleJson copy) {
@@ -46,6 +49,7 @@ public class MatchRuleJson {
     Deletes = copy.Deletes;
     Category = copy.Category;
     Attributes = copy.Attributes;
+    Slots = copy.Slots;
   }
 }
 
@@ -84,6 +88,7 @@ public class MatchRule : MatchRuleJson {
 
   private readonly Dictionary<AssetLocation, List<ICondition>>
       _conditionsByCategory;
+  private readonly ContentsCondition ContentsCondition;
 
   /// <summary>
   /// Construct a CollectibleMatchRule. To create this from json, call
@@ -105,6 +110,12 @@ public class MatchRule : MatchRuleJson {
       conditions.Add(Category);
     }
     conditions.AddRange(Attributes);
+    if (Slots != null) {
+      ContentsCondition = new ContentsCondition(Slots);
+      conditions.Add(ContentsCondition);
+    } else {
+      ContentsCondition = null;
+    }
     Conditions = conditions;
     _conditionsByCategory = new();
     foreach (AssetLocation category in OutputCategories) {
