@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
@@ -36,7 +37,7 @@ public interface IReadonlyCategoryDict {
                                                   int enumeratePerDistinct);
 }
 
-public class CategoryDict : IReadonlyCategoryDict {
+public class CategoryDict : IReadonlyCategoryDict, IByteSerializable {
   readonly Dictionary<AssetLocation,
                       Dictionary<CollectibleObject, CategoryValue>> _byCat =
       new();
@@ -133,6 +134,49 @@ public class CategoryDict : IReadonlyCategoryDict {
         ++count;
         distinctCounts[kv.Value.Value] = count;
         yield return kv.Key;
+      }
+    }
+  }
+
+  public void ToBytes(BinaryWriter writer) {
+    writer.Write(_byCat.Count);
+    foreach (var entry in _byCat) {
+      writer.Write(entry.Key.Domain);
+      writer.Write(entry.Key.Path);
+      writer.Write(entry.Value.Count);
+      foreach (var catEntry in entry.Value) {
+        writer.Write((int)catEntry.Key.ItemClass);
+        writer.Write(catEntry.Key.Id);
+        if (catEntry.Value == null) {
+          writer.Write(false);
+        } else {
+          writer.Write(true);
+          catEntry.Value.ToBytes(writer);
+        }
+      }
+    }
+  }
+
+  public void FromBytes(BinaryReader reader, IWorldAccessor resolver) {
+    _byCat.Clear();
+    int count1 = reader.ReadInt32();
+    for (int i = 0; i < count1; ++i) {
+      AssetLocation category =
+          new AssetLocation(reader.ReadString(), reader.ReadString());
+      Dictionary<CollectibleObject, CategoryValue> collectibles = new();
+      _byCat.Add(category, collectibles);
+      int categoryCount = reader.ReadInt32();
+      for (int j = 0; j < categoryCount; ++j) {
+        EnumItemClass itemClass = (EnumItemClass)reader.ReadInt32();
+        int id = reader.ReadInt32();
+        CollectibleObject collectible =
+            itemClass switch { EnumItemClass.Block => resolver.GetBlock(id),
+                               _ => resolver.GetItem(id) };
+        CategoryValue value = null;
+        if (reader.ReadBoolean()) {
+          value = new(reader);
+        }
+        collectibles.Add(collectible, value);
       }
     }
   }

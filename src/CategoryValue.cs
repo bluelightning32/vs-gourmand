@@ -1,20 +1,27 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Text;
 
+using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 
 namespace Gourmand;
 
-public class CategoryValue : IEquatable<CategoryValue> {
+public class CategoryValue : IEquatable<CategoryValue>, IByteSerializable {
   public float Priority;
   public List<IAttribute> Value;
 
   public CategoryValue(float priority, List<IAttribute> value) {
     Priority = priority;
     Value = value;
+  }
+
+  public CategoryValue(BinaryReader reader) {
+    Value = new();
+    FromBytes(reader, null);
   }
 
   public bool Equals(CategoryValue other) {
@@ -37,10 +44,15 @@ public class CategoryValue : IEquatable<CategoryValue> {
 
   public override string ToString() {
     StringBuilder builder = new();
-    builder.Append($"{{ priority: {Priority}, value: [");
-    foreach (IAttribute value in Value) {
-      builder.Append(value.ToString());
-      builder.Append(", ");
+    builder.Append($"{{ priority: {Priority}, value:");
+    if (Value == null) {
+      builder.Append(" null");
+    } else {
+      builder.Append("[");
+      foreach (IAttribute value in Value) {
+        builder.Append(value.ToString());
+        builder.Append(", ");
+      }
     }
     builder.Append("]}");
     return builder.ToString();
@@ -160,6 +172,48 @@ public class CategoryValue : IEquatable<CategoryValue> {
       return -1;
     }
     return 0;
+  }
+
+  public static void IAttributeListToBytes(BinaryWriter writer,
+                                           List<IAttribute> save) {
+    writer.Write(save.Count);
+    foreach (IAttribute a in save) {
+      writer.Write(a.GetAttributeId());
+      a.ToBytes(writer);
+    }
+  }
+
+  public static void IAttributeListFromBytes(BinaryReader reader,
+                                             List<IAttribute> load) {
+    load.Clear();
+    int count = reader.ReadInt32();
+    load.EnsureCapacity(count);
+    for (int i = 0; i < count; ++i) {
+      int id = reader.ReadInt32();
+      Type type = TreeAttribute.AttributeIdMapping[id];
+      IAttribute attr = (IAttribute)Activator.CreateInstance(type);
+      attr.FromBytes(reader);
+      load.Add(attr);
+    }
+  }
+
+  public void ToBytes(BinaryWriter writer) {
+    writer.Write(Priority);
+    if (Value == null) {
+      writer.Write(false);
+    } else {
+      writer.Write(true);
+      IAttributeListToBytes(writer, Value);
+    }
+  }
+
+  public void FromBytes(BinaryReader reader, IWorldAccessor resolver) {
+    Priority = reader.ReadSingle();
+    if (reader.ReadBoolean()) {
+      IAttributeListFromBytes(reader, Value);
+    } else {
+      Value = null;
+    }
   }
 }
 

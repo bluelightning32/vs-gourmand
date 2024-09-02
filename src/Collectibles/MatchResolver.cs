@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 using Vintagestory.API.Common;
 using Vintagestory.API.Util;
@@ -234,7 +233,7 @@ public class MatchResolver {
   /// rules.
   /// </summary>
   /// <param name="rules">The rules to load</param>
-  public void Load(IEnumerable<MatchRule> rules) {
+  public CategoryDict Load(IEnumerable<MatchRule> rules) {
     MatchRuleSorter sorter = new(rules);
     CategoryDict accum = new();
     HashSet<AssetLocation> emitted = new();
@@ -249,5 +248,6 @@ public class MatchResolver {
         accum.Transfer(entry.Category, _catdict);
       }
     }
+    return _catdict;
   }
 }
