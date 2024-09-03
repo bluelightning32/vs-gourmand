@@ -1,0 +1,16 @@
+[
+  {
+    code : {
+      match: "game:pickledvegetable-*",
+      type: "item",
+      outputs: [ "pickled-food" ]
+    }
+  },
+  {
+    code : {
+      match: "game:pickledlegume-*",
+      type: "item",
+      outputs: [ "pickled-food" ]
+    }
+  }
+]

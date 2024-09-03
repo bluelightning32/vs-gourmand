@@ -1,9 +1,17 @@
 using System.Collections.Generic;
+using System.Linq;
+
+using Gourmand.CollectibleBehaviors;
+using Gourmand.EntityBehaviors;
 
 using Newtonsoft.Json.Linq;
 
 using Vintagestory.API.Common;
+using Vintagestory.API.Common.Entities;
+using Vintagestory.API.Config;
+using Vintagestory.API.Datastructures;
 using Vintagestory.API.Server;
+using Vintagestory.API.Util;
 
 namespace Gourmand;
 
@@ -24,6 +32,8 @@ public class GourmandSystem : ModSystem {
   public override void Start(ICoreAPI api) {
     _api = api;
     CatDict = api.RegisterRecipeRegistry<CategoryDict>("CategoryDict");
+    api.RegisterCollectibleBehaviorClass("foodeaten", typeof(FoodEaten));
+    api.RegisterEntityBehaviorClass("updatefoodachievements", typeof(UpdateFoodAchievements));
   }
 
   public override void AssetsLoaded(ICoreAPI api) {
@@ -40,6 +50,17 @@ public class GourmandSystem : ModSystem {
         .ToObject<FoodAchievements>();
     FoodAchievements.Resolve(Mod.Info.ModID);
     api.Logger.Debug("Loaded {0} food achievements", FoodAchievements.RawAchievements.Count);
+
+    if (api is ICoreServerAPI sapi) {
+      foreach (CollectibleObject c in sapi.World.Collectibles) {
+        if (c.NutritionProps != null || c.GetType().GetMethod("GetNutritionProperties").DeclaringType != typeof(CollectibleObject)) {
+          c.CollectibleBehaviors = c.CollectibleBehaviors.Append(new FoodEaten(c));
+        }
+      }
+
+      EntityProperties playerProperties = sapi.World.GetEntityType(GlobalConstants.EntityPlayerTypeCode);
+      playerProperties.Server.BehaviorsAsJsonObj = playerProperties.Server.BehaviorsAsJsonObj.Append(JsonObject.FromJson("{ code: \"updatefoodachievements\" }"));
+    }
   }
 
   private void LoadCategories(ICoreServerAPI sapi) {
