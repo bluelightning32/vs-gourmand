@@ -273,4 +273,13 @@ public class CategoryDict {
       }
     }
   }
+
+  [TestMethod]
+  public void SerializeBytes() {
+    CatDict.ToBytes(LoadAssets.Server.World, out byte[] bytes,
+                    out int quantity);
+    Real.CategoryDict restored = new(LoadAssets.Server.World);
+    restored.FromBytes(LoadAssets.Server.World, quantity, bytes);
+    TestGetValue(restored);
+  }
 }

@@ -102,6 +102,9 @@ public class MatchRule : MatchRuleJson {
   /// <param name="json">the unresolved json data</param>
   public MatchRule(string domain, MatchRuleJson json) : base(json) {
     Dictionary<AssetLocation, List<IAttribute>> outputs = new(RawOutputs.Count);
+    // Parse the keys from RawOutputs into AssetLocations for outputs. Also fix
+    // the strings in _rawOutputs to include the domain. Fixing the domain is
+    // important in case this MatchRule is serialized back to JSON.
     KeyValuePair<string, JToken[]>[] rawOutputs = RawOutputs.ToArray();
     _rawOutputs.Clear();
     foreach (KeyValuePair<string, JToken[]> p in rawOutputs) {

@@ -12,7 +12,7 @@ using Vintagestory.API.Datastructures;
 
 namespace Gourmand;
 
-public class CategoryDict : IByteSerializable {
+public class CategoryDict : RecipeRegistryBase, IByteSerializable {
   private readonly Collectibles.CategoryDict _collectibleDict;
   private readonly IWorldAccessor _resolver;
   private readonly Dictionary<AssetLocation, List<MatchRule>> _rules;
@@ -26,9 +26,12 @@ public class CategoryDict : IByteSerializable {
     LoadStackRules(stackRules);
   }
 
-  public CategoryDict(IWorldAccessor resolver, BinaryReader reader)
+  public CategoryDict(IWorldAccessor resolver)
       : this(resolver, Array.Empty<Collectibles.MatchRule>(),
-             Array.Empty<MatchRule>()) {
+             Array.Empty<MatchRule>()) {}
+
+  public CategoryDict(IWorldAccessor resolver, BinaryReader reader)
+      : this(resolver) {
     FromBytes(reader, resolver);
   }
 
@@ -133,6 +136,39 @@ public class CategoryDict : IByteSerializable {
     int count = reader.ReadInt32();
     List<MatchRule> stackRules = new(count);
     for (int i = 0; i < count; ++i) {
+      stackRules.Add(
+          JsonConvert.DeserializeObject<MatchRule>(reader.ReadString()));
+    }
+    _rules.Clear();
+    LoadStackRules(stackRules);
+  }
+
+  public override void ToBytes(IWorldAccessor resolver, out byte[] data,
+                               out int quantity) {
+    using MemoryStream ms = new();
+    using BinaryWriter writer = new(ms);
+
+    _collectibleDict.ToBytes(writer);
+    HashSet<MatchRule> rules = new();
+    foreach (List<MatchRule> newRules in _rules.Values) {
+      rules.UnionWith(newRules);
+    }
+    quantity = rules.Count;
+    foreach (MatchRule rule in rules) {
+      writer.Write(JsonConvert.SerializeObject(rule));
+    }
+
+    data = ms.ToArray();
+  }
+
+  public override void FromBytes(IWorldAccessor resolver, int quantity,
+                                 byte[] data) {
+    using MemoryStream ms = new(data);
+    using BinaryReader reader = new(ms);
+
+    _collectibleDict.FromBytes(reader, resolver);
+    List<MatchRule> stackRules = new(quantity);
+    for (int i = 0; i < quantity; ++i) {
       stackRules.Add(
           JsonConvert.DeserializeObject<MatchRule>(reader.ReadString()));
     }
