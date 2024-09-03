@@ -1,7 +1,8 @@
-using System.Collections.Generic;
-
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
+using Vintagestory.API.Config;
+using Vintagestory.API.Datastructures;
+using Vintagestory.API.Server;
 
 namespace Gourmand.EntityBehaviors;
 
@@ -27,6 +28,18 @@ class UpdateFoodAchievements : EntityBehavior {
                                    nutritionGainMultiplier);
     if (_eating != null) {
       _api.Logger.Debug("Ate food {0}", _eating?.Collectible?.Code.ToString());
+      ITreeAttribute achievements =
+          entity.WatchedAttributes.GetOrAddTreeAttribute("gourmand");
+      GourmandSystem gourmand = _api.ModLoader.GetModSystem<GourmandSystem>();
+      int newPoints = gourmand.FoodAchievements.UpdateAchievements(
+          _api.World, gourmand.CatDict, achievements, _eating);
+      if (newPoints > 0) {
+        IServerPlayer player = (IServerPlayer)((EntityPlayer)entity).Player;
+        player.SendMessage(GlobalConstants.InfoLogChatGroup,
+                           Lang.GetL(player.LanguageCode,
+                                     "gourmand:new-food-eaten", newPoints),
+                           EnumChatType.Notification);
+      }
       _eating = null;
     }
   }

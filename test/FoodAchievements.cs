@@ -131,39 +131,44 @@ public class FoodAchievements {
     TreeAttribute achieved = new();
     int points = 0;
 
-    Assert.IsTrue(LoadedAchievements.UpdateAchievements(
-        LoadAssets.Server.World, CatDict, achieved, new ItemStack(pineapple)));
+    Assert.AreNotEqual(0, LoadedAchievements.UpdateAchievements(
+                              LoadAssets.Server.World, CatDict, achieved,
+                              new ItemStack(pineapple)));
     points += 3;
     Assert.AreEqual(
         points, LoadedAchievements.GetPointsForAchievements(null, achieved));
 
     // No new points for eating the same item again
-    Assert.IsFalse(LoadedAchievements.UpdateAchievements(
-        LoadAssets.Server.World, CatDict, achieved, new ItemStack(pineapple)));
+    Assert.AreEqual(0, LoadedAchievements.UpdateAchievements(
+                           LoadAssets.Server.World, CatDict, achieved,
+                           new ItemStack(pineapple)));
 
-    Assert.IsTrue(LoadedAchievements.UpdateAchievements(
-        LoadAssets.Server.World, CatDict, achieved, new ItemStack(cranberry)));
+    Assert.AreNotEqual(0, LoadedAchievements.UpdateAchievements(
+                              LoadAssets.Server.World, CatDict, achieved,
+                              new ItemStack(cranberry)));
     points += 3;
     // Completion bonus
     points += 100;
     Assert.AreEqual(
         points, LoadedAchievements.GetPointsForAchievements(null, achieved));
 
-    Assert.IsTrue(LoadedAchievements.UpdateAchievements(
-        LoadAssets.Server.World, CatDict, achieved, new ItemStack(blueberry)));
+    Assert.AreNotEqual(0, LoadedAchievements.UpdateAchievements(
+                              LoadAssets.Server.World, CatDict, achieved,
+                              new ItemStack(blueberry)));
     points += 3;
     Assert.AreEqual(
         points, LoadedAchievements.GetPointsForAchievements(null, achieved));
 
-    Assert.IsTrue(LoadedAchievements.UpdateAchievements(
-        LoadAssets.Server.World, CatDict, achieved, new ItemStack(fish_raw)));
+    Assert.AreNotEqual(0, LoadedAchievements.UpdateAchievements(
+                              LoadAssets.Server.World, CatDict, achieved,
+                              new ItemStack(fish_raw)));
     points += 1;
     Assert.AreEqual(
         points, LoadedAchievements.GetPointsForAchievements(null, achieved));
 
-    Assert.IsTrue(LoadedAchievements.UpdateAchievements(
-        LoadAssets.Server.World, CatDict, achieved,
-        new ItemStack(fish_cooked)));
+    Assert.AreNotEqual(0, LoadedAchievements.UpdateAchievements(
+                              LoadAssets.Server.World, CatDict, achieved,
+                              new ItemStack(fish_cooked)));
     points += 1;
     Assert.AreEqual(
         points, LoadedAchievements.GetPointsForAchievements(null, achieved));

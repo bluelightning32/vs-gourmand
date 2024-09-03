@@ -19,6 +19,14 @@ public class AchievementPoints {
     BonusAt = bonusAt;
     Bonus = bonus;
   }
+
+  public int GetPoints(int eaten) {
+    int points = Points * eaten;
+    if (eaten >= BonusAt) {
+      points += Bonus;
+    }
+    return points;
+  }
 }
 
 public class HealthFunctionPiece : IComparable<HealthFunctionPiece> {
@@ -106,17 +114,14 @@ public class FoodAchievements {
         continue;
       }
       int eaten = ((ITreeAttribute)achievement.Value).Count;
-      points += rating.Points * eaten;
-      if (eaten >= rating.BonusAt) {
-        points += rating.Bonus;
-      }
+      points += rating.GetPoints(eaten);
     }
     return points;
   }
 
-  public bool UpdateAchievements(IWorldAccessor resolver, CategoryDict catdict,
-                                 ITreeAttribute achievements, ItemStack eaten) {
-    bool modified = false;
+  public int UpdateAchievements(IWorldAccessor resolver, CategoryDict catdict,
+                                ITreeAttribute achievements, ItemStack eaten) {
+    int newPoints = 0;
     foreach (var entry in _achievements) {
       CategoryValue value = catdict.GetValue(resolver, entry.Key, eaten);
       if (value == null || value.Value == null) {
@@ -132,8 +137,9 @@ public class FoodAchievements {
         continue;
       }
       eatenValues.SetItemstack(categoryValue, eaten);
-      modified = true;
+      newPoints += entry.Value.GetPoints(eatenValues.Count) -
+                   entry.Value.GetPoints(eatenValues.Count - 1);
     }
-    return modified;
+    return newPoints;
   }
 }
