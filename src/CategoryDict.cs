@@ -14,25 +14,19 @@ namespace Gourmand;
 
 public class CategoryDict : RecipeRegistryBase, IByteSerializable {
   private readonly Collectibles.CategoryDict _collectibleDict;
-  private readonly IWorldAccessor _resolver;
   private readonly Dictionary<AssetLocation, List<MatchRule>> _rules;
   public CategoryDict(IWorldAccessor resolver,
                       IEnumerable<Collectibles.MatchRule> collectibleRules,
                       IEnumerable<MatchRule> stackRules) {
     MatchResolver matchResolver = new(resolver);
-    _resolver = resolver;
     _collectibleDict = matchResolver.Load(collectibleRules);
     _rules = new();
     LoadStackRules(stackRules);
   }
 
-  public CategoryDict(IWorldAccessor resolver)
-      : this(resolver, Array.Empty<Collectibles.MatchRule>(),
-             Array.Empty<MatchRule>()) {}
-
-  public CategoryDict(IWorldAccessor resolver, BinaryReader reader)
-      : this(resolver) {
-    FromBytes(reader, resolver);
+  public CategoryDict() {
+    _collectibleDict = new();
+    _rules = new();
   }
 
   private void LoadStackRules(IEnumerable<MatchRule> stackRules) {
@@ -59,11 +53,13 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
   /// <summary>
   /// Look up the value of a category for the given item stack.
   /// </summary>
+  /// <param name="resolver">resolver</param>
   /// <param name="category">the category to look up</param>
   /// <param name="stack">the object to look up the category value for</param>
   /// <returns>the value, or null if the stack does not match the
   /// category</returns>
-  public CategoryValue GetValue(AssetLocation category, ItemStack stack) {
+  public CategoryValue GetValue(IWorldAccessor resolver, AssetLocation category,
+                                ItemStack stack) {
     CategoryValue current =
         _collectibleDict.GetValue(category, stack.Collectible);
     bool modifiable = false;
@@ -74,9 +70,9 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
       if (current != null && m.Priority < current.Priority) {
         return current;
       }
-      if (m.IsMatch(_resolver, _collectibleDict, stack)) {
+      if (m.IsMatch(resolver, _collectibleDict, stack)) {
         List<IAttribute> value =
-            m.GetValue(_resolver, _collectibleDict, category, stack);
+            m.GetValue(resolver, _collectibleDict, category, stack);
         if (!modifiable) {
           current = new(m.Priority, value);
           modifiable = true;
@@ -92,30 +88,34 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
   /// <summary>
   /// Check whether the stack is in a category
   /// </summary>
+  /// <param name="resolver">resolver</param>
   /// <param name="category">the category to check</param>
   /// <param name="stack">the stack that may be in the category</param>
   /// <returns>true if it is in the category</returns>
-  public bool InCategory(AssetLocation category, ItemStack stack) {
-    return GetValue(category, stack)?.Value != null;
+  public bool InCategory(IWorldAccessor resolver, AssetLocation category,
+                         ItemStack stack) {
+    return GetValue(resolver, category, stack)?.Value != null;
   }
 
   /// <summary>
   /// Find all collectible objects that match any value in a category.
   /// </summary>
+  /// <param name="resolver">resolver</param>
   /// <param name="category">the category to search</param>
   /// <returns>an enumeration of the matching collectibles</returns>
-  public List<ItemStack> EnumerateMatches(AssetLocation category) {
+  public List<ItemStack> EnumerateMatches(IWorldAccessor resolver,
+                                          AssetLocation category) {
     HashSet<ItemStack> stacks =
         new(_collectibleDict.EnumerateMatches(category).Select(
                 c => new ItemStack(c)),
-            new ItemStackComparer(_resolver));
+            new ItemStackComparer(resolver));
     if (!_rules.TryGetValue(category, out List<MatchRule> categoryRules)) {
       return stacks.ToList();
     }
     foreach (MatchRule m in categoryRules) {
-      stacks.UnionWith(m.EnumerateMatches(_resolver, _collectibleDict));
+      stacks.UnionWith(m.EnumerateMatches(resolver, _collectibleDict));
     }
-    stacks.RemoveWhere(s => !InCategory(category, s));
+    stacks.RemoveWhere(s => !InCategory(resolver, category, s));
     return stacks.ToList();
   }
 

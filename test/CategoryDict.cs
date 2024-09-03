@@ -162,9 +162,12 @@ public class CategoryDict {
     AssetLocation edible = new("gourmand", "edible");
 
     // Test a collectible MatchRule
-    Assert.IsTrue(CatDict.InCategory(edible, new ItemStack(pineapple)));
-    Assert.IsTrue(CatDict.InCategory(edible, new ItemStack(fish_raw)));
-    Assert.IsFalse(CatDict.InCategory(edible, new ItemStack(tongs)));
+    Assert.IsTrue(CatDict.InCategory(LoadAssets.Server.World, edible,
+                                     new ItemStack(pineapple)));
+    Assert.IsTrue(CatDict.InCategory(LoadAssets.Server.World, edible,
+                                     new ItemStack(fish_raw)));
+    Assert.IsFalse(CatDict.InCategory(LoadAssets.Server.World, edible,
+                                      new ItemStack(tongs)));
 
     // Test a stack MatchRule
     Real.ContentBuilder.SetContents(LoadAssets.Server.World, meal,
@@ -172,7 +175,7 @@ public class CategoryDict {
                                       new(fish_raw),
                                       new(fish_raw),
                                     });
-    Assert.IsTrue(CatDict.InCategory(edible, meal));
+    Assert.IsTrue(CatDict.InCategory(LoadAssets.Server.World, edible, meal));
 
     // Test a stack MatchRule
     Real.ContentBuilder.SetContents(LoadAssets.Server.World, meal,
@@ -181,7 +184,7 @@ public class CategoryDict {
                                       new(fish_raw),
                                       new(pineapple),
                                     });
-    Assert.IsTrue(CatDict.InCategory(edible, meal));
+    Assert.IsTrue(CatDict.InCategory(LoadAssets.Server.World, edible, meal));
 
     // Test a delete stack MatchRule
     Real.ContentBuilder.SetContents(LoadAssets.Server.World, meal,
@@ -190,7 +193,7 @@ public class CategoryDict {
                                       new(fish_raw),
                                       new(cranberry),
                                     });
-    Assert.IsFalse(CatDict.InCategory(edible, meal));
+    Assert.IsFalse(CatDict.InCategory(LoadAssets.Server.World, edible, meal));
   }
 
   private static void TestGetValue(Real.CategoryDict catDict) {
@@ -206,9 +209,12 @@ public class CategoryDict {
     // Test a collectible MatchRule
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(
         new IAttribute[] { new StringAttribute("Fruit") },
-        catDict.GetValue(edible, new ItemStack(pineapple)).Value));
+        catDict
+            .GetValue(LoadAssets.Server.World, edible, new ItemStack(pineapple))
+            .Value));
     // Test a collectible that nothing matches
-    Assert.IsNull(catDict.GetValue(edible, new ItemStack(tongs)));
+    Assert.IsNull(catDict.GetValue(LoadAssets.Server.World, edible,
+                                   new ItemStack(tongs)));
 
     // Test a stack MatchRule
     Real.ContentBuilder.SetContents(LoadAssets.Server.World, meal,
@@ -216,7 +222,8 @@ public class CategoryDict {
                                       new(fish_raw),
                                       new(fish_raw),
                                     });
-    Real.CategoryValue value = catDict.GetValue(edible, meal);
+    Real.CategoryValue value =
+        catDict.GetValue(LoadAssets.Server.World, edible, meal);
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(
         new IAttribute[] { new StringAttribute("game:bowl-meal") },
         value.Value));
@@ -228,7 +235,8 @@ public class CategoryDict {
                                       new(fish_raw),
                                       new(cranberry),
                                     });
-    Assert.IsNull(catDict.GetValue(edible, meal).Value);
+    Assert.IsNull(
+        catDict.GetValue(LoadAssets.Server.World, edible, meal).Value);
   }
 
   [TestMethod]
@@ -237,7 +245,8 @@ public class CategoryDict {
   [TestMethod]
   public void EnumerateMatches() {
     AssetLocation edible = new("gourmand", "edible");
-    List<ItemStack> matches = CatDict.EnumerateMatches(edible);
+    List<ItemStack> matches =
+        CatDict.EnumerateMatches(LoadAssets.Server.World, edible);
     Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
     Item cranberry = LoadAssets.GetItem("game", "fruit-cranberry");
@@ -268,7 +277,8 @@ public class CategoryDict {
       }
       ms.Position = 0;
       using (BinaryReader reader = new(ms)) {
-        Real.CategoryDict restored = new(LoadAssets.Server.World, reader);
+        Real.CategoryDict restored = new();
+        restored.FromBytes(reader, LoadAssets.Server.World);
         TestGetValue(restored);
       }
     }
@@ -278,7 +288,7 @@ public class CategoryDict {
   public void SerializeBytes() {
     CatDict.ToBytes(LoadAssets.Server.World, out byte[] bytes,
                     out int quantity);
-    Real.CategoryDict restored = new(LoadAssets.Server.World);
+    Real.CategoryDict restored = new();
     restored.FromBytes(LoadAssets.Server.World, quantity, bytes);
     TestGetValue(restored);
   }
