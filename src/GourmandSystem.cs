@@ -9,6 +9,11 @@ namespace Gourmand;
 
 public class GourmandSystem : ModSystem {
   private ICoreAPI _api;
+  public FoodAchievements FoodAchievements {
+    get;
+    private set;
+  }
+
   public CategoryDict CatDict { get; private set; }
 
   public override double ExecuteOrder() {
@@ -26,6 +31,15 @@ public class GourmandSystem : ModSystem {
     if (api is ICoreServerAPI sapi) {
       LoadCategories(sapi);
     }
+  }
+
+  public override void AssetsFinalize(ICoreAPI api) {
+    base.AssetsFinalize(api);
+    FoodAchievements = api.Assets
+        .Get(new AssetLocation(Mod.Info.ModID, "config/food-achievements.json"))
+        .ToObject<FoodAchievements>();
+    FoodAchievements.Resolve(Mod.Info.ModID);
+    api.Logger.Debug("Loaded {0} food achievements", FoodAchievements.RawAchievements.Count);
   }
 
   private void LoadCategories(ICoreServerAPI sapi) {

@@ -64,6 +64,6 @@
     }
   ],
   outputs: {
-    "meal": [ "meatystew" ]
+    "meal-category": [ "meatystew" ]
   }
 }

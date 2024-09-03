@@ -5,8 +5,6 @@ using PrefixClassName.MsTest;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 
-using Gourmand.Collectibles;
-
 namespace Gourmand.Test.Collectibles;
 
 using Real = Gourmand.Collectibles;

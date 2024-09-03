@@ -1,0 +1,29 @@
+{
+  achievements: {
+    "meal-category" : {
+      points: 10,
+      bonusAt: 6,
+      bonus: 100
+    }
+  },
+  // Defines the piecewise function to convert diversity points into health
+  // points.
+  healthPoints: [
+    {
+      points: 0,
+      health: 0
+    },
+    {
+      points: 100,
+      health: 3
+    },
+    {
+      points: 500,
+      health: 6
+    },
+    {
+      points: 1000,
+      health: 10
+    }
+  ]
+}

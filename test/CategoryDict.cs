@@ -6,8 +6,6 @@ using PrefixClassName.MsTest;
 
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
-using Vintagestory.Common;
-using Vintagestory.GameContent;
 
 namespace Gourmand.Test;
 
