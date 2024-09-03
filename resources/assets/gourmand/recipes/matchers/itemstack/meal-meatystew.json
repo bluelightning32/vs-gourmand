@@ -1,0 +1,69 @@
+{
+  category: {
+    input: "edible-meal-container"
+  },
+  attributes: [
+    {
+      path: [ "recipeCode" ],
+      value: "meatystew"
+    },
+  ],
+  contents: [
+    {
+      min: 2,
+      max: 2,
+      categories: [
+        {
+          input: "meal-protein-base"
+        }
+      ]
+    },
+    {
+      slotBegin: 0,
+      slotEnd: 5,
+      min: 0,
+      max: 2,
+      categories: [
+        {
+          input: "meal-protein-extra"
+        }
+      ]
+    },
+    {
+      slotBegin: 0,
+      slotEnd: 5,
+      min: 0,
+      max: 2,
+      categories: [
+        {
+          input: "meal-vegetable-base"
+        }
+      ]
+    },
+    {
+      slotBegin: 0,
+      slotEnd: 5,
+      min: 0,
+      max: 1,
+      categories: [
+        {
+          input: "meal-fruit-extra"
+        }
+      ]
+    },
+    {
+      slotBegin: 0,
+      slotEnd: 5,
+      min: 0,
+      max: 1,
+      categories: [
+        {
+          input: "meal-topping"
+        }
+      ]
+    }
+  ],
+  outputs: {
+    "meal": [ "meatystew" ]
+  }
+}

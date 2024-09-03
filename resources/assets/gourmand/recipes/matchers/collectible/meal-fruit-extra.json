@@ -1,0 +1,10 @@
+[
+  {
+    categories: [
+      {
+        input: "fruit",
+        outputs: ["meal-fruit-extra"]
+      }
+    ]
+  }
+]

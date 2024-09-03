@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -178,6 +179,17 @@ public class CategoryDict : IReadonlyCategoryDict, IByteSerializable {
         }
         collectibles.Add(collectible, value);
       }
+    }
+  }
+
+  /// <summary>
+  /// Performs a shallow copy of other into this.
+  /// </summary>
+  /// <param name="other">The dictionary to copy into this dictionary</param>
+  public void Copy(CategoryDict other) {
+    _byCat.Clear();
+    foreach (var entry in other._byCat) {
+      _byCat.Add(entry.Key, entry.Value);
     }
   }
 }

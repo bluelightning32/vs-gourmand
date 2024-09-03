@@ -1,0 +1,17 @@
+[
+  {
+    categories: [
+      {
+        input: "meal-protein-base",
+        outputs: ["meal-protein-extra"]
+      }
+    ]
+  },
+  {
+    code : {
+      match: "game:egg-chicken-raw",
+      type: "item",
+      outputs: [ "meal-protein-extra" ]
+    }
+  }
+]

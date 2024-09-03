@@ -1,0 +1,100 @@
+[
+  {
+    code : {
+      match: "game:vegetable-cabbage",
+      type: "item",
+      outputs: [ "meal-vegetable-base" ]
+    },
+  },
+  {
+    code : {
+      match: "game:vegetable-carrot",
+      type: "item",
+      outputs: [ "meal-vegetable-base" ]
+    },
+  },
+  {
+    code : {
+      match: "game:vegetable-onion",
+      type: "item",
+      outputs: [ "meal-vegetable-base" ]
+    },
+  },
+  {
+    code : {
+      match: "game:vegetable-parsnip",
+      type: "item",
+      outputs: [ "meal-vegetable-base" ]
+    },
+  },
+  {
+    code : {
+      match: "game:vegetable-turnip",
+      type: "item",
+      outputs: [ "meal-vegetable-base" ]
+    },
+  },
+  {
+    code : {
+      match: "game:vegetable-pumpkin",
+      type: "item",
+      outputs: [ "meal-vegetable-base" ]
+    },
+  },
+  {
+    code : {
+      match: "game:vegetable-cassava",
+      type: "item",
+      outputs: [ "meal-vegetable-base" ]
+    },
+  },
+  {
+    code : {
+      match: "game:vegetable-bellpepper",
+      type: "item",
+      outputs: [ "meal-vegetable-base" ]
+    },
+  },
+  {
+    code : {
+      match: "game:mushroom-*",
+      type: "item",
+      outputs: [ "meal-vegetable-base" ]
+    },
+  },
+  {
+    code : {
+      match: "game:legume-soybean",
+      type: "item",
+      outputs: [ "meal-vegetable-base" ]
+    },
+  },
+  {
+    code : {
+      match: "game:legume-peanut",
+      type: "item",
+      outputs: [ "meal-vegetable-base" ]
+    },
+  },
+  {
+    code : {
+      match: "game:pickledvegetable-*",
+      type: "item",
+      outputs: [ "meal-vegetable-base" ]
+    },
+  },
+  {
+    code : {
+      match: "game:pickledlegume-soybean",
+      type: "item",
+      outputs: [ "meal-vegetable-base" ]
+    },
+  },
+  {
+    code : {
+      match: "game:vegetable-olive",
+      type: "item",
+      outputs: [ "meal-vegetable-base" ]
+    },
+  }
+]

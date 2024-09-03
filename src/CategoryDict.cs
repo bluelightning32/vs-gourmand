@@ -29,6 +29,15 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
     _rules = new();
   }
 
+  public void Set(IWorldAccessor resolver,
+                  IEnumerable<Collectibles.MatchRule> collectibleRules,
+                  IEnumerable<MatchRule> stackRules) {
+    MatchResolver matchResolver = new(resolver);
+    _collectibleDict.Copy(matchResolver.Load(collectibleRules));
+    _rules.Clear();
+    LoadStackRules(stackRules);
+  }
+
   private void LoadStackRules(IEnumerable<MatchRule> stackRules) {
     Dictionary<AssetLocation, HashSet<MatchRule>> rules = new();
     foreach (MatchRule rule in stackRules) {

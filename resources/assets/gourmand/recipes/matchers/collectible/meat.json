@@ -1,0 +1,23 @@
+[
+  {
+    code : {
+      match: "game:redmeat-*",
+      type: "item",
+      outputs: [ "meat" ]
+    },
+  },
+  {
+    code : {
+      match: "game:fish-*",
+      type: "item",
+      outputs: [ "meat" ]
+    },
+  },
+  {
+    code : {
+      match: "game:poultry-*",
+      type: "item",
+      outputs: [ "meat" ]
+    },
+  },
+]

@@ -1,0 +1,9 @@
+[
+  {
+    code : {
+      match: "game:honeyportion",
+      type: "item",
+      outputs: [ "meal-topping" ]
+    }
+  }
+]

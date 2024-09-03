@@ -42,6 +42,11 @@ public class MatchResolver {
       if (_itemVariantsByPrefix == null) {
         _itemVariantsByPrefix = new();
         foreach (Item item in Resolver.Items) {
+          if (item.Code == null) {
+            // ServerSystemBlockSimulation loads the items list with 4000
+            // "noitems". They do not have an item code. Skip them.
+            continue;
+          }
           int variantStart = item.Code.Path.IndexOf('-');
           if (variantStart != -1) {
             string first = item.Code.Path[..variantStart];

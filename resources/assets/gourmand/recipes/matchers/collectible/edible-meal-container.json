@@ -1,0 +1,9 @@
+[
+  {
+    code: {
+      match: "game:bowl-meal",
+      type: "block",
+      outputs: [ "edible-meal-container" ]
+    }
+  }
+]
