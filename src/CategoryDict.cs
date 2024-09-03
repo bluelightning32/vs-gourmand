@@ -1,15 +1,19 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using Gourmand.Collectibles;
+
+using Newtonsoft.Json;
 
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 
 namespace Gourmand;
 
-public class CategoryDict {
-  private readonly IReadonlyCategoryDict _collectibleDict;
+public class CategoryDict : IByteSerializable {
+  private readonly Collectibles.CategoryDict _collectibleDict;
   private readonly IWorldAccessor _resolver;
   private readonly Dictionary<AssetLocation, List<MatchRule>> _rules;
   public CategoryDict(IWorldAccessor resolver,
@@ -17,8 +21,18 @@ public class CategoryDict {
                       IEnumerable<MatchRule> stackRules) {
     MatchResolver matchResolver = new(resolver);
     _resolver = resolver;
-    matchResolver.Load(collectibleRules);
-    _collectibleDict = matchResolver.CatDict;
+    _collectibleDict = matchResolver.Load(collectibleRules);
+    _rules = new();
+    LoadStackRules(stackRules);
+  }
+
+  public CategoryDict(IWorldAccessor resolver, BinaryReader reader)
+      : this(resolver, Array.Empty<Collectibles.MatchRule>(),
+             Array.Empty<MatchRule>()) {
+    FromBytes(reader, resolver);
+  }
+
+  private void LoadStackRules(IEnumerable<MatchRule> stackRules) {
     Dictionary<AssetLocation, HashSet<MatchRule>> rules = new();
     foreach (MatchRule rule in stackRules) {
       foreach (AssetLocation category in rule.OutputCategories) {
@@ -30,7 +44,6 @@ public class CategoryDict {
         categoryRules.Add(rule);
       }
     }
-    _rules = new();
     foreach (KeyValuePair<AssetLocation, HashSet<MatchRule>> categoryRules in
                  rules) {
       List<MatchRule> sorted = categoryRules.Value.ToList();
@@ -101,5 +114,29 @@ public class CategoryDict {
     }
     stacks.RemoveWhere(s => !InCategory(category, s));
     return stacks.ToList();
+  }
+
+  public void ToBytes(BinaryWriter writer) {
+    _collectibleDict.ToBytes(writer);
+    HashSet<MatchRule> rules = new();
+    foreach (List<MatchRule> newRules in _rules.Values) {
+      rules.UnionWith(newRules);
+    }
+    writer.Write(rules.Count);
+    foreach (MatchRule rule in rules) {
+      writer.Write(JsonConvert.SerializeObject(rule));
+    }
+  }
+
+  public void FromBytes(BinaryReader reader, IWorldAccessor resolver) {
+    _collectibleDict.FromBytes(reader, resolver);
+    int count = reader.ReadInt32();
+    List<MatchRule> stackRules = new(count);
+    for (int i = 0; i < count; ++i) {
+      stackRules.Add(
+          JsonConvert.DeserializeObject<MatchRule>(reader.ReadString()));
+    }
+    _rules.Clear();
+    LoadStackRules(stackRules);
   }
 }

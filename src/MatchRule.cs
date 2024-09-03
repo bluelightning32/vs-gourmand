@@ -17,8 +17,10 @@ public class MatchRuleJson {
   [DefaultValue(1.0)]
   public readonly float Priority;
 
+  protected readonly Dictionary<string, JToken[]> _rawOutputs;
+
   [JsonProperty("outputs")]
-  public readonly IReadOnlyDictionary<string, JToken[]> RawOutputs;
+  public IReadOnlyDictionary<string, JToken[]> RawOutputs => _rawOutputs;
 
   [JsonProperty]
   public readonly AssetLocation[] Deletes;
@@ -31,12 +33,13 @@ public class MatchRuleJson {
   public readonly SlotCondition[] Slots;
 
   [JsonConstructor]
-  public MatchRuleJson(float priority,
-                       IReadOnlyDictionary<string, JToken[]> rawOutputs,
-                       AssetLocation[] deletes, CategoryCondition category,
-                       AttributeCondition[] attributes, SlotCondition[] slots) {
+  public MatchRuleJson(
+      float priority,
+      [JsonProperty("outputs")] Dictionary<string, JToken[]> rawOutputs,
+      AssetLocation[] deletes, CategoryCondition category,
+      AttributeCondition[] attributes, SlotCondition[] slots) {
     Priority = priority;
-    RawOutputs = rawOutputs ?? new Dictionary<string, JToken[]>();
+    _rawOutputs = rawOutputs ?? new Dictionary<string, JToken[]>();
     Deletes = deletes ?? Array.Empty<AssetLocation>();
     Category = category;
     Attributes = attributes ?? Array.Empty<AttributeCondition>();
@@ -45,7 +48,7 @@ public class MatchRuleJson {
 
   public MatchRuleJson(MatchRuleJson copy) {
     Priority = copy.Priority;
-    RawOutputs = copy.RawOutputs;
+    _rawOutputs = copy._rawOutputs;
     Deletes = copy.Deletes;
     Category = copy.Category;
     Attributes = copy.Attributes;
@@ -99,9 +102,13 @@ public class MatchRule : MatchRuleJson {
   /// <param name="json">the unresolved json data</param>
   public MatchRule(string domain, MatchRuleJson json) : base(json) {
     Dictionary<AssetLocation, List<IAttribute>> outputs = new(RawOutputs.Count);
-    foreach (KeyValuePair<string, JToken[]> p in RawOutputs) {
+    KeyValuePair<string, JToken[]>[] rawOutputs = RawOutputs.ToArray();
+    _rawOutputs.Clear();
+    foreach (KeyValuePair<string, JToken[]> p in rawOutputs) {
+      AssetLocation category = AssetLocation.Create(p.Key, domain);
+      _rawOutputs.Add(category.ToString(), p.Value);
       outputs.Add(
-          AssetLocation.Create(p.Key, domain),
+          category,
           p.Value.Select((a) => new JsonObject(a).ToAttribute()).ToList());
     }
     Outputs = outputs;

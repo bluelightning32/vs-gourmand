@@ -1,3 +1,5 @@
+using System.Text;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using PrefixClassName.MsTest;
@@ -191,8 +193,7 @@ public class CategoryDict {
     Assert.IsFalse(CatDict.InCategory(edible, meal));
   }
 
-  [TestMethod]
-  public void GetValue() {
+  private static void TestGetValue(Real.CategoryDict catDict) {
     Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
     ItemStack meal = new(bowl);
     meal.Attributes["recipeCode"] = new StringAttribute("meatystew");
@@ -205,9 +206,9 @@ public class CategoryDict {
     // Test a collectible MatchRule
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(
         new IAttribute[] { new StringAttribute("Fruit") },
-        CatDict.GetValue(edible, new ItemStack(pineapple)).Value));
+        catDict.GetValue(edible, new ItemStack(pineapple)).Value));
     // Test a collectible that nothing matches
-    Assert.IsNull(CatDict.GetValue(edible, new ItemStack(tongs)));
+    Assert.IsNull(catDict.GetValue(edible, new ItemStack(tongs)));
 
     // Test a stack MatchRule
     Real.ContentBuilder.SetContents(LoadAssets.Server.World, meal,
@@ -215,9 +216,10 @@ public class CategoryDict {
                                       new(fish_raw),
                                       new(fish_raw),
                                     });
+    Real.CategoryValue value = catDict.GetValue(edible, meal);
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(
         new IAttribute[] { new StringAttribute("game:bowl-meal") },
-        CatDict.GetValue(edible, meal).Value));
+        value.Value));
 
     // Test a delete stack MatchRule
     Real.ContentBuilder.SetContents(LoadAssets.Server.World, meal,
@@ -226,8 +228,11 @@ public class CategoryDict {
                                       new(fish_raw),
                                       new(cranberry),
                                     });
-    Assert.IsNull(CatDict.GetValue(edible, meal).Value);
+    Assert.IsNull(catDict.GetValue(edible, meal).Value);
   }
+
+  [TestMethod]
+  public void GetValue() { TestGetValue(CatDict); }
 
   [TestMethod]
   public void EnumerateMatches() {
@@ -252,5 +257,20 @@ public class CategoryDict {
             .ToList();
     Assert.IsTrue(matchContents.Any(c => c.Contains(pineapple)));
     Assert.IsFalse(matchContents.Any(c => c.Contains(cranberry)));
+  }
+
+  [TestMethod]
+  public void Serialize() {
+
+    using (MemoryStream ms = new()) {
+      using (BinaryWriter writer = new(ms, Encoding.UTF8, true)) {
+        CatDict.ToBytes(writer);
+      }
+      ms.Position = 0;
+      using (BinaryReader reader = new(ms)) {
+        Real.CategoryDict restored = new(LoadAssets.Server.World, reader);
+        TestGetValue(restored);
+      }
+    }
   }
 }
