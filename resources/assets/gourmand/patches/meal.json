@@ -1,0 +1,7 @@
+[
+  {
+    side: "server",
+    file: "game:blocktypes/clay/bowl-meal", op: "replace", path: "/class",
+    value: "NotifyingMeal"
+  }
+]

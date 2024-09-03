@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Gourmand.Blocks;
 using Gourmand.CollectibleBehaviors;
 using Gourmand.EntityBehaviors;
 
@@ -17,10 +18,7 @@ namespace Gourmand;
 
 public class GourmandSystem : ModSystem {
   private ICoreAPI _api;
-  public FoodAchievements FoodAchievements {
-    get;
-    private set;
-  }
+  public FoodAchievements FoodAchievements { get; private set; }
 
   public CategoryDict CatDict { get; private set; }
 
@@ -32,8 +30,11 @@ public class GourmandSystem : ModSystem {
   public override void Start(ICoreAPI api) {
     _api = api;
     CatDict = api.RegisterRecipeRegistry<CategoryDict>("CategoryDict");
-    api.RegisterCollectibleBehaviorClass("foodeaten", typeof(FoodEaten));
-    api.RegisterEntityBehaviorClass("updatefoodachievements", typeof(UpdateFoodAchievements));
+    api.RegisterCollectibleBehaviorClass("notifyeaten", typeof(NotifyEaten));
+    api.RegisterEntityBehaviorClass("updatefoodachievements",
+                                    typeof(UpdateFoodAchievements));
+    api.RegisterBlockClass(nameof(NotifyingMeal), typeof(NotifyingMeal));
+    api.RegisterBlockClass(nameof(NotifyingPie), typeof(NotifyingPie));
   }
 
   public override void AssetsLoaded(ICoreAPI api) {
@@ -46,20 +47,28 @@ public class GourmandSystem : ModSystem {
   public override void AssetsFinalize(ICoreAPI api) {
     base.AssetsFinalize(api);
     FoodAchievements = api.Assets
-        .Get(new AssetLocation(Mod.Info.ModID, "config/food-achievements.json"))
-        .ToObject<FoodAchievements>();
+                           .Get(new AssetLocation(
+                               Mod.Info.ModID, "config/food-achievements.json"))
+                           .ToObject<FoodAchievements>();
     FoodAchievements.Resolve(Mod.Info.ModID);
-    api.Logger.Debug("Loaded {0} food achievements", FoodAchievements.RawAchievements.Count);
+    api.Logger.Debug("Loaded {0} food achievements",
+                     FoodAchievements.RawAchievements.Count);
 
     if (api is ICoreServerAPI sapi) {
       foreach (CollectibleObject c in sapi.World.Collectibles) {
-        if (c.NutritionProps != null || c.GetType().GetMethod("GetNutritionProperties").DeclaringType != typeof(CollectibleObject)) {
-          c.CollectibleBehaviors = c.CollectibleBehaviors.Append(new FoodEaten(c));
+        if (c.NutritionProps != null ||
+            c.GetType().GetMethod("GetNutritionProperties").DeclaringType !=
+                typeof(CollectibleObject)) {
+          c.CollectibleBehaviors =
+              c.CollectibleBehaviors.Append(new NotifyEaten(c));
         }
       }
 
-      EntityProperties playerProperties = sapi.World.GetEntityType(GlobalConstants.EntityPlayerTypeCode);
-      playerProperties.Server.BehaviorsAsJsonObj = playerProperties.Server.BehaviorsAsJsonObj.Append(JsonObject.FromJson("{ code: \"updatefoodachievements\" }"));
+      EntityProperties playerProperties =
+          sapi.World.GetEntityType(GlobalConstants.EntityPlayerTypeCode);
+      playerProperties.Server.BehaviorsAsJsonObj =
+          playerProperties.Server.BehaviorsAsJsonObj.Append(
+              JsonObject.FromJson("{ code: \"updatefoodachievements\" }"));
     }
   }
 
