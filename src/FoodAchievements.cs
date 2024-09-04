@@ -104,10 +104,10 @@ public class FoodAchievements {
     return before.Health + (points - before.Points) * healthOverPoints;
   }
 
-  public int GetPointsForAchievements(ILogger logger,
-                                      ITreeAttribute achievements) {
+  public int GetPointsForAchievements(ILogger logger, ITreeAttribute moddata) {
     int points = 0;
-    foreach (var achievement in achievements) {
+    ITreeAttribute achieved = moddata.GetOrAddTreeAttribute("achieved");
+    foreach (var achievement in achieved) {
       if (!_achievements.TryGetValue(new AssetLocation(achievement.Key),
                                      out AchievementPoints rating)) {
         logger?.Warning($"Category {achievement.Key} not found");
@@ -119,9 +119,11 @@ public class FoodAchievements {
     return points;
   }
 
-  public int UpdateAchievements(IWorldAccessor resolver, CategoryDict catdict,
-                                ITreeAttribute achievements, ItemStack eaten) {
+  public int AddAchievements(IWorldAccessor resolver, CategoryDict catdict,
+                             ITreeAttribute moddata, ItemStack eaten) {
     int newPoints = 0;
+    ITreeAttribute achieved = moddata.GetOrAddTreeAttribute("achieved");
+    ITreeAttribute lost = moddata.GetOrAddTreeAttribute("lost");
     foreach (var entry in _achievements) {
       CategoryValue value = catdict.GetValue(resolver, entry.Key, eaten);
       if (value == null || value.Value == null) {
@@ -130,7 +132,7 @@ public class FoodAchievements {
       // This is indexed by the category value as a string, and the value is an
       // item stack.
       ITreeAttribute eatenValues =
-          achievements.GetOrAddTreeAttribute(entry.Key.ToString());
+          achieved.GetOrAddTreeAttribute(entry.Key.ToString());
       string categoryValue =
           string.Join(",", value.Value.Select(a => a.ToString()));
       if (eatenValues.HasAttribute(categoryValue)) {
@@ -139,7 +141,82 @@ public class FoodAchievements {
       eatenValues.SetItemstack(categoryValue, eaten);
       newPoints += entry.Value.GetPoints(eatenValues.Count) -
                    entry.Value.GetPoints(eatenValues.Count - 1);
+      ITreeAttribute lostValues =
+          lost.GetOrAddTreeAttribute(entry.Key.ToString());
+      lostValues.RemoveAttribute(categoryValue);
     }
     return newPoints;
+  }
+
+  public int RemoveAchievements(IWorldAccessor resolver, CategoryDict catdict,
+                                ITreeAttribute moddata, ItemStack food) {
+    int lostPoints = 0;
+    ITreeAttribute achieved = moddata.GetOrAddTreeAttribute("achieved");
+    ITreeAttribute lost = moddata.GetOrAddTreeAttribute("lost");
+    foreach (var entry in _achievements) {
+      CategoryValue value = catdict.GetValue(resolver, entry.Key, food);
+      if (value == null || value.Value == null) {
+        continue;
+      }
+      // This is indexed by the category value as a string, and the value is an
+      // item stack.
+      ITreeAttribute eatenValues =
+          achieved.GetOrAddTreeAttribute(entry.Key.ToString());
+      string categoryValue =
+          string.Join(",", value.Value.Select(a => a.ToString()));
+      if (!eatenValues.HasAttribute(categoryValue)) {
+        continue;
+      }
+      eatenValues.RemoveAttribute(categoryValue);
+      ITreeAttribute lostValues =
+          lost.GetOrAddTreeAttribute(entry.Key.ToString());
+      lostValues.SetItemstack(categoryValue, food);
+      lostPoints += entry.Value.GetPoints(eatenValues.Count + 1) -
+                    entry.Value.GetPoints(eatenValues.Count);
+    }
+    return lostPoints;
+  }
+
+  public static void ClearAchievements(ITreeAttribute moddata) {
+    moddata.RemoveAttribute("achieved");
+    moddata.RemoveAttribute("lost");
+  }
+
+  public static IEnumerable<ItemStack> GetLost(IWorldAccessor resolver,
+                                               ITreeAttribute moddata) {
+    ITreeAttribute lost = moddata.GetOrAddTreeAttribute("lost");
+    foreach (KeyValuePair<string, IAttribute> entry in lost) {
+      ITreeAttribute lostValues = (ITreeAttribute)entry.Value;
+      foreach (KeyValuePair<string, IAttribute> lostEntry in lostValues) {
+        ItemStack stack = ((ItemstackAttribute)lostEntry.Value).value;
+        stack.ResolveBlockOrItem(resolver);
+        yield return stack;
+      }
+    }
+  }
+
+  public IEnumerable<ItemStack> GetMissing(IWorldAccessor resolver,
+                                           CategoryDict catdict,
+                                           AssetLocation category,
+                                           ITreeAttribute moddata) {
+    if (!_achievements.ContainsKey(category)) {
+      yield break;
+    }
+    ITreeAttribute achieved = moddata.GetOrAddTreeAttribute("achieved");
+    ITreeAttribute eatenValues =
+        achieved.GetOrAddTreeAttribute(category.ToString());
+    HashSet<string> given = new();
+    foreach (ItemStack stack in catdict.EnumerateMatches(resolver, category)) {
+      CategoryValue value = catdict.GetValue(resolver, category, stack);
+      string categoryValue =
+          string.Join(",", value.Value.Select(a => a.ToString()));
+      if (eatenValues.HasAttribute(categoryValue)) {
+        continue;
+      }
+      if (!given.Add(categoryValue)) {
+        continue;
+      }
+      yield return stack;
+    }
   }
 }

@@ -1,5 +1,3 @@
-using System.Text;
-
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using PrefixClassName.MsTest;
@@ -131,7 +129,7 @@ public class FoodAchievements {
     TreeAttribute achieved = new();
     int points = 0;
 
-    Assert.AreNotEqual(0, LoadedAchievements.UpdateAchievements(
+    Assert.AreNotEqual(0, LoadedAchievements.AddAchievements(
                               LoadAssets.Server.World, CatDict, achieved,
                               new ItemStack(pineapple)));
     points += 3;
@@ -139,11 +137,11 @@ public class FoodAchievements {
         points, LoadedAchievements.GetPointsForAchievements(null, achieved));
 
     // No new points for eating the same item again
-    Assert.AreEqual(0, LoadedAchievements.UpdateAchievements(
+    Assert.AreEqual(0, LoadedAchievements.AddAchievements(
                            LoadAssets.Server.World, CatDict, achieved,
                            new ItemStack(pineapple)));
 
-    Assert.AreNotEqual(0, LoadedAchievements.UpdateAchievements(
+    Assert.AreNotEqual(0, LoadedAchievements.AddAchievements(
                               LoadAssets.Server.World, CatDict, achieved,
                               new ItemStack(cranberry)));
     points += 3;
@@ -152,21 +150,21 @@ public class FoodAchievements {
     Assert.AreEqual(
         points, LoadedAchievements.GetPointsForAchievements(null, achieved));
 
-    Assert.AreNotEqual(0, LoadedAchievements.UpdateAchievements(
+    Assert.AreNotEqual(0, LoadedAchievements.AddAchievements(
                               LoadAssets.Server.World, CatDict, achieved,
                               new ItemStack(blueberry)));
     points += 3;
     Assert.AreEqual(
         points, LoadedAchievements.GetPointsForAchievements(null, achieved));
 
-    Assert.AreNotEqual(0, LoadedAchievements.UpdateAchievements(
+    Assert.AreNotEqual(0, LoadedAchievements.AddAchievements(
                               LoadAssets.Server.World, CatDict, achieved,
                               new ItemStack(fish_raw)));
     points += 1;
     Assert.AreEqual(
         points, LoadedAchievements.GetPointsForAchievements(null, achieved));
 
-    Assert.AreNotEqual(0, LoadedAchievements.UpdateAchievements(
+    Assert.AreNotEqual(0, LoadedAchievements.AddAchievements(
                               LoadAssets.Server.World, CatDict, achieved,
                               new ItemStack(fish_cooked)));
     points += 1;

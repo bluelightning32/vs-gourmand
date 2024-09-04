@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
@@ -14,11 +16,13 @@ class UpdateFoodAchievements : EntityBehavior {
 
   public override string PropertyName() { return "updateachievements"; }
 
+  public void SetApi(ICoreAPI api) { _api = api; }
+
   public void SetCurrentFood(ICoreAPI api, ItemStack food) {
     api.Logger.Debug("Set current food to {0}",
                      food?.Collectible?.Code.ToString() ?? "none");
     _eating = food;
-    _api = api;
+    SetApi(api);
   }
 
   public override void OnEntityReceiveSaturation(
@@ -27,20 +31,54 @@ class UpdateFoodAchievements : EntityBehavior {
     base.OnEntityReceiveSaturation(saturation, foodCat, saturationLossDelay,
                                    nutritionGainMultiplier);
     if (_eating != null) {
-      _api.Logger.Debug("Ate food {0}", _eating?.Collectible?.Code.ToString());
-      ITreeAttribute achievements =
-          entity.WatchedAttributes.GetOrAddTreeAttribute("gourmand");
-      GourmandSystem gourmand = _api.ModLoader.GetModSystem<GourmandSystem>();
-      int newPoints = gourmand.FoodAchievements.UpdateAchievements(
-          _api.World, gourmand.CatDict, achievements, _eating);
-      if (newPoints > 0) {
-        IServerPlayer player = (IServerPlayer)((EntityPlayer)entity).Player;
-        player.SendMessage(GlobalConstants.InfoLogChatGroup,
-                           Lang.GetL(player.LanguageCode,
-                                     "gourmand:new-food-eaten", newPoints),
-                           EnumChatType.Notification);
-      }
+      OnFoodEaten(_eating);
       _eating = null;
     }
+  }
+
+  public int OnFoodEaten(ItemStack food) {
+    _api.Logger.Debug("Ate food {0}", food?.Collectible?.Code.ToString());
+    GourmandSystem gourmand = GetGourmandSystem();
+    ItemStack clonedFood = food.Clone();
+    clonedFood.StackSize = 1;
+    int newPoints = gourmand.FoodAchievements.AddAchievements(
+        _api.World, gourmand.CatDict, GetModData(), clonedFood);
+    if (newPoints > 0) {
+      IServerPlayer player = (IServerPlayer)((EntityPlayer)entity).Player;
+      player.SendMessage(
+          GlobalConstants.InfoLogChatGroup,
+          Lang.GetL(player.LanguageCode, "gourmand:new-food-eaten", newPoints),
+          EnumChatType.Notification);
+    }
+    return newPoints;
+  }
+
+  public int ClearFood(ItemStack food) {
+    GourmandSystem gourmand = GetGourmandSystem();
+    ItemStack clonedFood = food.Clone();
+    clonedFood.StackSize = 1;
+    int removedPoints = gourmand.FoodAchievements.RemoveAchievements(
+        _api.World, gourmand.CatDict, GetModData(), clonedFood);
+    return removedPoints;
+  }
+
+  public void Clear() { FoodAchievements.ClearAchievements(GetModData()); }
+
+  public IEnumerable<ItemStack> GetLost() {
+    return FoodAchievements.GetLost(_api.World, GetModData());
+  }
+
+  public ITreeAttribute GetModData() {
+    return entity.WatchedAttributes.GetOrAddTreeAttribute("gourmand");
+  }
+
+  public GourmandSystem GetGourmandSystem() {
+    return _api.ModLoader.GetModSystem<GourmandSystem>();
+  }
+
+  public IEnumerable<ItemStack> GetMissing(AssetLocation category) {
+    GourmandSystem gourmand = GetGourmandSystem();
+    return gourmand.FoodAchievements.GetMissing(_api.World, gourmand.CatDict,
+                                                category, GetModData());
   }
 }

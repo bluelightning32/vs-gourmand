@@ -28,6 +28,7 @@ public class GourmandSystem : ModSystem {
   }
 
   public override void Start(ICoreAPI api) {
+    base.Start(api);
     _api = api;
     CatDict = api.RegisterRecipeRegistry<CategoryDict>("CategoryDict");
     api.RegisterCollectibleBehaviorClass("notifyeaten", typeof(NotifyEaten));
@@ -35,6 +36,11 @@ public class GourmandSystem : ModSystem {
                                     typeof(UpdateFoodAchievements));
     api.RegisterBlockClass(nameof(NotifyingMeal), typeof(NotifyingMeal));
     api.RegisterBlockClass(nameof(NotifyingPie), typeof(NotifyingPie));
+  }
+
+  public override void StartServerSide(ICoreServerAPI sapi) {
+    base.StartServerSide(sapi);
+    _ = new Commands(sapi);
   }
 
   public override void AssetsLoaded(ICoreAPI api) {

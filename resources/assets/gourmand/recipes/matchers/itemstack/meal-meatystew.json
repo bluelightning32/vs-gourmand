@@ -16,7 +16,8 @@
         {
           input: "meal-protein-base"
         }
-      ]
+      ],
+      enumArrangement: "Repeated"
     },
     {
       slotBegin: 0,

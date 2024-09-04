@@ -71,6 +71,10 @@
             <HintPath>$(VINTAGE_STORY)/Mods/VSSurvivalMod.dll</HintPath>
             <Private>false</Private>
         </Reference>
+        <Reference Include="VintagestoryLib">
+            <HintPath>$(VINTAGE_STORY)/VintagestoryLib.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
 
         <!--
             Store the list of files to package in a zip file in the @(Package)
