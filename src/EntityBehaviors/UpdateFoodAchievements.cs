@@ -44,6 +44,7 @@ class UpdateFoodAchievements : EntityBehavior {
     int newPoints = gourmand.FoodAchievements.AddAchievements(
         _api.World, gourmand.CatDict, GetModData(), clonedFood);
     if (newPoints > 0) {
+      MarkDirty();
       IServerPlayer player = (IServerPlayer)((EntityPlayer)entity).Player;
       player.SendMessage(
           GlobalConstants.InfoLogChatGroup,
@@ -59,17 +60,27 @@ class UpdateFoodAchievements : EntityBehavior {
     clonedFood.StackSize = 1;
     int removedPoints = gourmand.FoodAchievements.RemoveAchievements(
         _api.World, gourmand.CatDict, GetModData(), clonedFood);
+    if (removedPoints > 0) {
+      MarkDirty();
+    }
     return removedPoints;
   }
 
-  public void Clear() { FoodAchievements.ClearAchievements(GetModData()); }
+  public void Clear() {
+    FoodAchievements.ClearAchievements(GetModData());
+    MarkDirty();
+  }
 
   public IEnumerable<ItemStack> GetLost() {
     return FoodAchievements.GetLost(_api.World, GetModData());
   }
 
   public ITreeAttribute GetModData() {
-    return entity.WatchedAttributes.GetOrAddTreeAttribute("gourmand");
+    return FoodAchievements.GetModData(entity);
+  }
+
+  public void MarkDirty() {
+    entity.WatchedAttributes.MarkPathDirty(FoodAchievements.ModDataPath);
   }
 
   public GourmandSystem GetGourmandSystem() {

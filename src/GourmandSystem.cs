@@ -7,6 +7,7 @@ using Gourmand.EntityBehaviors;
 
 using Newtonsoft.Json.Linq;
 
+using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
@@ -38,9 +39,14 @@ public class GourmandSystem : ModSystem {
     api.RegisterBlockClass(nameof(NotifyingPie), typeof(NotifyingPie));
   }
 
+  public override void StartClientSide(ICoreClientAPI capi) {
+    base.StartClientSide(capi);
+    _ = new ClientCommands(capi);
+  }
+
   public override void StartServerSide(ICoreServerAPI sapi) {
     base.StartServerSide(sapi);
-    _ = new Commands(sapi);
+    _ = new ServerCommands(sapi);
   }
 
   public override void AssetsLoaded(ICoreAPI api) {

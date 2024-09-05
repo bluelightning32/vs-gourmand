@@ -5,6 +5,7 @@ using System.Linq;
 using Newtonsoft.Json;
 
 using Vintagestory.API.Common;
+using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
 
 namespace Gourmand;
@@ -75,33 +76,43 @@ public class FoodAchievements {
     }
   }
 
-  public float GetHealthForPoints(int points) {
+  public float GetHealthFunctionPiece(int points, out float gainRate,
+                                      out int untilPoints) {
     HealthFunctionPiece upto = new(points, 0);
     HealthFunctionPiece starting = new(points + 1, 0);
     if (points < _healthFunc.Min.Points) {
+      gainRate = 0;
+      untilPoints = _healthFunc.Min.Points;
       return 0;
     }
     SortedSet<HealthFunctionPiece> beforeView =
         _healthFunc.GetViewBetween(_healthFunc.Min, upto);
     HealthFunctionPiece before = beforeView.Max;
 
-    float healthOverPoints = 0;
-    if (points > _healthFunc.Max.Points) {
+    if (points >= _healthFunc.Max.Points) {
       if (beforeView.Count > 1) {
         HealthFunctionPiece secondToLast = beforeView.Reverse().Skip(1).First();
-        healthOverPoints = (before.Health - secondToLast.Health) /
-                           (before.Points - secondToLast.Points);
+        gainRate = (before.Health - secondToLast.Health) /
+                   (before.Points - secondToLast.Points);
+        untilPoints = int.MaxValue;
+      } else {
+        gainRate = 0;
+        untilPoints = int.MaxValue;
       }
     } else {
       SortedSet<HealthFunctionPiece> afterView =
-          _healthFunc.GetViewBetween(upto, _healthFunc.Max);
+          _healthFunc.GetViewBetween(starting, _healthFunc.Max);
       HealthFunctionPiece after = afterView.Min;
-      if (after.Points != before.Points) {
-        healthOverPoints =
-            (after.Health - before.Health) / (after.Points - before.Points);
-      }
+      gainRate =
+          (after.Health - before.Health) / (after.Points - before.Points);
+      untilPoints = after.Points;
     }
-    return before.Health + (points - before.Points) * healthOverPoints;
+    return before.Health + (points - before.Points) * gainRate;
+  }
+
+  public float GetHealthForPoints(int points) {
+    return GetHealthFunctionPiece(points, out float gainRate,
+                                  out int untilPoints);
   }
 
   public int GetPointsForAchievements(ILogger logger, ITreeAttribute moddata) {
@@ -218,5 +229,26 @@ public class FoodAchievements {
       }
       yield return stack;
     }
+  }
+
+  public Dictionary<AssetLocation, Tuple<int, AchievementPoints>>
+  GetAchievementStats(ITreeAttribute moddata) {
+    Dictionary<AssetLocation, Tuple<int, AchievementPoints>> result = new();
+    ITreeAttribute achieved = moddata.GetOrAddTreeAttribute("achieved");
+    foreach (var entry in _achievements) {
+      // This is indexed by the category value as a string, and the value is an
+      // item stack.
+      ITreeAttribute eatenValues =
+          achieved.GetOrAddTreeAttribute(entry.Key.ToString());
+      result.Add(entry.Key, new Tuple<int, AchievementPoints>(eatenValues.Count,
+                                                              entry.Value));
+    }
+    return result;
+  }
+
+  public static readonly string ModDataPath = "gourmand";
+
+  public static ITreeAttribute GetModData(Entity entity) {
+    return entity.WatchedAttributes.GetOrAddTreeAttribute(ModDataPath);
   }
 }

@@ -12,9 +12,9 @@ using Vintagestory.Server;
 
 namespace Gourmand;
 
-public class Commands {
+public class ServerCommands {
   private readonly ICoreServerAPI _sapi;
-  public Commands(ICoreServerAPI sapi) {
+  public ServerCommands(ICoreServerAPI sapi) {
     _sapi = sapi;
     Register();
   }
