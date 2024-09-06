@@ -61,6 +61,9 @@ public class ClientCommands {
         foodAchievements.GetPointsForAchievements(_capi.Logger, modData);
     float health = foodAchievements.GetHealthFunctionPiece(
         points, out float gainRate, out int untilPoints);
+    if (gainRate != 0) {
+      gainRate = 1 / gainRate;
+    }
     HashSet<ItemStack> lost =
         new(FoodAchievements.GetLost(_capi.World, modData));
     Dictionary<AssetLocation, Tuple<int, AchievementPoints>> achievements =
@@ -69,9 +72,8 @@ public class ClientCommands {
     result.AppendLine("Gourmand stats:");
     result.AppendLine($"  Earned points: {points}");
     result.AppendLine($"  Lost foods from death: {lost.Count}");
-    result.AppendLine($"  Earned health: {health}");
-    result.AppendLine(
-        $"  Health points for every additional point: {gainRate}");
+    result.AppendLine($"  Earned health: {health:F2}");
+    result.AppendLine($"  Points necessary for next health: {gainRate:F2}");
     result.AppendLine($"  Until points: {untilPoints}");
     foreach (var category in achievements) {
       result.AppendLine();
