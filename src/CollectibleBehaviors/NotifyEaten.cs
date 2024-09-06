@@ -23,7 +23,7 @@ public class NotifyEaten : CollectibleBehavior {
                             ref handling);
     if (secondsUsed >= 0.95f) {
       byEntity.GetBehavior<UpdateFoodAchievements>()?.SetCurrentFood(
-          _api, slot?.Itemstack);
+          slot?.Itemstack);
     }
   }
 }

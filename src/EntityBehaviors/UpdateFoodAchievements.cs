@@ -10,19 +10,15 @@ namespace Gourmand.EntityBehaviors;
 
 class UpdateFoodAchievements : EntityBehavior {
   private ItemStack _eating = null;
-  private ICoreAPI _api = null;
 
   public UpdateFoodAchievements(Entity entity) : base(entity) {}
 
   public override string PropertyName() { return "updateachievements"; }
 
-  public void SetApi(ICoreAPI api) { _api = api; }
-
-  public void SetCurrentFood(ICoreAPI api, ItemStack food) {
-    api.Logger.Debug("Set current food to {0}",
-                     food?.Collectible?.Code.ToString() ?? "none");
+  public void SetCurrentFood(ItemStack food) {
+    entity.Api.Logger.Debug("Set current food to {0}",
+                            food?.Collectible?.Code.ToString() ?? "none");
     _eating = food;
-    SetApi(api);
   }
 
   public override void OnEntityReceiveSaturation(
@@ -37,12 +33,12 @@ class UpdateFoodAchievements : EntityBehavior {
   }
 
   public int OnFoodEaten(ItemStack food) {
-    _api.Logger.Debug("Ate food {0}", food?.Collectible?.Code.ToString());
+    entity.Api.Logger.Debug("Ate food {0}", food?.Collectible?.Code.ToString());
     GourmandSystem gourmand = GetGourmandSystem();
     ItemStack clonedFood = food.Clone();
     clonedFood.StackSize = 1;
     int newPoints = gourmand.FoodAchievements.AddAchievements(
-        _api.World, gourmand.CatDict, GetModData(), clonedFood);
+        entity.Api.World, gourmand.CatDict, GetModData(), clonedFood);
     if (newPoints > 0) {
       MarkDirty();
       IServerPlayer player = (IServerPlayer)((EntityPlayer)entity).Player;
@@ -59,7 +55,7 @@ class UpdateFoodAchievements : EntityBehavior {
     ItemStack clonedFood = food.Clone();
     clonedFood.StackSize = 1;
     int removedPoints = gourmand.FoodAchievements.RemoveAchievements(
-        _api.World, gourmand.CatDict, GetModData(), clonedFood);
+        entity.Api.World, gourmand.CatDict, GetModData(), clonedFood);
     if (removedPoints > 0) {
       MarkDirty();
     }
@@ -72,7 +68,7 @@ class UpdateFoodAchievements : EntityBehavior {
   }
 
   public IEnumerable<ItemStack> GetLost() {
-    return FoodAchievements.GetLost(_api.World, GetModData());
+    return FoodAchievements.GetLost(entity.Api.World, GetModData());
   }
 
   public ITreeAttribute GetModData() {
@@ -84,12 +80,12 @@ class UpdateFoodAchievements : EntityBehavior {
   }
 
   public GourmandSystem GetGourmandSystem() {
-    return _api.ModLoader.GetModSystem<GourmandSystem>();
+    return entity.Api.ModLoader.GetModSystem<GourmandSystem>();
   }
 
   public IEnumerable<ItemStack> GetMissing(AssetLocation category) {
     GourmandSystem gourmand = GetGourmandSystem();
-    return gourmand.FoodAchievements.GetMissing(_api.World, gourmand.CatDict,
-                                                category, GetModData());
+    return gourmand.FoodAchievements.GetMissing(
+        entity.Api.World, gourmand.CatDict, category, GetModData());
   }
 }

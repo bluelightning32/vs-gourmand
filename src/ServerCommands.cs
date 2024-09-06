@@ -103,7 +103,6 @@ public class ServerCommands {
     if (held == null) {
       return TextCommandResult.Error(Lang.Get("Nothing held"));
     }
-    target.SetApi(_sapi);
     int pointsAdded = target.OnFoodEaten(held);
     return TextCommandResult.Success("Points added " + pointsAdded);
   }
@@ -114,14 +113,12 @@ public class ServerCommands {
     if (held == null) {
       return TextCommandResult.Error(Lang.Get("Nothing held"));
     }
-    target.SetApi(_sapi);
     int pointsRemoved = target.ClearFood(held);
     return TextCommandResult.Success("Points removed " + pointsRemoved);
   }
 
   private TextCommandResult Clear(UpdateFoodAchievements target,
                                   TextCommandCallingArgs args) {
-    target.SetApi(_sapi);
     target.Clear();
     return TextCommandResult.Success("Achievements reset");
   }
@@ -130,7 +127,6 @@ public class ServerCommands {
                                      TextCommandCallingArgs args) {
     int max = (int)args[1];
     HashSet<ItemStack> gave = new(new ItemStackComparer(_sapi.World));
-    from.SetApi(_sapi);
     foreach (ItemStack stack in from.GetLost()) {
       if (gave.Count >= max) {
         break;
@@ -151,7 +147,6 @@ public class ServerCommands {
     AssetLocation category = new((string)args[1]);
     int max = (int)args[2];
     int gave = 0;
-    from.SetApi(_sapi);
     foreach (ItemStack stack in from.GetMissing(category).Take(max)) {
       ++gave;
       if (!args.Caller.Entity.TryGiveItemStack(stack.Clone())) {

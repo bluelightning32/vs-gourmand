@@ -12,10 +12,10 @@ class NotifyingPie : BlockPie {
                                 bool mulwithStackSize) {
     UpdateFoodAchievements behavior =
         eatingPlayer.Entity.GetBehavior<UpdateFoodAchievements>();
-    behavior?.SetCurrentFood(api, inSlot?.Itemstack);
+    behavior?.SetCurrentFood(inSlot?.Itemstack);
     float remaining = base.Consume(world, eatingPlayer, inSlot, contentStacks,
                                    remainingServings, mulwithStackSize);
-    behavior?.SetCurrentFood(api, null);
+    behavior?.SetCurrentFood(null);
     return remaining;
   }
 }
