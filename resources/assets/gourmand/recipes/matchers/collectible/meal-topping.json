@@ -1,7 +1,7 @@
 [
   {
     code : {
-      match: "game:honeyportion",
+      match: "game:jamhoneyportion",
       type: "item",
       outputs: [ "meal-topping" ]
     }

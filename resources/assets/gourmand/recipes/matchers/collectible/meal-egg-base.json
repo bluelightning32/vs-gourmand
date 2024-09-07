@@ -1,0 +1,9 @@
+[
+  {
+    code : {
+      match: "game:egg-chicken-raw",
+      type: "item",
+      outputs: [ "meal-egg-base" ]
+    }
+  }
+]

@@ -1,0 +1,16 @@
+[
+  {
+    code : {
+      match: "game:cheese-cheddar-1slice",
+      type: "item",
+      outputs: [ "meal-cheese-extra" ]
+    }
+  },
+  {
+    code : {
+      match: "game:cheese-blue-1slice",
+      type: "item",
+      outputs: [ "meal-cheese-extra" ]
+    }
+  }
+]

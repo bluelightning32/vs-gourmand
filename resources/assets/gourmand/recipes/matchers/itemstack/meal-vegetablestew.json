@@ -1,0 +1,32 @@
+{
+  category: {
+    input: "edible-meal-container"
+  },
+  attributes: [
+    {
+      path: [ "recipeCode" ],
+      value: "vegetablestew"
+    },
+    {
+      path: [ "quantityServings" ],
+      enumerateValues: [ 1 ]
+    },
+  ],
+  contents: [
+    {
+      slotBegin: 0,
+      slotEnd: 5,
+      min: 2,
+      max: 4,
+      categories: [
+        {
+          input: "meal-vegetable-base"
+        }
+      ],
+      enumArrangement: "Repeated"
+    },
+  ],
+  outputs: {
+    "meal-category": [ "vegetablestew" ]
+  }
+}

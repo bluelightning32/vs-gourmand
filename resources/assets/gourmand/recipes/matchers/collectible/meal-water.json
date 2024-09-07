@@ -1,0 +1,9 @@
+[
+  {
+    code : {
+      match: "game:waterportion",
+      type: "item",
+      outputs: [ "meal-water" ]
+    }
+  }
+]

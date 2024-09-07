@@ -5,7 +5,7 @@
   attributes: [
     {
       path: [ "recipeCode" ],
-      value: "meatystew"
+      value: "soup"
     },
     {
       path: [ "quantityServings" ],
@@ -16,11 +16,22 @@
     {
       slotBegin: 0,
       slotEnd: 5,
-      min: 2,
+      min: 1,
+      max: 1,
+      categories: [
+        {
+          input: "meal-water"
+        }
+      ],
+    },
+    {
+      slotBegin: 0,
+      slotEnd: 5,
+      min: 1,
       max: 2,
       categories: [
         {
-          input: "meal-protein-base"
+          input: "meal-vegetable-soup-base"
         }
       ],
       enumArrangement: "Repeated"
@@ -29,48 +40,26 @@
       slotBegin: 0,
       slotEnd: 5,
       min: 0,
-      max: 2,
+      max: 1,
+      categories: [
+        {
+          input: "meal-vegetable-soup-extra"
+        }
+      ]
+    },
+    {
+      slotBegin: 0,
+      slotEnd: 5,
+      min: 0,
+      max: 1,
       categories: [
         {
           input: "meal-protein-extra"
         }
       ]
-    },
-    {
-      slotBegin: 0,
-      slotEnd: 5,
-      min: 0,
-      max: 2,
-      categories: [
-        {
-          input: "meal-vegetable-base"
-        }
-      ]
-    },
-    {
-      slotBegin: 0,
-      slotEnd: 5,
-      min: 0,
-      max: 1,
-      categories: [
-        {
-          input: "meal-fruit-extra"
-        }
-      ]
-    },
-    {
-      slotBegin: 0,
-      slotEnd: 5,
-      min: 0,
-      max: 1,
-      categories: [
-        {
-          input: "meal-topping"
-        }
-      ]
     }
   ],
   outputs: {
-    "meal-category": [ "meatystew" ]
+    "meal-category": [ "soup" ]
   }
 }

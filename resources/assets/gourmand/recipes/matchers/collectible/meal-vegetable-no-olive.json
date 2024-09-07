@@ -1,0 +1,18 @@
+[
+  {
+    categories: [
+      {
+        input: "meal-vegetable-base",
+        outputs: ["meal-vegetable-base-no-olive"]
+      }
+    ]
+  },
+  {
+    priority: 2,
+    code : {
+      match: "game:vegetable-olive",
+      type: "item"
+    },
+    deletes: [ "meal-vegetable-base-no-olive" ]
+  }
+]
