@@ -30,6 +30,11 @@
       points: 2,
       bonusAt: 30,
       bonus: 100
+    },
+    "juice" : {
+      points: 2,
+      bonusAt: 12,
+      bonus: 100
     }
   },
   // Defines the piecewise function to convert diversity points into health

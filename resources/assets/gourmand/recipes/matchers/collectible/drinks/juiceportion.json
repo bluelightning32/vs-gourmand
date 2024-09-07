@@ -1,0 +1,15 @@
+[
+  {
+    code: {
+      match: "game:juiceportion-*",
+      type: "item",
+      outputs: [ "juiceportion" ]
+    },
+    attributes: [
+      {
+        path: ["waterTightContainerProps", "nutritionPropsPerLitre", "foodcategory"],
+        outputs: [ "juiceportion-category" ]
+      }
+    ]
+  },
+]

@@ -1,0 +1,41 @@
+// Checking the capacityLitres attribute below is not necessary, but it's
+// included in case the code match is ever generalized to check multiple
+// blocks and see whether they are liquid containers.
+[
+  {
+    code: {
+      match: "game:bowl-fired",
+      type: "block",
+      outputs: [ "potable-container" ]
+    },
+    attributes: [
+      {
+        path: ["liquidContainerProps", "capacityLitres"],
+      }
+    ]
+  },
+  {
+    code: {
+      match: "game:jug-*-fired",
+      type: "block",
+      outputs: [ "potable-container" ]
+    },
+    attributes: [
+      {
+        path: ["liquidContainerProps", "capacityLitres"],
+      }
+    ]
+  },
+  {
+    code: {
+      match: "game:woodenbucket",
+      type: "block",
+      outputs: [ "potable-container" ]
+    },
+    attributes: [
+      {
+        path: ["liquidContainerProps", "capacityLitres"],
+      }
+    ]
+  }
+]
