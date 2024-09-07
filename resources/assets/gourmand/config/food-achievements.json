@@ -3,6 +3,11 @@
     "food" : {
       points: 1
     },
+    "pie-category" : {
+      points: 2,
+      bonusAt: 32,
+      bonus: 100
+    },
     "meal-category" : {
       points: 10,
       bonusAt: 6,

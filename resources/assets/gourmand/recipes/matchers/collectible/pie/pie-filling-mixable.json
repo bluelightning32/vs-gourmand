@@ -1,0 +1,29 @@
+[
+  {
+    categories: [
+      {
+        input: "pie-filling-code",
+        outputs: [ "pie-filling-mixable-code" ]
+      },
+      {
+        input: "food-category",
+        outputs: [ "pie-filling-mixable-category" ]
+      }
+    ]
+  },
+  {
+    priority: 2,
+    categories: [
+      {
+        input: "pie-filling-code",
+      },
+    ],
+    attributes: [
+      {
+        path: ["inPieProperties", "allowMixing"],
+        value: false
+      }
+    ],
+    deletes: [ "pie-filling-mixable-code", "pie-filling-mixable-category" ]
+  }
+]

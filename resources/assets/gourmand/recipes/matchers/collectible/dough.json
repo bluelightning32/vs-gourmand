@@ -1,0 +1,9 @@
+[
+  {
+    code : {
+      match: "game:dough-*",
+      type: "item",
+      outputs: [ "dough" ]
+    },
+  }
+]

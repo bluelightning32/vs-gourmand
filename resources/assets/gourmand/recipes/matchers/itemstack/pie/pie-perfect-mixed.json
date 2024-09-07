@@ -1,0 +1,64 @@
+{
+    category: {
+      input: "pie-perfect"
+    },
+    attributes: [
+      {
+        path: [ "quantityServings" ],
+        enumerateValues: [ 1 ]
+      },
+      {
+        path: [ "pieSize" ],
+        enumerateValues: [ 1 ]
+      },
+    ],
+    contents: [
+      {
+        slotBegin: 0,
+        slotEnd: 1,
+        min: 1,
+        max: 1,
+        enumerateMax: 1,
+        categories: [
+          {
+            input: "pie-dough"
+          }
+        ]
+      },
+      {
+        slotBegin: 1,
+        slotEnd: 5,
+        min: 4,
+        max: 4,
+        enumerateMax: 100,
+        enumArrangement: "SortedWithRepeats",
+        categories: [
+          {
+            input: "pie-filling-mixable-code",
+            distinctMin: 2,
+            enumerateDistinctMax: 2
+          },
+          {
+            input: "pie-filling-mixable-category",
+            distinctMax: 1,
+            // When enumerating the possible pies, only pick 2 values per pie category to try and arrange. This is to speed up the enumeration while still showing all important values.
+            enumeratePerDistinct: 2,
+            distinctOutputs: [ "pie-category" ]
+          }
+        ]
+      },
+      {
+        slotBegin: 5,
+        slotEnd: 6,
+        min: 1,
+        max: 1,
+        enumerateMax: 1,
+        categories: [
+          {
+            input: "pie-dough"
+          }
+        ]
+      },
+    ]
+  }
+  

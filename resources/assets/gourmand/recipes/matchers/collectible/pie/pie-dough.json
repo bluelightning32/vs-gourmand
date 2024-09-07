@@ -1,0 +1,16 @@
+[
+  {
+    categories: [
+      {
+        input: "dough",
+        outputs: [ "pie-dough" ]
+      },
+    ],
+    attributes: [
+      {
+        path: ["inPieProperties", "partType"],
+        value: "Crust"
+      }
+    ]
+  }
+]

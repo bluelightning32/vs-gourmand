@@ -58,7 +58,7 @@
   {
     code : {
       match: "game:mushroom-*",
-      type: "item",
+      type: "block",
       outputs: [ "meal-vegetable-base" ]
     },
   },

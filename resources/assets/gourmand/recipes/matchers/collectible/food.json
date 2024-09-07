@@ -7,6 +7,7 @@
     },
     nutritionProps : {
       category: {
+        outputs: [ "food-category" ]
       },
     },
     outputs: {
@@ -21,7 +22,8 @@
     },
     nutritionProps : {
       category: {
-      },
+        outputs: [ "food-category" ]
+      }
     },
     outputs: {
       "food" : [ "block" ]

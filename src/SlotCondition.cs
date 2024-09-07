@@ -21,16 +21,21 @@ public class ContentCategory : CategoryCondition {
   [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
   [DefaultValue(int.MaxValue)]
   public readonly int DistinctMax;
+  [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+  [DefaultValue(int.MaxValue)]
+  public readonly int EnumerateDistinctMax;
   [JsonProperty]
   public readonly AssetLocation[] DistinctOutputs;
 
   public ContentCategory(AssetLocation input, AssetLocation[] outputs,
                          int distinctMin, int distinctMax,
+                         int enumerateDistinctMax,
                          AssetLocation[] distinctOutputs)
       : base(input, outputs) {
     DistinctMin = distinctMin;
     DistinctMax = distinctMax;
     DistinctOutputs = distinctOutputs ?? Array.Empty<AssetLocation>();
+    EnumerateDistinctMax = int.Min(enumerateDistinctMax, distinctMax);
   }
 
   /// <summary>
@@ -58,6 +63,10 @@ public class ContentCategory : CategoryCondition {
 
   public bool IsDistinctMaxOk(int distinctValues) {
     return distinctValues <= DistinctMax;
+  }
+
+  public bool IsEnumerateDistinctMaxOk(int distinctValues) {
+    return distinctValues <= EnumerateDistinctMax;
   }
 }
 
@@ -135,6 +144,16 @@ public class SlotCondition {
   }
 
   private bool IsDistinctMaxOk(Dictionary<List<IAttribute>, int>[] distinct) {
+    for (int distIndex = 0; distIndex < Categories.Length; ++distIndex) {
+      if (!Categories[distIndex].IsDistinctMaxOk(distinct[distIndex].Count)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private bool
+  IsEnumerateDistinctMaxOk(Dictionary<List<IAttribute>, int>[] distinct) {
     for (int distIndex = 0; distIndex < Categories.Length; ++distIndex) {
       if (!Categories[distIndex].IsDistinctMaxOk(distinct[distIndex].Count)) {
         return false;
@@ -307,7 +326,7 @@ public class SlotCondition {
         ++added;
         Debug.Assert(added == contentIndices.Count);
         bool distinctMinOk = IsDistinctMinOk(distinct);
-        bool distinctMaxOk = IsDistinctMaxOk(distinct);
+        bool distinctMaxOk = IsEnumerateDistinctMaxOk(distinct);
         if (Min <= added && distinctMinOk && distinctMaxOk) {
           yield return new();
           if (++enumerated >= EnumerateMax) {

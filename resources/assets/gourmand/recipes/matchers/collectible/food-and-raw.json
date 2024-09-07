@@ -1,0 +1,29 @@
+// Edible foods and foods that only become edible after being cooked
+[
+  {
+    categories: [
+      {
+        input: "food",
+        outputs: [ "food-and-raw" ]
+      },
+      {
+        input: "food-category",
+        outputs: [ "food-and-raw-category" ]
+      }
+    ],
+  },
+  {
+    categories: [
+      {
+        input: "meat",
+        outputs: [ "food-and-raw" ]
+      },
+    ],
+    attributes: [
+      {
+        path: ["nutritionPropsWhenInMeal", "foodcategory"],
+        outputs: ["food-and-raw-category"]
+      }
+    ]
+  },
+]

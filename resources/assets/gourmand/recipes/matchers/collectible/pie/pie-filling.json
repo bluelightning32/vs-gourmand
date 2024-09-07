@@ -1,0 +1,20 @@
+[
+  {
+    categories: [
+      {
+        input: "food-and-raw",
+        outputs: [ "pie-filling-code" ]
+      },
+      {
+        input: "food-and-raw-category",
+        outputs: [ "pie-filling-category" ]
+      },
+    ],
+    attributes: [
+      {
+        path: ["inPieProperties", "partType"],
+        value: "Filling"
+      }
+    ]
+  }
+]

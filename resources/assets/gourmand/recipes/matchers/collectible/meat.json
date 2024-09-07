@@ -5,6 +5,9 @@
       type: "item",
       outputs: [ "meat" ]
     },
+    outputs: {
+      "meat" : [ "item" ]
+    }
   },
   {
     code : {
@@ -12,6 +15,9 @@
       type: "item",
       outputs: [ "meat" ]
     },
+    outputs: {
+      "meat" : [ "item" ]
+    }
   },
   {
     code : {
@@ -19,5 +25,8 @@
       type: "item",
       outputs: [ "meat" ]
     },
+    outputs: {
+      "meat" : [ "item" ]
+    }
   },
 ]

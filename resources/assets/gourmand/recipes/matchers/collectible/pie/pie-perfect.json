@@ -1,0 +1,9 @@
+[
+  {
+    code : {
+      match: "game:pie-perfect",
+      type: "block",
+      outputs: [ "pie-perfect" ]
+    }
+  }
+]
