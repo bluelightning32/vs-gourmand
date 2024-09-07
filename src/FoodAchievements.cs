@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 using Newtonsoft.Json;
@@ -11,8 +12,14 @@ using Vintagestory.API.Datastructures;
 namespace Gourmand;
 
 public class AchievementPoints {
+  [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+  [DefaultValue(1)]
   public readonly int Points;
+  [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+  [DefaultValue(0)]
   public readonly int BonusAt;
+  [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+  [DefaultValue(0)]
   public readonly int Bonus;
 
   public AchievementPoints(int points, int bonusAt, int bonus) {

@@ -78,8 +78,12 @@ public class ClientCommands {
     foreach (var category in achievements) {
       result.AppendLine();
       result.AppendLine($"  Food category: {category.Key.ToString()}");
-      result.AppendLine(
-          $"    Eaten foods: {category.Value.Item1}/{category.Value.Item2.BonusAt}");
+      if (category.Value.Item2.BonusAt != 0) {
+        result.AppendLine(
+            $"    Eaten foods: {category.Value.Item1}/{category.Value.Item2.BonusAt}");
+      } else {
+        result.AppendLine($"    Eaten foods: {category.Value.Item1}");
+      }
       result.AppendLine($"    Points per food: {category.Value.Item2.Points}");
       result.AppendLine($"    Completion Bonus: {category.Value.Item2.Bonus}");
     }

@@ -1,0 +1,30 @@
+[
+  {
+    code : {
+      match: "*:*",
+      type: "item",
+      outputs: [ "food" ]
+    },
+    nutritionProps : {
+      category: {
+      },
+    },
+    outputs: {
+      "food" : [ "item" ]
+    }
+  },
+  {
+    code : {
+      match: "*:*",
+      type: "block",
+      outputs: [ "food" ]
+    },
+    nutritionProps : {
+      category: {
+      },
+    },
+    outputs: {
+      "food" : [ "block" ]
+    }
+  }
+]

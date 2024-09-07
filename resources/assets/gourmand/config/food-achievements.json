@@ -1,5 +1,8 @@
 {
   achievements: {
+    "food" : {
+      points: 1
+    },
     "meal-category" : {
       points: 10,
       bonusAt: 6,
