@@ -25,6 +25,11 @@
     },
     "climate-spanning" : {
       points: 50,
+    },
+    "mushroom" : {
+      points: 2,
+      bonusAt: 30,
+      bonus: 100
     }
   },
   // Defines the piecewise function to convert diversity points into health

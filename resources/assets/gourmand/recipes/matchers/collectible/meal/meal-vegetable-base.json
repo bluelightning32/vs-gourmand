@@ -56,11 +56,12 @@
     },
   },
   {
-    code : {
-      match: "game:mushroom-*",
-      type: "block",
-      outputs: [ "meal-vegetable-base" ]
-    },
+    categories: [
+      {
+        input: "mushroom",
+        outputs: ["meal-vegetable-base"]
+      }
+    ]
   },
   {
     code : {
