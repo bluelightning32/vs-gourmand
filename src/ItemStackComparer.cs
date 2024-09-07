@@ -24,10 +24,12 @@ public class ItemStackComparer : IEqualityComparer<ItemStack> {
     if (x.StackSize != y.StackSize) {
       return false;
     }
-    return x.Attributes.Equals(_resolver, y.Attributes);
+    // Use this function to handle null values correctly
+    return CategoryValue.Equals(x.Attributes, y.Attributes);
   }
 
   public int GetHashCode([DisallowNull] ItemStack obj) {
-    return HashCode.Combine(obj.Collectible, obj.StackSize, obj.Attributes);
+    return HashCode.Combine(obj.Collectible, obj.StackSize,
+                            CategoryValue.SafeGetHashCode(obj.Attributes));
   }
 }

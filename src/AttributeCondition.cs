@@ -76,8 +76,7 @@ public class AttributeCondition : ICondition {
     return attributes;
   }
 
-  public bool IsMatch(IWorldAccessor resolver,
-                      Collectibles.IReadonlyCategoryDict catdict,
+  public bool IsMatch(IWorldAccessor resolver, IReadonlyCategoryDict catdict,
                       ItemStack stack) {
     IAttribute attribute = GetAttribute(stack);
     if (attribute == null) {
@@ -100,9 +99,8 @@ public class AttributeCondition : ICondition {
   }
 
   public void AppendValue(IWorldAccessor resolver,
-                          Collectibles.IReadonlyCategoryDict catdict,
-                          AssetLocation category, ItemStack stack,
-                          List<IAttribute> result) {
+                          IReadonlyCategoryDict catdict, AssetLocation category,
+                          ItemStack stack, List<IAttribute> result) {
     // It is the caller's responsibility to ensure the stack is a match, and the
     // category is one of the output categories. So with that assumed, the value
     // can be directly returned.
@@ -117,7 +115,7 @@ public class AttributeCondition : ICondition {
   /// <param name="catdict">category dictionary</param>
   /// <param name="matches">input and output list of matched item stacks</param>
   public void EnumerateMatches(IWorldAccessor resolver,
-                               Collectibles.IReadonlyCategoryDict catdict,
+                               IReadonlyCategoryDict catdict,
                                ref List<ItemStack> matches) {
     matches ??= new();
     if (EnumerateValues.Length == 0) {

@@ -65,10 +65,82 @@ public class CategoryValue : IEquatable<CategoryValue>, IByteSerializable {
         total += 0xE;
         // Rotate total to the left 13 bits.
         total = (total << 13) | (total >> (32 - 13));
-        total ^= a.GetHashCode();
+        total ^= SafeGetHashCode(a);
       }
     }
     return total;
+  }
+
+  public static int SafeGetHashCode(IAttribute a) {
+    if (a == null) {
+      return 0;
+    }
+    if (a is TreeAttribute t) {
+      // Avoid the regular GetHashCode on tree attributes, because if any of the
+      // values in the tree are null, it will throw an exception.
+      int total = 0;
+      lock (t.attributesLock) {
+        // The attributes are listed from an ordered dictionary.
+        foreach (var entry in t) {
+          total += 0x14;
+          // Rotate total to the left 7 bits.
+          total = (total << 7) | (total >> (32 - 7));
+          total ^= entry.Key.GetHashCode();
+          total ^= SafeGetHashCode(entry.Value);
+        }
+      }
+      return total;
+    }
+    return a.GetHashCode();
+  }
+
+  /// <summary>
+  /// Comparison function for attributes that handles StringAttributes and
+  /// TreeAttributes correctly
+  /// </summary>
+  /// <param name="a1">first attribute to compare</param>
+  /// <param name="a2">second attribute to compare</param>
+  /// <returns>true if they are equal</returns>
+  public static bool Equals(IAttribute a1, IAttribute a2) {
+    if (a1 == null) {
+      return a2 == null;
+    }
+    if (a2 == null) {
+      return false;
+    }
+    if (a1 is TreeAttribute t1) {
+      if (a2 is not TreeAttribute t2) {
+        return false;
+      }
+      lock (t1.attributesLock) {
+        lock (t2.attributesLock) {
+          using var enum1 = t1.GetEnumerator();
+          using var enum2 = t2.GetEnumerator();
+          // Before the first call to enum.MoveNext, enum1.Current points before
+          // the first element and is invalid.
+          while (enum1.MoveNext()) {
+            if (!enum2.MoveNext()) {
+              // enum1 has more elements than enum2
+              return false;
+            }
+            if (enum1.Current.Key != enum2.Current.Key) {
+              return false;
+            }
+            if (!Equals(enum1.Current.Value, enum2.Current.Value)) {
+              return false;
+            }
+          }
+          if (enum2.MoveNext()) {
+            // enum2 has more elements than enum1
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+    // The attribute values have to be specially compared to avoid the
+    // StringAttribute Equals method, because it is broken.
+    return a1.GetValue().Equals(a2.GetValue());
   }
 
   public static bool ValuesEqual(IEnumerable<IAttribute> value1,
@@ -91,7 +163,7 @@ public class CategoryValue : IEquatable<CategoryValue>, IByteSerializable {
       }
       // The attribute values have to be specially compared to avoid the
       // StringAttribute Equals method, because it is broken.
-      if (!enum1.Current.GetValue().Equals(enum2.Current.GetValue())) {
+      if (!Equals(enum1.Current, enum2.Current)) {
         return false;
       }
     }
