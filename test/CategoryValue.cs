@@ -22,6 +22,17 @@ public class CategoryValue {
   }
 
   [TestMethod]
+  public void EqualsGetHashCodeSameNullStrings() {
+    Real.CategoryValue v1 =
+        new(1, new List<IAttribute>() { new StringAttribute(null) });
+    Real.CategoryValue v2 =
+        new(1, new List<IAttribute>() { new StringAttribute(null) });
+    Assert.IsTrue(v1.Equals(v2));
+    Assert.IsTrue(v2.Equals(v1));
+    Assert.AreEqual(v1.GetHashCode(), v2.GetHashCode());
+  }
+
+  [TestMethod]
   public void EqualsGetHashCodeNullValues() {
     TreeAttribute t1 = new();
     t1["child"] = null;

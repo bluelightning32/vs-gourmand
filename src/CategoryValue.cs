@@ -91,6 +91,12 @@ public class CategoryValue : IEquatable<CategoryValue>, IByteSerializable {
       }
       return total;
     }
+    if (a is StringAttribute s) {
+      if (s.value == null) {
+        return 0;
+      }
+      return s.value.GetHashCode();
+    }
     return a.GetHashCode();
   }
 
@@ -138,8 +144,20 @@ public class CategoryValue : IEquatable<CategoryValue>, IByteSerializable {
       }
       return true;
     }
-    // The attribute values have to be specially compared to avoid the
-    // StringAttribute Equals method, because it is broken.
+    if (a1 is StringAttribute s1) {
+      if (a2 is not StringAttribute s2) {
+        return false;
+      }
+      // The attribute values have to be specially compared to avoid the
+      // StringAttribute Equals method, because it is broken.
+      if (s1.value == null) {
+        return s2.value == null;
+      }
+      if (s2.value == null) {
+        return false;
+      }
+      return s1.value == s2.value;
+    }
     return a1.GetValue().Equals(a2.GetValue());
   }
 
