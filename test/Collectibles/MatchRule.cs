@@ -50,6 +50,17 @@ public class MatchRule {
   }
 
   [TestMethod]
+  public void JsonParseIgnoreNoMatches() {
+    string json = @"
+    {
+      ignoreNoMatches: true
+    }
+    ";
+    Real.MatchRule rule = JsonUtil.ToObject<Real.MatchRule>(json, "gourmand");
+    Assert.IsTrue(rule.IgnoreNoMatches);
+  }
+
+  [TestMethod]
   public void EnumerateMatches() {
     string json = @"
     {

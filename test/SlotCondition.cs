@@ -103,7 +103,8 @@ public class SlotCondition {
         ],
         outputs: {
           ""pie-filling"": [ ""block"" ]
-        }
+        },
+        ignoreNoMatches: true
       },
     ]";
     List<Real.Collectibles.MatchRule> rules =

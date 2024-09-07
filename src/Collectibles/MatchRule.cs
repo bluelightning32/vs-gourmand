@@ -32,6 +32,9 @@ public class MatchRuleJson {
   public readonly NutritionPropsCondition NutritionProps;
   [JsonProperty]
   public readonly AttributeCondition[] Attributes;
+  [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+  [DefaultValue(false)]
+  public readonly bool IgnoreNoMatches;
 
   [JsonConstructor]
   public MatchRuleJson(float priority,
@@ -39,7 +42,7 @@ public class MatchRuleJson {
                        AssetLocation[] deletes, CategoryCondition[] categories,
                        CodeCondition code,
                        NutritionPropsCondition nutritionProp,
-                       AttributeCondition[] attributes) {
+                       AttributeCondition[] attributes, bool ignoreNoMatches) {
     Priority = priority;
     RawOutputs = rawOutputs ?? new Dictionary<string, JToken[]>();
     Deletes = deletes ?? Array.Empty<AssetLocation>();
@@ -47,6 +50,7 @@ public class MatchRuleJson {
     Code = code;
     NutritionProps = nutritionProp;
     Attributes = attributes ?? Array.Empty<AttributeCondition>();
+    IgnoreNoMatches = ignoreNoMatches;
   }
 
   public MatchRuleJson(MatchRuleJson copy) {
@@ -57,6 +61,7 @@ public class MatchRuleJson {
     Code = copy.Code;
     NutritionProps = copy.NutritionProps;
     Attributes = copy.Attributes;
+    IgnoreNoMatches = copy.IgnoreNoMatches;
   }
 }
 
@@ -148,6 +153,11 @@ public class MatchRule : MatchRuleJson {
     List<CollectibleObject> matches = null;
     foreach (ICondition condition in Conditions) {
       condition.EnumerateMatches(resolver, ref matches);
+    }
+    if (matches.Count == 0 && !IgnoreNoMatches) {
+      Console.WriteLine(
+          "None of the collectibles succeeded for match rule: {0}",
+          JsonConvert.SerializeObject(this));
     }
     return matches;
   }
