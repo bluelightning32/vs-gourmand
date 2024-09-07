@@ -95,6 +95,11 @@ public class MatchResolver {
       if (_blockVariantsByPrefix == null) {
         _blockVariantsByPrefix = new();
         foreach (Block block in Resolver.Blocks) {
+          if (block.Code == null) {
+            // Skip unknown blocks (the question mark blocks from deleting mods
+            // that were previously installed).
+            continue;
+          }
           int variantStart = block.Code.Path.IndexOf('-');
           if (variantStart != -1) {
             string first = block.Code.Path[..variantStart];
