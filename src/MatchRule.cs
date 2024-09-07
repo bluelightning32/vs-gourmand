@@ -205,4 +205,13 @@ public class MatchRule : MatchRuleJson {
     }
     return result;
   }
+
+  public bool Validate(IWorldAccessor resolver,
+                       Collectibles.IReadonlyCategoryDict catdict) {
+    bool result = true;
+    foreach (ICondition condition in Conditions) {
+      result &= condition.Validate(resolver, catdict);
+    }
+    return result;
+  }
 }

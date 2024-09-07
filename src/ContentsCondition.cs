@@ -71,4 +71,12 @@ public class ContentsCondition : ICondition {
     }
     return contents.All(c => c == null);
   }
+
+  public bool Validate(IWorldAccessor resolver, IReadonlyCategoryDict catdict) {
+    bool result = true;
+    foreach (SlotCondition slot in Slots) {
+      result &= slot.Validate(resolver, catdict);
+    }
+    return result;
+  }
 }

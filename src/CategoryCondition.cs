@@ -81,4 +81,12 @@ public class CategoryCondition : ICondition {
       return false;
     }
   }
+
+  public bool Validate(IWorldAccessor resolver, IReadonlyCategoryDict catdict) {
+    if (!catdict.IsRegistered(Input)) {
+      resolver.Api.Logger.Error($"Category {Input} is not registered.");
+      return false;
+    }
+    return true;
+  }
 }

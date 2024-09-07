@@ -36,6 +36,8 @@ public interface IReadonlyCategoryDict {
   IEnumerable<CollectibleObject> EnumerateMatches(AssetLocation category);
   IEnumerable<CollectibleObject> EnumerateMatches(AssetLocation category,
                                                   int enumeratePerDistinct);
+
+  bool IsRegistered(AssetLocation category);
 }
 
 public class CategoryDict : IReadonlyCategoryDict, IByteSerializable {
@@ -59,6 +61,8 @@ public class CategoryDict : IReadonlyCategoryDict, IByteSerializable {
     if (!_byCat.TryGetValue(
             category,
             out Dictionary<CollectibleObject, CategoryValue> collectibles)) {
+      Console.WriteLine(
+          $"Warning requested category {category} is not registered");
       yield break;
     }
     foreach (KeyValuePair<CollectibleObject, CategoryValue> kv in
@@ -191,5 +195,9 @@ public class CategoryDict : IReadonlyCategoryDict, IByteSerializable {
     foreach (var entry in other._byCat) {
       _byCat.Add(entry.Key, entry.Value);
     }
+  }
+
+  public bool IsRegistered(AssetLocation category) {
+    return _byCat.ContainsKey(category);
   }
 }

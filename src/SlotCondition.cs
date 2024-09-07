@@ -382,4 +382,12 @@ public class SlotCondition {
   public IEnumerable<AssetLocation> OutputCategories =>
       Categories.SelectMany(c => c.Categories.Concat(c.DistinctOutputs))
           .Concat(CountOutputs);
+
+  public bool Validate(IWorldAccessor resolver, IReadonlyCategoryDict catdict) {
+    bool result = true;
+    foreach (ContentCategory category in Categories) {
+      result &= category.Validate(resolver, catdict);
+    }
+    return result;
+  }
 }

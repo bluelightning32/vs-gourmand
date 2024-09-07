@@ -1,3 +1,5 @@
+using Gourmand.Collectibles;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -140,5 +142,9 @@ public class AttributeCondition : ICondition {
       attributes = attributes.GetOrAddTreeAttribute(Path[i]);
     }
     attributes[Path[^1]] = value.Clone();
+  }
+
+  public bool Validate(IWorldAccessor resolver, IReadonlyCategoryDict catdict) {
+    return true;
   }
 }

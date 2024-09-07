@@ -21,7 +21,7 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
     MatchResolver matchResolver = new(resolver);
     _collectibleDict = matchResolver.Load(collectibleRules);
     _rules = new();
-    LoadStackRules(stackRules);
+    LoadStackRules(resolver, stackRules);
   }
 
   public CategoryDict() {
@@ -35,10 +35,11 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
     MatchResolver matchResolver = new(resolver);
     _collectibleDict.Copy(matchResolver.Load(collectibleRules));
     _rules.Clear();
-    LoadStackRules(stackRules);
+    LoadStackRules(resolver, stackRules);
   }
 
-  private void LoadStackRules(IEnumerable<MatchRule> stackRules) {
+  private void LoadStackRules(IWorldAccessor resolver,
+                              IEnumerable<MatchRule> stackRules) {
     Dictionary<AssetLocation, HashSet<MatchRule>> rules = new();
     foreach (MatchRule rule in stackRules) {
       foreach (AssetLocation category in rule.OutputCategories) {
@@ -57,6 +58,7 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
                       Comparer<float>.Default.Compare(b.Priority, a.Priority));
       _rules.Add(categoryRules.Key, sorted);
     }
+    Validate(resolver);
   }
 
   /// <summary>
@@ -149,7 +151,7 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
           JsonConvert.DeserializeObject<MatchRule>(reader.ReadString()));
     }
     _rules.Clear();
-    LoadStackRules(stackRules);
+    LoadStackRules(resolver, stackRules);
   }
 
   public override void ToBytes(IWorldAccessor resolver, out byte[] data,
@@ -182,6 +184,17 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
           JsonConvert.DeserializeObject<MatchRule>(reader.ReadString()));
     }
     _rules.Clear();
-    LoadStackRules(stackRules);
+    LoadStackRules(resolver, stackRules);
+    Validate(resolver);
+  }
+
+  public bool Validate(IWorldAccessor resolver) {
+    bool result = true;
+    foreach (List<MatchRule> categoryRules in _rules.Values) {
+      foreach (MatchRule rule in categoryRules) {
+        result &= rule.Validate(resolver, _collectibleDict);
+      }
+    }
+    return result;
   }
 }
