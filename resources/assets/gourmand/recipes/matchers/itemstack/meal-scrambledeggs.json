@@ -55,7 +55,7 @@
       max: 1,
       categories: [
         {
-          input: "meal-vegetable-no-olive"
+          input: "meal-vegetable-base-no-olive"
         }
       ]
     },
