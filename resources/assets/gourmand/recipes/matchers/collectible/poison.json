@@ -1,0 +1,15 @@
+[
+  {
+    categories: [
+      {
+        input: "food",
+        outputs: [ "poison" ]
+      },
+    ],
+    nutritionProps : {
+      health: {
+        max: -1
+      },
+    },
+  },
+]

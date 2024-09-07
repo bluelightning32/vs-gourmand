@@ -40,6 +40,9 @@
       points: 3,
       bonusAt: 18,
       bonus: 100
+    },
+    "poison" : {
+      points: 5,
     }
   },
   // Defines the piecewise function to convert diversity points into health

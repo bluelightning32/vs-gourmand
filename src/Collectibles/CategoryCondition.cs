@@ -15,6 +15,7 @@ public class CategoryCondition : ICondition {
   [JsonProperty]
   public readonly AssetLocation[] Outputs;
 
+  [JsonIgnore]
   public IEnumerable<AssetLocation> Categories => Outputs;
 
   public CategoryCondition(AssetLocation input, AssetLocation[] outputs) {

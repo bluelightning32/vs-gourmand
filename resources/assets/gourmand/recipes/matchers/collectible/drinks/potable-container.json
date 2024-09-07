@@ -28,7 +28,7 @@
   },
   {
     code: {
-      match: "game:woodenbucket",
+      match: "game:woodbucket",
       type: "block",
       outputs: [ "potable-container" ]
     },

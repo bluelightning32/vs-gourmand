@@ -110,6 +110,7 @@ public class MatchRuleConverter : JsonConverter<MatchRule> {
 public class MatchRule : MatchRuleJson {
   readonly public IReadOnlyDictionary<AssetLocation, IAttribute[]> Outputs;
 
+  [JsonIgnore]
   public readonly IReadOnlyList<ICondition> Conditions;
 
   /// <summary>

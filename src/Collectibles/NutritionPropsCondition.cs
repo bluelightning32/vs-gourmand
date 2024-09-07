@@ -14,6 +14,7 @@ abstract public class NutritionConditionBase : ICondition {
   [JsonProperty]
   public readonly AssetLocation[] Outputs;
 
+  [JsonIgnore]
   public IEnumerable<AssetLocation> Categories => Outputs;
 
   public NutritionConditionBase(AssetLocation[] outputs) {
@@ -70,10 +71,10 @@ public class NutritionCategoryCondition : NutritionConditionBase {
 }
 
 public class NutritionSatietyCondition : NutritionConditionBase {
-  [JsonProperty]
+  [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
   [DefaultValue(float.NegativeInfinity)]
   public readonly float Min;
-  [JsonProperty]
+  [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
   [DefaultValue(float.PositiveInfinity)]
   public readonly float Max;
 
@@ -97,6 +98,33 @@ public class NutritionSatietyCondition : NutritionConditionBase {
   }
 }
 
+public class NutritionHealthCondition : NutritionConditionBase {
+  [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+  [DefaultValue(float.NegativeInfinity)]
+  public readonly float Min;
+  [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+  [DefaultValue(float.PositiveInfinity)]
+  public readonly float Max;
+
+  public NutritionHealthCondition(float min, float max, AssetLocation[] outputs)
+      : base(outputs) {
+    Min = min;
+    Max = max;
+  }
+
+  public override bool IsMatch(FoodNutritionProperties nutrition) {
+    if (nutrition == null) {
+      return false;
+    }
+    return Min <= nutrition.Health && nutrition.Health <= Max;
+  }
+
+  public override
+      IAttribute GetCategoryValue(FoodNutritionProperties nutrition) {
+    return new FloatAttribute(nutrition.Health);
+  }
+}
+
 public class NutritionPropsCondition : AggregateCondition {
   [JsonProperty]
   readonly public NutritionCategoryCondition Category;
@@ -104,12 +132,18 @@ public class NutritionPropsCondition : AggregateCondition {
   [JsonProperty]
   readonly public NutritionSatietyCondition Satiety;
 
+  [JsonProperty]
+  readonly public NutritionHealthCondition Health;
+
   public NutritionPropsCondition(NutritionCategoryCondition category,
-                                 NutritionSatietyCondition satiety) {
+                                 NutritionSatietyCondition satiety,
+                                 NutritionHealthCondition health) {
     Category = category;
     Satiety = satiety;
+    Health = health;
   }
 
+  [JsonIgnore]
   public override IEnumerable<ICondition> Conditions {
     get {
       if (Category != null) {
@@ -117,6 +151,9 @@ public class NutritionPropsCondition : AggregateCondition {
       }
       if (Satiety != null) {
         yield return Satiety;
+      }
+      if (Health != null) {
+        yield return Health;
       }
     }
   }

@@ -102,6 +102,30 @@ public class NutritionPropsCondition {
   }
 
   [TestMethod]
+  public void EnumerateMatchesHealth() {
+    string json = @"
+    {
+      health: {
+        max: -1
+      }
+    }";
+    Real.NutritionPropsCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.NutritionPropsCondition>(
+            null, "gourmand");
+    List<CollectibleObject> matches = null;
+    cond.EnumerateMatches(_resolver, ref matches);
+
+    CollectionAssert.Contains(
+        matches, LoadAssets.GetBlock("game", "mushroom-flyagaric-normal"));
+    CollectionAssert.DoesNotContain(
+        matches, LoadAssets.GetItem("game", "fruit-pineapple"));
+    CollectionAssert.DoesNotContain(matches,
+                                    LoadAssets.GetItem("game", "fish-raw"));
+    CollectionAssert.DoesNotContain(matches,
+                                    LoadAssets.GetItem("game", "firestarter"));
+  }
+
+  [TestMethod]
   public void EnumerateMatchesRefine() {
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
     string json = $@"

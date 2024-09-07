@@ -18,6 +18,7 @@ public class AttributeCondition : ICondition {
   [JsonProperty]
   public readonly AssetLocation[] Outputs;
 
+  [JsonIgnore]
   public IEnumerable<AssetLocation> Categories => Outputs;
 
   public AttributeCondition(string[] path, JToken value,

@@ -27,6 +27,7 @@ public class CodeCondition : ICondition {
     Outputs = outputs ?? Array.Empty<AssetLocation>();
   }
 
+  [JsonIgnore]
   public IEnumerable<AssetLocation> Categories => Outputs;
 
   public void EnumerateMatches(MatchResolver resolver,

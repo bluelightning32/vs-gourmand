@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -89,16 +90,26 @@ public class GourmandSystem : ModSystem {
         sapi.Server.Logger, "recipes/matchers/collectible");
     List<Collectibles.MatchRule> collectibleRules = new();
     foreach (var matcher in collectibleFiles) {
-      collectibleRules.AddRange(LoadMaybeArray<Collectibles.MatchRule>(
-          matcher.Key.Domain, matcher.Value));
+      try {
+        collectibleRules.AddRange(LoadMaybeArray<Collectibles.MatchRule>(
+            matcher.Key.Domain, matcher.Value));
+      } catch (Exception) {
+        sapi.Logger.Error("Gourmand: error parsing {0}", matcher.Key);
+        throw;
+      }
     }
 
     var stackFiles = sapi.Assets.GetMany<JToken>(sapi.Server.Logger,
                                                  "recipes/matchers/itemstack");
     List<MatchRule> stackRules = new();
     foreach (var matcher in stackFiles) {
-      stackRules.AddRange(
-          LoadMaybeArray<MatchRule>(matcher.Key.Domain, matcher.Value));
+      try {
+        stackRules.AddRange(
+            LoadMaybeArray<MatchRule>(matcher.Key.Domain, matcher.Value));
+      } catch (Exception) {
+        sapi.Logger.Error("Gourmand: error parsing {0}", matcher.Key);
+        throw;
+      }
     }
 
     CatDict.Set(sapi.World, collectibleRules, stackRules);

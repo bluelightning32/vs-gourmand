@@ -1,22 +1,14 @@
 [
   {
+    categories: [
+      {
+        input: "food",
+        outputs: [ "mushroom" ]
+      },
+    ],
     code : {
-      match: "game:mushroom-*-normal",
-      type: "block",
-      outputs: [ "mushroom" ]
+      match: "game:mushroom-*",
+      type: "block"
     },
-    outputs: {
-      "mushroom" : [ "block" ]
-    }
-  },
-  {
-    code : {
-      match: "game:mushroom-*-normal-north",
-      type: "block",
-      outputs: [ "mushroom" ]
-    },
-    outputs: {
-      "mushroom" : [ "block" ]
-    }
   },
 ]
