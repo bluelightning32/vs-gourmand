@@ -17,6 +17,14 @@
       points: 10,
       bonusAt: 8,
       bonus: 100
+    },
+    "bread-perfect" : {
+      points: 2,
+      bonusAt: 7,
+      bonus: 50
+    },
+    "climate-spanning" : {
+      points: 50,
     }
   },
   // Defines the piecewise function to convert diversity points into health

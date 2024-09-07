@@ -1,0 +1,9 @@
+[
+  {
+    code : {
+      match: "game:vegetable-cassava",
+      type: "item",
+      outputs: [ "hot-vegetable" ]
+    }
+  }
+]

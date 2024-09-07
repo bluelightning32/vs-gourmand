@@ -1,0 +1,43 @@
+{
+  category: {
+    input: "edible-meal-container"
+  },
+  attributes: [
+    {
+      path: [ "recipeCode" ],
+      value: "porridge"
+    },
+    {
+      path: [ "quantityServings" ],
+      enumerateValues: [ 1 ]
+    },
+  ],
+  contents: [
+    {
+      slotBegin: 0,
+      slotEnd: 5,
+      min: 1,
+      max: 3,
+      categories: [
+        {
+          input: "cold-grain",
+          distinctOutputs: [ "climate-spanning" ]
+        }
+      ],
+      enumArrangement: "Repeated"
+    },
+    {
+      slotBegin: 0,
+      slotEnd: 5,
+      min: 1,
+      max: 2,
+      categories: [
+        {
+          input: "hot-fruit",
+          distinctOutputs: [ "climate-spanning" ]
+        }
+      ],
+      enumArrangement: "Repeated"
+    },
+  ]
+}

@@ -1,0 +1,9 @@
+[
+  {
+    code : {
+      match: "game:bread-*-perfect",
+      type: "item",
+      outputs: [ "bread-perfect" ]
+    },
+  }
+]

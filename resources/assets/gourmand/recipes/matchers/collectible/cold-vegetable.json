@@ -1,0 +1,9 @@
+[
+  {
+    code : {
+      match: "game:vegetable-turnip",
+      type: "item",
+      outputs: [ "cold-vegetable" ]
+    }
+  }
+]

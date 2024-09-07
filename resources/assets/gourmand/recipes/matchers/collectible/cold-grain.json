@@ -1,0 +1,9 @@
+[
+  {
+    code : {
+      match: "game:grain-rye",
+      type: "item",
+      outputs: [ "cold-grain" ]
+    }
+  }
+]
