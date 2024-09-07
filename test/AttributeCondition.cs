@@ -1,5 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+using Newtonsoft.Json;
+
 using PrefixClassName.MsTest;
 
 using Vintagestory.API.Common;
@@ -147,6 +149,28 @@ public class AttributeCondition {
     Assert.AreEqual(2,
                     matches.Count(i => i.Attributes.GetAsInt("pieSize") == 2));
     Assert.AreEqual(originalMatches.Count * 2, matches.Count);
+  }
+
+  [TestMethod]
+  public void SaveRestore() {
+    string json = @"
+    {
+      path: [""pieSize""],
+      outputs: [ ""output1"" ],
+      enumerateValues: [2]
+    }
+    ";
+    Real.AttributeCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.AttributeCondition>(null,
+                                                                    "gourmand");
+    string json2 = JsonConvert.SerializeObject(cond);
+    Real.AttributeCondition cond2 =
+        JsonObject.FromJson(json2).AsObject<Real.AttributeCondition>(
+            null, "gourmand");
+    Assert.AreEqual("pieSize", cond2.Path[0]);
+    Assert.AreEqual("gourmand:output1", cond2.Outputs[0].ToString());
+    Assert.AreEqual(cond.EnumerateValues[0].GetValue(),
+                    cond2.EnumerateValues[0].GetValue());
   }
 
   [TestMethod]

@@ -40,20 +40,23 @@ public class AttributeCondition : ICondition {
     }
     Path = path;
     RawValue = value;
-    if ((value != null) && (enumerateValues != null)) {
+    if (value != null && value.Type != JTokenType.Null &&
+        enumerateValues != null) {
       throw new ArgumentException(
           "Only one of 'value' or 'enumerateValues' may be present.");
     }
 
-    if (value != null) {
+    if (value != null && value.Type != JTokenType.Null) {
       Value = new JsonObject(value).ToAttribute();
       EnumerateValues = new IAttribute[] { Value };
+      RawEnumerateValues = null;
     } else {
       Value = null;
       if (enumerateValues != null) {
         EnumerateValues =
             enumerateValues.Select(v => new JsonObject(v).ToAttribute())
                 .ToArray();
+        RawEnumerateValues = enumerateValues;
       } else {
         EnumerateValues = Array.Empty<IAttribute>();
       }
