@@ -35,6 +35,11 @@
       points: 2,
       bonusAt: 12,
       bonus: 100
+    },
+    "cider" : {
+      points: 3,
+      bonusAt: 18,
+      bonus: 100
     }
   },
   // Defines the piecewise function to convert diversity points into health
