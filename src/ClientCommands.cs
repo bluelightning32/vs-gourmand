@@ -25,26 +25,36 @@ public class ClientCommands {
     gourmand.BeginSub("stats")
         .WithDesc("List the total points, and points per category.")
         .WithArgs(_capi.ChatCommands.Parsers.OptionalInt("max", 5))
-        .HandleWith(FindBehavior(GetStats))
+        .HandleWith(FindModData(GetStats))
         .EndSub()
         .BeginSub("lost")
         .WithDesc("List foods that were previously achieved but then lost " +
                   "due to a death.")
         .WithArgs(_capi.ChatCommands.Parsers.OptionalInt("max", 5))
-        .HandleWith(FindBehavior(GetLost))
+        .HandleWith(FindModData(GetLost))
         .EndSub()
         .BeginSub("missing")
         .WithDesc("List foods within the specified category that have not " +
                   "been achieved yet.")
         .WithArgs(_capi.ChatCommands.Parsers.Word("category"),
                   _capi.ChatCommands.Parsers.OptionalInt("max", 5))
-        .HandleWith(FindBehavior(GetMissing))
+        .HandleWith(FindModData(GetMissing))
+        .EndSub()
+        .BeginSub("chargui")
+        .HandleWith(CharGui)
         .EndSub();
   }
 
+  private TextCommandResult CharGui(TextCommandCallingArgs args) {
+    (_capi.Gui.LoadedGuis.Find(dlg => dlg is GuiDialogCharacterBase)
+         as GuiDialogCharacterBase)
+        ?.Toggle();
+    return TextCommandResult.Success("toggled");
+  }
+
   private OnCommandDelegate
-  FindBehavior(System.Func<ITreeAttribute, TextCommandCallingArgs,
-                           TextCommandResult> target) {
+  FindModData(System.Func<ITreeAttribute, TextCommandCallingArgs,
+                          TextCommandResult> target) {
     TextCommandResult Invoke(TextCommandCallingArgs args) {
       Entity targetEntity = args.Caller.Entity;
       ITreeAttribute modData = FoodAchievements.GetModData(targetEntity);
