@@ -80,6 +80,9 @@
             <Private>false</Private>
         </Reference>
 
+        <!-- Import the JsonPeek Nuget package, because it provides the JsonPeek build task that is used later. -->
+        <PackageReference Include="JsonPeek" Version="1.2.0" />
+
         <!--
             Store the list of files to package in a zip file in the @(Package)
             item. "Package" is a custom item (not a standard item name). The
@@ -122,6 +125,9 @@
             resources, the build system automatically removes it from the zip
             temporary folder. Otherwise, if a resource was removed, it would
             keep getting packaged into the zip file on every subsequent build.
+
+            The @(property->'transform) syntax is a transform modifier.
+            https://learn.microsoft.com/en-us/visualstudio/msbuild/msbuild-transforms?view=vs-2022
         -->
         <FileWrites
             Include="@(Package->'$(IntermediateOutputPath)/zip/%(Dest)')"/>
@@ -193,6 +199,22 @@
         <ZipDirectory DestinationFile="$(OutputPath)$(TargetName).zip"
             SourceDirectory="$(IntermediateOutputPath)zip"
             Overwrite="true" />
+        <JsonPeek ContentPath="resources/modinfo.json" Query="$.version">
+            <Output TaskParameter="Result" PropertyName="Version" />
+        </JsonPeek>
+        <Message Importance="high" Text="Creating $(TargetName)_$(Version).zip" />
+        <!-- Delete any versioned zip files in the output directory. -->
+        <ItemGroup>
+            <OldZips Include="$(OutputPath)$(TargetName)_*.zip" />
+        </ItemGroup>
+        <Delete Files="@(OldZips)"/>
+        <!-- Copy the zip to give it the versioned file name. The original zip
+             is kept around, because the build system uses its modification
+             time to determine if the zip needs to be rebuilt. This copy zip
+             task and the rest of the Package target will only be run if any
+             of the input files have changed relative to the last unversioned
+             zip file. -->
+        <Copy SourceFiles="$(OutputPath)$(TargetName).zip" DestinationFiles="$(OutputPath)$(TargetName)_$(Version).zip" />
     </Target>
 
 </Project>
