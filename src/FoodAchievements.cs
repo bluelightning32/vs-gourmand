@@ -168,9 +168,15 @@ public class FoodAchievements {
 
   public int RemoveAchievements(IWorldAccessor resolver, CategoryDict catdict,
                                 ITreeAttribute moddata, ItemStack food) {
-    int lostPoints = 0;
     ITreeAttribute achieved = moddata.GetOrAddTreeAttribute("achieved");
     ITreeAttribute lost = moddata.GetOrAddTreeAttribute("lost");
+    return RemoveAchievements(resolver, catdict, achieved, lost, food);
+  }
+
+  private int RemoveAchievements(IWorldAccessor resolver, CategoryDict catdict,
+                                 ITreeAttribute achieved, ITreeAttribute lost,
+                                 ItemStack food) {
+    int lostPoints = 0;
     foreach (var entry in _achievements) {
       CategoryValue value = catdict.GetValue(resolver, entry.Key, food);
       if (value == null || value.Value == null) {
@@ -207,6 +213,19 @@ public class FoodAchievements {
       ITreeAttribute lostValues = (ITreeAttribute)entry.Value;
       foreach (KeyValuePair<string, IAttribute> lostEntry in lostValues) {
         ItemStack stack = ((ItemstackAttribute)lostEntry.Value).value;
+        stack.ResolveBlockOrItem(resolver);
+        yield return stack;
+      }
+    }
+  }
+
+  public static IEnumerable<ItemStack> GetEaten(IWorldAccessor resolver,
+                                                ITreeAttribute moddata) {
+    ITreeAttribute achieved = moddata.GetOrAddTreeAttribute("achieved");
+    foreach (KeyValuePair<string, IAttribute> entry in achieved) {
+      ITreeAttribute eatenValues = (ITreeAttribute)entry.Value;
+      foreach (KeyValuePair<string, IAttribute> eatenEntry in eatenValues) {
+        ItemStack stack = ((ItemstackAttribute)eatenEntry.Value).value;
         stack.ResolveBlockOrItem(resolver);
         yield return stack;
       }
@@ -257,5 +276,27 @@ public class FoodAchievements {
 
   public static ITreeAttribute GetModData(Entity entity) {
     return entity.WatchedAttributes.GetOrAddTreeAttribute(ModDataPath);
+  }
+
+  public int ApplyDeath(IWorldAccessor resolver, CategoryDict catDict,
+                        ITreeAttribute moddata, float deathPenalty) {
+    Dictionary<ItemStack, bool> foodDecision =
+        new(new ItemStackComparer(resolver));
+    foreach (ItemStack stack in GetEaten(resolver, moddata)) {
+      if (!foodDecision.ContainsKey(stack)) {
+        bool lose = Random.Shared.NextSingle() < deathPenalty;
+        foodDecision.Add(stack, lose);
+      }
+    }
+    ITreeAttribute achieved = moddata.GetOrAddTreeAttribute("achieved");
+    ITreeAttribute lost = moddata.GetOrAddTreeAttribute("lost");
+    int lostPoints = 0;
+    foreach (var entry in foodDecision) {
+      if (entry.Value) {
+        lostPoints +=
+            RemoveAchievements(resolver, catDict, achieved, lost, entry.Key);
+      }
+    }
+    return lostPoints;
   }
 }
