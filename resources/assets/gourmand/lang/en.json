@@ -1,4 +1,5 @@
 {
   "gourmand:playerinfo-nutrition-Gourmand": "Gourmand",
-  "new-food-eaten": "Earned points from new food: {0}"
+  "new-food-eaten": "Earned points from new food: {0}",
+  "tabname-gourmand" : "Gourmand"
 }
