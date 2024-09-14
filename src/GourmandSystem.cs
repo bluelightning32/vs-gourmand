@@ -6,6 +6,8 @@ using Gourmand.Blocks;
 using Gourmand.CollectibleBehaviors;
 using Gourmand.EntityBehaviors;
 
+using HarmonyLib;
+
 using Newtonsoft.Json.Linq;
 
 using Vintagestory.API.Client;
@@ -20,6 +22,8 @@ namespace Gourmand;
 
 public class GourmandSystem : ModSystem {
   private ICoreAPI _api;
+  private Harmony _harmony;
+
   public FoodAchievements FoodAchievements { get; private set; }
 
   public CategoryDict CatDict { get; private set; }
@@ -31,6 +35,13 @@ public class GourmandSystem : ModSystem {
 
   public override void Start(ICoreAPI api) {
     base.Start(api);
+
+    string patchId = Mod.Info.ModID;
+    if (!Harmony.HasAnyPatches(patchId)) {
+      _harmony = new Harmony(patchId);
+      _harmony.PatchAll();
+    }
+
     _api = api;
     CatDict = api.RegisterRecipeRegistry<CategoryDict>("CategoryDict");
     api.RegisterCollectibleBehaviorClass("notifyeaten", typeof(NotifyEaten));
@@ -128,5 +139,11 @@ public class GourmandSystem : ModSystem {
     } else {
       yield return value.ToObject<T>(domain);
     }
+  }
+
+  public override void Dispose() {
+    base.Dispose();
+
+    _harmony?.UnpatchAll(_harmony.Id);
   }
 }
