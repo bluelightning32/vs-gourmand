@@ -10,7 +10,7 @@ using Vintagestory.API.Datastructures;
 
 namespace Gourmand;
 
-public class CharacterDialog {
+public class PlayerStatsDialog {
   private readonly ICoreClientAPI _capi;
   private readonly GuiDialogCharacterBase _dialog;
   /// <summary>
@@ -20,7 +20,7 @@ public class CharacterDialog {
   /// </summary>
   private readonly FieldInfo _staticElementsField;
 
-  public CharacterDialog(ICoreClientAPI capi) {
+  public PlayerStatsDialog(ICoreClientAPI capi) {
     _capi = capi;
     _dialog = _capi.Gui.LoadedGuis.Find(dlg => dlg is GuiDialogCharacterBase)
                   as GuiDialogCharacterBase;
