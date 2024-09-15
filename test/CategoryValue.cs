@@ -92,6 +92,19 @@ public class CategoryValue {
   }
 
   [TestMethod]
+  public void EqualsGetHashCodeSameFloatArrays() {
+    float[] a1 = new float[] { 1.0F };
+    float[] a2 = new float[] { 1.0F };
+    Real.CategoryValue v1 =
+        new(1, new List<IAttribute>() { new FloatArrayAttribute(a1) });
+    Real.CategoryValue v2 =
+        new(1, new List<IAttribute>() { new FloatArrayAttribute(a2) });
+    Assert.IsTrue(v1.Equals(v2));
+    Assert.IsTrue(v2.Equals(v1));
+    Assert.AreEqual(v1.GetHashCode(), v2.GetHashCode());
+  }
+
+  [TestMethod]
   public void CompareAttributesTypes() {
     IAttribute[] attrs = {
       new IntAttribute(1),

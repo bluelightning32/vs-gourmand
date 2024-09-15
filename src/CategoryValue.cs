@@ -158,6 +158,20 @@ public class CategoryValue : IEquatable<CategoryValue>, IByteSerializable {
       }
       return s1.value == s2.value;
     }
+    if (a1 is FloatArrayAttribute f1) {
+      if (a2 is not FloatArrayAttribute f2) {
+        return false;
+      }
+      // The attribute values have to be specially compared to avoid the
+      // StringAttribute Equals method, because it is broken.
+      if (f1.value == null) {
+        return f2.value == null;
+      }
+      if (f2.value == null) {
+        return false;
+      }
+      return f1.value.SequenceEqual(f2.value);
+    }
     return a1.GetValue().Equals(a2.GetValue());
   }
 
