@@ -54,8 +54,8 @@ public class GourmandSystem : ModSystem {
   public override void StartClientSide(ICoreClientAPI capi) {
     base.StartClientSide(capi);
     _ = new ClientCommands(capi);
-    _ = new PlayerStatsDialog(capi);
-    _ = new GourmandTab(capi);
+    _ = new Gui.PlayerStatsDialog(capi);
+    _ = new Gui.GourmandTab(capi);
   }
 
   public override void StartServerSide(ICoreServerAPI sapi) {

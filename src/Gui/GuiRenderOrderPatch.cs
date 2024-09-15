@@ -6,7 +6,7 @@ using Vintagestory.API.Client;
 using Vintagestory.API.MathTools;
 using Vintagestory.Client.NoObf;
 
-namespace Gourmand;
+namespace Gourmand.Gui;
 
 #pragma warning disable IDE1006
 

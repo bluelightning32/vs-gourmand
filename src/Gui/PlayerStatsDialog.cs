@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 using Vintagestory.API.Client;
@@ -8,7 +6,7 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 
-namespace Gourmand;
+namespace Gourmand.Gui;
 
 public class PlayerStatsDialog {
   private readonly ICoreClientAPI _capi;

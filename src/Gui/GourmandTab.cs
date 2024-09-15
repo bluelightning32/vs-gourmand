@@ -1,10 +1,7 @@
-using System;
-using System.Reflection;
-
 using Vintagestory.API.Client;
 using Vintagestory.API.Config;
 
-namespace Gourmand;
+namespace Gourmand.Gui;
 
 public class GourmandTab {
   private readonly ICoreClientAPI _capi;
