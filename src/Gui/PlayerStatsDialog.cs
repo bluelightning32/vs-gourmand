@@ -113,6 +113,5 @@ public class PlayerStatsDialog {
         ++shifted;
       }
     }
-    _capi.Logger.Debug("Shifted {0}", shifted);
   }
 }

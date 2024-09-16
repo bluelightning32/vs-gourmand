@@ -1,5 +1,52 @@
 {
   "gourmand:playerinfo-nutrition-Gourmand": "Gourmand",
   "new-food-eaten": "Earned points from new food: {0}",
-  "tabname-gourmand" : "Gourmand"
+  "tabname-gourmand" : "Gourmand",
+
+  // Text in the gourmand tab.
+  "earned-points":          "Earned points:",
+  "lost-foods-count":       "Lost foods from death:",
+  "earned-health":          "Earned health:",
+  "points-for-next-health": "Points necessary for next health:",
+  "until-points":           "Until points:",
+  "lost-foods":             "Lost foods",
+  "lost-foods-desc":             "These are previously earned foods that were lost by death.",
+  "lost-foods-none":             "None",
+  "missing-foods-none":             "Everything eaten already",
+  "eaten-foods": "Eaten foods: {0}/{1}",
+  "eaten-foods-no-bonus": "Eaten foods: {0}",
+  "points-per-food": "Points per food: {0}",
+  "completion-bonus": "Completion bonus: {0}",
+  "missing": "Missing: ",
+
+  // Food category names and descriptions
+  "food-cat-name": "Food Types",
+  "food-cat-desc": "Every kind of food, classified by its item or block code.",
+
+  "pie-category-cat-name": "Pies",
+  "pie-category-cat-desc": "Different types of pies, classified by their names.",
+
+  "meal-category-cat-name": "Meals",
+  "meal-category-cat-desc": "Cooked meals, classified by their recipe category: meaty stew, vegetable stew, soup, porridge, jam, and scrambled eggs",
+
+  "pickled-food-cat-name": "Pickled Foods",
+  "pickled-food-cat-desc": "Vegetables that were pickled.",
+
+  "bread-perfect-cat-name": "Breads",
+  "bread-perfect-cat-desc": "Perfectly cooked breads.",
+
+  "climate-spanning-cat-name": "Climate spanning foods",
+  "climate-spanning-cat-desc": "A few select foods that require ingredients from both hot and cold climates.",
+
+  "mushroom-cat-name": "Mushrooms",
+  "mushroom-cat-desc": "Every kind of mushroom that can be foraged.",
+
+  "juice-cat-name": "Juices",
+  "juice-cat-desc": "Every kind of juice. They can be drunk from any potable container.",
+
+  "cider-cat-name": "Ciders",
+  "cider-cat-desc": "Alcoholic drinks made from the first level of fermentation: ciders and meads",
+
+  "poison-cat-name": "Poisons",
+  "poison-cat-desc": "Foods that remove health points when eaten.",
 }

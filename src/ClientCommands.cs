@@ -7,6 +7,7 @@ using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.CommandAbbr;
 using Vintagestory.API.Common.Entities;
+using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.Server;
 
@@ -76,7 +77,7 @@ public class ClientCommands {
     }
     HashSet<ItemStack> lost =
         new(FoodAchievements.GetLost(_capi.World, modData),
-            new ItemStackComparer(_capi.World));
+            new ItemStackComparer(_capi.World, GlobalConstants.IgnoredStackAttributes));
     Dictionary<AssetLocation, Tuple<int, AchievementPoints>> achievements =
         foodAchievements.GetAchievementStats(modData);
     StringBuilder result = new();

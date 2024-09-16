@@ -83,6 +83,10 @@
             <HintPath>$(VINTAGE_STORY)/Lib/0Harmony.dll</HintPath>
             <Private>false</Private>
         </Reference>
+        <Reference Include="cairo-sharp">
+            <HintPath>$(VINTAGE_STORY)/Lib/cairo-sharp.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
 
         <!-- Import the JsonPeek Nuget package, because it provides the JsonPeek build task that is used later. -->
         <PackageReference Include="JsonPeek" Version="1.2.0" />

@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
+using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 
 namespace Gourmand;
@@ -257,6 +258,33 @@ public class FoodAchievements {
     }
   }
 
+  public Dictionary<string, List<ItemStack>>
+  GetMissingDict(IWorldAccessor resolver, CategoryDict catdict,
+                 AssetLocation category, ITreeAttribute moddata) {
+    Dictionary<string, List<ItemStack>> given = new();
+    if (!_achievements.ContainsKey(category)) {
+      return given;
+    }
+    ITreeAttribute achieved = moddata.GetOrAddTreeAttribute("achieved");
+    ITreeAttribute eatenValues =
+        achieved.GetOrAddTreeAttribute(category.ToString());
+    foreach (ItemStack stack in catdict.EnumerateMatches(resolver, category)) {
+      CategoryValue value = catdict.GetValue(resolver, category, stack);
+      string categoryValue =
+          string.Join(",", value.Value.Select(a => a.ToString()));
+      if (eatenValues.HasAttribute(categoryValue)) {
+        continue;
+      }
+
+      if (!given.TryGetValue(categoryValue, out List<ItemStack> stacks)) {
+        stacks = new();
+        given.Add(categoryValue, stacks);
+      }
+      stacks.Add(stack);
+    }
+    return given;
+  }
+
   public Dictionary<AssetLocation, Tuple<int, AchievementPoints>>
   GetAchievementStats(ITreeAttribute moddata) {
     Dictionary<AssetLocation, Tuple<int, AchievementPoints>> result = new();
@@ -281,7 +309,7 @@ public class FoodAchievements {
   public int ApplyDeath(IWorldAccessor resolver, CategoryDict catDict,
                         ITreeAttribute moddata, float deathPenalty) {
     Dictionary<ItemStack, bool> foodDecision =
-        new(new ItemStackComparer(resolver));
+        new(new ItemStackComparer(resolver, GlobalConstants.IgnoredStackAttributes));
     foreach (ItemStack stack in GetEaten(resolver, moddata)) {
       if (!foodDecision.ContainsKey(stack)) {
         bool lose = Random.Shared.NextSingle() < deathPenalty;
