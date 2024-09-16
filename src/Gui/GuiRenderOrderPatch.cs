@@ -12,6 +12,8 @@ namespace Gourmand.Gui;
 
 [HarmonyPatch(typeof(GuiDialogCharacter))]
 // Fix a zorder glitch with the character dialog.
+// This is a workaround for
+// https://github.com/anegostudios/VintageStory-Issues/issues/4085.
 class GuiDialogPatch {
   [HarmonyPrefix]
   [HarmonyPatch("OnRenderGUI")]
