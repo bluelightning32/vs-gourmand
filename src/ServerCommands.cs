@@ -126,7 +126,8 @@ public class ServerCommands {
   private TextCommandResult GiveLost(UpdateFoodAchievements from,
                                      TextCommandCallingArgs args) {
     int max = (int)args[1];
-    HashSet<ItemStack> gave = new(new ItemStackComparer(_sapi.World, GlobalConstants.IgnoredStackAttributes));
+    HashSet<ItemStack> gave = new(new ItemStackComparer(
+        _sapi.World, GlobalConstants.IgnoredStackAttributes));
     foreach (ItemStack stack in from.GetLost()) {
       if (gave.Count >= max) {
         break;

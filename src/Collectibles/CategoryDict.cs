@@ -33,7 +33,8 @@ public interface IReadonlyCategoryDict {
   /// </summary>
   /// <param name="category">the category to search</param>
   /// <returns>an enumeration of the matching collectibles</returns>
-  IEnumerable<CollectibleObject> EnumerateMatches(AssetLocation category, bool warnOnMissing = true);
+  IEnumerable<CollectibleObject> EnumerateMatches(AssetLocation category,
+                                                  bool warnOnMissing = true);
   IEnumerable<CollectibleObject> EnumerateMatches(AssetLocation category,
                                                   int enumeratePerDistinct);
 
@@ -45,7 +46,7 @@ public class CategoryDict : IReadonlyCategoryDict, IByteSerializable {
                       Dictionary<CollectibleObject, CategoryValue>> _byCat =
       new();
 
-  public CategoryDict() { }
+  public CategoryDict() {}
 
   public CategoryValue GetValue(AssetLocation category, CollectibleObject c) {
     if (!_byCat.TryGetValue(
@@ -177,10 +178,8 @@ public class CategoryDict : IReadonlyCategoryDict, IByteSerializable {
         EnumItemClass itemClass = (EnumItemClass)reader.ReadInt32();
         int id = reader.ReadInt32();
         CollectibleObject collectible =
-            itemClass switch {
-              EnumItemClass.Block => resolver.GetBlock(id),
-              _ => resolver.GetItem(id)
-            };
+            itemClass switch { EnumItemClass.Block => resolver.GetBlock(id),
+                               _ => resolver.GetItem(id) };
         CategoryValue value = null;
         if (reader.ReadBoolean()) {
           value = new(reader);

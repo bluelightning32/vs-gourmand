@@ -77,7 +77,8 @@ public class ClientCommands {
     }
     HashSet<ItemStack> lost =
         new(FoodAchievements.GetLost(_capi.World, modData),
-            new ItemStackComparer(_capi.World, GlobalConstants.IgnoredStackAttributes));
+            new ItemStackComparer(_capi.World,
+                                  GlobalConstants.IgnoredStackAttributes));
     Dictionary<AssetLocation, Tuple<int, AchievementPoints>> achievements =
         foodAchievements.GetAchievementStats(modData);
     StringBuilder result = new();

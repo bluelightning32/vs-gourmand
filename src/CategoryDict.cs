@@ -118,9 +118,10 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
   public List<ItemStack> EnumerateMatches(IWorldAccessor resolver,
                                           AssetLocation category) {
     HashSet<ItemStack> stacks =
-        new(_collectibleDict.EnumerateMatches(category, false).Select(
-                c => new ItemStack(c)),
-            new ItemStackComparer(resolver, GlobalConstants.IgnoredStackAttributes));
+        new(_collectibleDict.EnumerateMatches(category, false)
+                .Select(c => new ItemStack(c)),
+            new ItemStackComparer(resolver,
+                                  GlobalConstants.IgnoredStackAttributes));
     if (!_rules.TryGetValue(category, out List<MatchRule> categoryRules)) {
       return stacks.ToList();
     }

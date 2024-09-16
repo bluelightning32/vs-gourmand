@@ -95,7 +95,8 @@ public class GourmandTab {
         FoodAchievements.GetModData(_capi.World.Player.Entity);
     HashSet<ItemStack> lost =
         new(FoodAchievements.GetLost(_capi.World, modData),
-            new ItemStackComparer(_capi.World, GlobalConstants.IgnoredStackAttributes));
+            new ItemStackComparer(_capi.World,
+                                  GlobalConstants.IgnoredStackAttributes));
     GourmandSystem gourmand = _capi.ModLoader.GetModSystem<GourmandSystem>();
     FoodAchievements foodAchievements = gourmand.FoodAchievements;
 

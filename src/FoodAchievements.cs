@@ -308,8 +308,8 @@ public class FoodAchievements {
 
   public int ApplyDeath(IWorldAccessor resolver, CategoryDict catDict,
                         ITreeAttribute moddata, float deathPenalty) {
-    Dictionary<ItemStack, bool> foodDecision =
-        new(new ItemStackComparer(resolver, GlobalConstants.IgnoredStackAttributes));
+    Dictionary<ItemStack, bool> foodDecision = new(new ItemStackComparer(
+        resolver, GlobalConstants.IgnoredStackAttributes));
     foreach (ItemStack stack in GetEaten(resolver, moddata)) {
       if (!foodDecision.ContainsKey(stack)) {
         bool lose = Random.Shared.NextSingle() < deathPenalty;
