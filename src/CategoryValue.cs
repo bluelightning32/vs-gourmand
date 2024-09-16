@@ -65,39 +65,10 @@ public class CategoryValue : IEquatable<CategoryValue>, IByteSerializable {
         total += 0xE;
         // Rotate total to the left 13 bits.
         total = (total << 13) | (total >> (32 - 13));
-        total ^= SafeGetHashCode(a);
+        total ^= a.GetHashCode();
       }
     }
     return total;
-  }
-
-  public static int SafeGetHashCode(IAttribute a) {
-    if (a == null) {
-      return 0;
-    }
-    if (a is TreeAttribute t) {
-      // Avoid the regular GetHashCode on tree attributes, because if any of the
-      // values in the tree are null, it will throw an exception.
-      int total = 0;
-      lock (t.attributesLock) {
-        // The attributes are listed from an ordered dictionary.
-        foreach (var entry in t) {
-          total += 0x14;
-          // Rotate total to the left 7 bits.
-          total = (total << 7) | (total >> (32 - 7));
-          total ^= entry.Key.GetHashCode();
-          total ^= SafeGetHashCode(entry.Value);
-        }
-      }
-      return total;
-    }
-    if (a is StringAttribute s) {
-      if (s.value == null) {
-        return 0;
-      }
-      return s.value.GetHashCode();
-    }
-    return a.GetHashCode();
   }
 
   /// <summary>
@@ -160,14 +131,6 @@ public class CategoryValue : IEquatable<CategoryValue>, IByteSerializable {
     }
     if (a1 is FloatArrayAttribute f1) {
       if (a2 is not FloatArrayAttribute f2) {
-        return false;
-      }
-      // The attribute values have to be specially compared to avoid the
-      // StringAttribute Equals method, because it is broken.
-      if (f1.value == null) {
-        return f2.value == null;
-      }
-      if (f2.value == null) {
         return false;
       }
       return f1.value.SequenceEqual(f2.value);

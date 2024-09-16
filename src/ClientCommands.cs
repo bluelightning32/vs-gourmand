@@ -75,7 +75,8 @@ public class ClientCommands {
       gainRate = 1 / gainRate;
     }
     HashSet<ItemStack> lost =
-        new(FoodAchievements.GetLost(_capi.World, modData));
+        new(FoodAchievements.GetLost(_capi.World, modData),
+            new ItemStackComparer(_capi.World));
     Dictionary<AssetLocation, Tuple<int, AchievementPoints>> achievements =
         foodAchievements.GetAchievementStats(modData);
     StringBuilder result = new();
@@ -136,15 +137,15 @@ public class ClientCommands {
     StringBuilder result = new();
     AssetLocation category = new((string)args[0]);
     int max = (int)args[1];
-    int gave = 0;
+    int found = 0;
     foreach (ItemStack stack in foodAchievements
                  .GetMissing(_capi.World, gourmand.CatDict, category, modData)
                  .Take(max)) {
-      ++gave;
+      ++found;
       result.Append("Missing: ");
       result.AppendLine(GetFoodName(stack));
     }
-    result.Append($"Found {gave} missing food(s) in category");
+    result.Append($"Found {found} missing food(s) in category");
     return TextCommandResult.Success(result.ToString());
   }
 }

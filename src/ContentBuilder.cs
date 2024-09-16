@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 
 using Vintagestory.API.Common;
+using Vintagestory.API.Datastructures;
 using Vintagestory.GameContent;
 
 namespace Gourmand;
@@ -30,11 +31,20 @@ public class ContentBuilder {
   public static void SetContents(IWorldAccessor resolver, ItemStack stack,
                                  ItemStack[] newContents) {
     if (stack.Collectible is IBlockMealContainer mealContainer) {
-      mealContainer.SetContents(
-          mealContainer.GetRecipeCode(resolver, stack), stack, newContents,
-          mealContainer.GetQuantityServings(resolver, stack));
-    } else if (stack.Collectible is BlockContainer container) {
+      string recipe = mealContainer.GetRecipeCode(resolver, stack);
+      // Don't call the BlockMeal.SetContents with a null recipe, because the
+      // game would crash with a null exception if the stack is hovered over in
+      // the GUI. Specifically, don't call it for pies.
+      if (recipe != null) {
+        mealContainer.SetContents(
+            recipe, stack, newContents,
+            mealContainer.GetQuantityServings(resolver, stack));
+        return;
+      }
+    }
+    if (stack.Collectible is BlockContainer container) {
       container.SetContents(stack, newContents);
+      return;
     }
   }
 

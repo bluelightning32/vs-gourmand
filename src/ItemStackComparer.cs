@@ -30,6 +30,6 @@ public class ItemStackComparer : IEqualityComparer<ItemStack> {
 
   public int GetHashCode([DisallowNull] ItemStack obj) {
     return HashCode.Combine(obj.Collectible, obj.StackSize,
-                            CategoryValue.SafeGetHashCode(obj.Attributes));
+                            obj.Attributes.GetHashCode());
   }
 }
