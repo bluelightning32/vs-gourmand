@@ -1,0 +1,52 @@
+{
+  "gourmand:playerinfo-nutrition-Gourmand": "Гурман",
+  "new-food-eaten": "Зароблені бали за нову їжу: {0}",
+  "tabname-gourmand" : "Гурман",
+
+  // Text in the gourmand tab.
+  "earned-points":          "Зароблені бали:",
+  "lost-foods-count":       "Втрачені продукти від смерті:",
+  "earned-health":          "Зароблене здоров'я:",
+  "points-for-next-health": "Бали, необхідні для покращення здоров'я:",
+  "until-points":           "До тих пір, поки не з'являться бали:",
+  "lost-foods":             "Втрачені продукти",
+  "lost-foods-desc":             "Це раніше спожиті продукти, які були втрачені через смерть.",
+  "lost-foods-none":             "Немає",
+  "missing-foods-none":             "Все вже з'їдено",
+  "eaten-foods": "Спожито продуктів: {0}/{1}",
+  "eaten-foods-no-bonus": "Спожиті продукти: {0}",
+  "points-per-food": "Балів за їжу: {0}",
+  "completion-bonus": "Бонус за завершення: {0}",
+  "missing": "Відсутні: ",
+
+  // Food category names and descriptions
+  "food-cat-name": "Типи продуктів харчування",
+  "food-cat-desc": "Кожен вид продуктів харчування, класифікований за артикулом або кодом блоку.",
+
+  "pie-category-cat-name": "Пироги",
+  "pie-category-cat-desc": "Різні види пирогів, класифіковані за назвами.",
+
+  "meal-category-cat-name": "Страви",
+  "meal-category-cat-desc": "Приготовані страви, класифіковані за категоріями рецептів: м'ясне рагу, овочеве рагу, суп, каша, джем, яєчня",
+
+  "pickled-food-cat-name": "Мариновані продукти",
+  "pickled-food-cat-desc": "Овочі, які були мариновані.",
+
+  "bread-perfect-cat-name": "Хліб",
+  "bread-perfect-cat-desc": "Ідеально спечений хліб.",
+
+  "climate-spanning-cat-name": "Кліматично чутливі продукти",
+  "climate-spanning-cat-desc": "Кілька видів їжі, для яких потрібні інгредієнти як з жаркого, так і з холодного клімату.",
+
+  "mushroom-cat-name": "Гриби",
+  "mushroom-cat-desc": "Всі види грибів, які можна їсти.",
+
+  "juice-cat-name": "Соки",
+  "juice-cat-desc": "Всі види соків. Їх можна пити з будь-якої ємності.",
+
+  "cider-cat-name": "Сидри",
+  "cider-cat-desc": "Алкогольні напої першого ступеня бродіння: сидри та медовуха",
+
+  "poison-cat-name": "Отрути",
+  "poison-cat-desc": "Продукти, які знімають очки здоров'я при вживанні.",
+}
