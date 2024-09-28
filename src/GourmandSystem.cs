@@ -45,6 +45,7 @@ public class GourmandSystem : ModSystem {
     _api = api;
     CatDict = api.RegisterRecipeRegistry<CategoryDict>("CategoryDict");
     api.RegisterCollectibleBehaviorClass("notifyeaten", typeof(NotifyEaten));
+    api.RegisterCollectibleBehaviorClass("showpoints", typeof(ShowPoints));
     api.RegisterEntityBehaviorClass("updatefoodachievements",
                                     typeof(UpdateFoodAchievements));
     api.RegisterBlockClass(nameof(NotifyingMeal), typeof(NotifyingMeal));
@@ -96,6 +97,21 @@ public class GourmandSystem : ModSystem {
           playerProperties.Server.BehaviorsAsJsonObj.Append(
               JsonObject.FromJson("{ code: \"updatefoodachievements\" }"));
     }
+    if (api is ICoreClientAPI capi) {
+      foreach (CollectibleObject c in capi.World.Collectibles) {
+        if (ShouldAddShowPointsBehavior(c)) {
+          c.CollectibleBehaviors =
+              c.CollectibleBehaviors.Append(new ShowPoints(c));
+        }
+      }
+    }
+  }
+
+  private static bool ShouldAddShowPointsBehavior(CollectibleObject c) {
+    // The second condition handles containers with edible liquids.
+    return c.NutritionProps != null ||
+           c.GetType().GetMethod("GetNutritionProperties").DeclaringType !=
+               typeof(CollectibleObject);
   }
 
   private void LoadCategories(ICoreServerAPI sapi) {

@@ -19,6 +19,9 @@
   "completion-bonus": "Completion bonus: {0}",
   "missing": "Missing: ",
 
+  // Shown in the item info
+  "available-points": "Available Gourmand points: {0}",
+
   // Food category names and descriptions
   "food-cat-name": "Food Types",
   "food-cat-desc": "Every kind of food, classified by its item or block code.",

@@ -167,6 +167,42 @@ public class FoodAchievements {
     return newPoints;
   }
 
+  /// <summary>
+  /// Returns the points that can be earned by eating the food
+  /// </summary>
+  /// <param name="resolver">resolver</param>
+  /// <param name="catdict">catdict</param>
+  /// <param name="moddata">the player's food data</param>
+  /// <param name="food">the food to get the stats for</param>
+  /// <returns>0 if the food is already eaten, a positive value if it has not
+  /// been eaten yet, or -1 if it does not match any achievements</returns>
+  public int GetAvailableFoodPoints(IWorldAccessor resolver,
+                                    CategoryDict catdict,
+                                    ITreeAttribute moddata, ItemStack food) {
+    int newPoints = 0;
+    bool isFood = false;
+    ITreeAttribute achieved = moddata.GetOrAddTreeAttribute("achieved");
+    foreach (var entry in _achievements) {
+      CategoryValue value = catdict.GetValue(resolver, entry.Key, food);
+      if (value == null || value.Value == null) {
+        continue;
+      }
+      isFood = true;
+      // This is indexed by the category value as a string, and the value is an
+      // item stack.
+      ITreeAttribute eatenValues =
+          achieved.GetOrAddTreeAttribute(entry.Key.ToString());
+      string categoryValue =
+          string.Join(",", value.Value.Select(a => a.ToString()));
+      if (eatenValues.HasAttribute(categoryValue)) {
+        continue;
+      }
+      newPoints += entry.Value.GetPoints(eatenValues.Count + 1) -
+                   entry.Value.GetPoints(eatenValues.Count);
+    }
+    return isFood ? newPoints : -1;
+  }
+
   public int RemoveAchievements(IWorldAccessor resolver, CategoryDict catdict,
                                 ITreeAttribute moddata, ItemStack food) {
     ITreeAttribute achieved = moddata.GetOrAddTreeAttribute("achieved");
