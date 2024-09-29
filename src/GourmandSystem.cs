@@ -77,7 +77,7 @@ public class GourmandSystem : ModSystem {
                            .Get(new AssetLocation(
                                Mod.Info.ModID, "config/food-achievements.json"))
                            .ToObject<FoodAchievements>();
-    FoodAchievements.Resolve(Mod.Info.ModID);
+    FoodAchievements.Resolve(Mod.Info.ModID, api.ModLoader);
     api.Logger.Debug("Loaded {0} food achievements",
                      FoodAchievements.RawAchievements.Count);
 

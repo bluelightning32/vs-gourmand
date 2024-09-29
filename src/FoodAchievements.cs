@@ -13,20 +13,40 @@ using Vintagestory.API.Datastructures;
 namespace Gourmand;
 
 public class AchievementPoints {
+  /// <summary>
+  /// This is a list of modids that the achievement depends on. Ignore this
+  /// achievement if one of the mods in this list is not installed.
+  /// </summary>
+  [JsonProperty("dependsOn")]
+  public string[] DependsOn { get; private set; }
+
   [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
   [DefaultValue(1)]
-  public readonly int Points;
-  [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
-  [DefaultValue(0)]
-  public readonly int BonusAt;
-  [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
-  [DefaultValue(0)]
-  public readonly int Bonus;
+  public int Points { get; private set; }
 
-  public AchievementPoints(int points, int bonusAt, int bonus) {
+  [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+  [DefaultValue(0)]
+  public int BonusAt { get; private set; }
+
+  [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+  [DefaultValue(0)]
+  public int Bonus { get; private set; }
+
+  /// <summary>
+  /// The Points, BonusAt, and Bonus values will get the sum of all the
+  /// corresponding fields of the entries in this list. The intention is that
+  /// the elements in the list only exist when certain mods are installed.
+  /// </summary>
+  [JsonProperty("add")]
+  public AchievementPoints[] Add { get; private set; }
+
+  public AchievementPoints(string[] dependsOn, int points, int bonusAt,
+                           int bonus, AchievementPoints[] add) {
+    DependsOn = dependsOn ?? Array.Empty<string>();
     Points = points;
     BonusAt = bonusAt;
     Bonus = bonus;
+    Add = add;
   }
 
   public int GetPoints(int eaten) {
@@ -35,6 +55,35 @@ public class AchievementPoints {
       points += Bonus;
     }
     return points;
+  }
+
+  public bool DependsOnSatisified(IModLoader loader) {
+    return DependsOn.All(loader.IsModEnabled);
+  }
+
+  /// <summary>
+  /// Accumulates and clears all entries in <see cref="Add"/>.
+  /// </summary>
+  /// <param name="loader"></param>
+  /// <returns>true if the top level DependsOn was satisfied</returns>
+  public bool Collapse(IModLoader loader) {
+    if (!DependsOnSatisified(loader)) {
+      Points = 0;
+      BonusAt = 0;
+      Bonus = 0;
+      Add = null;
+      return false;
+    }
+    foreach (AchievementPoints add in Add ?? Array.Empty<AchievementPoints>()) {
+      if (!add.Resolve(loader)) {
+        continue;
+      }
+      Points += add.Points;
+      BonusAt += add.BonusAt;
+      Bonus += add.Bonus;
+    }
+    Add = null;
+    return true;
   }
 }
 
@@ -77,9 +126,12 @@ public class FoodAchievements {
     }
   }
 
-  public void Resolve(string domain) {
+  public void Resolve(string domain, IModLoader loader) {
     _achievements.Clear();
     foreach (var entry in RawAchievements) {
+      if (!entry.Value.Collapse(loader)) {
+        continue;
+      }
       _achievements.Add(AssetLocation.Create(entry.Key, domain), entry.Value);
     }
   }

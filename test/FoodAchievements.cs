@@ -79,12 +79,30 @@ public class FoodAchievements {
     {
       achievements: {
         ""achievement-fruit"": {
-          points: 3,
-          bonusAt: 2,
-          bonus: 100
+          points: 2,
+          bonusAt: 1,
+          bonus: 90,
+          add: [
+            {
+              dependsOn: [ ""survival"" ],
+              points: 1,
+              bonusAt: 1,
+              bonus: 10,
+            },
+            {
+              dependsOn: [ ""notinstalled"" ],
+              points: 1000,
+              bonusAt: 1000,
+              bonus: 1000,
+            }
+          ]
         },
         ""achievement-protein"": {
           points: 1,
+        },
+        ""achievement-not-installed"": {
+          dependsOn: [ ""notinstalled"" ],
+          points: 99,
         }
       },
       healthPoints: [
@@ -104,7 +122,7 @@ public class FoodAchievements {
     }";
     LoadedAchievements =
         JsonUtil.ToObject<Real.FoodAchievements>(achievementsJson, "gourmand");
-    LoadedAchievements.Resolve("gourmand");
+    LoadedAchievements.Resolve("gourmand", LoadAssets.Server.Api.ModLoader);
   }
 
   [TestMethod]
@@ -170,5 +188,20 @@ public class FoodAchievements {
     points += 1;
     Assert.AreEqual(
         points, LoadedAchievements.GetPointsForAchievements(null, achieved));
+  }
+
+  [TestMethod]
+  public void DependsOn() {
+    TreeAttribute moddata = new();
+    Dictionary<AssetLocation, Tuple<int, AchievementPoints>> achievements =
+        LoadedAchievements.GetAchievementStats(moddata);
+    Assert.IsFalse(achievements.ContainsKey(
+        new AssetLocation("gourmand", "achievement-not-installed")));
+    Assert.IsTrue(achievements.TryGetValue(
+        new AssetLocation("gourmand", "achievement-fruit"),
+        out Tuple<int, AchievementPoints> fruit));
+    Assert.AreEqual(3, fruit.Item2.Points);
+    Assert.AreEqual(2, fruit.Item2.BonusAt);
+    Assert.AreEqual(100, fruit.Item2.Bonus);
   }
 }
