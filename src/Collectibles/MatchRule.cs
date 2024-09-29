@@ -14,6 +14,13 @@ using Vintagestory.API.Datastructures;
 namespace Gourmand.Collectibles;
 
 public class MatchRuleJson {
+  /// <summary>
+  /// This is a list of modids that the rule depends on. Ignore this match rule
+  /// if one of the mods in this list is not installed.
+  /// </summary>
+  [JsonProperty("dependsOn")]
+  public readonly string[] DependsOn;
+
   [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
   [DefaultValue(1.0)]
   public readonly float Priority;
@@ -37,12 +44,13 @@ public class MatchRuleJson {
   public readonly bool IgnoreNoMatches;
 
   [JsonConstructor]
-  public MatchRuleJson(float priority,
+  public MatchRuleJson(string[] dependsOn, float priority,
                        IReadOnlyDictionary<string, JToken[]> rawOutputs,
                        AssetLocation[] deletes, CategoryCondition[] categories,
                        CodeCondition code,
                        NutritionPropsCondition nutritionProp,
                        AttributeCondition[] attributes, bool ignoreNoMatches) {
+    DependsOn = dependsOn ?? Array.Empty<string>();
     Priority = priority;
     RawOutputs = rawOutputs ?? new Dictionary<string, JToken[]>();
     Deletes = deletes ?? Array.Empty<AssetLocation>();
@@ -54,6 +62,7 @@ public class MatchRuleJson {
   }
 
   public MatchRuleJson(MatchRuleJson copy) {
+    DependsOn = copy.DependsOn;
     Priority = copy.Priority;
     RawOutputs = copy.RawOutputs;
     Deletes = copy.Deletes;
@@ -62,6 +71,10 @@ public class MatchRuleJson {
     NutritionProps = copy.NutritionProps;
     Attributes = copy.Attributes;
     IgnoreNoMatches = copy.IgnoreNoMatches;
+  }
+
+  public bool DependsOnSatisified(IModLoader modLoader) {
+    return DependsOn.All(modLoader.IsModEnabled);
   }
 }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Vintagestory.API.Common;
+using Vintagestory.Common;
 
 namespace Gourmand.Collectibles;
 
@@ -26,8 +27,11 @@ public class MatchRuleSorter {
   private readonly HashSet<AssetLocation> _visitedCategories = new();
   private readonly List<AssetLocation> _path = new();
 
-  public MatchRuleSorter(IEnumerable<MatchRule> rules) {
+  public MatchRuleSorter(IEnumerable<MatchRule> rules, IModLoader modLoader) {
     foreach (MatchRule rule in rules) {
+      if (!rule.DependsOnSatisified(modLoader)) {
+        continue;
+      }
       foreach (AssetLocation category in rule.OutputCategories) {
         if (!_categoryGenerators.TryGetValue(category,
                                              out List<MatchRule> generators)) {

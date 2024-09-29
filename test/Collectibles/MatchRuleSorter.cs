@@ -5,6 +5,7 @@ using PrefixClassName.MsTest;
 using Vintagestory.API.Common;
 
 using Gourmand.Collectibles;
+using Vintagestory.Common;
 
 namespace Gourmand.Test.Collectibles;
 
@@ -35,7 +36,7 @@ public class MatchRuleSorter {
       }
     ]";
     List<Real.MatchRule> rules = ParseRules(json);
-    Real.MatchRuleSorter sorter = new(rules);
+    Real.MatchRuleSorter sorter = new(rules, LoadAssets.Server.Api.ModLoader);
     void Validate() {
       // The first rule does not depend on anything. So it should be processed
       // first.
@@ -48,7 +49,8 @@ public class MatchRuleSorter {
     }
     Validate();
 
-    sorter = new(rules.AsEnumerable().Reverse());
+    sorter =
+        new(rules.AsEnumerable().Reverse(), LoadAssets.Server.Api.ModLoader);
     Validate();
   }
 
@@ -81,7 +83,8 @@ public class MatchRuleSorter {
       },
     ]";
     List<Real.MatchRule> rules = ParseRules(json);
-    Real.MatchRuleSorter sorter = new(rules.AsEnumerable().Reverse());
+    Real.MatchRuleSorter sorter =
+        new(rules.AsEnumerable().Reverse(), LoadAssets.Server.Api.ModLoader);
     void Validate() {
       // The final rule does not depend on anything. So it should be processed
       // first.
@@ -107,7 +110,7 @@ public class MatchRuleSorter {
     }
     Validate();
 
-    sorter = new(rules);
+    sorter = new(rules, LoadAssets.Server.Api.ModLoader);
     Validate();
   }
 
@@ -131,6 +134,32 @@ public class MatchRuleSorter {
       }
     ]";
     List<Real.MatchRule> rules = ParseRules(json);
-    _ = new Real.MatchRuleSorter(rules.AsEnumerable().Reverse());
+    _ = new Real.MatchRuleSorter(rules.AsEnumerable().Reverse(),
+                                 LoadAssets.Server.Api.ModLoader);
+  }
+
+  [TestMethod]
+  public void FilterDependsOn() {
+    string json = @"
+    [
+      {
+        dependsOn: [""survival""],
+        outputs: {
+          ""cat1"": [ 0 ]
+        }
+      },
+      {
+        dependsOn: [""notinstalled""],
+        outputs: {
+          ""cat2"": [ 0 ]
+        }
+      }
+    ]";
+    List<Real.MatchRule> rules = ParseRules(json);
+    Real.MatchRuleSorter sorter = new(rules, LoadAssets.Server.Api.ModLoader);
+    CollectionAssert.AreEquivalent(
+        new RuleOrCategory[] { new(rules[0]),
+                               new(new AssetLocation("gourmand", "cat1")) },
+        sorter.Result);
   }
 }

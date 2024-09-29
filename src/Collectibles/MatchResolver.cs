@@ -244,7 +244,7 @@ public class MatchResolver {
   /// </summary>
   /// <param name="rules">The rules to load</param>
   public CategoryDict Load(IEnumerable<MatchRule> rules) {
-    MatchRuleSorter sorter = new(rules);
+    MatchRuleSorter sorter = new(rules, Resolver.Api.ModLoader);
     CategoryDict accum = new();
     HashSet<AssetLocation> emitted = new();
     foreach (RuleOrCategory entry in sorter.Result) {

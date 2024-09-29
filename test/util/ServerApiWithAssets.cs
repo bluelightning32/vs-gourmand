@@ -65,7 +65,9 @@ class ServerApiWithAssets {
     string[] rawArgs = Array.Empty<string>();
     ServerProgramArgs programArgs = new();
     ServerMain server = new(serverArgs, rawArgs, programArgs, false);
-    ServerCoreAPI api = new(server);
+    // This creates a ServerCoreAPI and sets server.api.
+    _ = new ServerSystemModHandler(server);
+    ServerCoreAPI api = (ServerCoreAPI)server.Api;
 
     FieldInfo systemsField = server.GetType().GetField(
         "Systems", BindingFlags.Instance | BindingFlags.NonPublic);
