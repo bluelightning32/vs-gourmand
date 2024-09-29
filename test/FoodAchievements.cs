@@ -115,9 +115,21 @@ public class FoodAchievements {
           health: 20,
         },
         {
-          points: 11,
-          health: 30,
+          points: 10,
+          health: 20,
+          add: [
+            {
+              dependsOn: [ ""survival"" ],
+              points: 1,
+              health: 10,
+            }
+          ]
         },
+        {
+          dependsOn: [ ""not-installed"" ],
+          points: 99,
+          health: 99,
+        }
       ]
     }";
     LoadedAchievements =

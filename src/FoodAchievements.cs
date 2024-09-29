@@ -66,7 +66,7 @@ public class AchievementPoints {
   /// </summary>
   /// <param name="loader"></param>
   /// <returns>true if the top level DependsOn was satisfied</returns>
-  public bool Collapse(IModLoader loader) {
+  public bool Resolve(IModLoader loader) {
     if (!DependsOnSatisified(loader)) {
       Points = 0;
       BonusAt = 0;
@@ -88,16 +88,64 @@ public class AchievementPoints {
 }
 
 public class HealthFunctionPiece : IComparable<HealthFunctionPiece> {
-  public readonly int Points;
-  public readonly float Health;
+  /// <summary>
+  /// This is a list of modids that the achievement depends on. Ignore this
+  /// achievement if one of the mods in this list is not installed.
+  /// </summary>
+  [JsonProperty("dependsOn")]
+  public string[] DependsOn { get; private set; }
 
-  public HealthFunctionPiece(int points, int health) {
+  public int Points { get; private set; }
+  public float Health { get; private set; }
+
+  /// <summary>
+  /// The Points and Health values will get the sum of all the corresponding
+  /// fields of the entries in this list. The intention is that the elements in
+  /// the list only exist when certain mods are installed.
+  /// </summary>
+  [JsonProperty("add")]
+  public HealthFunctionPiece[] Add {
+    get; private set;
+  }
+
+  public HealthFunctionPiece(string[] dependsOn, int points, int health,
+                             HealthFunctionPiece[] add) {
+    DependsOn = dependsOn ?? Array.Empty<string>();
     Points = points;
     Health = health;
+    Add = add;
   }
 
   public int CompareTo(HealthFunctionPiece other) {
     return Points - other.Points;
+  }
+
+  public bool DependsOnSatisified(IModLoader loader) {
+    return DependsOn.All(loader.IsModEnabled);
+  }
+
+  /// <summary>
+  /// Accumulates and clears all entries in <see cref="Add"/>.
+  /// </summary>
+  /// <param name="loader"></param>
+  /// <returns>true if the top level DependsOn was satisfied</returns>
+  public bool Resolve(IModLoader loader) {
+    if (!DependsOnSatisified(loader)) {
+      Points = 0;
+      Health = 0;
+      Add = null;
+      return false;
+    }
+    foreach (HealthFunctionPiece add in Add ??
+             Array.Empty<HealthFunctionPiece>()) {
+      if (!add.Resolve(loader)) {
+        continue;
+      }
+      Points += add.Points;
+      Health += add.Health;
+    }
+    Add = null;
+    return true;
   }
 }
 
@@ -120,26 +168,33 @@ public class FoodAchievements {
     _achievements = new();
     HealthPoints = healthPoints;
 
-    _healthFunc = new();
-    foreach (var entry in healthPoints) {
-      _healthFunc.Add(entry);
-    }
+    _healthFunc = new(healthPoints);
   }
 
   public void Resolve(string domain, IModLoader loader) {
     _achievements.Clear();
     foreach (var entry in RawAchievements) {
-      if (!entry.Value.Collapse(loader)) {
+      if (!entry.Value.Resolve(loader)) {
         continue;
       }
       _achievements.Add(AssetLocation.Create(entry.Key, domain), entry.Value);
+    }
+
+    // _healthFunc needs to be cleared and rebuilt, because resolving the
+    // entries can change their order.
+    _healthFunc.Clear();
+    foreach (var entry in HealthPoints) {
+      if (!entry.Resolve(loader)) {
+        continue;
+      }
+      _healthFunc.Add(entry);
     }
   }
 
   public float GetHealthFunctionPiece(int points, out float gainRate,
                                       out int untilPoints) {
-    HealthFunctionPiece upto = new(points, 0);
-    HealthFunctionPiece starting = new(points + 1, 0);
+    HealthFunctionPiece upto = new(null, points, 0, null);
+    HealthFunctionPiece starting = new(null, points + 1, 0, null);
     if (points < _healthFunc.Min.Points) {
       gainRate = 0;
       untilPoints = _healthFunc.Min.Points;
