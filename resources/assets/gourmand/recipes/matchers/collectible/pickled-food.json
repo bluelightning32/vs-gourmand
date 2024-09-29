@@ -12,5 +12,13 @@
       type: "item",
       outputs: [ "pickled-food" ]
     }
+  },
+  {
+    dependsOn: [ "expandedfoods" ],
+    code : {
+      match: "game:egg-chicken-pickled",
+      type: "item",
+      outputs: [ "pickled-food" ]
+    }
   }
 ]

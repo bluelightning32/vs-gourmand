@@ -16,7 +16,14 @@
     "pickled-food" : {
       points: 10,
       bonusAt: 8,
-      bonus: 100
+      bonus: 100,
+      add: [
+        {
+          dependsOn: ["expandedfoods"],
+          // Pickled egg
+          bonusAt: 1
+        }
+      ]
     },
     "bread-perfect" : {
       points: 2,
