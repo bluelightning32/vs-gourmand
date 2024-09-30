@@ -15,7 +15,7 @@
   contents: [
     {
       slotBegin: 0,
-      slotEnd: 5,
+      slotEnd: 4,
       min: 2,
       max: 4,
       categories: [
@@ -27,7 +27,7 @@
     },
     {
       slotBegin: 0,
-      slotEnd: 5,
+      slotEnd: 4,
       min: 0,
       max: 2,
       categories: [
@@ -39,7 +39,7 @@
     },
     {
       slotBegin: 0,
-      slotEnd: 5,
+      slotEnd: 4,
       min: 0,
       max: 1,
       categories: [
@@ -50,7 +50,7 @@
     },
     {
       slotBegin: 0,
-      slotEnd: 5,
+      slotEnd: 4,
       min: 0,
       max: 1,
       categories: [
@@ -61,7 +61,7 @@
     },
     {
       slotBegin: 0,
-      slotEnd: 5,
+      slotEnd: 4,
       min: 0,
       max: 1,
       categories: [
@@ -69,7 +69,46 @@
           input: "meal-topping"
         }
       ]
-    }
+    },
+    {
+      // only when expandedfoods is installed
+      slotBegin: 0,
+      slotEnd: 4,
+      min: 0,
+      max: 1,
+      enumerateMax: 10,
+      categories: [
+        {
+          input: "meal-porridge-topping-extra"
+        }
+      ]
+    },
+    {
+      // only when expandedfoods is installed
+      slotBegin: 0,
+      slotEnd: 4,
+      min: 0,
+      max: 2,
+      enumerateMax: 2,
+      categories: [
+        {
+          input: "meal-nuts-extra"
+        }
+      ]
+    },
+    {
+      // only when expandedfoods is installed
+      slotBegin: 0,
+      slotEnd: 4,
+      min: 0,
+      max: 1,
+      enumerateMax: 10,
+      categories: [
+        {
+          input: "meal-porridge-meat"
+        }
+      ]
+    },
   ],
   outputs: {
     "meal-category": [ "porridge" ]
