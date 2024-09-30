@@ -15,7 +15,7 @@
   contents: [
     {
       slotBegin: 0,
-      slotEnd: 5,
+      slotEnd: 4,
       min: 2,
       max: 2,
       categories: [
@@ -27,7 +27,7 @@
     },
     {
       slotBegin: 0,
-      slotEnd: 5,
+      slotEnd: 4,
       min: 2,
       max: 2,
       categories: [

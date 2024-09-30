@@ -15,7 +15,7 @@
   contents: [
     {
       slotBegin: 0,
-      slotEnd: 5,
+      slotEnd: 4,
       min: 2,
       max: 4,
       categories: [
@@ -27,7 +27,7 @@
     },
     {
       slotBegin: 0,
-      slotEnd: 5,
+      slotEnd: 4,
       min: 0,
       max: 2,
       categories: [
@@ -39,7 +39,7 @@
     },
     {
       slotBegin: 0,
-      slotEnd: 5,
+      slotEnd: 4,
       min: 0,
       max: 1,
       categories: [
@@ -50,12 +50,77 @@
     },
     {
       slotBegin: 0,
-      slotEnd: 5,
+      slotEnd: 4,
       min: 0,
       max: 1,
       categories: [
         {
           input: "meal-vegetable-base-no-olive"
+        }
+      ]
+    },
+    {
+      // only when expandedfoods is installed
+      slotBegin: 0,
+      slotEnd: 4,
+      min: 0,
+      max: 1,
+      enumerateMax: 5,
+      categories: [
+        {
+          input: "meal-scrambled-eggs-milk-base"
+        }
+      ]
+    },
+    {
+      // only when expandedfoods is installed
+      slotBegin: 0,
+      slotEnd: 4,
+      min: 0,
+      max: 1,
+      enumerateMax: 5,
+      categories: [
+        {
+          input: "meal-scrambled-eggs-protein-extra"
+        }
+      ]
+    },
+    {
+      // only when expandedfoods is installed
+      slotBegin: 0,
+      slotEnd: 4,
+      min: 0,
+      max: 1,
+      enumerateMax: 5,
+      categories: [
+        {
+          input: "meal-scrambled-eggs-meat-extra"
+        }
+      ]
+    },
+    {
+      // only when expandedfoods is installed
+      slotBegin: 0,
+      slotEnd: 4,
+      min: 0,
+      max: 1,
+      enumerateMax: 2,
+      categories: [
+        {
+          input: "meal-topping-sauce"
+        }
+      ]
+    },
+    {
+      // only when expandedfoods is installed
+      slotBegin: 0,
+      slotEnd: 4,
+      min: 0,
+      max: 1,
+      enumerateMax: 2,
+      categories: [
+        {
+          input: "meal-salt"
         }
       ]
     },
