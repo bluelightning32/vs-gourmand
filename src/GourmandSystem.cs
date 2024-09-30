@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 using Gourmand.Blocks;
@@ -116,6 +117,8 @@ public class GourmandSystem : ModSystem {
   }
 
   private void LoadCategories(ICoreServerAPI sapi) {
+    Stopwatch stopwatch = new();
+    stopwatch.Start();
     var collectibleFiles =
         sapi.Assets.GetMany<JToken>(Mod.Logger, "recipes/matchers/collectible");
     List<Collectibles.MatchRule> collectibleRules = new();
@@ -143,9 +146,10 @@ public class GourmandSystem : ModSystem {
     }
 
     CatDict.Set(sapi.World, Mod.Logger, collectibleRules, stackRules);
+    stopwatch.Stop();
     Mod.Logger.Debug(
-        "Loaded {0} collectible matchers and {1} item stack matchers.",
-        collectibleRules.Count, stackRules.Count);
+        "Loaded {0} collectible matchers and {1} item stack matchers in {2}.",
+        collectibleRules.Count, stackRules.Count, stopwatch.Elapsed);
   }
 
   private static IEnumerable<T> LoadMaybeArray<T>(string domain, JToken value) {

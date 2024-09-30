@@ -124,7 +124,8 @@ public class SlotCondition {
     CountOutputs = countOutputs ?? Array.Empty<AssetLocation>();
   }
 
-  public SlotCondition(string recipe, CookingRecipeIngredient ingred) {
+  public SlotCondition(string recipe, CookingRecipeIngredient ingred,
+                       int requiredEnumerateMax) {
     Code = ingred.Code;
     SlotBegin = 0;
     SlotEnd = 4;
@@ -136,7 +137,7 @@ public class SlotCondition {
         null, 0, int.MaxValue, int.MaxValue, null) };
     Categories[0].EnumeratePerDistinct = int.MaxValue;
     EnumArrangement = Arrangement.Repeated;
-    EnumerateMax = 5;
+    EnumerateMax = Min > 0 ? requiredEnumerateMax : 2;
     CountOutputs = Array.Empty<AssetLocation>();
   }
 

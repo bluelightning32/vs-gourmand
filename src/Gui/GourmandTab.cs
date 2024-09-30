@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Text;
 
 using Vintagestory.API.Client;
@@ -109,11 +111,18 @@ public class GourmandTab {
     Dictionary<AssetLocation, Tuple<int, AchievementPoints>> achievements =
         foodAchievements.GetAchievementStats(modData);
     Random rand = new();
+    Stopwatch stopwatch = new();
     foreach (var category in achievements) {
       components.Add(new RichTextComponent(_capi, "\n", _headerFont));
+      stopwatch.Reset();
+      stopwatch.Start();
       Dictionary<string, List<ItemStack>> missing =
           foodAchievements.GetMissingDict(_capi.World, gourmand.CatDict,
                                           category.Key, modData);
+      stopwatch.Stop();
+      gourmand.Mod.Logger.Debug(
+          "Enumerated category {0} with {1} values in {2}.", category.Key,
+          missing.Sum(m => m.Value.Count), stopwatch.Elapsed);
       AddFoodCategory(components, category.Key, category.Value.Item1,
                       category.Value.Item2, rand, missing);
     }
