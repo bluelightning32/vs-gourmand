@@ -1,8 +1,5 @@
 {
   achievements: {
-    "food" : {
-      points: 1
-    },
     "pie-category" : {
       points: 2,
       bonusAt: 32,
@@ -50,6 +47,9 @@
     },
     "poison" : {
       points: 5,
+    },
+    "food" : {
+      points: 1
     }
   },
   // Defines the piecewise function to convert diversity points into health
