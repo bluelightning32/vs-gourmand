@@ -4,6 +4,8 @@ using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
 
+using Gourmand.Collectibles;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -166,6 +168,18 @@ public class MatchRule : MatchRuleJson {
     }
   }
 
+  public static Dictionary<string, CookingRecipe> GetRecipeDict(IEnumerable<CookingRecipe> recipes) {
+    Dictionary<string, CookingRecipe> result = new();
+    foreach (CookingRecipe recipe in recipes) {
+      result.Add(recipe.Code, recipe);
+    }
+    return result;
+  }
+
+  public static Dictionary<string, CookingRecipe> GetRecipeDict(IModLoader loader) {
+    return GetRecipeDict(CookingIngredientCondition.GetRecipes(loader));
+  }
+
   /// <summary>
   /// Processes the <see cref="ImportRecipe"/> field and merges any slots it
   /// creates with the existing slots.
@@ -173,15 +187,13 @@ public class MatchRule : MatchRuleJson {
   /// <param name="sapi">api to lookup the cooking recipe</param>
   /// <returns>a list of implict recipe categories that this rule depends
   /// on</returns>
-  public List<string> ResolveImports(RecipeRegistrySystem cooking,
+  public List<string> ResolveImports(Dictionary<string, CookingRecipe> recipes,
                                      ILogger logger) {
     List<string> implictCategories = new();
     if (ImportRecipe == null) {
       return implictCategories;
     }
-    CookingRecipe recipe =
-        cooking.CookingRecipes.Find(r => r.Code == ImportRecipe);
-    if (recipe == null) {
+    if (!recipes.TryGetValue(ImportRecipe, out CookingRecipe recipe)) {
       logger.Warning("Could not find recipe {0}", ImportRecipe);
       return implictCategories;
     }

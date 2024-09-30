@@ -3,9 +3,11 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
+using Vintagestory.Common;
 using Vintagestory.GameContent;
 
 namespace Gourmand.Collectibles;
@@ -29,9 +31,39 @@ public class CookingIngredientCondition : ICondition {
   [JsonIgnore]
   public IEnumerable<AssetLocation> Categories => Outputs;
 
+  /// <summary>
+  /// Gets the mixing recipe list from aculinaryartillery, if it loaded.
+  /// </summary>
+  /// <param name="loader">all of the loaded mods</param>
+  /// <returns>
+  /// the list of recipes, or null if aculinaryartillery is not loaded
+  /// </returns>
+  public static List<CookingRecipe> GetAcaMixingRecipes(IModLoader loader) {
+    Mod aca = loader.GetMod("aculinaryartillery");
+    if (aca == null) {
+      return null;
+    }
+    foreach (ModSystem system in aca.Systems) {
+      // Use reflection to avoid having to add aculinaryartillery to the build system.
+      FieldInfo field = system.GetType().GetField("MixingRecipes");
+      if (field == null) {
+        continue;
+      }
+      return (List<CookingRecipe>)field.GetValue(system);
+    }
+    return null;
+  }
+
+  public static IEnumerable<CookingRecipe> GetRecipes(IModLoader loader) {
+    List<CookingRecipe> vanilla =
+        loader.GetModSystem<RecipeRegistrySystem>().CookingRecipes;
+    List<CookingRecipe> mixing = GetAcaMixingRecipes(loader);
+    return mixing == null ? vanilla : vanilla.Concat(mixing);
+  }
+
   public CookingRecipeIngredient
-  GetMatchingIngredient(ILogger logger, RecipeRegistrySystem system) {
-    CookingRecipe recipe = system.CookingRecipes.Find(r => r.Code == Recipe);
+  GetMatchingIngredient(ILogger logger, IEnumerable<CookingRecipe> recipes) {
+    CookingRecipe recipe = recipes.FirstOrDefault(r => r.Code == Recipe);
     if (recipe == null) {
       logger.Warning("Could not find recipe {0}", Recipe);
       return null;
@@ -48,8 +80,7 @@ public class CookingIngredientCondition : ICondition {
 
   IEnumerable<CollectibleObject> EnumerateCollectibles(MatchResolver resolver) {
     CookingRecipeIngredient ingredient = GetMatchingIngredient(
-        resolver.Logger,
-        resolver.Resolver.Api.ModLoader.GetModSystem<RecipeRegistrySystem>());
+        resolver.Logger, GetRecipes(resolver.Resolver.Api.ModLoader));
     if (ingredient == null) {
       yield break;
     }
