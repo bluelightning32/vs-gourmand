@@ -68,7 +68,7 @@
       enumerateMax: 5,
       categories: [
         {
-          input: "meal-scrambled-eggs-milk-base"
+          input: "meal-scrambledeggs-milk-base"
         }
       ]
     },
@@ -81,7 +81,7 @@
       enumerateMax: 5,
       categories: [
         {
-          input: "meal-scrambled-eggs-protein-extra"
+          input: "meal-scrambledeggs-protein-extra"
         }
       ]
     },
@@ -94,7 +94,7 @@
       enumerateMax: 5,
       categories: [
         {
-          input: "meal-scrambled-eggs-meat-extra"
+          input: "meal-scrambledeggs-meat-extra"
         }
       ]
     },

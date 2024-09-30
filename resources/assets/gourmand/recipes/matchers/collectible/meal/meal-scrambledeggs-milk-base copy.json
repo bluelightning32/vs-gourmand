@@ -1,14 +1,14 @@
 [
   {
     // A match nothing rule to register the meal-topping-sauce category, in case expandedfoods is not installed.
-    deletes: [ "meal-scrambled-eggs-protein-extra" ]
+    deletes: [ "meal-scrambledeggs-milk-base" ]
   },
   {
     dependsOn: [ "expandedfoods" ],
     cooking : {
       recipe: "scrambledeggs",
-      ingredient: "protein-extra",
-      outputs: ["meal-scrambled-eggs-protein-extra"]
+      ingredient: "milk-base",
+      outputs: ["meal-scrambledeggs-milk-base"]
     }
   }
 ]
