@@ -6,6 +6,7 @@ using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
+using Vintagestory.API.Util;
 
 namespace Gourmand.Gui;
 
@@ -106,13 +107,14 @@ public class GourmandTab {
 
     Dictionary<AssetLocation, Tuple<int, AchievementPoints>> achievements =
         foodAchievements.GetAchievementStats(modData);
+    Random rand = new();
     foreach (var category in achievements) {
       components.Add(new RichTextComponent(_capi, "\n", _headerFont));
       Dictionary<string, List<ItemStack>> missing =
           foodAchievements.GetMissingDict(_capi.World, gourmand.CatDict,
                                           category.Key, modData);
       AddFoodCategory(components, category.Key, category.Value.Item1,
-                      category.Value.Item2, missing);
+                      category.Value.Item2, rand, missing);
     }
     return components;
   }
@@ -192,7 +194,7 @@ public class GourmandTab {
 
   private void AddFoodCategory(List<RichTextComponentBase> components,
                                AssetLocation category, int eaten,
-                               AchievementPoints achievement,
+                               AchievementPoints achievement, Random rand,
                                Dictionary<string, List<ItemStack>> missing) {
     AssetLocation categoryName =
         new(category.Domain, category.Path + "-cat-name");
@@ -221,8 +223,10 @@ public class GourmandTab {
                                 CairoFont.WhiteSmallText()));
     } else {
       foreach (KeyValuePair<string, List<ItemStack>> foods in missing) {
+        ItemStack[] foodsArray = foods.Value.ToArray();
+        foodsArray.Shuffle(rand);
         components.Add(new SlideshowItemstackTextComponent(
-            _capi, foods.Value.ToArray(), _itemSize, EnumFloat.Inline));
+            _capi, foodsArray, _itemSize, EnumFloat.Inline));
       }
     }
     components.Add(
