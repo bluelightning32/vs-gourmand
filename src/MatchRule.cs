@@ -9,6 +9,8 @@ using Newtonsoft.Json.Linq;
 
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
+using Vintagestory.API.Server;
+using Vintagestory.GameContent;
 
 namespace Gourmand;
 
@@ -36,21 +38,25 @@ public class MatchRuleJson {
   public readonly CategoryCondition Category;
   [JsonProperty]
   public readonly AttributeCondition[] Attributes;
+  [JsonProperty]
+  public string ImportRecipe { get; protected set; }
   [JsonProperty("contents")]
-  public readonly SlotCondition[] Slots;
+  public SlotCondition[] Slots { get; protected set; }
 
   [JsonConstructor]
   public MatchRuleJson(
       string[] dependsOn, float priority,
       [JsonProperty("outputs")] Dictionary<string, JToken[]> rawOutputs,
       AssetLocation[] deletes, CategoryCondition category,
-      AttributeCondition[] attributes, SlotCondition[] slots) {
+      AttributeCondition[] attributes, string importRecipe,
+      SlotCondition[] slots) {
     DependsOn = dependsOn ?? Array.Empty<string>();
     Priority = priority;
     _rawOutputs = rawOutputs ?? new Dictionary<string, JToken[]>();
     Deletes = deletes ?? Array.Empty<AssetLocation>();
     Category = category;
     Attributes = attributes ?? Array.Empty<AttributeCondition>();
+    ImportRecipe = importRecipe;
     Slots = slots;
   }
 
@@ -61,6 +67,7 @@ public class MatchRuleJson {
     Deletes = copy.Deletes;
     Category = copy.Category;
     Attributes = copy.Attributes;
+    ImportRecipe = copy.ImportRecipe;
     Slots = copy.Slots;
   }
 
@@ -100,11 +107,10 @@ public class MatchRuleConverter : JsonConverter<MatchRule> {
 public class MatchRule : MatchRuleJson {
   public readonly IReadOnlyDictionary<AssetLocation, List<IAttribute>> Outputs;
 
-  public readonly IReadOnlyList<ICondition> Conditions;
+  public IReadOnlyList<ICondition> Conditions { set; private get; }
 
-  private readonly Dictionary<AssetLocation, List<ICondition>>
-      _conditionsByCategory;
-  private readonly ContentsCondition ContentsCondition;
+  private Dictionary<AssetLocation, List<ICondition>> _conditionsByCategory;
+  private ContentsCondition _contentsCondition;
 
   /// <summary>
   /// Construct a CollectibleMatchRule. To create this from json, call
@@ -128,16 +134,20 @@ public class MatchRule : MatchRuleJson {
           p.Value.Select((a) => new JsonObject(a).ToAttribute()).ToList());
     }
     Outputs = outputs;
+    SetConditions();
+  }
+
+  private void SetConditions() {
     List<ICondition> conditions = new();
     if (Category != null) {
       conditions.Add(Category);
     }
     conditions.AddRange(Attributes);
     if (Slots != null) {
-      ContentsCondition = new ContentsCondition(Slots);
-      conditions.Add(ContentsCondition);
+      _contentsCondition = new ContentsCondition(Slots);
+      conditions.Add(_contentsCondition);
     } else {
-      ContentsCondition = null;
+      _contentsCondition = null;
     }
     Conditions = conditions;
     _conditionsByCategory = new();
@@ -154,6 +164,40 @@ public class MatchRule : MatchRuleJson {
             Conditions.Where(c => c.Categories.Contains(category)).ToList());
       }
     }
+  }
+
+  /// <summary>
+  /// Processes the <see cref="ImportRecipe"/> field and merges any slots it
+  /// creates with the existing slots.
+  /// </summary>
+  /// <param name="sapi">api to lookup the cooking recipe</param>
+  /// <returns>a list of implict recipe categories that this rule depends
+  /// on</returns>
+  public List<string> ResolveImports(RecipeRegistrySystem cooking,
+                                     ILogger logger) {
+    List<string> implictCategories = new();
+    if (ImportRecipe == null) {
+      return implictCategories;
+    }
+    CookingRecipe recipe =
+        cooking.CookingRecipes.Find(r => r.Code == ImportRecipe);
+    if (recipe == null) {
+      logger.Warning("Could not find recipe {0}", ImportRecipe);
+      return implictCategories;
+    }
+
+    List<SlotCondition> slots = new(Slots ?? Array.Empty<SlotCondition>());
+    HashSet<string> initialSlots = new(slots.Select(s => s.Code));
+    foreach (CookingRecipeIngredient ingred in recipe.Ingredients) {
+      implictCategories.Add(ingred.Code);
+      if (!initialSlots.Contains(ingred.Code)) {
+        slots.Add(new SlotCondition(recipe.Code, ingred));
+      }
+    }
+    Slots = slots.ToArray();
+    ImportRecipe = null;
+    SetConditions();
+    return implictCategories;
   }
 
   /// <summary>

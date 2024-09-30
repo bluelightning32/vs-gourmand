@@ -65,6 +65,19 @@ public class MatchRuleJson {
     IgnoreNoMatches = ignoreNoMatches;
   }
 
+  public MatchRuleJson(CookingIngredientCondition cooking) {
+    DependsOn = Array.Empty<string>();
+    Priority = 1;
+    RawOutputs = new Dictionary<string, JToken[]>();
+    Deletes = Array.Empty<AssetLocation>();
+    Categories = Array.Empty<CategoryCondition>();
+    Code = null;
+    Cooking = cooking;
+    NutritionProps = null;
+    Attributes = Array.Empty<AttributeCondition>();
+    IgnoreNoMatches = true;
+  }
+
   public MatchRuleJson(MatchRuleJson copy) {
     DependsOn = copy.DependsOn;
     Priority = copy.Priority;
@@ -151,6 +164,11 @@ public class MatchRule : MatchRuleJson {
     conditions.AddRange(Attributes);
     conditions.RemoveAll(c => c == null);
     Conditions = conditions;
+  }
+
+  public MatchRule(CookingIngredientCondition cooking) : base(cooking) {
+    Outputs = new Dictionary<AssetLocation, IAttribute[]>();
+    Conditions = new List<ICondition>() { Cooking };
   }
 
   /// <summary>

@@ -212,4 +212,9 @@ public class CategoryDict : IReadonlyCategoryDict, IByteSerializable {
   public bool Register(AssetLocation category) {
     return _byCat.TryAdd(category, new());
   }
+
+  public static AssetLocation ImplictIngredientCategory(string recipe,
+                                                        string code) {
+    return new("gourmandimportrecipe", recipe + "." + code);
+  }
 }

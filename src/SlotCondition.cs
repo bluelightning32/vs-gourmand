@@ -11,6 +11,7 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.Util;
 using System.Diagnostics;
+using Vintagestory.GameContent;
 
 namespace Gourmand;
 
@@ -79,6 +80,8 @@ public enum Arrangement {
 
 [JsonObject(MemberSerialization.OptIn)]
 public class SlotCondition {
+  [JsonProperty("code")]
+  readonly public string Code;
   [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
   [DefaultValue(0)]
   readonly public int SlotBegin;
@@ -109,6 +112,7 @@ public class SlotCondition {
   [JsonProperty]
   public readonly AssetLocation[] CountOutputs;
 
+  [JsonConstructor]
   public SlotCondition(int slotBegin, int slotEnd, ContentCategory[] categories,
                        AssetLocation[] countOutputs) {
     SlotBegin = slotBegin;
@@ -118,6 +122,22 @@ public class SlotCondition {
     }
     Categories = categories ?? Array.Empty<ContentCategory>();
     CountOutputs = countOutputs ?? Array.Empty<AssetLocation>();
+  }
+
+  public SlotCondition(string recipe, CookingRecipeIngredient ingred) {
+    Code = ingred.Code;
+    SlotBegin = 0;
+    SlotEnd = 4;
+    Min = ingred.MinQuantity;
+    Max = ingred.MaxQuantity;
+    Categories = new ContentCategory[] { new(
+        Collectibles.CategoryDict.ImplictIngredientCategory(recipe,
+                                                            ingred.Code),
+        null, 0, int.MaxValue, int.MaxValue, null) };
+    Categories[0].EnumeratePerDistinct = int.MaxValue;
+    EnumArrangement = Arrangement.Repeated;
+    EnumerateMax = 5;
+    CountOutputs = Array.Empty<AssetLocation>();
   }
 
   private bool IsContentMatch(IWorldAccessor resolver,

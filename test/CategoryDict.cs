@@ -148,6 +148,21 @@ public class CategoryDict {
           ""edible"": [ ""shouldnotrun"" ]
         }
       },
+      {
+        category: {
+          input: ""edible-meal-container"",
+        },
+        attributes: [
+          {
+            path: [ ""recipeCode"" ],
+            enumerateValues: [ ""meatystew"" ]
+          },
+        ],
+        importRecipe: ""meatystew"",
+        outputs: {
+          ""importedrecipe"": [ ""meatystew"" ]
+        }
+      },
     ]";
     List<Real.Collectibles.MatchRule> collectibleRules =
         JsonUtil.ToObject<List<Real.Collectibles.MatchRule>>(collectibleJson,
@@ -214,6 +229,7 @@ public class CategoryDict {
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
     Item cranberry = LoadAssets.GetItem("game", "fruit-cranberry");
     AssetLocation edible = new("gourmand", "edible");
+    AssetLocation importedRecipeCat = new("gourmand", "importedrecipe");
 
     // Test a collectible MatchRule
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(
@@ -233,9 +249,16 @@ public class CategoryDict {
                                     });
     Real.CategoryValue value =
         catDict.GetValue(LoadAssets.Server.World, edible, meal);
+    Assert.IsNotNull(value);
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(
         new IAttribute[] { new StringAttribute("game:bowl-meal") },
         value.Value));
+
+    // Test an imported stack rule
+    value = catDict.GetValue(LoadAssets.Server.World, importedRecipeCat, meal);
+    Assert.IsNotNull(value);
+    Assert.IsTrue(Real.CategoryValue.ValuesEqual(
+        new IAttribute[] { new StringAttribute("meatystew") }, value.Value));
 
     // Test a delete stack MatchRule
     Real.ContentBuilder.SetContents(LoadAssets.Server.World, meal,

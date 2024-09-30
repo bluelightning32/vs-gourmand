@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
+using Vintagestory.GameContent;
 
 namespace Gourmand;
 
@@ -20,9 +21,12 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
                       IEnumerable<Collectibles.MatchRule> collectibleRules,
                       IEnumerable<MatchRule> stackRules) {
     MatchResolver matchResolver = new(resolver, logger);
-    _collectibleDict = matchResolver.Load(collectibleRules);
     _rules = new();
-    LoadStackRules(resolver, logger, stackRules);
+    IEnumerable<Collectibles.MatchRule> implicitRules =
+        LoadStackRules(resolver, logger, stackRules);
+    _collectibleDict =
+        matchResolver.Load(collectibleRules.Concat(implicitRules));
+    Validate(resolver, logger);
   }
 
   public CategoryDict() {
@@ -32,19 +36,32 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
 
   public void Set(IWorldAccessor resolver, ILogger logger,
                   IEnumerable<Collectibles.MatchRule> collectibleRules,
-                  IEnumerable<MatchRule> stackRules) {
+                  List<MatchRule> stackRules) {
     MatchResolver matchResolver = new(resolver, logger);
-    _collectibleDict.Copy(matchResolver.Load(collectibleRules));
     _rules.Clear();
-    LoadStackRules(resolver, logger, stackRules);
+    IEnumerable<Collectibles.MatchRule> implicitRules =
+        LoadStackRules(resolver, logger, stackRules);
+    _collectibleDict.Copy(
+        matchResolver.Load(collectibleRules.Concat(implicitRules)));
+    Validate(resolver, logger);
   }
 
-  private void LoadStackRules(IWorldAccessor resolver, ILogger logger,
-                              IEnumerable<MatchRule> stackRules) {
+  private IEnumerable<Collectibles.MatchRule>
+  LoadStackRules(IWorldAccessor resolver, ILogger logger,
+                 IEnumerable<MatchRule> stackRules) {
+    RecipeRegistrySystem cooking =
+        resolver.Api.ModLoader.GetModSystem<RecipeRegistrySystem>();
+    HashSet<Tuple<string, string>> implicits = new();
+
     Dictionary<AssetLocation, HashSet<MatchRule>> rules = new();
     foreach (MatchRule rule in stackRules) {
       if (!rule.DependsOnSatisified(resolver.Api.ModLoader)) {
         continue;
+      }
+      // Make a backup, because ResolveImports nulls out ImportRecipe.
+      string recipe = rule.ImportRecipe;
+      foreach (string ingred in rule.ResolveImports(cooking, logger)) {
+        implicits.Add(new(recipe, ingred));
       }
       foreach (AssetLocation category in rule.OutputCategories) {
         if (!rules.TryGetValue(category,
@@ -62,7 +79,11 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
                       Comparer<float>.Default.Compare(b.Priority, a.Priority));
       _rules.Add(categoryRules.Key, sorted);
     }
-    Validate(resolver, logger);
+
+    foreach (var imp in implicits) {
+      yield return CookingIngredientCondition.CreateImplicitRule(imp.Item1,
+                                                                 imp.Item2);
+    }
   }
 
   /// <summary>
@@ -156,7 +177,13 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
           JsonConvert.DeserializeObject<MatchRule>(reader.ReadString()));
     }
     _rules.Clear();
-    LoadStackRules(resolver, resolver.Logger, stackRules);
+    int newCollectibleRules =
+        LoadStackRules(resolver, resolver.Logger, stackRules).Count();
+    if (newCollectibleRules != 0) {
+      throw new ArgumentException("gourmand: the stack rules should have " +
+                                  "been resolved before serialization.");
+    }
+    Validate(resolver, resolver.Logger);
   }
 
   public override void ToBytes(IWorldAccessor resolver, out byte[] data,
@@ -189,7 +216,12 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
           JsonConvert.DeserializeObject<MatchRule>(reader.ReadString()));
     }
     _rules.Clear();
-    LoadStackRules(resolver, resolver.Logger, stackRules);
+    int newCollectibleRules =
+        LoadStackRules(resolver, resolver.Logger, stackRules).Count();
+    if (newCollectibleRules != 0) {
+      throw new ArgumentException("gourmand: the stack rules should have " +
+                                  "been resolved before serialization.");
+    }
     Validate(resolver, resolver.Logger);
   }
 

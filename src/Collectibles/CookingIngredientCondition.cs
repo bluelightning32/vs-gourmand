@@ -92,4 +92,11 @@ public class CookingIngredientCondition : ICondition {
           new IAttribute[1] { new StringAttribute(match.Code.ToString()) });
     }
   }
+
+  public static MatchRule CreateImplicitRule(string recipe, string ingredient) {
+    return new MatchRule(new CookingIngredientCondition(
+        recipe, ingredient,
+        new AssetLocation[] { CategoryDict.ImplictIngredientCategory(
+            recipe, ingredient) }));
+  }
 }
