@@ -1,0 +1,14 @@
+[
+  {
+    // A match nothing rule to register the category, in case expandedfoods is not installed.
+    deletes: [ "meal-augratin-cheese-base" ]
+  },
+  {
+    dependsOn: [ "expandedfoods" ],
+    cooking : {
+      recipe: "augratin",
+      ingredient: "cheese-base",
+      outputs: ["meal-augratin-cheese-base"]
+    }
+  }
+]
