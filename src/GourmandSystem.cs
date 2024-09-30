@@ -29,7 +29,8 @@ public class GourmandSystem : ModSystem {
   public CategoryDict CatDict { get; private set; }
 
   public override double ExecuteOrder() {
-    // Use the same load order as the grid recipes loader.
+    // Use the same load order as the grid recipes loader. This must be greater
+    // than RecipeRegistrySystem.ExecuteOrder(), which is 0.6.
     return 1;
   }
 

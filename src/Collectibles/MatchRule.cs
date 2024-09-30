@@ -36,6 +36,8 @@ public class MatchRuleJson {
   [JsonProperty]
   public readonly CodeCondition Code;
   [JsonProperty]
+  public readonly CookingIngredientCondition Cooking;
+  [JsonProperty]
   public readonly NutritionPropsCondition NutritionProps;
   [JsonProperty]
   public readonly AttributeCondition[] Attributes;
@@ -47,7 +49,7 @@ public class MatchRuleJson {
   public MatchRuleJson(string[] dependsOn, float priority,
                        IReadOnlyDictionary<string, JToken[]> rawOutputs,
                        AssetLocation[] deletes, CategoryCondition[] categories,
-                       CodeCondition code,
+                       CodeCondition code, CookingIngredientCondition cooking,
                        NutritionPropsCondition nutritionProp,
                        AttributeCondition[] attributes, bool ignoreNoMatches) {
     DependsOn = dependsOn ?? Array.Empty<string>();
@@ -56,6 +58,7 @@ public class MatchRuleJson {
     Deletes = deletes ?? Array.Empty<AssetLocation>();
     Categories = categories ?? Array.Empty<CategoryCondition>();
     Code = code;
+    Cooking = cooking;
     NutritionProps = nutritionProp;
     Attributes = attributes ?? Array.Empty<AttributeCondition>();
     IgnoreNoMatches = ignoreNoMatches;
@@ -68,6 +71,7 @@ public class MatchRuleJson {
     Deletes = copy.Deletes;
     Categories = copy.Categories;
     Code = copy.Code;
+    Cooking = copy.Cooking;
     NutritionProps = copy.NutritionProps;
     Attributes = copy.Attributes;
     IgnoreNoMatches = copy.IgnoreNoMatches;
@@ -141,7 +145,8 @@ public class MatchRule : MatchRuleJson {
           p.Value.Select((a) => new JsonObject(a).ToAttribute()).ToArray());
     }
     Outputs = outputs;
-    List<ICondition> conditions = new(Categories) { Code, NutritionProps };
+    List<ICondition> conditions =
+        new(Categories) { Code, Cooking, NutritionProps };
     conditions.AddRange(Attributes);
     conditions.RemoveAll(c => c == null);
     Conditions = conditions;

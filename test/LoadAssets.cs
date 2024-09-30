@@ -19,12 +19,15 @@ public class LoadAssets {
 
   [AssemblyInitialize()]
   public static void AssemblyInitialize(TestContext context) {
-    Dictionary<AssetCategory, HashSet<string>> allow = new();
-    allow[AssetCategory.itemtypes] =
-        new() { "fruit.json", "firestarter.json", "fish.json", "tongs.json",
-                "vegetable.json" };
-    allow[AssetCategory.blocktypes] =
-        new() { "bowl-meal.json", "egg.json", "mushroom.json", "pie.json" };
+    Dictionary<AssetCategory, HashSet<string>> allow =
+        new() { [AssetCategory.itemtypes] =
+                    new() { "fruit.json", "firestarter.json", "fish.json",
+                            "tongs.json", "vegetable.json" },
+                [AssetCategory.blocktypes] =
+                    new() { "bowl-meal.json", "egg.json", "mushroom.json",
+                            "pie.json" },
+                [AssetCategory.recipes] =
+                    new() { "meatystew.json", "vegetablestew.json" } };
     Server = ServerApiWithAssets.Create(allow);
   }
 
