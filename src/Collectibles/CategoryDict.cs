@@ -203,4 +203,13 @@ public class CategoryDict : IReadonlyCategoryDict, IByteSerializable {
   public bool IsRegistered(AssetLocation category) {
     return _byCat.ContainsKey(category);
   }
+
+  /// <summary>
+  /// Registers the category if it does not already exist.
+  /// </summary>
+  /// <param name="category">what to register</param>
+  /// <returns>true the category was registered</returns>
+  public bool Register(AssetLocation category) {
+    return _byCat.TryAdd(category, new());
+  }
 }

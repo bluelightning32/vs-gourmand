@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
@@ -172,6 +173,12 @@ public class MatchRule : MatchRuleJson {
     List<CollectibleObject> matches = null;
     foreach (ICondition condition in Conditions) {
       condition.EnumerateMatches(resolver, ref matches);
+    }
+    if (matches == null) {
+      Debug.Assert(Conditions.Count == 0);
+      // There were no conditions. The user purposely added this empty rule to
+      // create an empty category.
+      return new();
     }
     if (matches.Count == 0 && !IgnoreNoMatches) {
       Console.WriteLine(

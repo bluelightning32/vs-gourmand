@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PrefixClassName.MsTest;
 
 using Vintagestory.API.Common;
+using Vintagestory.Common;
 
 namespace Gourmand.Test.Collectibles;
 
@@ -40,6 +41,9 @@ public class CategoryDict {
           type: ""item""
         },
         deletes: [ ""meal-fruit"" ]
+      },
+      {
+        deletes: [ ""empty-category"" ]
       }
     ]";
     List<Real.MatchRule> rules =
@@ -81,5 +85,11 @@ public class CategoryDict {
                          cranberry),
         restored.GetValue(new AssetLocation("gourmand", "meal-fruit"),
                           cranberry));
+  }
+
+  [TestMethod]
+  public void EmtpyCategoryExists() {
+    Assert.IsTrue(
+        CatDict.IsRegistered(new AssetLocation("gourmand", "empty-category")));
   }
 }

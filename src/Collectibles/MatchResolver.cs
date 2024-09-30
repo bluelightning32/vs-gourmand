@@ -249,6 +249,9 @@ public class MatchResolver {
     HashSet<AssetLocation> emitted = new();
     foreach (RuleOrCategory entry in sorter.Result) {
       if (entry.Rule != null) {
+        foreach (AssetLocation category in entry.Rule.Deletes) {
+          accum.Register(category);
+        }
         foreach (CollectibleObject collectible in entry.Rule.EnumerateMatches(
                      this)) {
           entry.Rule.UpdateCategories(collectible, CatDict, accum, emitted);

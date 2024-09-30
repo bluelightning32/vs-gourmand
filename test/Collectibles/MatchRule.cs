@@ -82,6 +82,19 @@ public class MatchRule {
   }
 
   [TestMethod]
+  public void NoConditions() {
+    string json = @"
+    {
+      deletes: [ ""category"" ]
+    }
+    ";
+    Real.MatchRule rule =
+        JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
+    List<CollectibleObject> matches = rule.EnumerateMatches(_resolver);
+    CollectionAssert.AreEquivalent(Array.Empty<CollectibleObject>(), matches);
+  }
+
+  [TestMethod]
   public void UpdateCategoriesLowPriority() {
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
     string json = @"
