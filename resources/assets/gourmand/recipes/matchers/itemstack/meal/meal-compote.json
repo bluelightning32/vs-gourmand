@@ -1,0 +1,81 @@
+{
+  // Only when expandedfoods is installed
+  category: {
+    input: "edible-meal-container"
+  },
+  attributes: [
+    {
+      path: [ "recipeCode" ],
+      value: "compote"
+    },
+    {
+      path: [ "quantityServings" ],
+      enumerateValues: [ 1 ]
+    },
+  ],
+  contents: [
+    {
+      slotBegin: 0,
+      slotEnd: 4,
+      min: 1,
+      max: 1,
+      enumerateMax: 5,
+      categories: [
+        {
+          input: "meal-compote-syrup-base"
+        }
+      ]
+    },
+    {
+      slotBegin: 0,
+      slotEnd: 4,
+      min: 1,
+      max: 3,
+      enumerateMax: 5,
+      categories: [
+        {
+          input: "meal-fruit-extra"
+        }
+      ]
+    },
+    {
+      slotBegin: 0,
+      slotEnd: 4,
+      min: 0,
+      max: 1,
+      enumerateMax: 3,
+      categories: [
+        {
+          input: "meal-compote-topping-sauce"
+        }
+      ]
+    },
+    {
+      slotBegin: 0,
+      slotEnd: 4,
+      min: 0,
+      max: 2,
+      enumerateMax: 2,
+      categories: [
+        {
+          input: "meal-nuts-extra"
+        }
+      ]
+    },
+    {
+      slotBegin: 0,
+      slotEnd: 4,
+      min: 0,
+      max: 1,
+      enumerateMax: 3,
+      categories: [
+        {
+          input: "meal-compote-vegetable-base"
+        }
+      ]
+    },
+  ],
+  outputs: {
+    "meal-category": [ "compote" ]
+  }
+}
