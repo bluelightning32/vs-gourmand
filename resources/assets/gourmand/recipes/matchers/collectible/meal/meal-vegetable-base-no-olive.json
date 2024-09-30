@@ -1,9 +1,0 @@
-[
-  {
-    cooking : {
-      recipe: "scrambledeggs",
-      ingredient: "vegetable-base2",
-      outputs: ["meal-vegetable-base-no-olive"]
-    }
-  }
-]

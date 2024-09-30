@@ -1,9 +1,0 @@
-[
-  {
-    cooking : {
-      recipe: "vegetablestew",
-      ingredient: "vegetable-base",
-      outputs: [ "meal-vegetable-base" ]
-    }
-  }
-]

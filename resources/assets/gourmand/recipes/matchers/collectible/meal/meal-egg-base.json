@@ -1,9 +1,0 @@
-[
-  {
-    cooking : {
-      recipe: "scrambledeggs",
-      ingredient: "egg-base",
-      outputs: [ "meal-egg-base" ]
-    }
-  }
-]

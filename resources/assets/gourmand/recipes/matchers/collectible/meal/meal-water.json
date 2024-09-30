@@ -1,9 +1,0 @@
-[
-  {
-    cooking : {
-      recipe: "soup",
-      ingredient: "water",
-      outputs: [ "meal-water" ]
-    }
-  }
-]

@@ -1,9 +1,0 @@
-[
-  {
-    cooking : {
-      recipe: "porridge",
-      ingredient: "topping",
-      outputs: [ "meal-topping" ]
-    }
-  }
-]

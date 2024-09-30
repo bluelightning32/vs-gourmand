@@ -1,9 +1,0 @@
-[
-  {
-    cooking : {
-      recipe: "meatystew",
-      ingredient: "fruit-extra",
-      outputs: ["meal-fruit-extra"]
-    }
-  }
-]

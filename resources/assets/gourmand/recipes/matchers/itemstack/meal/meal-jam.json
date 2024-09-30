@@ -12,32 +12,7 @@
       enumerateValues: [ 1 ]
     },
   ],
-  contents: [
-    {
-      slotBegin: 0,
-      slotEnd: 4,
-      min: 2,
-      max: 2,
-      categories: [
-        {
-          input: "meal-topping"
-        }
-      ],
-      enumArrangement: "Repeated"
-    },
-    {
-      slotBegin: 0,
-      slotEnd: 4,
-      min: 2,
-      max: 2,
-      categories: [
-        {
-          input: "meal-fruit-extra"
-        }
-      ],
-      enumArrangement: "Repeated"
-    },
-  ],
+  importRecipe: "jam",
   outputs: {
     "meal-category": [ "jam" ]
   }

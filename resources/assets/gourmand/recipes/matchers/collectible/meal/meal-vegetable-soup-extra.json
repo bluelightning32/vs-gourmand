@@ -1,9 +1,0 @@
-[
-  {
-    cooking : {
-      recipe: "soup",
-      ingredient: "vegetable-base-3",
-      outputs: ["meal-vegetable-soup-extra"]
-    }
-  }
-]

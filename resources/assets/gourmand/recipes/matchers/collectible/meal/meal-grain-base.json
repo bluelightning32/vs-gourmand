@@ -1,9 +1,0 @@
-[
-  {
-    cooking : {
-      recipe: "porridge",
-      ingredient: "grainbase",
-      outputs: ["meal-grain-base"]
-    }
-  }
-]
