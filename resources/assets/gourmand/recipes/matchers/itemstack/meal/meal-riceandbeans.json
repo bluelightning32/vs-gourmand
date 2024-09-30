@@ -1,0 +1,21 @@
+{
+  dependsOn: [ "expandedfoods" ],
+  category: {
+    input: "edible-meal-container"
+  },
+  attributes: [
+    {
+      path: [ "recipeCode" ],
+      value: "riceandbeans"
+    },
+    {
+      path: [ "quantityServings" ],
+      enumerateValues: [ 1 ]
+    },
+  ],
+  // The meal namer calls this Pilaf.
+  importRecipe: "riceandbeans",
+  outputs: {
+    "meal-category": [ "riceandbeans" ]
+  }
+}
