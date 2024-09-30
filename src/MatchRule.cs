@@ -13,6 +13,13 @@ using Vintagestory.API.Datastructures;
 namespace Gourmand;
 
 public class MatchRuleJson {
+  /// <summary>
+  /// This is a list of modids that the rule depends on. Ignore this match rule
+  /// if one of the mods in this list is not installed.
+  /// </summary>
+  [JsonProperty("dependsOn")]
+  public readonly string[] DependsOn;
+
   [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
   [DefaultValue(1.0)]
   public readonly float Priority;
@@ -34,10 +41,11 @@ public class MatchRuleJson {
 
   [JsonConstructor]
   public MatchRuleJson(
-      float priority,
+      string[] dependsOn, float priority,
       [JsonProperty("outputs")] Dictionary<string, JToken[]> rawOutputs,
       AssetLocation[] deletes, CategoryCondition category,
       AttributeCondition[] attributes, SlotCondition[] slots) {
+    DependsOn = dependsOn ?? Array.Empty<string>();
     Priority = priority;
     _rawOutputs = rawOutputs ?? new Dictionary<string, JToken[]>();
     Deletes = deletes ?? Array.Empty<AssetLocation>();
@@ -47,12 +55,17 @@ public class MatchRuleJson {
   }
 
   public MatchRuleJson(MatchRuleJson copy) {
+    DependsOn = copy.DependsOn;
     Priority = copy.Priority;
     _rawOutputs = copy._rawOutputs;
     Deletes = copy.Deletes;
     Category = copy.Category;
     Attributes = copy.Attributes;
     Slots = copy.Slots;
+  }
+
+  public bool DependsOnSatisified(IModLoader modLoader) {
+    return DependsOn.All(modLoader.IsModEnabled);
   }
 }
 

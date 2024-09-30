@@ -64,6 +64,7 @@ public class CategoryDict {
     string stackJson = @"
     [
       {
+        dependsOn: [ ""survival"" ],
         category: {
           input: ""edible-meal-container"",
         },
@@ -137,7 +138,16 @@ public class CategoryDict {
           },
         ],
         deletes: [ ""edible"" ]
-      }
+      },
+      {
+        dependsOn: [ ""notinstalled"" ],
+        category: {
+          input: ""edible-meal-container"",
+        },
+        outputs: {
+          ""edible"": [ ""shouldnotrun"" ]
+        }
+      },
     ]";
     List<Real.Collectibles.MatchRule> collectibleRules =
         JsonUtil.ToObject<List<Real.Collectibles.MatchRule>>(collectibleJson,

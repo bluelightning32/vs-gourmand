@@ -43,6 +43,9 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
                               IEnumerable<MatchRule> stackRules) {
     Dictionary<AssetLocation, HashSet<MatchRule>> rules = new();
     foreach (MatchRule rule in stackRules) {
+      if (!rule.DependsOnSatisified(resolver.Api.ModLoader)) {
+        continue;
+      }
       foreach (AssetLocation category in rule.OutputCategories) {
         if (!rules.TryGetValue(category,
                                out HashSet<MatchRule> categoryRules)) {
