@@ -1,18 +1,9 @@
 [
   {
-    categories: [
-      {
-        input: "meal-vegetable-soup-extra",
-        outputs: ["meal-vegetable-soup-base"]
-      }
-    ]
-  },
-  {
-    priority: 2,
-    code : {
-      match: "game:legume-*",
-      type: "item"
-    },
-    deletes: [ "meal-vegetable-soup-base" ]
+    cooking : {
+      recipe: "soup",
+      ingredient: "vegetable-base-1",
+      outputs: ["meal-vegetable-soup-base"]
+    }
   }
 ]

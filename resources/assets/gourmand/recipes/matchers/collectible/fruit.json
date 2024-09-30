@@ -1,9 +1,0 @@
-[
-  {
-    code : {
-      match: "game:fruit-*",
-      type: "item",
-      outputs: [ "fruit" ]
-    }
-  }
-]

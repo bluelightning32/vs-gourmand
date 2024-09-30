@@ -1,16 +1,10 @@
 [
   {
-    code : {
-      match: "game:cheese-cheddar-1slice",
-      type: "item",
+    cooking : {
+      recipe: "scrambledeggs",
+      // It really is called 'cheese-exra' instead of 'cheese-extra' in the vanilla file.
+      ingredient: "cheese-exra",
       outputs: [ "meal-cheese-extra" ]
     }
   },
-  {
-    code : {
-      match: "game:cheese-blue-1slice",
-      type: "item",
-      outputs: [ "meal-cheese-extra" ]
-    }
-  }
 ]

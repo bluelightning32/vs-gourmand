@@ -1,9 +1,9 @@
 [
   {
-    code : {
-      match: "game:grain-*",
-      type: "item",
+    cooking : {
+      recipe: "porridge",
+      ingredient: "grainbase",
       outputs: ["meal-grain-base"]
-    },
+    }
   }
 ]

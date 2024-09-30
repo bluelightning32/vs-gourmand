@@ -1,10 +1,9 @@
 [
   {
-    categories: [
-      {
-        input: "fruit",
-        outputs: ["meal-fruit-extra"]
-      }
-    ]
+    cooking : {
+      recipe: "meatystew",
+      ingredient: "fruit-extra",
+      outputs: ["meal-fruit-extra"]
+    }
   }
 ]

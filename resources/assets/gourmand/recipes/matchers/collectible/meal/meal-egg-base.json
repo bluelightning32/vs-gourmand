@@ -1,8 +1,8 @@
 [
   {
-    code : {
-      match: "game:egg-chicken-raw",
-      type: "item",
+    cooking : {
+      recipe: "scrambledeggs",
+      ingredient: "egg-base",
       outputs: [ "meal-egg-base" ]
     }
   }

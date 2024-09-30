@@ -1,8 +1,8 @@
 [
   {
-    code : {
-      match: "game:waterportion",
-      type: "item",
+    cooking : {
+      recipe: "soup",
+      ingredient: "water",
       outputs: [ "meal-water" ]
     }
   }

@@ -1,36 +1,9 @@
 [
   {
-    categories: [
-      {
-        input: "meat",
-        outputs: ["meal-protein-base"]
-      }
-    ]
-  },
-  {
-    priority: 2,
-    categories: [
-      {
-        input: "meat"
-      }
-    ],
-    code : {
-      match: "*:*-cooked",
-      type: "item",
-    },
-    deletes: [ "meal-protein-base" ]
-  },
-  {
-    priority: 2,
-    categories: [
-      {
-        input: "meat"
-      }
-    ],
-    code : {
-      match: "*:*-vintage",
-      type: "item",
-    },
-    deletes: [ "meal-protein-base" ]
+    cooking : {
+      recipe: "meatystew",
+      ingredient: "protein-base",
+      outputs: ["meal-protein-base"]
+    }
   }
 ]

@@ -1,16 +1,8 @@
 [
   {
-    categories: [
-      {
-        input: "meal-protein-base",
-        outputs: ["meal-protein-extra"]
-      }
-    ]
-  },
-  {
-    code : {
-      match: "game:egg-chicken-raw",
-      type: "item",
+    cooking : {
+      recipe: "meatystew",
+      ingredient: "protein-extra",
       outputs: [ "meal-protein-extra" ]
     }
   }
