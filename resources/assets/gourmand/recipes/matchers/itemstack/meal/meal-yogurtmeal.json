@@ -1,0 +1,20 @@
+{
+  dependsOn: [ "expandedfoods" ],
+  category: {
+    input: "edible-meal-container"
+  },
+  attributes: [
+    {
+      path: [ "recipeCode" ],
+      value: "yogurtmeal"
+    },
+    {
+      path: [ "quantityServings" ],
+      enumerateValues: [ 1 ]
+    },
+  ],
+  importRecipe: "yogurtmeal",
+  outputs: {
+    "meal-category": [ "yogurtmeal" ]
+  }
+}
