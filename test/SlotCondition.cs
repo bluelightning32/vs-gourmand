@@ -14,7 +14,7 @@ public class SlotCondition {
   private static readonly Real.Collectibles.MatchResolver Resolver;
 
   static SlotCondition() {
-    Resolver = new(LoadAssets.Server.World);
+    Resolver = new(LoadAssets.Server.World, LoadAssets.Server.Api.Logger);
 
     string rulesJson = @"
     [

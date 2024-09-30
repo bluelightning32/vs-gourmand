@@ -15,7 +15,7 @@ public class MatchRule {
   private static readonly Real.Collectibles.MatchResolver Resolver;
 
   static MatchRule() {
-    Resolver = new(LoadAssets.Server.World);
+    Resolver = new(LoadAssets.Server.World, LoadAssets.Server.Api.Logger);
 
     string rulesJson = @"
     [

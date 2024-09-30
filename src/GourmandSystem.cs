@@ -79,7 +79,7 @@ public class GourmandSystem : ModSystem {
                                Mod.Info.ModID, "config/food-achievements.json"))
                            .ToObject<FoodAchievements>();
     FoodAchievements.Resolve(Mod.Info.ModID, api.ModLoader);
-    api.Logger.Debug("Loaded {0} food achievements",
+    Mod.Logger.Debug("Loaded {0} food achievements",
                      FoodAchievements.RawAchievements.Count);
 
     if (api is ICoreServerAPI sapi) {
@@ -116,34 +116,34 @@ public class GourmandSystem : ModSystem {
   }
 
   private void LoadCategories(ICoreServerAPI sapi) {
-    var collectibleFiles = sapi.Assets.GetMany<JToken>(
-        sapi.Server.Logger, "recipes/matchers/collectible");
+    var collectibleFiles =
+        sapi.Assets.GetMany<JToken>(Mod.Logger, "recipes/matchers/collectible");
     List<Collectibles.MatchRule> collectibleRules = new();
     foreach (var matcher in collectibleFiles) {
       try {
         collectibleRules.AddRange(LoadMaybeArray<Collectibles.MatchRule>(
             matcher.Key.Domain, matcher.Value));
       } catch (Exception) {
-        sapi.Logger.Error("Gourmand: error parsing {0}", matcher.Key);
+        Mod.Logger.Error("Gourmand: error parsing {0}", matcher.Key);
         throw;
       }
     }
 
-    var stackFiles = sapi.Assets.GetMany<JToken>(sapi.Server.Logger,
-                                                 "recipes/matchers/itemstack");
+    var stackFiles =
+        sapi.Assets.GetMany<JToken>(Mod.Logger, "recipes/matchers/itemstack");
     List<MatchRule> stackRules = new();
     foreach (var matcher in stackFiles) {
       try {
         stackRules.AddRange(
             LoadMaybeArray<MatchRule>(matcher.Key.Domain, matcher.Value));
       } catch (Exception) {
-        sapi.Logger.Error("Gourmand: error parsing {0}", matcher.Key);
+        Mod.Logger.Error("Gourmand: error parsing {0}", matcher.Key);
         throw;
       }
     }
 
-    CatDict.Set(sapi.World, collectibleRules, stackRules);
-    sapi.Logger.Debug(
+    CatDict.Set(sapi.World, Mod.Logger, collectibleRules, stackRules);
+    Mod.Logger.Debug(
         "Loaded {0} collectible matchers and {1} item stack matchers.",
         collectibleRules.Count, stackRules.Count);
   }

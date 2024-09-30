@@ -402,10 +402,11 @@ public class SlotCondition {
       Categories.SelectMany(c => c.Categories.Concat(c.DistinctOutputs))
           .Concat(CountOutputs);
 
-  public bool Validate(IWorldAccessor resolver, IReadonlyCategoryDict catdict) {
+  public bool Validate(IWorldAccessor resolver, ILogger logger,
+                       IReadonlyCategoryDict catdict) {
     bool result = true;
     foreach (ContentCategory category in Categories) {
-      result &= category.Validate(resolver, catdict);
+      result &= category.Validate(resolver, logger, catdict);
     }
     return result;
   }

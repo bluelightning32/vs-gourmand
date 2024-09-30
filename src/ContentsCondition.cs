@@ -72,10 +72,11 @@ public class ContentsCondition : ICondition {
     return contents.All(c => c == null);
   }
 
-  public bool Validate(IWorldAccessor resolver, IReadonlyCategoryDict catdict) {
+  public bool Validate(IWorldAccessor resolver, ILogger logger,
+                       IReadonlyCategoryDict catdict) {
     bool result = true;
     foreach (SlotCondition slot in Slots) {
-      result &= slot.Validate(resolver, catdict);
+      result &= slot.Validate(resolver, logger, catdict);
     }
     return result;
   }

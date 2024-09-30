@@ -23,8 +23,9 @@ class UpdateFoodAchievements : EntityBehavior {
   }
 
   public void SetCurrentFood(ItemStack food) {
-    entity.Api.Logger.Debug("Set current food to {0}",
-                            food?.Collectible?.Code.ToString() ?? "none");
+    GourmandSystem gourmand = GetGourmandSystem();
+    gourmand.Mod.Logger.Debug("Set current food to {0}",
+                              food?.Collectible?.Code.ToString() ?? "none");
     _eating = food;
   }
 
@@ -40,8 +41,9 @@ class UpdateFoodAchievements : EntityBehavior {
   }
 
   public int OnFoodEaten(ItemStack food) {
-    entity.Api.Logger.Debug("Ate food {0}", food?.Collectible?.Code.ToString());
     GourmandSystem gourmand = GetGourmandSystem();
+    gourmand.Mod.Logger.Debug("Ate food {0}",
+                              food?.Collectible?.Code.ToString());
     ItemStack clonedFood = food.Clone();
     clonedFood.StackSize = 1;
     int newPoints = gourmand.FoodAchievements.AddAchievements(
@@ -86,11 +88,11 @@ class UpdateFoodAchievements : EntityBehavior {
   public void MarkDirty(GourmandSystem gourmand) {
     entity.WatchedAttributes.MarkPathDirty(FoodAchievements.ModDataPath);
     int points = gourmand.FoodAchievements.GetPointsForAchievements(
-        entity.Api.Logger, GetModData());
+        gourmand.Mod.Logger, GetModData());
     float health = gourmand.FoodAchievements.GetHealthForPoints(points);
     _healthBehavior.MaxHealthModifiers["gourmand"] = health;
     _healthBehavior.UpdateMaxHealth();
-    entity.Api.Logger.Debug(
+    gourmand.Mod.Logger.Debug(
         $"Set extra health to {health} for {entity.GetName()}");
   }
 
@@ -111,8 +113,8 @@ class UpdateFoodAchievements : EntityBehavior {
     GourmandSystem gourmand = GetGourmandSystem();
     int removedPoints = gourmand.FoodAchievements.ApplyDeath(
         entity.Api.World, gourmand.CatDict, GetModData(), deathPenalty);
-    entity.Api.Logger.Debug("Lost {0} points on death due to penality {1}",
-                            removedPoints, deathPenalty);
+    gourmand.Mod.Logger.Debug("Lost {0} points on death due to penality {1}",
+                              removedPoints, deathPenalty);
     if (removedPoints > 0) {
       MarkDirty(gourmand);
     }

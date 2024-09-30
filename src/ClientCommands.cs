@@ -66,10 +66,10 @@ public class ClientCommands {
 
   private TextCommandResult GetStats(ITreeAttribute modData,
                                      TextCommandCallingArgs args) {
-    FoodAchievements foodAchievements =
-        _capi.ModLoader.GetModSystem<GourmandSystem>().FoodAchievements;
+    GourmandSystem gourmand = _capi.ModLoader.GetModSystem<GourmandSystem>();
+    FoodAchievements foodAchievements = gourmand.FoodAchievements;
     int points =
-        foodAchievements.GetPointsForAchievements(_capi.Logger, modData);
+        foodAchievements.GetPointsForAchievements(gourmand.Mod.Logger, modData);
     float health = foodAchievements.GetHealthFunctionPiece(
         points, out float gainRate, out int untilPoints);
     if (gainRate != 0) {

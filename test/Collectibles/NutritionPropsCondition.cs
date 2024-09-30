@@ -14,7 +14,9 @@ using Real = Gourmand.Collectibles;
 public class NutritionPropsCondition {
   private readonly Real.MatchResolver _resolver;
 
-  public NutritionPropsCondition() { _resolver = new(LoadAssets.Server.World); }
+  public NutritionPropsCondition() {
+    _resolver = new(LoadAssets.Server.World, LoadAssets.Server.Api.Logger);
+  }
 
   [TestMethod]
   public void JsonParseMissingOptionals() {

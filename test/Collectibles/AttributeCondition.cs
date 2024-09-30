@@ -13,7 +13,9 @@ using Real = Gourmand.Collectibles;
 public class AttributeCondition {
   private readonly Real.MatchResolver _resolver;
 
-  public AttributeCondition() { _resolver = new(LoadAssets.Server.World); }
+  public AttributeCondition() {
+    _resolver = new(LoadAssets.Server.World, LoadAssets.Server.Api.Logger);
+  }
 
   [TestMethod]
   public void JsonParseMissingOptionals() {

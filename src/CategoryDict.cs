@@ -16,13 +16,13 @@ namespace Gourmand;
 public class CategoryDict : RecipeRegistryBase, IByteSerializable {
   private readonly Collectibles.CategoryDict _collectibleDict;
   private readonly Dictionary<AssetLocation, List<MatchRule>> _rules;
-  public CategoryDict(IWorldAccessor resolver,
+  public CategoryDict(IWorldAccessor resolver, ILogger logger,
                       IEnumerable<Collectibles.MatchRule> collectibleRules,
                       IEnumerable<MatchRule> stackRules) {
-    MatchResolver matchResolver = new(resolver);
+    MatchResolver matchResolver = new(resolver, logger);
     _collectibleDict = matchResolver.Load(collectibleRules);
     _rules = new();
-    LoadStackRules(resolver, stackRules);
+    LoadStackRules(resolver, logger, stackRules);
   }
 
   public CategoryDict() {
@@ -30,16 +30,16 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
     _rules = new();
   }
 
-  public void Set(IWorldAccessor resolver,
+  public void Set(IWorldAccessor resolver, ILogger logger,
                   IEnumerable<Collectibles.MatchRule> collectibleRules,
                   IEnumerable<MatchRule> stackRules) {
-    MatchResolver matchResolver = new(resolver);
+    MatchResolver matchResolver = new(resolver, logger);
     _collectibleDict.Copy(matchResolver.Load(collectibleRules));
     _rules.Clear();
-    LoadStackRules(resolver, stackRules);
+    LoadStackRules(resolver, logger, stackRules);
   }
 
-  private void LoadStackRules(IWorldAccessor resolver,
+  private void LoadStackRules(IWorldAccessor resolver, ILogger logger,
                               IEnumerable<MatchRule> stackRules) {
     Dictionary<AssetLocation, HashSet<MatchRule>> rules = new();
     foreach (MatchRule rule in stackRules) {
@@ -59,7 +59,7 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
                       Comparer<float>.Default.Compare(b.Priority, a.Priority));
       _rules.Add(categoryRules.Key, sorted);
     }
-    Validate(resolver);
+    Validate(resolver, logger);
   }
 
   /// <summary>
@@ -153,7 +153,7 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
           JsonConvert.DeserializeObject<MatchRule>(reader.ReadString()));
     }
     _rules.Clear();
-    LoadStackRules(resolver, stackRules);
+    LoadStackRules(resolver, resolver.Logger, stackRules);
   }
 
   public override void ToBytes(IWorldAccessor resolver, out byte[] data,
@@ -186,15 +186,15 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
           JsonConvert.DeserializeObject<MatchRule>(reader.ReadString()));
     }
     _rules.Clear();
-    LoadStackRules(resolver, stackRules);
-    Validate(resolver);
+    LoadStackRules(resolver, resolver.Logger, stackRules);
+    Validate(resolver, resolver.Logger);
   }
 
-  public bool Validate(IWorldAccessor resolver) {
+  public bool Validate(IWorldAccessor resolver, ILogger logger) {
     bool result = true;
     foreach (List<MatchRule> categoryRules in _rules.Values) {
       foreach (MatchRule rule in categoryRules) {
-        result &= rule.Validate(resolver, _collectibleDict);
+        result &= rule.Validate(resolver, logger, _collectibleDict);
       }
     }
     return result;

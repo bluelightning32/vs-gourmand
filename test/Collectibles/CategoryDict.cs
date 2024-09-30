@@ -16,7 +16,8 @@ public class CategoryDict {
   private static readonly Real.CategoryDict CatDict;
 
   static CategoryDict() {
-    Real.MatchResolver resolver = new(LoadAssets.Server.World);
+    Real.MatchResolver resolver =
+        new(LoadAssets.Server.World, LoadAssets.Server.Api.Logger);
 
     string rulesJson = @"
     [

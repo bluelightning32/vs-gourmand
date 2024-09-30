@@ -48,7 +48,7 @@ public class CookingIngredientCondition : ICondition {
 
   IEnumerable<CollectibleObject> EnumerateCollectibles(MatchResolver resolver) {
     CookingRecipeIngredient ingredient = GetMatchingIngredient(
-        resolver.Resolver.Logger,
+        resolver.Logger,
         resolver.Resolver.Api.ModLoader.GetModSystem<RecipeRegistrySystem>());
     if (ingredient == null) {
       yield break;

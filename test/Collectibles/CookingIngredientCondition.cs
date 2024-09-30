@@ -14,7 +14,7 @@ public class CookingIngredientCondition {
   private readonly Real.MatchResolver _resolver;
 
   public CookingIngredientCondition() {
-    _resolver = new(LoadAssets.Server.World);
+    _resolver = new(LoadAssets.Server.World, LoadAssets.Server.Api.Logger);
   }
 
   [TestMethod]

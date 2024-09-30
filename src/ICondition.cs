@@ -6,7 +6,7 @@ using Vintagestory.API.Datastructures;
 namespace Gourmand;
 
 public interface ICondition {
-  bool Validate(IWorldAccessor resolver,
+  bool Validate(IWorldAccessor resolver, ILogger logger,
                 Collectibles.IReadonlyCategoryDict catdict);
 
   /// <summary>

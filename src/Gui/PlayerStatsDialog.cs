@@ -76,16 +76,15 @@ public class PlayerStatsDialog {
     EntityPlayer entity = _capi.World.Player.Entity;
     ITreeAttribute modData = FoodAchievements.GetModData(entity);
 
-    FoodAchievements foodAchievements =
-        _capi.ModLoader.GetModSystem<GourmandSystem>().FoodAchievements;
+    GourmandSystem gourmand = _capi.ModLoader.GetModSystem<GourmandSystem>();
+    FoodAchievements foodAchievements = gourmand.FoodAchievements;
     int points =
-        foodAchievements.GetPointsForAchievements(_capi.Logger, modData);
+        foodAchievements.GetPointsForAchievements(gourmand.Mod.Logger, modData);
     float health = foodAchievements.GetHealthFunctionPiece(
         points, out float gainRate, out int untilPoints);
 
     GuiComposer playerstats = _dialog.Composers["playerstats"];
     GuiElementStatbar bar = playerstats.GetStatbar("gourmandBar");
-    GourmandSystem gourmand = _capi.ModLoader.GetModSystem<GourmandSystem>();
     float max = gourmand.FoodAchievements.HealthPoints[^1].Health;
     bar.SetLineInterval(max / 10);
     bar.SetValues(health, 0, max);

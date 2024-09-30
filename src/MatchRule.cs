@@ -206,11 +206,11 @@ public class MatchRule : MatchRuleJson {
     return result;
   }
 
-  public bool Validate(IWorldAccessor resolver,
+  public bool Validate(IWorldAccessor resolver, ILogger logger,
                        Collectibles.IReadonlyCategoryDict catdict) {
     bool result = true;
     foreach (ICondition condition in Conditions) {
-      result &= condition.Validate(resolver, catdict);
+      result &= condition.Validate(resolver, logger, catdict);
     }
     return result;
   }

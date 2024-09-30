@@ -82,9 +82,10 @@ public class CategoryCondition : ICondition {
     }
   }
 
-  public bool Validate(IWorldAccessor resolver, IReadonlyCategoryDict catdict) {
+  public bool Validate(IWorldAccessor resolver, ILogger logger,
+                       IReadonlyCategoryDict catdict) {
     if (!catdict.IsRegistered(Input)) {
-      resolver.Api.Logger.Error($"Category {Input} is not registered.");
+      logger.Error($"Category {Input} is not registered.");
       return false;
     }
     return true;

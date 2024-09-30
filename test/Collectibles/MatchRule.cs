@@ -14,7 +14,9 @@ using Real = Gourmand.Collectibles;
 public class MatchRule {
   private readonly Real.MatchResolver _resolver;
 
-  public MatchRule() { _resolver = new(LoadAssets.Server.World); }
+  public MatchRule() {
+    _resolver = new(LoadAssets.Server.World, LoadAssets.Server.Api.Logger);
+  }
 
   [TestMethod]
   public void JsonParseMissingOptionals() {

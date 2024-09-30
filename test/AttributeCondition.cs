@@ -15,7 +15,9 @@ using Real = Gourmand;
 public class AttributeCondition {
   private readonly Real.Collectibles.MatchResolver _resolver;
 
-  public AttributeCondition() { _resolver = new(LoadAssets.Server.World); }
+  public AttributeCondition() {
+    _resolver = new(LoadAssets.Server.World, LoadAssets.Server.Api.Logger);
+  }
 
   [TestMethod]
   public void IsMatch() {

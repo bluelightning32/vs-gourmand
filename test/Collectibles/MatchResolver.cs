@@ -27,7 +27,7 @@ public class MatchResolver {
         .Returns<AssetLocation>(LoadAssets.Server.SearchBlocks);
     _mock.SetupGet(x => x.Blocks).Returns(LoadAssets.Server.World.Blocks);
 
-    _resolver = new(_mock.Object);
+    _resolver = new(_mock.Object, LoadAssets.Server.Api.Logger);
   }
 
   [TestMethod]

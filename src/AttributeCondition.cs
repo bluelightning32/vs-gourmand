@@ -142,7 +142,8 @@ public class AttributeCondition : ICondition {
     attributes[Path[^1]] = value.Clone();
   }
 
-  public bool Validate(IWorldAccessor resolver, IReadonlyCategoryDict catdict) {
+  public bool Validate(IWorldAccessor resolver, ILogger logger,
+                       IReadonlyCategoryDict catdict) {
     return true;
   }
 }

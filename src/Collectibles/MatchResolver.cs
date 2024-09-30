@@ -33,6 +33,7 @@ public class MatchResolver {
   public IReadonlyCategoryDict CatDict => _catdict;
   private IReadOnlyList<Item> _allItems = null;
   private IReadOnlyList<Block> _allBlocks = null;
+  public readonly ILogger Logger;
 
   // An dictionary of all item variants, indexed by the first part of their code
   // (everything up to the first '-'). Only items that have a '-' in their code
@@ -116,7 +117,10 @@ public class MatchResolver {
     }
   }
 
-  public MatchResolver(IWorldAccessor resolver) { Resolver = resolver; }
+  public MatchResolver(IWorldAccessor resolver, ILogger logger) {
+    Resolver = resolver;
+    Logger = logger;
+  }
 
   private static IReadOnlyList<X> GetMatchingCollectibles<X>(
       AssetLocation wildcard,

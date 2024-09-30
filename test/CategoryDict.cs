@@ -145,7 +145,8 @@ public class CategoryDict {
     List<Real.MatchRule> stackRules =
         JsonUtil.ToObject<List<Real.MatchRule>>(stackJson, "gourmand");
 
-    CatDict = new(LoadAssets.Server.World, collectibleRules, stackRules);
+    CatDict = new(LoadAssets.Server.World, LoadAssets.Server.Api.Logger,
+                  collectibleRules, stackRules);
   }
 
   [TestMethod]

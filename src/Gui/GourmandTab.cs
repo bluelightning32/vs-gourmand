@@ -101,7 +101,8 @@ public class GourmandTab {
     GourmandSystem gourmand = _capi.ModLoader.GetModSystem<GourmandSystem>();
     FoodAchievements foodAchievements = gourmand.FoodAchievements;
 
-    AddGourmandSummary(components, foodAchievements, modData, lost);
+    AddGourmandSummary(components, gourmand.Mod.Logger, foodAchievements,
+                       modData, lost);
     components.Add(new RichTextComponent(_capi, "\n", _headerFont));
     AddLostFoods(components, lost);
 
@@ -120,11 +121,11 @@ public class GourmandTab {
   }
 
   private void AddGourmandSummary(List<RichTextComponentBase> components,
+                                  ILogger logger,
                                   FoodAchievements foodAchievements,
                                   ITreeAttribute modData,
                                   HashSet<ItemStack> lost) {
-    int points =
-        foodAchievements.GetPointsForAchievements(_capi.Logger, modData);
+    int points = foodAchievements.GetPointsForAchievements(logger, modData);
     float health = foodAchievements.GetHealthFunctionPiece(
         points, out float gainRate, out int untilPoints);
     if (gainRate != 0) {

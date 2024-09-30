@@ -14,7 +14,7 @@ public class CategoryCondition {
   private readonly Real.MatchResolver _resolver;
 
   public CategoryCondition() {
-    _resolver = new(LoadAssets.Server.World);
+    _resolver = new(LoadAssets.Server.World, LoadAssets.Server.Api.Logger);
     string rulesJson = @"
     [
       {
