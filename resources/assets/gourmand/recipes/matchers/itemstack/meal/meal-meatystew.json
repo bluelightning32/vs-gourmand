@@ -15,7 +15,7 @@
   contents: [
     {
       slotBegin: 0,
-      slotEnd: 5,
+      slotEnd: 4,
       min: 2,
       max: 2,
       categories: [
@@ -27,7 +27,7 @@
     },
     {
       slotBegin: 0,
-      slotEnd: 5,
+      slotEnd: 4,
       min: 0,
       max: 2,
       categories: [
@@ -38,9 +38,10 @@
     },
     {
       slotBegin: 0,
-      slotEnd: 5,
+      slotEnd: 4,
       min: 0,
       max: 2,
+      enumerateMax: 10,
       categories: [
         {
           input: "meal-vegetable-base"
@@ -49,9 +50,10 @@
     },
     {
       slotBegin: 0,
-      slotEnd: 5,
+      slotEnd: 4,
       min: 0,
       max: 1,
+      enumerateMax: 2,
       categories: [
         {
           input: "meal-fruit-extra"
@@ -60,15 +62,107 @@
     },
     {
       slotBegin: 0,
-      slotEnd: 5,
+      slotEnd: 4,
       min: 0,
       max: 1,
+      enumerateMax: 2,
       categories: [
         {
           input: "meal-topping"
         }
       ]
-    }
+    },
+    {
+      // only when expandedfoods is installed
+      slotBegin: 0,
+      slotEnd: 4,
+      min: 0,
+      max: 1,
+      enumerateMax: 2,
+      categories: [
+        {
+          input: "meal-topping-sauce"
+        }
+      ]
+    },
+    {
+      // only when expandedfoods is installed
+      slotBegin: 0,
+      slotEnd: 4,
+      min: 0,
+      max: 1,
+      enumerateMax: 2,
+      categories: [
+        {
+          input: "meal-dryfruit-extra"
+        }
+      ]
+    },
+    {
+      // only when expandedfoods is installed
+      slotBegin: 0,
+      slotEnd: 4,
+      min: 0,
+      max: 1,
+      enumerateMax: 2,
+      categories: [
+        {
+          input: "meal-breadcrumbs-extra"
+        }
+      ]
+    },
+    {
+      // only when expandedfoods is installed
+      slotBegin: 0,
+      slotEnd: 4,
+      min: 0,
+      max: 1,
+      enumerateMax: 2,
+      categories: [
+        {
+          input: "meal-salt"
+        }
+      ]
+    },
+    {
+      // only when expandedfoods is installed
+      slotBegin: 0,
+      slotEnd: 4,
+      min: 0,
+      max: 1,
+      enumerateMax: 2,
+      categories: [
+        {
+          input: "meal-broth"
+        }
+      ]
+    },
+    {
+      // only when expandedfoods is installed
+      slotBegin: 0,
+      slotEnd: 4,
+      min: 0,
+      max: 2,
+      enumerateMax: 2,
+      categories: [
+        {
+          input: "meal-nuts-extra"
+        }
+      ]
+    },
+    {
+      // only when expandedfoods is installed
+      slotBegin: 0,
+      slotEnd: 4,
+      min: 0,
+      max: 1,
+      enumerateMax: 2,
+      categories: [
+        {
+          input: "meal-egg-yolk"
+        }
+      ]
+    },
   ],
   outputs: {
     "meal-category": [ "meatystew" ]

@@ -1,0 +1,14 @@
+[
+  {
+    // A match nothing rule to register the meal-topping-sauce category, in case expandedfoods is not installed.
+    deletes: [ "meal-topping-sauce" ]
+  },
+  {
+    dependsOn: [ "expandedfoods" ],
+    cooking : {
+      recipe: "meatystew",
+      ingredient: "topping-sauce",
+      outputs: ["meal-topping-sauce"]
+    }
+  }
+]

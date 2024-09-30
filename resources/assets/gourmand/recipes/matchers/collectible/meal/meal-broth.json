@@ -1,0 +1,14 @@
+[
+  {
+    // A match nothing rule to register the category, in case expandedfoods is not installed.
+    deletes: [ "meal-broth" ]
+  },
+  {
+    dependsOn: [ "expandedfoods" ],
+    cooking : {
+      recipe: "meatystew",
+      ingredient: "broth",
+      outputs: ["meal-broth"]
+    }
+  }
+]
