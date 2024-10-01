@@ -420,14 +420,16 @@ public class FoodAchievements {
   /// Aside from that, this only affects the number of keys, not the total
   /// number of values in the dictionary value lists.
   /// </param>
-  /// <returns>the resulting multimap</returns>
-  public Dictionary<string, List<ItemStack>>
-  GetMissingDict(IWorldAccessor resolver, CategoryDict catdict,
-                 AssetLocation category, ITreeAttribute moddata,
-                 int maxEntries) {
-    Dictionary<string, List<ItemStack>> given = new();
+  /// <param name="missing">the output multimap</param>
+  /// <returns>true if more entries are available but not returned due to
+  /// maxEntries</returns>
+  public bool GetMissingDict(IWorldAccessor resolver, CategoryDict catdict,
+                             AssetLocation category, ITreeAttribute moddata,
+                             int maxEntries,
+                             out Dictionary<string, List<ItemStack>> missing) {
+    missing = new();
     if (!_achievements.ContainsKey(category)) {
-      return given;
+      return false;
     }
     ITreeAttribute achieved = moddata.GetOrAddTreeAttribute("achieved");
     ITreeAttribute eatenValues =
@@ -440,16 +442,16 @@ public class FoodAchievements {
         continue;
       }
 
-      if (!given.TryGetValue(categoryValue, out List<ItemStack> stacks)) {
-        if (given.Count >= maxEntries) {
-          return given;
+      if (!missing.TryGetValue(categoryValue, out List<ItemStack> stacks)) {
+        if (missing.Count >= maxEntries) {
+          return true;
         }
         stacks = new();
-        given.Add(categoryValue, stacks);
+        missing.Add(categoryValue, stacks);
       }
       stacks.Add(stack);
     }
-    return given;
+    return false;
   }
 
   public Dictionary<AssetLocation, Tuple<int, AchievementPoints>>
