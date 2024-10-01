@@ -1,0 +1,13 @@
+[
+  {
+    dependsOn: [ "expandedfoods" ],
+    code : {
+      match: "expandedfoods:stuffedpepper-*-cooked",
+      type: "item",
+      outputs: [ "fried-stuffedpepper" ]
+    },
+    outputs: {
+      "fried": [ "stuffedpepper" ]
+    }
+  },
+]

@@ -1,0 +1,13 @@
+[
+  {
+    dependsOn: [ "expandedfoods" ],
+    code : {
+      match: "expandedfoods:breadedball-*-cooked",
+      type: "item",
+      outputs: [ "fried-bread" ]
+    },
+    outputs: {
+      "fried": [ "bread" ]
+    }
+  },
+]

@@ -1,0 +1,10 @@
+[
+  {
+    dependsOn: [ "expandedfoods" ],
+    code : {
+      match: "expandedfoods:sushi-*",
+      type: "item",
+      outputs: [ "sushi" ]
+    }
+  },
+]

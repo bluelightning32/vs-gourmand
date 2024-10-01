@@ -1,0 +1,10 @@
+[
+  {
+    dependsOn: [ "expandedfoods" ],
+    code : {
+      match: "expandedfoods:fruitbar-raw",
+      type: "item",
+      outputs: [ "sweetsavory" ]
+    }
+  }
+]

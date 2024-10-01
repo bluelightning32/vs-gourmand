@@ -1,0 +1,13 @@
+[
+  {
+    dependsOn: [ "expandedfoods" ],
+    code : {
+      match: "expandedfoods:hardtack-*-bake2",
+      type: "item",
+      outputs: [ "hardtack" ]
+    },
+    outputs: {
+      "hardtack-bake": [ 2 ]
+    }
+  },
+]

@@ -1,0 +1,42 @@
+[
+  {
+    dependsOn: [ "expandedfoods" ],
+    code: {
+      match: "expandedfoods:potentwineportion-*",
+      type: "item",
+    },
+    outputs: {
+      "alcoholportion": [ "fine-wine" ]
+    }
+  },
+  {
+    dependsOn: [ "expandedfoods" ],
+    code: {
+      match: "expandedfoods:strongwineportion-*",
+      type: "item",
+    },
+    outputs: {
+      "alcoholportion": [ "strong-wine" ]
+    }
+  },
+  {
+    dependsOn: [ "expandedfoods" ],
+    code: {
+      match: "expandedfoods:strongspiritportion-*",
+      type: "item",
+    },
+    outputs: {
+      "alcoholportion": [ "aged-brandy" ]
+    }
+  },
+  {
+    dependsOn: [ "expandedfoods" ],
+    code: {
+      match: "expandedfoods:potentspiritportion-*",
+      type: "item",
+    },
+    outputs: {
+      "alcoholportion": [ "vintage-brandy" ]
+    }
+  },
+]

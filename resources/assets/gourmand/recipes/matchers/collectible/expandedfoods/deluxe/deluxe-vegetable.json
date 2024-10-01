@@ -1,0 +1,26 @@
+[
+  {
+    dependsOn: [ "expandedfoods" ],
+    code : {
+      match: "expandedfoods:breadedvegetable-*-syrupv",
+      type: "item",
+      outputs: [ "deluxe-vegetable" ]
+    },
+    outputs: {
+      "deluxe": [ "vegetable" ]
+    }
+  },
+  {
+    dependsOn: [ "expandedfoods" ],
+    priority: 2,
+    code : {
+      match: "expandedfoods:breadedvegetable-*-pickled*-syrupv",
+      type: "item",
+      outputs: [ "fried-pickledvegetable" ]
+    },
+    deletes: [ "deluxe-vegetable" ],
+    outputs: {
+      "deluxe": [ "pickledvegetable" ]
+    }
+  },
+]

@@ -1,0 +1,29 @@
+[
+  {
+    code: {
+      match: "game:ciderportion-*",
+      type: "item",
+    },
+    outputs: {
+      "alcoholportion": [ "cider" ]
+    }
+  },
+  {
+    code: {
+      match: "game:spiritportion-*",
+      type: "item",
+    },
+    outputs: {
+      "alcoholportion": [ "brandy" ]
+    }
+  },
+  {
+    code: {
+      match: "game:alcoholportion",
+      type: "item",
+    },
+    outputs: {
+      "alcoholportion": [ "alcohol" ]
+    }
+  },
+]

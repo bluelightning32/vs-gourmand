@@ -1,5 +1,6 @@
 [
   {
+    dependsOn: [ "expandedfoods" ],
     category: {
       input: "potable-container",
     },
@@ -12,11 +13,11 @@
         enumerateMax: 100,
         categories: [
           {
-            input: "ciderportion",
-            outputs: [ "cider" ]
+            input: "vegetablejuiceportion",
+            outputs: [ "vegetablejuice" ]
           }
         ],
       },
-    ]
+    ],
   }
 ]

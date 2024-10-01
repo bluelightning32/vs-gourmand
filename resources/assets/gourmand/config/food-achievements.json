@@ -1,10 +1,5 @@
 {
   achievements: {
-    "pie-category" : {
-      points: 2,
-      bonusAt: 32,
-      bonus: 100
-    },
     "meal-category" : {
       points: 10,
       bonusAt: 6,
@@ -20,6 +15,50 @@
         }
       ]
     },
+    "bread-perfect" : {
+      points: 2,
+      bonusAt: 7,
+      bonus: 50,
+      add: [
+        {
+          dependsOn: ["expandedfoods"],
+          points: 0,
+          // fruitbread, fruitbread-syrup, muffin, and muffin-syrup
+          bonusAt: 4
+        }
+      ]
+    },
+    "hardtack-bake" : {
+      dependsOn: ["expandedfoods"],
+      points: 2,
+      bonusAt: 4,
+      bonus: 10,
+    },
+    "pie-category" : {
+      points: 2,
+      bonusAt: 32,
+      bonus: 100,
+      add: [
+        {
+          dependsOn: ["expandedfoods"],
+          points: 0,
+          bonusAt: 32,
+          bonus: 100
+        }
+      ]
+    },
+    "sweetsavory" : {
+      dependsOn: ["expandedfoods"],
+      points: 2,
+      bonusAt: 7,
+      bonus: 100,
+    },
+    "sushi" : {
+      dependsOn: ["expandedfoods"],
+      points: 2,
+      bonusAt: 30,
+      bonus: 100,
+    },
     "pickled-food" : {
       points: 10,
       bonusAt: 8,
@@ -33,10 +72,17 @@
         }
       ]
     },
-    "bread-perfect" : {
-      points: 2,
-      bonusAt: 7,
-      bonus: 50
+    "fried" : {
+      dependsOn: ["expandedfoods"],
+      points: 10,
+      bonusAt: 9,
+      bonus: 100,
+    },
+    "deluxe" : {
+      dependsOn: ["expandedfoods"],
+      points: 3,
+      bonusAt: 3,
+      bonus: 50,
     },
     "climate-spanning" : {
       points: 50,
@@ -51,10 +97,29 @@
       bonusAt: 12,
       bonus: 100
     },
+    "vegetablejuice" : {
+      points: 2,
+      bonusAt: 8,
+      bonus: 30
+    },
     "cider" : {
       points: 3,
       bonusAt: 18,
       bonus: 100
+    },
+    "alcohol" : {
+      points: 5,
+      bonusAt: 3,
+      bonus: 50,
+      add: [
+        {
+          dependsOn: ["expandedfoods"],
+          points: 0,
+          bonusAt: 4,
+          bonus: 50,
+          description: "expandedfoods-alcohol-desc"
+        }
+      ]
     },
     "poison" : {
       points: 5,

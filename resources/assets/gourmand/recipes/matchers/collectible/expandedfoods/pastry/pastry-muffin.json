@@ -1,0 +1,10 @@
+[
+  {
+    dependsOn: [ "expandedfoods" ],
+    code : {
+      match: "expandedfoods:muffin-cooked",
+      type: "item",
+      outputs: [ "pastry", "bread-perfect" ]
+    },
+  },
+]

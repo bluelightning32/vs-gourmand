@@ -1,0 +1,13 @@
+[
+  {
+    dependsOn: [ "expandedfoods" ],
+    code : {
+      match: "expandedfoods:candiedfruit-*",
+      type: "item",
+      outputs: [ "candiedfruit" ]
+    },
+    outputs: {
+      "sweetsavory": [ "candiedfruit" ]
+    }
+  }
+]

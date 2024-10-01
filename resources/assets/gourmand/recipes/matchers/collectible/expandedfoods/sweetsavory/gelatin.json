@@ -1,0 +1,13 @@
+[
+  {
+    dependsOn: [ "expandedfoods" ],
+    code : {
+      match: "expandedfoods:gelatin-*",
+      type: "item",
+      outputs: [ "gelatin" ]
+    },
+    outputs: {
+      "sweetsavory": [ "gelatin" ]
+    }
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    dependsOn: [ "expandedfoods" ],
+    code : {
+      match: "expandedfoods:breadedvegetable-*-cooked",
+      type: "item",
+      outputs: [ "fried-vegetable" ]
+    },
+    outputs: {
+      "fried": [ "vegetable" ]
+    }
+  },
+  {
+    dependsOn: [ "expandedfoods" ],
+    priority: 2,
+    code : {
+      match: "expandedfoods:breadedvegetable-*-pickled*-cooked",
+      type: "item",
+      outputs: [ "fried-pickledvegetable" ]
+    },
+    deletes: [ "fried-vegetable" ],
+    outputs: {
+      "fried": [ "pickledvegetable" ]
+    }
+  },
+]

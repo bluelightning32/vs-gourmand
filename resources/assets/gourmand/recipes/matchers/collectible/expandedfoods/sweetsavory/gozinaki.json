@@ -1,0 +1,19 @@
+[
+  {
+    dependsOn: [
+      "expandedfoods"
+    ],
+    categories: [
+      {
+        input: "food"
+      }
+    ],
+    code : {
+      match: "expandedfoods:gozinaki-*",
+      type: "item",
+      outputs: [
+        "sweetsavory"
+      ]
+    }
+  }
+]

@@ -1,0 +1,13 @@
+[
+  {
+    dependsOn: [ "expandedfoods" ],
+    code : {
+      match: "expandedfoods:breadedmeatnugget-*-poultry-tender",
+      type: "item",
+      outputs: [ "fried-poultry" ]
+    },
+    outputs: {
+      "fried": [ "poultry" ]
+    }
+  },
+]

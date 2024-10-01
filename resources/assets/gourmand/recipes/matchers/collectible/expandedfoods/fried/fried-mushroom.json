@@ -1,0 +1,13 @@
+[
+  {
+    dependsOn: [ "expandedfoods" ],
+    code : {
+      match: "expandedfoods:breadedmushroom-*-cooked",
+      type: "item",
+      outputs: [ "fried-mushroom" ]
+    },
+    outputs: {
+      "fried": [ "mushroom" ]
+    }
+  },
+]

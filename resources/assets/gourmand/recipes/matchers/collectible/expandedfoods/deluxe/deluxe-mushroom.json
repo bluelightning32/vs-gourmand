@@ -1,0 +1,13 @@
+[
+  {
+    dependsOn: [ "expandedfoods" ],
+    code : {
+      match: "expandedfoods:breadedmushroom-*-syrup",
+      type: "item",
+      outputs: [ "deluxe-mushroom" ]
+    },
+    outputs: {
+      "deluxe": [ "mushroom" ]
+    }
+  },
+]

@@ -1,0 +1,16 @@
+[
+  {
+    dependsOn: [ "expandedfoods" ],
+    code: {
+      match: "expandedfoods:vegetablejuiceportion-*",
+      type: "item",
+      outputs: [ "vegetablejuiceportion" ]
+    },
+    attributes: [
+      {
+        path: ["waterTightContainerProps", "nutritionPropsPerLitre", "foodcategory"],
+        outputs: [ "vegetablejuiceportion-category" ]
+      }
+    ]
+  },
+]

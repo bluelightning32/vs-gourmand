@@ -1,0 +1,13 @@
+[
+  {
+    dependsOn: [ "expandedfoods" ],
+    code : {
+      match: "expandedfoods:breadedmeatnugget-*-bushmeat-syrups",
+      type: "item",
+      outputs: [ "deluxe-bushmeat" ]
+    },
+    outputs: {
+      "deluxe": [ "bushmeat" ]
+    }
+  },
+]

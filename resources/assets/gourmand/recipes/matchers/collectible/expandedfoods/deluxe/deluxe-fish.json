@@ -1,0 +1,13 @@
+[
+  {
+    dependsOn: [ "expandedfoods" ],
+    code : {
+      match: "expandedfoods:breadedfishnugget-*-syrups",
+      type: "item",
+      outputs: [ "deluxe-fish" ]
+    },
+    outputs: {
+      "deluxe": [ "fish" ]
+    }
+  },
+]

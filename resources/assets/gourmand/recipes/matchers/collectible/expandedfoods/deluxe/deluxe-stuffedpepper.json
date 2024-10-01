@@ -1,0 +1,13 @@
+[
+  {
+    dependsOn: [ "expandedfoods" ],
+    code : {
+      match: "expandedfoods:stuffedpepper-*-syrupcooked",
+      type: "item",
+      outputs: [ "deluxe-stuffedpepper" ]
+    },
+    outputs: {
+      "deluxe": [ "stuffedpepper" ]
+    }
+  },
+]
