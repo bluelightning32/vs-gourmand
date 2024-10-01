@@ -139,21 +139,28 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
   /// <param name="resolver">resolver</param>
   /// <param name="category">the category to search</param>
   /// <returns>an enumeration of the matching collectibles</returns>
-  public List<ItemStack> EnumerateMatches(IWorldAccessor resolver,
-                                          AssetLocation category) {
-    HashSet<ItemStack> stacks =
-        new(_collectibleDict.EnumerateMatches(category, false)
-                .Select(c => new ItemStack(c)),
-            new ItemStackComparer(resolver,
-                                  GlobalConstants.IgnoredStackAttributes));
+  public IEnumerable<ItemStack> EnumerateMatches(IWorldAccessor resolver,
+                                                 AssetLocation category) {
+
+    HashSet<ItemStack> stacks = new(new ItemStackComparer(
+        resolver, GlobalConstants.IgnoredStackAttributes));
+    foreach (CollectibleObject c in _collectibleDict.EnumerateMatches(category,
+                                                                      false)) {
+      ItemStack s = new(c);
+      if (stacks.Add(s) && InCategory(resolver, category, s)) {
+        yield return s;
+      }
+    }
     if (!_rules.TryGetValue(category, out List<MatchRule> categoryRules)) {
-      return stacks.ToList();
+      yield break;
     }
     foreach (MatchRule m in categoryRules) {
-      stacks.UnionWith(m.EnumerateMatches(resolver, _collectibleDict));
+      foreach (ItemStack s in m.EnumerateMatches(resolver, _collectibleDict)) {
+        if (stacks.Add(s) && InCategory(resolver, category, s)) {
+          yield return s;
+        }
+      }
     }
-    stacks.RemoveWhere(s => !InCategory(resolver, category, s));
-    return stacks.ToList();
   }
 
   public void ToBytes(BinaryWriter writer) {

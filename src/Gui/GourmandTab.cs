@@ -118,7 +118,7 @@ public class GourmandTab {
       stopwatch.Start();
       Dictionary<string, List<ItemStack>> missing =
           foodAchievements.GetMissingDict(_capi.World, gourmand.CatDict,
-                                          category.Key, modData);
+                                          category.Key, modData, int.MaxValue);
       stopwatch.Stop();
       gourmand.Mod.Logger.Debug(
           "Enumerated category {0} with {1} values in {2}.", category.Key,

@@ -406,9 +406,25 @@ public class FoodAchievements {
     }
   }
 
+  /// <summary>
+  /// Get a multimap of foods the player has not eaten yet, indexed by the food
+  /// category value.
+  /// </summary>
+  /// <param name="resolver"></param>
+  /// <param name="catdict"></param>
+  /// <param name="category">the category to find items for</param>
+  /// <param name="moddata">data about what the player has already eaten</param>
+  /// <param name="maxEntries">
+  /// The maximum number of keys in the dictionary. Once the limit is reached,
+  /// no more entries are added, even if they would belong to existing keys.
+  /// Aside from that, this only affects the number of keys, not the total
+  /// number of values in the dictionary value lists.
+  /// </param>
+  /// <returns>the resulting multimap</returns>
   public Dictionary<string, List<ItemStack>>
   GetMissingDict(IWorldAccessor resolver, CategoryDict catdict,
-                 AssetLocation category, ITreeAttribute moddata) {
+                 AssetLocation category, ITreeAttribute moddata,
+                 int maxEntries) {
     Dictionary<string, List<ItemStack>> given = new();
     if (!_achievements.ContainsKey(category)) {
       return given;
@@ -425,6 +441,9 @@ public class FoodAchievements {
       }
 
       if (!given.TryGetValue(categoryValue, out List<ItemStack> stacks)) {
+        if (given.Count >= maxEntries) {
+          return given;
+        }
         stacks = new();
         given.Add(categoryValue, stacks);
       }

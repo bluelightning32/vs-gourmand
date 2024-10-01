@@ -278,7 +278,7 @@ public class CategoryDict {
   public void EnumerateMatches() {
     AssetLocation edible = new("gourmand", "edible");
     List<ItemStack> matches =
-        CatDict.EnumerateMatches(LoadAssets.Server.World, edible);
+        CatDict.EnumerateMatches(LoadAssets.Server.World, edible).ToList();
     Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
     Item cranberry = LoadAssets.GetItem("game", "fruit-cranberry");
