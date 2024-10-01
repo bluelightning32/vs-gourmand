@@ -212,8 +212,13 @@ public class GourmandTab {
         _capi, Lang.Get(categoryName.ToString()) + "\n", _headerFont));
 
     StringBuilder text = new();
-    AssetLocation categoryDesc =
-        new(category.Domain, category.Path + "-cat-desc");
+    AssetLocation categoryDesc;
+    if (achievement.Description != null) {
+      categoryDesc =
+          AssetLocation.Create(achievement.Description, category.Domain);
+    } else {
+      categoryDesc = new(category.Domain, category.Path + "-cat-desc");
+    }
     text.AppendLine(Lang.Get(categoryDesc.ToString()));
     if (achievement.BonusAt != 0) {
       text.AppendLine(
@@ -224,8 +229,8 @@ public class GourmandTab {
     text.AppendLine(Lang.Get("gourmand:points-per-food", achievement.Points));
     text.AppendLine(Lang.Get("gourmand:completion-bonus", achievement.Bonus));
     text.AppendLine(Lang.Get("gourmand:missing"));
-    components.Add(new RichTextComponent(_capi, text.ToString(),
-                                         CairoFont.WhiteDetailText()));
+    components.AddRange(VtmlUtil.Richtextify(_capi, text.ToString(),
+                                             CairoFont.WhiteDetailText()));
 
     if (missing.Count == 0) {
       components.Add(

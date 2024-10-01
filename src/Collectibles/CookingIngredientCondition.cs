@@ -44,7 +44,8 @@ public class CookingIngredientCondition : ICondition {
       return null;
     }
     foreach (ModSystem system in aca.Systems) {
-      // Use reflection to avoid having to add aculinaryartillery to the build system.
+      // Use reflection to avoid having to add aculinaryartillery to the build
+      // system.
       FieldInfo field = system.GetType().GetField("MixingRecipes");
       if (field == null) {
         continue;

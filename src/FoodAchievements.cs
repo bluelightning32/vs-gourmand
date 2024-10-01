@@ -31,6 +31,8 @@ public class AchievementPoints {
   [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
   [DefaultValue(0)]
   public int Bonus { get; private set; }
+  [JsonProperty("description")]
+  public string Description { get; private set; }
 
   /// <summary>
   /// The Points, BonusAt, and Bonus values will get the sum of all the
@@ -81,6 +83,9 @@ public class AchievementPoints {
       Points += add.Points;
       BonusAt += add.BonusAt;
       Bonus += add.Bonus;
+      if (add.Description != null) {
+        Description = add.Description;
+      }
     }
     Add = null;
     return true;

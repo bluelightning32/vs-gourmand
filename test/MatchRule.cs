@@ -376,7 +376,7 @@ public class MatchRule {
             new AssetLocation("gourmand", "contains-meal-protein-base"),
             meal)));
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(
-        new IAttribute[] { },
+        new IAttribute[] {},
         rule.GetValue(Resolver.Resolver, Resolver.CatDict,
                       new AssetLocation("gourmand", "contains-meal-fruit"),
                       meal)));
@@ -458,7 +458,8 @@ public class MatchRule {
     ";
     Real.MatchRule rule =
         JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
-    Dictionary<string, CookingRecipe> cooking = Real.MatchRule.GetRecipeDict(LoadAssets.Server.Api.ModLoader);
+    Dictionary<string, CookingRecipe> cooking =
+        Real.MatchRule.GetRecipeDict(LoadAssets.Server.Api.ModLoader);
     List<string> implicits =
         rule.ResolveImports(cooking, LoadAssets.Server.Api.Logger);
 
@@ -501,7 +502,8 @@ public class MatchRule {
     ";
     Real.MatchRule rule =
         JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
-    Dictionary<string, CookingRecipe> cooking = Real.MatchRule.GetRecipeDict(LoadAssets.Server.Api.ModLoader);
+    Dictionary<string, CookingRecipe> cooking =
+        Real.MatchRule.GetRecipeDict(LoadAssets.Server.Api.ModLoader);
     List<string> implicits =
         rule.ResolveImports(cooking, LoadAssets.Server.Api.Logger);
 

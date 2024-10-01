@@ -8,7 +8,17 @@
     "meal-category" : {
       points: 10,
       bonusAt: 6,
-      bonus: 100
+      bonus: 100,
+      add: [
+        {
+          dependsOn: ["expandedfoods"],
+          // augratin, compote, meatysalad, pastacold, pastahot, riceandbeans, and yogurtmeal
+          points: 0,
+          bonusAt: 7,
+          bonus: 50,
+          description: "expandedfoods-meal-desc"
+        }
+      ]
     },
     "pickled-food" : {
       points: 10,
@@ -18,7 +28,8 @@
         {
           dependsOn: ["expandedfoods"],
           // Pickled egg
-          bonusAt: 1
+          points: 0,
+          bonusAt: 1,
         }
       ]
     },

@@ -31,6 +31,7 @@
 
   "meal-category-cat-name": "Meals",
   "meal-category-cat-desc": "Cooked meals, classified by their recipe category: meaty stew, vegetable stew, soup, porridge, jam, and scrambled eggs",
+  "expandedfoods-meal-desc": "Cooked meals, classified by their recipe category: meaty stew, vegetable stew, soup, porridge, jam, and scrambled eggs.\nThe Expanded Foods meals are also included (<a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Meals\">wiki</a>) (<a href=\"handbook://expandedfoodsguide3\">handbook</a>): augratin, compote, salad, cold pasta, hot pasta, pilaf, and yogurt.",
 
   "pickled-food-cat-name": "Pickled Foods",
   "pickled-food-cat-desc": "Vegetables that were pickled.",

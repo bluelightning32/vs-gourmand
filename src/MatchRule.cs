@@ -168,7 +168,8 @@ public class MatchRule : MatchRuleJson {
     }
   }
 
-  public static Dictionary<string, CookingRecipe> GetRecipeDict(IEnumerable<CookingRecipe> recipes) {
+  public static Dictionary<string, CookingRecipe>
+  GetRecipeDict(IEnumerable<CookingRecipe> recipes) {
     Dictionary<string, CookingRecipe> result = new();
     foreach (CookingRecipe recipe in recipes) {
       result.Add(recipe.Code, recipe);
@@ -176,7 +177,8 @@ public class MatchRule : MatchRuleJson {
     return result;
   }
 
-  public static Dictionary<string, CookingRecipe> GetRecipeDict(IModLoader loader) {
+  public static Dictionary<string, CookingRecipe>
+  GetRecipeDict(IModLoader loader) {
     return GetRecipeDict(CookingIngredientCondition.GetRecipes(loader));
   }
 
