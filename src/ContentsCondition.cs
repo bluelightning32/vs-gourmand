@@ -50,17 +50,15 @@ public class ContentsCondition : ICondition {
     return result;
   }
 
-  public void EnumerateMatches(IWorldAccessor resolver,
-                               IReadonlyCategoryDict catdict,
-                               ref List<ItemStack> matches) {
-    List<ItemStack> output = new();
+  public IEnumerable<ItemStack> EnumerateMatches(IWorldAccessor resolver,
+                                                 IReadonlyCategoryDict catdict,
+                                                 IEnumerable<ItemStack> input) {
     ContentBuilder builder = new();
     foreach (var _ in GetAllSlotsEnumerable(
                  resolver, catdict, builder,
-                 GetInputEnumerable(resolver, builder, matches))) {
-      output.Add(builder.GetItemStack(resolver));
+                 GetInputEnumerable(resolver, builder, input))) {
+      yield return builder.GetItemStack(resolver);
     }
-    matches = output;
   }
 
   public bool IsMatch(IWorldAccessor resolver, IReadonlyCategoryDict catdict,

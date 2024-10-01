@@ -227,12 +227,12 @@ public class MatchRule : MatchRuleJson {
           .Concat(Deletes)
           .Concat(Conditions.SelectMany(c => c.Categories));
 
-  public List<ItemStack>
+  public IEnumerable<ItemStack>
   EnumerateMatches(IWorldAccessor resolver,
                    Collectibles.IReadonlyCategoryDict catdict) {
-    List<ItemStack> matches = null;
+    IEnumerable<ItemStack> matches = null;
     foreach (ICondition condition in Conditions) {
-      condition.EnumerateMatches(resolver, catdict, ref matches);
+      matches = condition.EnumerateMatches(resolver, catdict, matches);
     }
     return matches;
   }

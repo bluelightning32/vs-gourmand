@@ -42,26 +42,23 @@ public class CategoryCondition : ICondition {
     result.AddRange(catdict.GetValue(Input, stack.Collectible).Value);
   }
 
-  public void EnumerateMatches(IWorldAccessor resolver,
-                               IReadonlyCategoryDict catdict,
-                               ref List<ItemStack> matches) {
+  public IEnumerable<ItemStack> EnumerateMatches(IWorldAccessor resolver,
+                                                 IReadonlyCategoryDict catdict,
+                                                 IEnumerable<ItemStack> input) {
     if (EnumeratePerDistinct == int.MaxValue) {
-      if (matches == null) {
-        matches = catdict.EnumerateMatches(Input)
-                      .Select(c => new ItemStack(c))
-                      .ToList();
+      if (input == null) {
+        return catdict.EnumerateMatches(Input).Select(c => new ItemStack(c));
       } else {
-        matches.RemoveAll((c) => !IsMatch(resolver, catdict, c));
+        return input.Where((c) => IsMatch(resolver, catdict, c));
       }
     } else {
-      if (matches == null) {
-        matches = catdict.EnumerateMatches(Input, EnumeratePerDistinct)
-                      .Select(c => new ItemStack(c))
-                      .ToList();
+      if (input == null) {
+        return catdict.EnumerateMatches(Input, EnumeratePerDistinct)
+            .Select(c => new ItemStack(c));
       } else {
         Dictionary<List<IAttribute>, int> distinctCounts =
             new(new ListIAttributeComparer());
-        matches.RemoveAll((c) => !IsEnumerableDistinctMatch(resolver, catdict,
+        return input.Where((c) => IsEnumerableDistinctMatch(resolver, catdict,
                                                             c, distinctCounts));
       }
     }

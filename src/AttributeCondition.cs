@@ -113,24 +113,21 @@ public class AttributeCondition : ICondition {
   /// existing stacks with a different attribute value set.
   /// </summary>
   /// <param name="catdict">category dictionary</param>
-  /// <param name="matches">input and output list of matched item stacks</param>
-  public void EnumerateMatches(IWorldAccessor resolver,
-                               IReadonlyCategoryDict catdict,
-                               ref List<ItemStack> matches) {
-    matches ??= new();
+  /// <param name="input">input enumerable of matched item stacks</param>
+  public IEnumerable<ItemStack> EnumerateMatches(IWorldAccessor resolver,
+                                                 IReadonlyCategoryDict catdict,
+                                                 IEnumerable<ItemStack> input) {
     if (EnumerateValues.Length == 0) {
-      matches.Clear();
-      return;
+      yield break;
     }
-    int matchesCount = matches.Count;
-    for (int matchIndex = 0; matchIndex < matchesCount; ++matchIndex) {
-      ItemStack stack = matches[matchIndex];
+    foreach (ItemStack stack in input ?? Array.Empty<ItemStack>()) {
       SetAttribute(stack.Attributes, EnumerateValues[0]);
+      yield return stack;
       for (int valueIndex = 1; valueIndex < EnumerateValues.Length;
            ++valueIndex) {
         ItemStack newStack = stack.Clone();
-        SetAttribute(stack.Attributes, EnumerateValues[valueIndex]);
-        matches.Add(newStack);
+        SetAttribute(newStack.Attributes, EnumerateValues[valueIndex]);
+        yield return newStack;
       }
     }
   }

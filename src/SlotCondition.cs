@@ -275,11 +275,11 @@ public class SlotCondition {
   public IReadOnlyList<ItemStack>
   EnumerateAllowedStacks(IWorldAccessor resolver,
                          IReadonlyCategoryDict catdict) {
-    List<ItemStack> contentMatchesList = null;
+    IEnumerable<ItemStack> contentMatches = null;
     foreach (ICondition cond in Categories) {
-      cond.EnumerateMatches(resolver, catdict, ref contentMatchesList);
+      contentMatches = cond.EnumerateMatches(resolver, catdict, contentMatches);
     }
-    return (IReadOnlyList<ItemStack>)contentMatchesList ??
+    return (IReadOnlyList<ItemStack>)contentMatches?.ToList() ??
            new AllStacksList(resolver);
   }
 

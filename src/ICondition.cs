@@ -47,12 +47,16 @@ public interface ICondition {
   /// </summary>
   /// <param name="catdict">a precomputed dictionary of categories for
   /// collectible objects</param>
-  /// <param name="matches">
-  ///   An existing list of ItemStacks to further refine
-  ///   based on this condition. Pass null for this condition to start a new
-  ///   list.
+  /// <param name="input">
+  ///   An existing enumerable of ItemStacks to further refine
+  ///   based on this condition. Pass null for this condition to enumerate all
+  ///   of its possible values instead of refining an existing enumerable.
   /// </param>
-  public void EnumerateMatches(IWorldAccessor resolver,
-                               Collectibles.IReadonlyCategoryDict catdict,
-                               ref List<ItemStack> matches);
+  /// <returns>
+  /// An enumerable of matches
+  /// </returns>
+  public IEnumerable<ItemStack>
+  EnumerateMatches(IWorldAccessor resolver,
+                   Collectibles.IReadonlyCategoryDict catdict,
+                   IEnumerable<ItemStack> input);
 }

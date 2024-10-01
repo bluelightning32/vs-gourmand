@@ -182,7 +182,7 @@ public class MatchRule {
         JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
     Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
     List<ItemStack> matches =
-        rule.EnumerateMatches(Resolver.Resolver, Resolver.CatDict);
+        rule.EnumerateMatches(Resolver.Resolver, Resolver.CatDict).ToList();
     CollectionAssert.AreEquivalent(new CollectibleObject[] { bowl, bowl },
                                    matches.Select(s => s.Collectible).ToList());
     CollectionAssert.AreEquivalent(
@@ -233,7 +233,7 @@ public class MatchRule {
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
 
     List<ItemStack> matches =
-        rule.EnumerateMatches(Resolver.Resolver, Resolver.CatDict);
+        rule.EnumerateMatches(Resolver.Resolver, Resolver.CatDict).ToList();
     Assert.IsTrue(matches.Select(s => s.Collectible).All(c => c == bowl));
     Assert.IsTrue(
         matches.Select(s => (string)s.Attributes["recipeCode"].GetValue())

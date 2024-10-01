@@ -94,8 +94,9 @@ public class AttributeCondition {
         JsonObject.FromJson(json).AsObject<Real.AttributeCondition>(null,
                                                                     "gourmand");
 
-    List<ItemStack> matches = null;
-    cond.EnumerateMatches(_resolver.Resolver, _resolver.CatDict, ref matches);
+    List<ItemStack> matches =
+        cond.EnumerateMatches(_resolver.Resolver, _resolver.CatDict, null)
+            .ToList();
     CollectionAssert.AreEqual(Array.Empty<ItemStack>(), matches);
   }
 
@@ -116,7 +117,9 @@ public class AttributeCondition {
                 new ItemStack(LoadAssets.GetBlock("game", "pie-charred"), 2) };
     originalMatches[1].Attributes.SetInt("pieSize", 5);
     List<ItemStack> matches = originalMatches.ToList();
-    cond.EnumerateMatches(_resolver.Resolver, _resolver.CatDict, ref matches);
+    matches =
+        cond.EnumerateMatches(_resolver.Resolver, _resolver.CatDict, matches)
+            .ToList();
 
     CollectionAssert.AreEqual(
         originalMatches.Select(c => c.Collectible).ToList(),
@@ -140,8 +143,10 @@ public class AttributeCondition {
         new() { new ItemStack(LoadAssets.GetBlock("game", "pie-perfect"), 2),
                 new ItemStack(LoadAssets.GetBlock("game", "pie-charred"), 2) };
     originalMatches[1].Attributes.SetInt("pieSize", 5);
-    List<ItemStack> matches = originalMatches.ToList();
-    cond.EnumerateMatches(_resolver.Resolver, _resolver.CatDict, ref matches);
+    List<ItemStack> matches =
+        cond.EnumerateMatches(_resolver.Resolver, _resolver.CatDict,
+                              originalMatches)
+            .ToList();
 
     CollectionAssert.AreEqual(
         originalMatches.Select(c => c.Collectible).ToHashSet().ToList(),

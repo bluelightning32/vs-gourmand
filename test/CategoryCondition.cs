@@ -80,8 +80,9 @@ public class CategoryCondition {
         JsonObject.FromJson(json).AsObject<Real.CategoryCondition>(null,
                                                                    "gourmand");
 
-    List<ItemStack> matches = null;
-    cond.EnumerateMatches(_resolver.Resolver, _resolver.CatDict, ref matches);
+    List<ItemStack> matches =
+        cond.EnumerateMatches(_resolver.Resolver, _resolver.CatDict, null)
+            .ToList();
 
     List<CollectibleObject> collectibles =
         matches.Select(c => c.Collectible).ToList();
@@ -110,7 +111,9 @@ public class CategoryCondition {
         new() { new ItemStack(LoadAssets.GetItem("game", "fruit-pineapple"), 2),
                 new ItemStack(LoadAssets.GetItem("game", "fruit-cranberry"), 2),
                 new ItemStack(LoadAssets.GetItem("game", "firestarter"), 2) };
-    cond.EnumerateMatches(_resolver.Resolver, _resolver.CatDict, ref matches);
+    matches =
+        cond.EnumerateMatches(_resolver.Resolver, _resolver.CatDict, matches)
+            .ToList();
 
     List<CollectibleObject> collectibles =
         matches.Select(c => c.Collectible).ToList();
@@ -138,8 +141,9 @@ public class CategoryCondition {
         JsonObject.FromJson(json).AsObject<Real.CategoryCondition>(null,
                                                                    "gourmand");
 
-    List<ItemStack> matches = null;
-    cond.EnumerateMatches(_resolver.Resolver, _resolver.CatDict, ref matches);
+    List<ItemStack> matches =
+        cond.EnumerateMatches(_resolver.Resolver, _resolver.CatDict, null)
+            .ToList();
 
     List<CollectibleObject> collectibles =
         matches.Select(c => c.Collectible).ToList();
@@ -185,7 +189,9 @@ public class CategoryCondition {
                 new ItemStack(LoadAssets.GetItem("game", "fruit-blueberry"), 2),
                 new ItemStack(LoadAssets.GetItem("game", "fruit-cranberry"), 2),
                 new ItemStack(LoadAssets.GetItem("game", "firestarter"), 2) };
-    cond.EnumerateMatches(_resolver.Resolver, _resolver.CatDict, ref matches);
+    matches =
+        cond.EnumerateMatches(_resolver.Resolver, _resolver.CatDict, matches)
+            .ToList();
 
     List<CollectibleObject> collectibles =
         matches.Select(c => c.Collectible).ToList();
