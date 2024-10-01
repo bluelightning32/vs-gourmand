@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
 
 using Gourmand.Collectibles;
 
@@ -169,17 +170,28 @@ public class MatchRule : MatchRuleJson {
   }
 
   public static Dictionary<string, CookingRecipe>
-  GetRecipeDict(IEnumerable<CookingRecipe> recipes) {
+  GetRecipeDict(IEnumerable<CookingRecipe> recipes, ILogger logger) {
     Dictionary<string, CookingRecipe> result = new();
     foreach (CookingRecipe recipe in recipes) {
-      result.Add(recipe.Code, recipe);
+      try {
+        result.Add(recipe.Code, recipe);
+      } catch (ArgumentException) {
+        StringBuilder sb = new();
+        sb.AppendLine(
+            $"Two recipes with the same code name of {recipe.Code} were found. Maybe you copied files within the game's asset folder? All recipes:");
+        foreach (CookingRecipe entry in recipes) {
+          sb.AppendLine(JsonUtil.ToString(entry));
+        }
+        logger.Fatal(sb.ToString());
+        throw;
+      }
     }
     return result;
   }
 
   public static Dictionary<string, CookingRecipe>
-  GetRecipeDict(IModLoader loader) {
-    return GetRecipeDict(CookingIngredientCondition.GetRecipes(loader));
+  GetRecipeDict(IModLoader loader, ILogger logger) {
+    return GetRecipeDict(CookingIngredientCondition.GetRecipes(loader), logger);
   }
 
   /// <summary>

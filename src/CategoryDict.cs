@@ -50,7 +50,7 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
   LoadStackRules(IWorldAccessor resolver, ILogger logger,
                  IEnumerable<MatchRule> stackRules) {
     Dictionary<string, CookingRecipe> cooking =
-        MatchRule.GetRecipeDict(resolver.Api.ModLoader);
+        MatchRule.GetRecipeDict(resolver.Api.ModLoader, logger);
     HashSet<Tuple<string, string>> implicits = new();
 
     Dictionary<AssetLocation, HashSet<MatchRule>> rules = new();

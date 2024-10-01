@@ -458,8 +458,8 @@ public class MatchRule {
     ";
     Real.MatchRule rule =
         JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
-    Dictionary<string, CookingRecipe> cooking =
-        Real.MatchRule.GetRecipeDict(LoadAssets.Server.Api.ModLoader);
+    Dictionary<string, CookingRecipe> cooking = Real.MatchRule.GetRecipeDict(
+        LoadAssets.Server.Api.ModLoader, LoadAssets.Server.Api.Logger);
     List<string> implicits =
         rule.ResolveImports(cooking, LoadAssets.Server.Api.Logger);
 
@@ -502,8 +502,8 @@ public class MatchRule {
     ";
     Real.MatchRule rule =
         JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
-    Dictionary<string, CookingRecipe> cooking =
-        Real.MatchRule.GetRecipeDict(LoadAssets.Server.Api.ModLoader);
+    Dictionary<string, CookingRecipe> cooking = Real.MatchRule.GetRecipeDict(
+        LoadAssets.Server.Api.ModLoader, LoadAssets.Server.Api.Logger);
     List<string> implicits =
         rule.ResolveImports(cooking, LoadAssets.Server.Api.Logger);
 
