@@ -165,9 +165,9 @@ public class GourmandTab {
         _capi.World, gourmand.CatDict, category, modData, maxShow,
         out Dictionary<string, List<ItemStack>> missing);
     stopwatch.Stop();
-    gourmand.Mod.Logger.Debug("Enumerated category {0} with {1} values in {2}.",
-                              category, missing.Sum(m => m.Value.Count),
-                              stopwatch.Elapsed);
+    GetDebugLogger()?.Debug("Enumerated category {0} with {1} values in {2}.",
+                            category, missing.Sum(m => m.Value.Count),
+                            stopwatch.Elapsed);
     AddFoodCategory(composer, components, category, eaten, achievement, rand,
                     missing, more);
   }
@@ -179,27 +179,35 @@ public class GourmandTab {
     DiposeNotifyingLink link =
         new(_capi, Lang.Get("gourmand:back-to-overview") + "\n",
             CairoFont.WhiteSmallText(), (l) => BackToOverview(composer));
-    link.OnDispose += ClearCache;
+    link.OnDispose += () => ClearCache();
     components.Add(link);
 
     Random rand = new();
     Dictionary<AssetLocation, Tuple<int, AchievementPoints>> achievements =
         foodAchievements.GetAchievementStats(modData);
     AddFoodAchievement(composer, components, gourmand, foodAchievements,
-                       modData, _focusCategory,
-                       achievements[_focusCategory].Item1,
-                       achievements[_focusCategory].Item2, rand, int.MaxValue);
+                       modData, focusCategory,
+                       achievements[focusCategory].Item1,
+                       achievements[focusCategory].Item2, rand, int.MaxValue);
   }
 
   private void ClearCache() {
     if (_cachedOverviewComponents != null) {
-      GourmandSystem gourmand = _capi.ModLoader.GetModSystem<GourmandSystem>();
-      gourmand.Mod.Logger.Debug("Clearing overview cache");
+      GetDebugLogger()?.Debug("Clearing overview cache");
       foreach (RichTextComponentBase component in _cachedOverviewComponents) {
         component.Dispose();
       }
       _cachedOverviewComponents = null;
       _cachedOverviewScroll = 0;
+    }
+  }
+
+  private ILogger GetDebugLogger() {
+    if (_capi.Settings.Bool["extendedDebugInfo"]) {
+      GourmandSystem gourmand = _capi.ModLoader.GetModSystem<GourmandSystem>();
+      return gourmand.Mod.Logger;
+    } else {
+      return null;
     }
   }
 
@@ -356,7 +364,7 @@ public class GourmandTab {
     float scrollTo = 0;
     if (_focusCategory == null && _cachedOverviewComponents != null) {
       GourmandSystem gourmand = _capi.ModLoader.GetModSystem<GourmandSystem>();
-      gourmand.Mod.Logger.Debug("Using cached overview.");
+      GetDebugLogger()?.Debug("Using cached overview.");
 
       text.Components = _cachedOverviewComponents;
       scrollTo = _cachedOverviewScroll;
