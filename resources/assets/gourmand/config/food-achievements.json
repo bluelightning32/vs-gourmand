@@ -56,8 +56,8 @@
     "sushi" : {
       dependsOn: ["expandedfoods"],
       points: 2,
-      bonusAt: 30,
-      bonus: 100,
+      bonusAt: 8,
+      bonus: 50,
     },
     "pickled-food" : {
       points: 10,
