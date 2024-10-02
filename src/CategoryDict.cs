@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
+using Vintagestory.API.Server;
 using Vintagestory.GameContent;
 
 namespace Gourmand;
@@ -49,8 +50,8 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
   private IEnumerable<Collectibles.MatchRule>
   LoadStackRules(IWorldAccessor resolver, ILogger logger,
                  IEnumerable<MatchRule> stackRules) {
-    Dictionary<string, CookingRecipe> cooking =
-        MatchRule.GetRecipeDict(resolver.Api.ModLoader, logger);
+    Dictionary<string, List<CookingRecipe>> cooking = MatchRule.GetRecipeDict(
+        resolver.Api.ModLoader, resolver.Api as ICoreServerAPI, logger);
     HashSet<Tuple<string, string>> implicits = new();
 
     Dictionary<AssetLocation, HashSet<MatchRule>> rules = new();

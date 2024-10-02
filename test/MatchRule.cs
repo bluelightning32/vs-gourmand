@@ -4,6 +4,7 @@ using PrefixClassName.MsTest;
 
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
+using Vintagestory.API.Server;
 using Vintagestory.Common;
 using Vintagestory.GameContent;
 
@@ -458,8 +459,10 @@ public class MatchRule {
     ";
     Real.MatchRule rule =
         JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
-    Dictionary<string, CookingRecipe> cooking = Real.MatchRule.GetRecipeDict(
-        LoadAssets.Server.Api.ModLoader, LoadAssets.Server.Api.Logger);
+    Dictionary<string, List<CookingRecipe>> cooking =
+        Real.MatchRule.GetRecipeDict(LoadAssets.Server.Api.ModLoader,
+                                     LoadAssets.Server.Api as ICoreServerAPI,
+                                     LoadAssets.Server.Api.Logger);
     List<string> implicits =
         rule.ResolveImports(cooking, LoadAssets.Server.Api.Logger);
 
@@ -502,8 +505,10 @@ public class MatchRule {
     ";
     Real.MatchRule rule =
         JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
-    Dictionary<string, CookingRecipe> cooking = Real.MatchRule.GetRecipeDict(
-        LoadAssets.Server.Api.ModLoader, LoadAssets.Server.Api.Logger);
+    Dictionary<string, List<CookingRecipe>> cooking =
+        Real.MatchRule.GetRecipeDict(LoadAssets.Server.Api.ModLoader,
+                                     LoadAssets.Server.Api as ICoreServerAPI,
+                                     LoadAssets.Server.Api.Logger);
     List<string> implicits =
         rule.ResolveImports(cooking, LoadAssets.Server.Api.Logger);
 

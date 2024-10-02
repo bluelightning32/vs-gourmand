@@ -169,29 +169,40 @@ public class MatchRule : MatchRuleJson {
     }
   }
 
-  public static Dictionary<string, CookingRecipe>
-  GetRecipeDict(IEnumerable<CookingRecipe> recipes, ILogger logger) {
-    Dictionary<string, CookingRecipe> result = new();
+  public static Dictionary<string, List<CookingRecipe>>
+  GetRecipeDict(IEnumerable<CookingRecipe> recipes, ICoreServerAPI sapi,
+                ILogger logger) {
+    Dictionary<string, List<CookingRecipe>> result = new();
     foreach (CookingRecipe recipe in recipes) {
-      try {
-        result.Add(recipe.Code, recipe);
-      } catch (ArgumentException) {
+      if (result.TryGetValue(recipe.Code,
+                             out List<CookingRecipe> recipesForCode)) {
         StringBuilder sb = new();
         sb.AppendLine(
-            $"Two recipes with the same code name of {recipe.Code} were found. Maybe you copied files within the game's asset folder? All recipes:");
+            $"Two recipes with the same code name of {recipe.Code} were found. Maybe you copied files within the game's asset folder? All recipe codes:");
         foreach (CookingRecipe entry in recipes) {
-          sb.AppendLine(JsonUtil.ToString(entry));
+          sb.AppendLine(entry.Code);
         }
-        logger.Fatal(sb.ToString());
-        throw;
+        if (sapi != null) {
+          sb.AppendLine("All recipe files:");
+          foreach (KeyValuePair<AssetLocation, JToken> file in sapi.Assets
+                       .GetMany<JToken>(logger, "recipes/cooking")) {
+            sb.AppendLine(file.Key.ToString());
+          }
+        }
+        logger.Warning(sb.ToString());
+      } else {
+        recipesForCode = new();
+        result.Add(recipe.Code, recipesForCode);
       }
+      recipesForCode.Add(recipe);
     }
     return result;
   }
 
-  public static Dictionary<string, CookingRecipe>
-  GetRecipeDict(IModLoader loader, ILogger logger) {
-    return GetRecipeDict(CookingIngredientCondition.GetRecipes(loader), logger);
+  public static Dictionary<string, List<CookingRecipe>>
+  GetRecipeDict(IModLoader loader, ICoreServerAPI sapi, ILogger logger) {
+    return GetRecipeDict(CookingIngredientCondition.GetRecipes(loader), sapi,
+                         logger);
   }
 
   /// <summary>
@@ -201,16 +212,23 @@ public class MatchRule : MatchRuleJson {
   /// <param name="sapi">api to lookup the cooking recipe</param>
   /// <returns>a list of implict recipe categories that this rule depends
   /// on</returns>
-  public List<string> ResolveImports(Dictionary<string, CookingRecipe> recipes,
-                                     ILogger logger) {
+  public List<string>
+  ResolveImports(Dictionary<string, List<CookingRecipe>> recipes,
+                 ILogger logger) {
     List<string> implictCategories = new();
     if (ImportRecipe == null) {
       return implictCategories;
     }
-    if (!recipes.TryGetValue(ImportRecipe, out CookingRecipe recipe)) {
+    if (!recipes.TryGetValue(ImportRecipe,
+                             out List<CookingRecipe> recipesForCode)) {
       logger.Warning("Could not find recipe {0}", ImportRecipe);
       return implictCategories;
     }
+    if (recipesForCode.Count > 1) {
+      logger.Error("There are {recipesForCode.Count} recipes for " +
+                   "{ImportRecipe}. Only the first will be used.");
+    }
+    CookingRecipe recipe = recipesForCode[0];
 
     List<SlotCondition> slots = new(Slots ?? Array.Empty<SlotCondition>());
     HashSet<string> initialSlots = new(slots.Select(s => s.Code));
