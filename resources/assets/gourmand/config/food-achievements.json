@@ -42,8 +42,10 @@
         {
           dependsOn: ["expandedfoods"],
           points: 0,
-          bonusAt: 32,
-          bonus: 100
+          // There are 237 possible pies with Expanded Foods installed. In
+          // total the completion bonus allows 20 of them to be skipped.
+          bonusAt: 185,
+          bonus: 200
         }
       ]
     },

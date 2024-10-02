@@ -25,5 +25,17 @@
       }
     ],
     deletes: [ "pie-filling-mixable-code", "pie-filling-mixable-category" ]
+  },
+  {
+    // Exclude any foods from pies that have no nutrition when in meals. These
+    // foods would cause a crash when rendered. See
+    // https://github.com/bluelightning32/vs-gourmand/issues/2.
+    priority: 2,
+    categories: [
+      {
+        input: "cookable-no-nutrition",
+      },
+    ],
+    deletes: [ "pie-filling-mixable-code", "pie-filling-mixable-category" ]
   }
 ]
