@@ -1,0 +1,49 @@
+[
+  {
+    // Edible foods and foods that only become edible after being cooked
+    categories: [
+      {
+        input: "food",
+        outputs: [ "cookable-food" ]
+      },
+      {
+        input: "food-category",
+        outputs: [ "cookable-food-category" ]
+      }
+    ],
+  },
+  {
+    priority: 2,
+    categories: [
+      {
+        input: "food",
+        outputs: [ "cookable-food" ]
+      },
+    ],
+    attributes: [
+      {
+        path: ["nutritionPropsWhenInMeal", "foodcategory"],
+        outputs: ["cookable-food-category"]
+      }
+    ]
+  },
+  {
+    // For efficiency reasons, the above rules only looked at items in the
+    // food category, which are items that have nutritional properties set.
+    // That excluded items which initially do not have nutritional properties,
+    // but can still be cooked into meals. Instead of searching for all such
+    // items, for efficiency reasons, only raw meats are added.
+    categories: [
+      {
+        input: "meat",
+        outputs: [ "cookable-food" ]
+      },
+    ],
+    attributes: [
+      {
+        path: ["nutritionPropsWhenInMeal", "foodcategory"],
+        outputs: ["cookable-food-category"]
+      }
+    ]
+  },
+]

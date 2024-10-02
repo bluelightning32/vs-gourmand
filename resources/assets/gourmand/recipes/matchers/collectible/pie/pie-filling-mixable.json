@@ -6,7 +6,7 @@
         outputs: [ "pie-filling-mixable-code" ]
       },
       {
-        input: "food-category",
+        input: "pie-filling-category",
         outputs: [ "pie-filling-mixable-category" ]
       }
     ]

@@ -1,0 +1,51 @@
+[
+  {
+    // First, include all cookable foods that have a food category of
+    // NoNutrition.
+    priority: 1,
+    categories: [
+      {
+        input: "cookable-food",
+        outputs: [ "cookable-no-nutrition" ]
+      },
+    ],
+    nutritionProps : {
+      category: {
+        value: "NoNutrition"
+      }
+    },
+  },
+  {
+    // Next, exclude cookable foods that set the in meal food category,
+    // because it may be set to something other than NoNutrition.
+    priority: 2,
+    categories: [
+      {
+        input: "cookable-food",
+      },
+    ],
+    attributes: [
+      {
+        path: ["nutritionPropsWhenInMeal", "foodcategory"],
+      }
+    ],
+    deletes: [ "cookable-no-nutrition" ]
+  },
+  {
+    // Finally, include cookable foods that set the in meal food category to
+    // NoNutrition.
+    priority: 3,
+    categories: [
+      {
+        input: "cookable-food",
+        outputs: [ "cookable-no-nutrition" ]
+      },
+    ],
+    attributes: [
+      {
+        path: ["nutritionPropsWhenInMeal", "foodcategory"],
+        value: "NoNutrition"
+      }
+    ]
+  },
+]
