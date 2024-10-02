@@ -33,20 +33,20 @@
 
   "meal-category-cat-name": "Meals",
   "meal-category-cat-desc": "Cooked meals, classified by their recipe category: meaty stew, vegetable stew, soup, porridge, jam, and scrambled eggs",
-  "expandedfoods-meal-desc": "Cooked meals, classified by their recipe category: meaty stew, vegetable stew, soup, porridge, jam, and scrambled eggs.\nThe Expanded Foods meals are also included (<a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Meals\">wiki</a>) (<a href=\"handbook://expandedfoodsguide3\">handbook</a>): augratin, compote, salad, cold pasta, hot pasta, pilaf, and yogurt.",
+  "expandedfoods-meal-desc": "Cooked meals, classified by their recipe category: meaty stew, vegetable stew, soup, porridge, jam, and scrambled eggs.\nThe Expanded Foods meals are also included <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Meals\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide3\">[handbook]</a>: augratin, compote, salad, cold pasta, hot pasta, pilaf, and yogurt.",
 
   // Only with expandedfoods installed
   "hardtack-bake-cat-name": "Hardtack",
-  "hardtack-bake-cat-desc": "As easy as bread, but with a longer shelf life. (<a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Hardtack\">wiki</a>) (<a href=\"handbook://expandedfoodsguide2\">handbook</a>).",
+  "hardtack-bake-cat-desc": "As easy as bread, but with a longer shelf life. <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Hardtack\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
   "sweetsavory-cat-name": "Sweet and Savory",
   "sweetsavory-cat-desc": "Various sweet and savory treats.",
   "sushi-cat-name": "Sushi",
-  "sushi-cat-desc": "Japanese food made from seaweed, rice, and optionally fish nuggets or veggies (<a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Sushi\">wiki</a>) (<a href=\"handbook://expandedfoodsguide2\">handbook</a>).",
+  "sushi-cat-desc": "Japanese food made from seaweed, rice, and optionally fish nuggets or veggies. <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Sushi\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
   "fried-cat-name": "Fried Foods",
-  "fried-cat-desc": "Fried bread, fried fish, fried bushmeat, fried poultry, fried redmeat, fried mushrooms, fried vegetables, fried pickled vegetables, and stuffed peppers. (<a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Breaded_Food\">wiki</a>) (<a href=\"handbook://expandedfoodsguide2\">handbook</a>).",
+  "fried-cat-desc": "Prepared and breaded, then fried to perfection. <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Breaded_Food\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
   "deluxe-cat-name": "Deluxe Fried Foods",
-  "deluxe-cat-desc": "Fried foods with honey, soy sauce, fish sauce, birch or maple syrup, peanut butter, or peanut sauce added on top. (<a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Breaded_Food\">wiki</a>) (<a href=\"handbook://expandedfoodsguide2\">handbook</a>).",
-  "vegetablejuice-cat-name": "Vegetable juices",
+  "deluxe-cat-desc": "Fried foods drizzled with various sauces and syrups. <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Breaded_Food\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
+  "vegetablejuice-cat-name": "Vegetable Juices",
   "vegetablejuice-cat-desc": "Every kind of vegetable juice. They can be drunk from any potable container.",
 
   "pickled-food-cat-name": "Pickled Foods",
@@ -55,7 +55,7 @@
   "bread-perfect-cat-name": "Breads",
   "bread-perfect-cat-desc": "Perfectly cooked breads.",
 
-  "climate-spanning-cat-name": "Climate spanning foods",
+  "climate-spanning-cat-name": "Climate Spanning Foods",
   "climate-spanning-cat-desc": "A few select foods that require ingredients from both hot and cold climates.",
 
   "mushroom-cat-name": "Mushrooms",
@@ -69,7 +69,7 @@
 
   "alcohol-cat-name": "Alcohol Types",
   "alcohol-cat-desc": "Cider, brandy, and aqua vitae.",
-  "expandedfoods-alcohol-desc": "Fine wine, strong wine, cider, brandy, aged brandy, vintage brandy, vodka, and aqua vitae.",
+  "expandedfoods-alcohol-desc": "Every type of alcoholic drink, including: fine wine, strong wine, cider, brandy, aged brandy, vintage brandy, vodka, and aqua vitae.",
 
   "poison-cat-name": "Poisons",
   "poison-cat-desc": "Foods that remove health points when eaten.",
