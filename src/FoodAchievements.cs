@@ -18,7 +18,7 @@ public class AchievementPoints {
   /// achievement if one of the mods in this list is not installed.
   /// </summary>
   [JsonProperty("dependsOn")]
-  public string[] DependsOn { get; private set; }
+  public ModDependency[] DependsOn { get; private set; }
 
   [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
   [DefaultValue(1)]
@@ -42,9 +42,9 @@ public class AchievementPoints {
   [JsonProperty("add")]
   public AchievementPoints[] Add { get; private set; }
 
-  public AchievementPoints(string[] dependsOn, int points, int bonusAt,
+  public AchievementPoints(ModDependency[] dependsOn, int points, int bonusAt,
                            int bonus, AchievementPoints[] add) {
-    DependsOn = dependsOn ?? Array.Empty<string>();
+    DependsOn = dependsOn ?? Array.Empty<ModDependency>();
     Points = points;
     BonusAt = bonusAt;
     Bonus = bonus;
@@ -60,7 +60,7 @@ public class AchievementPoints {
   }
 
   public bool DependsOnSatisified(IModLoader loader) {
-    return DependsOn.All(loader.IsModEnabled);
+    return DependsOn.All(d => d.IsSatisified(loader));
   }
 
   /// <summary>
@@ -98,7 +98,7 @@ public class HealthFunctionPiece : IComparable<HealthFunctionPiece> {
   /// achievement if one of the mods in this list is not installed.
   /// </summary>
   [JsonProperty("dependsOn")]
-  public string[] DependsOn { get; private set; }
+  public ModDependency[] DependsOn { get; private set; }
 
   public int Points { get; private set; }
   public float Health { get; private set; }
@@ -113,9 +113,9 @@ public class HealthFunctionPiece : IComparable<HealthFunctionPiece> {
     get; private set;
   }
 
-  public HealthFunctionPiece(string[] dependsOn, int points, int health,
+  public HealthFunctionPiece(ModDependency[] dependsOn, int points, int health,
                              HealthFunctionPiece[] add) {
-    DependsOn = dependsOn ?? Array.Empty<string>();
+    DependsOn = dependsOn ?? Array.Empty<ModDependency>();
     Points = points;
     Health = health;
     Add = add;
@@ -126,7 +126,7 @@ public class HealthFunctionPiece : IComparable<HealthFunctionPiece> {
   }
 
   public bool DependsOnSatisified(IModLoader loader) {
-    return DependsOn.All(loader.IsModEnabled);
+    return DependsOn.All(d => d.IsSatisified(loader));
   }
 
   /// <summary>

@@ -143,13 +143,13 @@ public class MatchRuleSorter {
     string json = @"
     [
       {
-        dependsOn: [""survival""],
+        dependsOn: [ { modId: ""survival"" } ],
         outputs: {
           ""cat1"": [ 0 ]
         }
       },
       {
-        dependsOn: [""notinstalled""],
+        dependsOn: [ { modId: ""notinstalled"" } ],
         outputs: {
           ""cat2"": [ 0 ]
         }

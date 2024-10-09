@@ -1,6 +1,6 @@
 [
   {
-    dependsOn: [ "expandedfoods" ],
+    dependsOn: [ { modId: "expandedfoods" } ],
     code : {
       match: "expandedfoods:hardtack-*-bake1",
       type: "item",

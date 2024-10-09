@@ -1,6 +1,6 @@
 [
   {
-    dependsOn: [ "expandedfoods" ],
+    dependsOn: [ { modId: "expandedfoods" } ],
     code : {
       match: "expandedfoods:berrybread-syrup",
       type: "item",

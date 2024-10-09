@@ -20,7 +20,7 @@ public class MatchRuleJson {
   /// if one of the mods in this list is not installed.
   /// </summary>
   [JsonProperty("dependsOn")]
-  public readonly string[] DependsOn;
+  public readonly ModDependency[] DependsOn;
 
   [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
   [DefaultValue(1.0)]
@@ -47,13 +47,13 @@ public class MatchRuleJson {
   public readonly bool IgnoreNoMatches;
 
   [JsonConstructor]
-  public MatchRuleJson(string[] dependsOn, float priority,
+  public MatchRuleJson(ModDependency[] dependsOn, float priority,
                        IReadOnlyDictionary<string, JToken[]> rawOutputs,
                        AssetLocation[] deletes, CategoryCondition[] categories,
                        CodeCondition code, CookingIngredientCondition cooking,
                        NutritionPropsCondition nutritionProp,
                        AttributeCondition[] attributes, bool ignoreNoMatches) {
-    DependsOn = dependsOn ?? Array.Empty<string>();
+    DependsOn = dependsOn ?? Array.Empty<ModDependency>();
     Priority = priority;
     RawOutputs = rawOutputs ?? new Dictionary<string, JToken[]>();
     Deletes = deletes ?? Array.Empty<AssetLocation>();
@@ -66,7 +66,7 @@ public class MatchRuleJson {
   }
 
   public MatchRuleJson(CookingIngredientCondition cooking) {
-    DependsOn = Array.Empty<string>();
+    DependsOn = Array.Empty<ModDependency>();
     Priority = 1;
     RawOutputs = new Dictionary<string, JToken[]>();
     Deletes = Array.Empty<AssetLocation>();
@@ -92,7 +92,7 @@ public class MatchRuleJson {
   }
 
   public bool DependsOnSatisified(IModLoader modLoader) {
-    return DependsOn.All(modLoader.IsModEnabled);
+    return DependsOn.All(d => d.IsSatisified(modLoader));
   }
 }
 

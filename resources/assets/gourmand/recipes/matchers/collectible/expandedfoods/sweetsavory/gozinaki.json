@@ -1,8 +1,6 @@
 [
   {
-    dependsOn: [
-      "expandedfoods"
-    ],
+    dependsOn: [ { modId: "expandedfoods" } ],
     categories: [
       {
         input: "food"

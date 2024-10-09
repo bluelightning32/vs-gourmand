@@ -1,5 +1,5 @@
 {
-  dependsOn: [ "expandedfoods" ],
+  dependsOn: [ { modId: "expandedfoods" } ],
   category: {
     input: "edible-meal-container"
   },

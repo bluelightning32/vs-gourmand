@@ -1,6 +1,6 @@
 [
   {
-    dependsOn: [ "expandedfoods" ],
+    dependsOn: [ { modId: "expandedfoods" } ],
     code : {
       match: "expandedfoods:breadedvegetable-*-syrupv",
       type: "item",
@@ -11,7 +11,7 @@
     }
   },
   {
-    dependsOn: [ "expandedfoods" ],
+    dependsOn: [ { modId: "expandedfoods" } ],
     priority: 2,
     code : {
       match: "expandedfoods:breadedvegetable-*-pickled*-syrupv",

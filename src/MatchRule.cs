@@ -23,7 +23,7 @@ public class MatchRuleJson {
   /// if one of the mods in this list is not installed.
   /// </summary>
   [JsonProperty("dependsOn")]
-  public readonly string[] DependsOn;
+  public readonly ModDependency[] DependsOn;
 
   [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
   [DefaultValue(1.0)]
@@ -48,12 +48,12 @@ public class MatchRuleJson {
 
   [JsonConstructor]
   public MatchRuleJson(
-      string[] dependsOn, float priority,
+      ModDependency[] dependsOn, float priority,
       [JsonProperty("outputs")] Dictionary<string, JToken[]> rawOutputs,
       AssetLocation[] deletes, CategoryCondition category,
       AttributeCondition[] attributes, string importRecipe,
       SlotCondition[] slots) {
-    DependsOn = dependsOn ?? Array.Empty<string>();
+    DependsOn = dependsOn ?? Array.Empty<ModDependency>();
     Priority = priority;
     _rawOutputs = rawOutputs ?? new Dictionary<string, JToken[]>();
     Deletes = deletes ?? Array.Empty<AssetLocation>();
@@ -75,7 +75,7 @@ public class MatchRuleJson {
   }
 
   public bool DependsOnSatisified(IModLoader modLoader) {
-    return DependsOn.All(modLoader.IsModEnabled);
+    return DependsOn.All(d => d.IsSatisified(modLoader));
   }
 }
 

@@ -6,7 +6,7 @@
       bonus: 100,
       add: [
         {
-          dependsOn: ["expandedfoods"],
+          dependsOn: [ { modId: "expandedfoods" }],
           // augratin, compote, meatysalad, pastacold, pastahot, riceandbeans, and yogurtmeal
           points: 0,
           bonusAt: 7,
@@ -21,7 +21,7 @@
       bonus: 50,
       add: [
         {
-          dependsOn: ["expandedfoods"],
+          dependsOn: [ { modId: "expandedfoods" } ],
           points: 0,
           // fruitbread, fruitbread-syrup, muffin, and muffin-syrup
           bonusAt: 4
@@ -29,7 +29,7 @@
       ]
     },
     "hardtack-bake" : {
-      dependsOn: ["expandedfoods"],
+      dependsOn: [ { modId: "expandedfoods" } ],
       points: 2,
       bonusAt: 4,
       bonus: 10,
@@ -40,7 +40,7 @@
       bonus: 100,
       add: [
         {
-          dependsOn: ["expandedfoods"],
+          dependsOn: [ { modId: "expandedfoods" } ],
           points: 0,
           // There are 237 possible pies with Expanded Foods installed. In
           // total the completion bonus allows 20 of them to be skipped.
@@ -50,13 +50,13 @@
       ]
     },
     "sweetsavory" : {
-      dependsOn: ["expandedfoods"],
+      dependsOn: [ { modId: "expandedfoods" } ],
       points: 2,
       bonusAt: 7,
       bonus: 100,
     },
     "sushi" : {
-      dependsOn: ["expandedfoods"],
+      dependsOn: [ { modId: "expandedfoods" } ],
       points: 2,
       bonusAt: 8,
       bonus: 50,
@@ -67,7 +67,7 @@
       bonus: 100,
       add: [
         {
-          dependsOn: ["expandedfoods"],
+          dependsOn: [ { modId: "expandedfoods" } ],
           // Pickled egg
           points: 0,
           bonusAt: 1,
@@ -75,13 +75,13 @@
       ]
     },
     "fried" : {
-      dependsOn: ["expandedfoods"],
+      dependsOn: [ { modId: "expandedfoods" } ],
       points: 10,
       bonusAt: 9,
       bonus: 100,
     },
     "deluxe" : {
-      dependsOn: ["expandedfoods"],
+      dependsOn: [ { modId: "expandedfoods" } ],
       points: 3,
       bonusAt: 3,
       bonus: 50,
@@ -115,7 +115,7 @@
       bonus: 50,
       add: [
         {
-          dependsOn: ["expandedfoods"],
+          dependsOn: [ { modId: "expandedfoods" } ],
           points: 0,
           bonusAt: 4,
           bonus: 50,

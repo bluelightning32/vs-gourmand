@@ -1,6 +1,6 @@
 [
   {
-    dependsOn: [ "expandedfoods" ],
+    dependsOn: [ { modId: "expandedfoods" } ],
     code: {
       match: "expandedfoods:potentwineportion-*",
       type: "item",
@@ -10,7 +10,7 @@
     }
   },
   {
-    dependsOn: [ "expandedfoods" ],
+    dependsOn: [ { modId: "expandedfoods" } ],
     code: {
       match: "expandedfoods:strongwineportion-*",
       type: "item",
@@ -20,7 +20,7 @@
     }
   },
   {
-    dependsOn: [ "expandedfoods" ],
+    dependsOn: [ { modId: "expandedfoods" } ],
     code: {
       match: "expandedfoods:strongspiritportion-*",
       type: "item",
@@ -30,7 +30,7 @@
     }
   },
   {
-    dependsOn: [ "expandedfoods" ],
+    dependsOn: [ { modId: "expandedfoods" } ],
     code: {
       match: "expandedfoods:potentspiritportion-*",
       type: "item",

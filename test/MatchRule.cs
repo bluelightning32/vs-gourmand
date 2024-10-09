@@ -551,6 +551,7 @@ public class MatchRule {
     Assert.IsFalse(
         rule.IsMatch(Resolver.Resolver, Resolver.CatDict, new ItemStack(bowl)));
 
-    Assert.AreEqual(0, rule.EnumerateMatches(Resolver.Resolver, Resolver.CatDict).Count());
+    Assert.AreEqual(
+        0, rule.EnumerateMatches(Resolver.Resolver, Resolver.CatDict).Count());
   }
 }

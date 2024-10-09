@@ -1,6 +1,6 @@
 [
   {
-    dependsOn: [ "expandedfoods" ],
+    dependsOn: [ { modId: "expandedfoods" } ],
     code : {
       match: "expandedfoods:breadedmeatnugget-*-poultry-tender",
       type: "item",

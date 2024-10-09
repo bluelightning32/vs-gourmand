@@ -64,7 +64,7 @@ public class CategoryDict {
     string stackJson = @"
     [
       {
-        dependsOn: [ ""survival"" ],
+        dependsOn: [ { modId:""survival"" } ],
         category: {
           input: ""edible-meal-container"",
         },
@@ -140,7 +140,7 @@ public class CategoryDict {
         deletes: [ ""edible"" ]
       },
       {
-        dependsOn: [ ""notinstalled"" ],
+        dependsOn: [ { modId: ""notinstalled"" } ],
         category: {
           input: ""edible-meal-container"",
         },

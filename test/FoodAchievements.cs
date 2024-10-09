@@ -85,13 +85,13 @@ public class FoodAchievements {
           bonus: 90,
           add: [
             {
-              dependsOn: [ ""survival"" ],
+              dependsOn: [ { modId: ""survival"" } ],
               points: 1,
               bonusAt: 1,
               bonus: 10,
             },
             {
-              dependsOn: [ ""notinstalled"" ],
+              dependsOn: [ { modId: ""notinstalled"" } ],
               points: 1000,
               bonusAt: 1000,
               bonus: 1000,
@@ -102,7 +102,7 @@ public class FoodAchievements {
           points: 1,
         },
         ""achievement-not-installed"": {
-          dependsOn: [ ""notinstalled"" ],
+          dependsOn: [ { modId: ""notinstalled"" } ],
           points: 99,
         }
       },
@@ -120,14 +120,14 @@ public class FoodAchievements {
           health: 20,
           add: [
             {
-              dependsOn: [ ""survival"" ],
+              dependsOn: [ { modId: ""survival"" } ],
               points: 1,
               health: 10,
             }
           ]
         },
         {
-          dependsOn: [ ""not-installed"" ],
+          dependsOn: [ { modId: ""not-installed"" } ],
           points: 99,
           health: 99,
         }

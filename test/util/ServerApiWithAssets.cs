@@ -113,8 +113,9 @@ class ServerApiWithAssets {
 
       ModContainer modContainer =
           new(new FileInfo(modType.Assembly.Location), api.Logger, logDebug);
-      object[] args =
-          new object[] { info, new List<ModDependency>(), null, null };
+      object[] args = new object[] {
+        info, new List<Vintagestory.API.Common.ModDependency>(), null, null
+      };
       ModInfo modInfo =
           (ModInfo)loadModInfoFromModInfoAttribute.Invoke(modContainer, args);
       infoProperty.GetSetMethod(true).Invoke(modContainer,
