@@ -201,8 +201,8 @@ public class MatchRule : MatchRuleJson {
 
   public static Dictionary<string, List<CookingRecipe>>
   GetRecipeDict(IModLoader loader, ICoreServerAPI sapi, ILogger logger) {
-    return GetRecipeDict(CookingIngredientCondition.GetRecipes(loader), sapi,
-                         logger);
+    return GetRecipeDict(CookingIngredientCondition.GetRecipes(loader, sapi),
+                         sapi, logger);
   }
 
   /// <summary>

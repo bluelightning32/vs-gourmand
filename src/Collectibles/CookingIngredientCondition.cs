@@ -7,6 +7,7 @@ using System.Reflection;
 
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
+using Vintagestory.API.Server;
 using Vintagestory.Common;
 using Vintagestory.GameContent;
 
@@ -35,10 +36,12 @@ public class CookingIngredientCondition : ICondition {
   /// Gets the mixing recipe list from aculinaryartillery, if it loaded.
   /// </summary>
   /// <param name="loader">all of the loaded mods</param>
+  /// <param name="sapi">server api for loading ACA, may be null</param>
   /// <returns>
   /// the list of recipes, or null if aculinaryartillery is not loaded
   /// </returns>
-  public static List<CookingRecipe> GetAcaMixingRecipes(IModLoader loader) {
+  public static List<CookingRecipe> GetAcaMixingRecipes(IModLoader loader,
+                                                        ICoreServerAPI sapi) {
     Mod aca = loader.GetMod("aculinaryartillery");
     if (aca == null) {
       return null;
@@ -52,13 +55,54 @@ public class CookingIngredientCondition : ICondition {
       }
       return (List<CookingRecipe>)field.GetValue(system);
     }
-    return null;
+    // This is the way to get the recipes before version 1.1.5.
+    Type registryType = aca.Systems.First().GetType().Assembly.GetType(
+        "ACulinaryArtillery.MixingRecipeRegistry");
+    if (registryType == null) {
+      loader.GetModSystem<GourmandSystem>()?.Mod.Logger.Error(
+          "aculinaryartillery is present, but its mixing recipes cannot be " +
+          "found.");
+      return null;
+    }
+    FieldInfo registryFieldInfo = registryType.GetField(
+        "registry", BindingFlags.NonPublic | BindingFlags.Static);
+    FieldInfo mixingRecipesFieldInfo = registryType.GetField(
+        "mixingRecipes", BindingFlags.NonPublic | BindingFlags.Instance);
+    object registry = registryFieldInfo.GetValue(null);
+    List<CookingRecipe> recipes =
+        (List<CookingRecipe>)mixingRecipesFieldInfo.GetValue(registry);
+    if (recipes.Count == 0) {
+      // Old versions of ACA loaded the recipes in the AssetsFinalize stage
+      // instead of the AssetsLoaded stage. Gourmand needs them loaded in the
+      // AssetsLoaded stage. Workaround this by forcing ACA to load the recipes
+      // now. This is a little inefficient, because ACA will load the recipes
+      // again in the AssetsFinalized stage.
+      foreach (ModSystem system in aca.Systems) {
+        MethodInfo method = system.GetType().GetMethod(
+            "LoadMixingRecipes", BindingFlags.Public | BindingFlags.Instance);
+        if (method == null) {
+          continue;
+        }
+        FieldInfo apiFieldInfo = system.GetType().GetField(
+            "api", BindingFlags.Public | BindingFlags.Instance);
+        if (apiFieldInfo.GetValue(system) == null) {
+          // Set sapi before calling LoadMixingRecipes, to prevent a null
+          // reference exception.
+          apiFieldInfo.SetValue(system, sapi);
+        }
+        method.Invoke(system, Array.Empty<object>());
+        recipes =
+            (List<CookingRecipe>)mixingRecipesFieldInfo.GetValue(registry);
+      }
+    }
+    return recipes;
   }
 
-  public static IEnumerable<CookingRecipe> GetRecipes(IModLoader loader) {
+  public static IEnumerable<CookingRecipe> GetRecipes(IModLoader loader,
+                                                      ICoreServerAPI sapi) {
     List<CookingRecipe> vanilla =
         loader.GetModSystem<RecipeRegistrySystem>().CookingRecipes;
-    List<CookingRecipe> mixing = GetAcaMixingRecipes(loader);
+    List<CookingRecipe> mixing = GetAcaMixingRecipes(loader, sapi);
     return mixing == null ? vanilla : vanilla.Concat(mixing);
   }
 
@@ -81,7 +125,7 @@ public class CookingIngredientCondition : ICondition {
 
   IEnumerable<CollectibleObject> EnumerateCollectibles(MatchResolver resolver) {
     CookingRecipeIngredient ingredient = GetMatchingIngredient(
-        resolver.Logger, GetRecipes(resolver.Resolver.Api.ModLoader));
+        resolver.Logger, GetRecipes(resolver.Resolver.Api.ModLoader, null));
     if (ingredient == null) {
       yield break;
     }
