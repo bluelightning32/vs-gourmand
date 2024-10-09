@@ -260,6 +260,9 @@ public class MatchRule : MatchRuleJson {
   public IEnumerable<ItemStack>
   EnumerateMatches(IWorldAccessor resolver,
                    Collectibles.IReadonlyCategoryDict catdict) {
+    if (ImportRecipe != null) {
+      return Array.Empty<ItemStack>();
+    }
     IEnumerable<ItemStack> matches = null;
     foreach (ICondition condition in Conditions) {
       matches = condition.EnumerateMatches(resolver, catdict, matches);
@@ -277,6 +280,9 @@ public class MatchRule : MatchRuleJson {
   public bool IsMatch(IWorldAccessor resolver,
                       Collectibles.IReadonlyCategoryDict catdict,
                       ItemStack stack) {
+    if (ImportRecipe != null) {
+      return false;
+    }
     return Conditions.All(c => c.IsMatch(resolver, catdict, stack));
   }
 

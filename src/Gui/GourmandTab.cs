@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -363,7 +362,6 @@ public class GourmandTab {
     RichTextComponentBase[] oldComponents = text.Components;
     float scrollTo = 0;
     if (_focusCategory == null && _cachedOverviewComponents != null) {
-      GourmandSystem gourmand = _capi.ModLoader.GetModSystem<GourmandSystem>();
       GetDebugLogger()?.Debug("Using cached overview.");
 
       text.Components = _cachedOverviewComponents;

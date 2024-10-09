@@ -523,4 +523,34 @@ public class MatchRule {
     Assert.AreEqual(2, protein_base.Min);
     Assert.AreEqual(2, protein_base.Max);
   }
+
+  [TestMethod]
+  public void ResolveImportsMissingRecipe() {
+    string json = @"
+    {
+      category: {
+        input: ""edible-meal-container"",
+      },
+      importRecipe: ""nonexistent""
+    }
+    ";
+    Real.MatchRule rule =
+        JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
+    Dictionary<string, List<CookingRecipe>> cooking =
+        Real.MatchRule.GetRecipeDict(LoadAssets.Server.Api.ModLoader,
+                                     LoadAssets.Server.Api as ICoreServerAPI,
+                                     LoadAssets.Server.Api.Logger);
+    List<string> implicits =
+        rule.ResolveImports(cooking, LoadAssets.Server.Api.Logger);
+    Assert.AreEqual(0, implicits.Count);
+
+    Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
+    ItemStack meal = new(bowl);
+    meal.Attributes["recipeCode"] = new StringAttribute("meatystew");
+    // The rule should not match anything, because its recipe is missing.
+    Assert.IsFalse(
+        rule.IsMatch(Resolver.Resolver, Resolver.CatDict, new ItemStack(bowl)));
+
+    Assert.AreEqual(0, rule.EnumerateMatches(Resolver.Resolver, Resolver.CatDict).Count());
+  }
 }
