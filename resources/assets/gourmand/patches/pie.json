@@ -3,5 +3,19 @@
     side: "server",
     file: "game:blocktypes/food/pie", op: "replace", path: "/class",
     value: "NotifyingPie"
+  },
+  {
+    "file": "foodshelves:config/restrictions/shelves/pieshelf.json",
+    "op": "addmerge",
+    "path": "/CollectibleTypes/-",
+    "value": "game:NotifyingPie",
+    "dependsOn": [ { "modid": "foodshelves" } ]
+  },
+  {
+    "file": "foodshelves:config/restrictions/general/fooduniversal.json",
+    "op": "addmerge",
+    "path": "/CollectibleTypes/-",
+    "value": "game:NotifyingPie",
+    "dependsOn": [ { "modid": "foodshelves" } ]
   }
 ]
