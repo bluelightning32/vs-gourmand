@@ -55,10 +55,10 @@ class ServerApiWithAssets {
     PropertyInfo assetsPathProp = typeof(GamePaths).GetProperty("AssetsPath");
     assetsPathProp.GetSetMethod(true).Invoke(
         null, new object[] { Path.Combine(vsPath, "assets") });
+    // Even the NullLogger tries to archive old log files in the log directory.
+    Directory.CreateDirectory(GamePaths.Logs);
     if (!logDebug && ServerMain.Logger == null) {
       ServerMain.Logger = new NullLogger();
-    } else {
-      Directory.CreateDirectory(GamePaths.Logs);
     }
 
     StartServerArgs serverArgs = new();
@@ -173,9 +173,7 @@ class ServerApiWithAssets {
         server.AssetManager.Get("textures/environment/sunlight.png");
     FieldInfo gameWorldCalendarField = server.GetType().GetField(
         "GameWorldCalendar", BindingFlags.Instance | BindingFlags.NonPublic);
-    GameCalendar calendar = (GameCalendar)Activator.CreateInstance(
-        typeof(GameCalendar), BindingFlags.NonPublic | BindingFlags.Instance,
-        null, new object[] { sunlight, 0, 1L }, null);
+    GameCalendar calendar = new(sunlight, 0, 1L);
     gameWorldCalendarField.SetValue(server, calendar);
     return server;
   }

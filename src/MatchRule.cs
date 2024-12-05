@@ -176,20 +176,24 @@ public class MatchRule : MatchRuleJson {
     foreach (CookingRecipe recipe in recipes) {
       if (result.TryGetValue(recipe.Code,
                              out List<CookingRecipe> recipesForCode)) {
-        StringBuilder sb = new();
-        sb.AppendLine(
-            $"Two recipes with the same code name of {recipe.Code} were found. Maybe you copied files within the game's asset folder? All recipe codes:");
-        foreach (CookingRecipe entry in recipes) {
-          sb.AppendLine(entry.Code);
-        }
-        if (sapi != null) {
-          sb.AppendLine("All recipe files:");
-          foreach (KeyValuePair<AssetLocation, JToken> file in sapi.Assets
-                       .GetMany<JToken>(logger, "recipes/cooking")) {
-            sb.AppendLine(file.Key.ToString());
+        // The base game has two recipes for sturdy leather. Ignore it, because
+        // it isn't a food item.
+        if (recipe.Code != "leather-sturdy-plain") {
+          StringBuilder sb = new();
+          sb.AppendLine(
+              $"Two recipes with the same code name of {recipe.Code} were found. Maybe you copied files within the game's asset folder? All recipe codes:");
+          foreach (CookingRecipe entry in recipes) {
+            sb.AppendLine(entry.Code);
           }
+          if (sapi != null) {
+            sb.AppendLine("All recipe files:");
+            foreach (KeyValuePair<AssetLocation, JToken> file in sapi.Assets
+                         .GetMany<JToken>(logger, "recipes/cooking")) {
+              sb.AppendLine(file.Key.ToString());
+            }
+          }
+          logger.Warning(sb.ToString());
         }
-        logger.Warning(sb.ToString());
       } else {
         recipesForCode = new();
         result.Add(recipe.Code, recipesForCode);

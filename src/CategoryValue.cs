@@ -89,29 +89,25 @@ public class CategoryValue : IEquatable<CategoryValue>, IByteSerializable {
       if (a2 is not TreeAttribute t2) {
         return false;
       }
-      lock (t1.attributesLock) {
-        lock (t2.attributesLock) {
-          using var enum1 = t1.GetEnumerator();
-          using var enum2 = t2.GetEnumerator();
-          // Before the first call to enum.MoveNext, enum1.Current points before
-          // the first element and is invalid.
-          while (enum1.MoveNext()) {
-            if (!enum2.MoveNext()) {
-              // enum1 has more elements than enum2
-              return false;
-            }
-            if (enum1.Current.Key != enum2.Current.Key) {
-              return false;
-            }
-            if (!Equals(enum1.Current.Value, enum2.Current.Value)) {
-              return false;
-            }
-          }
-          if (enum2.MoveNext()) {
-            // enum2 has more elements than enum1
-            return false;
-          }
+      using var enum1 = t1.GetEnumerator();
+      using var enum2 = t2.GetEnumerator();
+      // Before the first call to enum.MoveNext, enum1.Current points before
+      // the first element and is invalid.
+      while (enum1.MoveNext()) {
+        if (!enum2.MoveNext()) {
+          // enum1 has more elements than enum2
+          return false;
         }
+        if (enum1.Current.Key != enum2.Current.Key) {
+          return false;
+        }
+        if (!Equals(enum1.Current.Value, enum2.Current.Value)) {
+          return false;
+        }
+      }
+      if (enum2.MoveNext()) {
+        // enum2 has more elements than enum1
+        return false;
       }
       return true;
     }
