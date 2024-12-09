@@ -176,9 +176,14 @@ public class MatchRule : MatchRuleJson {
     foreach (CookingRecipe recipe in recipes) {
       if (result.TryGetValue(recipe.Code,
                              out List<CookingRecipe> recipesForCode)) {
-        // The base game has two recipes for sturdy leather. Ignore it, because
-        // it isn't a food item.
-        if (recipe.Code != "leather-sturdy-plain") {
+        HashSet<string> expectedDuplicates = new() {
+          // The base game has two recipes for sturdy leather.
+          "leather-sturdy-plain",
+          // Expanded Matter adds a recipe for glueportion-pitch-hot, and leaves
+          // the base game recipe.
+          "glueportion-pitch-hot",
+        };
+        if (!expectedDuplicates.Contains(recipe.Code)) {
           StringBuilder sb = new();
           sb.AppendLine(
               $"Two recipes with the same code name of {recipe.Code} were found. Maybe you copied files within the game's asset folder? All recipe codes:");
