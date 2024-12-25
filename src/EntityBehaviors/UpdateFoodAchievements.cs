@@ -106,8 +106,9 @@ class UpdateFoodAchievements : EntityBehavior {
         entity.Api.World, gourmand.CatDict, category, GetModData());
   }
 
-  public override void OnEntityRevive() {
-    base.OnEntityRevive();
+  // Override OnEntityDeath instead of onEntityRevive, because in the Unconcious
+  // mod, players can be revived without dying.
+  public override void OnEntityDeath(DamageSource source) {
     float deathPenalty =
         entity.Api.World.Config.GetFloat("gourmandDeathPenalty", 0.3f);
     GourmandSystem gourmand = GetGourmandSystem();
@@ -118,5 +119,6 @@ class UpdateFoodAchievements : EntityBehavior {
     if (removedPoints > 0) {
       MarkDirty(gourmand);
     }
+    base.OnEntityDeath(source);
   }
 }
