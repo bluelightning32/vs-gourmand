@@ -90,8 +90,7 @@ class UpdateFoodAchievements : EntityBehavior {
     int points = gourmand.FoodAchievements.GetPointsForAchievements(
         gourmand.Mod.Logger, GetModData());
     float health = gourmand.FoodAchievements.GetHealthForPoints(points);
-    _healthBehavior.MaxHealthModifiers["gourmand"] = health;
-    _healthBehavior.UpdateMaxHealth();
+    _healthBehavior.SetMaxHealthModifiers("gourmand", health);
     gourmand.Mod.Logger.Debug(
         $"Set extra health to {health} for {entity.GetName()}");
   }
