@@ -86,6 +86,36 @@
       bonusAt: 3,
       bonus: 50,
     },
+    "floralzones-fruit" : {
+      points: 2,
+      bonusAt: 0,
+      bonus: 0,
+      hideIfNoBonusAt: true,
+      add: [
+        {
+          dependsOn: [ { modId: "floralzonescaperegion" } ],
+          // contains 3 fruits
+          points: 0,
+          bonusAt: 3,
+          bonus: 10
+        }
+      ]
+    },
+    "floralzones-vegetable" : {
+      points: 2,
+      bonusAt: 0,
+      bonus: 0,
+      hideIfNoBonusAt: true,
+      add: [
+        {
+          dependsOn: [ { modId: "floralzonescaperegion" } ],
+          // contains 1 vegetable
+          points: 0,
+          bonusAt: 1,
+          bonus: 3
+        }
+      ]
+    },
     "climate-spanning" : {
       points: 50,
     },

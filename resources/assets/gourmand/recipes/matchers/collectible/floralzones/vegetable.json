@@ -1,0 +1,13 @@
+[
+  {
+    dependsOn: [ { modId: "floralzonescaperegion" } ],
+    code : {
+      match: "floralzonescaperegion:vegetable-*",
+      type: "item",
+      outputs: [ "floralzones-vegetable" ]
+    },
+    outputs: {
+      "floralzones-zone": [ "floralzonescaperegion" ]
+    }
+  },
+]

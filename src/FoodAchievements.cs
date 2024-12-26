@@ -20,6 +20,20 @@ public class AchievementPoints {
   [JsonProperty("dependsOn")]
   public ModDependency[] DependsOn { get; private set; }
 
+  /// <summary>
+  /// Ignore this achievement if the total BonusAs is 0. This is useful for
+  /// setting the default BonusAs to 0, then adding to the bonus if any of
+  /// several mods are installed. If none of the mods are installed, the bonus
+  /// remains at zero, and the achivement is hidden. If any of the mods are
+  /// installed, then the achievement is shown.
+  /// </summary>
+  [JsonProperty("hideIfNoBonusAt")]
+  [DefaultValue(false)]
+  public bool HideIfNoBonusAt { get; private set; }
+
+  /// <summary>
+  /// The points gained by eating each collectible in the category.
+  /// </summary>
   [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
   [DefaultValue(1)]
   public int Points { get; private set; }
@@ -67,7 +81,9 @@ public class AchievementPoints {
   /// Accumulates and clears all entries in <see cref="Add"/>.
   /// </summary>
   /// <param name="loader"></param>
-  /// <returns>true if the top level DependsOn was satisfied</returns>
+  /// <returns>true if the achievement should be shown, or returns false if the
+  /// mod should be hidden due to the top level DependsOn or
+  /// HideIfNoBonusAt.</returns>
   public bool Resolve(IModLoader loader) {
     if (!DependsOnSatisified(loader)) {
       Points = 0;
@@ -88,6 +104,11 @@ public class AchievementPoints {
       }
     }
     Add = null;
+    if (BonusAt == 0 && HideIfNoBonusAt) {
+      Points = 0;
+      Bonus = 0;
+      return false;
+    }
     return true;
   }
 }
