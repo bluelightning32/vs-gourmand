@@ -46,6 +46,7 @@
         path: ["nutritionPropsWhenInMeal", "foodcategory"],
         value: "NoNutrition"
       }
-    ]
+    ],
+    ignoreNoMatches: true
   },
 ]
