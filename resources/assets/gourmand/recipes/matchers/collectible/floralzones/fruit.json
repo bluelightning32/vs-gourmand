@@ -4,10 +4,95 @@
     code : {
       match: "floralzonescaperegion:fruit-*",
       type: "item",
-      outputs: [ "floralzones-fruit" ]
     },
+    categories: [
+      {
+        input: "food",
+        outputs: [ "floralzones-fruit" ]
+      },
+    ],
     outputs: {
       "floralzones-zone": [ "floralzonescaperegion" ]
+    }
+  },
+  {
+    dependsOn: [ { modId: "floralzonesmediterraneanregion" } ],
+    code : {
+      match: "floralzonesmediterraneanregion:fruit-*",
+      type: "item",
+    },
+    categories: [
+      {
+        input: "food",
+        outputs: [ "floralzones-fruit" ]
+      },
+    ],
+    outputs: {
+      "floralzones-zone": [ "floralzonesmediterraneanregion" ]
+    }
+  },
+  {
+    dependsOn: [ { modId: "floralzonesneozeylandicregion" } ],
+    code : {
+      match: "floralzonesneozeylandicregion:fruit-*",
+      type: "item",
+    },
+    categories: [
+      {
+        input: "food",
+        outputs: [ "floralzones-fruit" ]
+      },
+    ],
+    outputs: {
+      "floralzones-zone": [ "floralzonesneozeylandicregion" ]
+    }
+  },
+  {
+    dependsOn: [ { modId: "floralzoneseastasiaticregion" } ],
+    code : {
+      match: "floralzoneseastasiaticregion:fruit-*",
+      type: "item",
+    },
+    categories: [
+      {
+        input: "food",
+        outputs: [ "floralzones-fruit" ]
+      },
+    ],
+    outputs: {
+      "floralzones-zone": [ "floralzoneseastasiaticregion" ]
+    }
+  },
+  {
+    dependsOn: [ { modId: "floralzonescentralaustralianregion" } ],
+    code : {
+      match: "floralzonescentralaustralianregion:fruit-*",
+      type: "item",
+    },
+    categories: [
+      {
+        input: "food",
+        outputs: [ "floralzones-fruit" ]
+      },
+    ],
+    outputs: {
+      "floralzones-zone": [ "floralzonescentralaustralianregion" ]
+    }
+  },
+  {
+    dependsOn: [ { modId: "floralzonescaribbeanregion" } ],
+    code : {
+      match: "floralzonescaribbeanregion:fruit-*",
+      type: "item",
+    },
+    categories: [
+      {
+        input: "food",
+        outputs: [ "floralzones-fruit" ]
+      },
+    ],
+    outputs: {
+      "floralzones-zone": [ "floralzonescaribbeanregion" ]
     }
   },
 ]

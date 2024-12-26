@@ -98,7 +98,42 @@
           points: 0,
           bonusAt: 3,
           bonus: 10
-        }
+        },
+        {
+          dependsOn: [ { modId: "floralzonesmediterraneanregion" } ],
+          // contains 8 fruits
+          points: 0,
+          bonusAt: 7,
+          bonus: 23
+        },
+        {
+          dependsOn: [ { modId: "floralzonesneozeylandicregion" } ],
+          // contains 1 fruit
+          points: 0,
+          bonusAt: 1,
+          bonus: 3
+        },
+        {
+          dependsOn: [ { modId: "floralzoneseastasiaticregion" } ],
+          // contains 1 fruit
+          points: 0,
+          bonusAt: 1,
+          bonus: 3
+        },
+        {
+          dependsOn: [ { modId: "floralzonescentralaustralianregion" } ],
+          // contains 1 fruit
+          points: 0,
+          bonusAt: 1,
+          bonus: 3
+        },
+        {
+          dependsOn: [ { modId: "floralzonescaribbeanregion" } ],
+          // contains 10 fruits
+          points: 0,
+          bonusAt: 8,
+          bonus: 25
+        },
       ]
     },
     "floralzones-vegetable" : {
@@ -113,7 +148,42 @@
           points: 0,
           bonusAt: 1,
           bonus: 3
-        }
+        },
+        {
+          dependsOn: [ { modId: "floralzonesmediterraneanregion" } ],
+          // contains 7 vegetables
+          points: 0,
+          bonusAt: 6,
+          bonus: 20
+        },
+        {
+          dependsOn: [ { modId: "floralzonesneozeylandicregion" } ],
+          // contains 2 vegetables
+          points: 0,
+          bonusAt: 2,
+          bonus: 6
+        },
+        {
+          dependsOn: [ { modId: "floralzoneseastasiaticregion" } ],
+          // contains 4 vegetables
+          points: 0,
+          bonusAt: 4,
+          bonus: 12
+        },
+        {
+          dependsOn: [ { modId: "floralzonescentralaustralianregion" } ],
+          // contains 1 vegetable
+          points: 0,
+          bonusAt: 1,
+          bonus: 3
+        },
+        {
+          dependsOn: [ { modId: "floralzonescaribbeanregion" } ],
+          // contains 3 vegetables
+          points: 0,
+          bonusAt: 3,
+          bonus: 10
+        },
       ]
     },
     "climate-spanning" : {
