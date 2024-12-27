@@ -18,6 +18,11 @@
   "points-per-food": "Балів за їжу: {0}",
   "completion-bonus": "Бонус за завершення: {0}",
   "missing": "Відсутні: ",
+  "more-entries": "більше",
+  "back-to-overview": "назад",
+
+  // Shown in the item info
+  "available-points": "Доступні бали Гурмана: {0}",
 
   // Food category names and descriptions
   "food-cat-name": "Типи продуктів харчування",
@@ -28,12 +33,33 @@
 
   "meal-category-cat-name": "Страви",
   "meal-category-cat-desc": "Приготовані страви, класифіковані за категоріями рецептів: м'ясне рагу, овочеве рагу, суп, каша, джем, яєчня",
+  "expandedfoods-meal-desc": "Готові страви, класифіковані за категоріями рецептів: м'ясне рагу, овочеве рагу, суп, каша, джем, яєчня.\nДо страв розширеного харчування також входять <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Meals\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide3\">[handbook]</a>: авґратин, компот, салат, холодні макарони, гарячі макарони, плов, йогурт.",
+
+  // Only with expandedfoods installed
+  "hardtack-bake-cat-name": "Галети",
+  "hardtack-bake-cat-desc": "Простий, як хліб, але з довшим терміном зберігання. <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Hardtack\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
+  "sweetsavory-cat-name": "Солодке та солоне",
+  "sweetsavory-cat-desc": "Різноманітні солодкі та солоні ласощі.",
+  "sushi-cat-name": "Суші",
+  "sushi-cat-desc": "Японська їжа, приготована з морських водоростей, рису і, за бажанням, рибних нагетсів або овочів. <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Sushi\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
+  "fried-cat-name": "Смажена їжа",
+  "fried-cat-desc": "Підготовлені та запаніровані, потім обсмажені до готовності. <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Breaded_Food\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
+  "deluxe-cat-name": "Смажені продукти класу люкс",
+  "deluxe-cat-desc": "Смажені страви поливають різноманітними соусами та сиропами. <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Breaded_Food\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
+  "vegetablejuice-cat-name": "Овочеві соки",
+  "vegetablejuice-cat-desc": "Всі види овочевих соків. Їх можна пити з будь-якої ємності.",
 
   "pickled-food-cat-name": "Мариновані продукти",
   "pickled-food-cat-desc": "Овочі, які були мариновані.",
 
   "bread-perfect-cat-name": "Хліб",
   "bread-perfect-cat-desc": "Ідеально спечений хліб.",
+
+  "floralzones-fruit-cat-name": "Фрукти з квіткової зони",
+  "floralzones-fruit-cat-desc": "Збирайте та їжте фрукти з усього світу.",
+
+  "floralzones-vegetable-cat-name": "Овочі з квіткової зони",
+  "floralzones-vegetable-cat-desc": "Збирайте та їжте овочі з усього світу.",
 
   "climate-spanning-cat-name": "Кліматично чутливі продукти",
   "climate-spanning-cat-desc": "Кілька видів їжі, для яких потрібні інгредієнти як з жаркого, так і з холодного клімату.",
@@ -46,6 +72,10 @@
 
   "cider-cat-name": "Сидри",
   "cider-cat-desc": "Алкогольні напої першого ступеня бродіння: сидри та медовуха",
+
+  "alcohol-cat-name": "Види алкоголю",
+  "alcohol-cat-desc": "Сидр, бренді та аква віта.",
+  "expandedfoods-alcohol-desc": "Всі види алкогольних напоїв, включаючи: вишукане вино, міцне вино, сидр, бренді, витриманий бренді, вінтажний бренді, горілку та аква-віта.",
 
   "poison-cat-name": "Отрути",
   "poison-cat-desc": "Продукти, які знімають очки здоров'я при вживанні.",
