@@ -24,8 +24,12 @@ class UpdateFoodAchievements : EntityBehavior {
 
   public void SetCurrentFood(ItemStack food) {
     GourmandSystem gourmand = GetGourmandSystem();
-    gourmand.Mod.Logger.Debug("Set current food to {0}",
-                              food?.Collectible?.Code.ToString() ?? "none");
+    if (gourmand.ServerConfig.DebugLogging) {
+      IServerPlayer player = (IServerPlayer)((EntityPlayer)entity).Player;
+      gourmand.Mod.Logger.Debug("{0} set current food to {1}",
+                                player.PlayerName,
+                                food?.Collectible?.Code.ToString() ?? "none");
+    }
     _eating = food;
   }
 
@@ -42,15 +46,17 @@ class UpdateFoodAchievements : EntityBehavior {
 
   public int OnFoodEaten(ItemStack food) {
     GourmandSystem gourmand = GetGourmandSystem();
-    gourmand.Mod.Logger.Debug("Ate food {0}",
-                              food?.Collectible?.Code.ToString());
+    IServerPlayer player = (IServerPlayer)((EntityPlayer)entity).Player;
+    if (gourmand.ServerConfig.DebugLogging) {
+      gourmand.Mod.Logger.Debug("{0} ate food {1}", player.PlayerName,
+                                food?.Collectible?.Code.ToString());
+    }
     ItemStack clonedFood = food.Clone();
     clonedFood.StackSize = 1;
     int newPoints = gourmand.FoodAchievements.AddAchievements(
         entity.Api.World, gourmand.CatDict, GetModData(), clonedFood);
     if (newPoints > 0) {
       MarkDirty(gourmand);
-      IServerPlayer player = (IServerPlayer)((EntityPlayer)entity).Player;
       player.SendMessage(
           GlobalConstants.InfoLogChatGroup,
           Lang.GetL(player.LanguageCode, "gourmand:new-food-eaten", newPoints),

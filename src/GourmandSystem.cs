@@ -25,8 +25,9 @@ public class GourmandSystem : ModSystem {
   private ICoreAPI _api;
   private Harmony _harmony;
 
+  public static string Domain { get; private set; }
   public FoodAchievements FoodAchievements { get; private set; }
-
+  public ServerConfig ServerConfig { get; private set; }
   public CategoryDict CatDict { get; private set; }
 
   public override double ExecuteOrder() {
@@ -39,6 +40,7 @@ public class GourmandSystem : ModSystem {
   }
 
   public override void Start(ICoreAPI api) {
+    Domain = Mod.Info.ModID;
     base.Start(api);
 
     string patchId = Mod.Info.ModID;
@@ -66,6 +68,7 @@ public class GourmandSystem : ModSystem {
 
   public override void StartServerSide(ICoreServerAPI sapi) {
     base.StartServerSide(sapi);
+    LoadConfigFile(sapi);
     _ = new ServerCommands(sapi);
   }
 
@@ -109,6 +112,21 @@ public class GourmandSystem : ModSystem {
               c.CollectibleBehaviors.Append(new ShowPoints(c));
         }
       }
+    }
+  }
+
+  private void LoadConfigFile(ICoreServerAPI api) {
+    string configFile = $"{Domain}.json";
+    try {
+      ServerConfig = api.LoadModConfig<ServerConfig>(configFile);
+    } catch (Exception e) {
+      api.Logger.Fatal("Error parsing '{0}': {1}", configFile, e.Message);
+      throw;
+    }
+    if (ServerConfig == null) {
+      // The file doesn't exist. So create it.
+      ServerConfig = new();
+      api.StoreModConfig(ServerConfig, configFile);
     }
   }
 
