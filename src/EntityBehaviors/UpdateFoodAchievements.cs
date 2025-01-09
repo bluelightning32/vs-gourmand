@@ -26,7 +26,7 @@ class UpdateFoodAchievements : EntityBehavior {
     GourmandSystem gourmand = GetGourmandSystem();
     if (gourmand.ServerConfig.DebugLogging) {
       IServerPlayer player = (IServerPlayer)((EntityPlayer)entity).Player;
-      gourmand.Mod.Logger.Debug("{0} set current food to {1}",
+      gourmand.Mod.Logger.Audit("{0} set current food to {1}",
                                 player.PlayerName,
                                 food?.Collectible?.Code.ToString() ?? "none");
     }
@@ -48,7 +48,7 @@ class UpdateFoodAchievements : EntityBehavior {
     GourmandSystem gourmand = GetGourmandSystem();
     IServerPlayer player = (IServerPlayer)((EntityPlayer)entity).Player;
     if (gourmand.ServerConfig.DebugLogging) {
-      gourmand.Mod.Logger.Debug("{0} ate food {1}", player.PlayerName,
+      gourmand.Mod.Logger.Audit("{0} ate food {1}", player.PlayerName,
                                 food?.Collectible?.Code.ToString());
     }
     ItemStack clonedFood = food.Clone();
