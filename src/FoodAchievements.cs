@@ -376,6 +376,12 @@ public class FoodAchievements {
     moddata.RemoveAttribute("lost");
   }
 
+  public static void ClearFoodCreatedTime(ItemStack stack) {
+    ITreeAttribute transition =
+        stack.Attributes.GetTreeAttribute("transitionstate");
+    transition?.RemoveAttribute("createdTotalHours");
+  }
+
   public static IEnumerable<ItemStack> GetLost(IWorldAccessor resolver,
                                                ITreeAttribute moddata) {
     ITreeAttribute lost = moddata.GetOrAddTreeAttribute("lost");
@@ -383,6 +389,10 @@ public class FoodAchievements {
       ITreeAttribute lostValues = (ITreeAttribute)entry.Value;
       foreach (KeyValuePair<string, IAttribute> lostEntry in lostValues) {
         ItemStack stack = ((ItemstackAttribute)lostEntry.Value).value;
+        // Prevent foods that were added in legacy versions of the mod from
+        // showing up as rotten. Current versions of the mod clear this
+        // attribute before adding it to the eaten or lost food lists.
+        ClearFoodCreatedTime(stack);
         stack.ResolveBlockOrItem(resolver);
         yield return stack;
       }

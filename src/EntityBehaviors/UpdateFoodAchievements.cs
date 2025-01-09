@@ -53,6 +53,10 @@ class UpdateFoodAchievements : EntityBehavior {
     }
     ItemStack clonedFood = food.Clone();
     clonedFood.StackSize = 1;
+    // Prevent the food as showing up as rotten if it is later moved to the lost
+    // foods list. The collectible will reset freshHours if createdTotalHours is
+    // missing.
+    FoodAchievements.ClearFoodCreatedTime(clonedFood);
     int newPoints = gourmand.FoodAchievements.AddAchievements(
         entity.Api.World, gourmand.CatDict, GetModData(), clonedFood);
     if (newPoints > 0) {
