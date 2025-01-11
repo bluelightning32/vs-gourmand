@@ -1,0 +1,35 @@
+[
+  {
+    dependsOn: [ { modId: "primitivesurvival" } ],
+    code : {
+      match: "primitivesurvival:fishfillet-raw",
+      type: "item",
+      outputs: [ "meat" ]
+    },
+    outputs: {
+      "meat" : [ "item" ]
+    }
+  },
+  {
+    dependsOn: [ { modId: "primitivesurvival" } ],
+    code : {
+      match: "primitivesurvival:crabmeat-raw",
+      type: "item",
+      outputs: [ "meat" ]
+    },
+    outputs: {
+      "meat" : [ "item" ]
+    }
+  },
+  {
+    dependsOn: [ { modId: "primitivesurvival" } ],
+    code : {
+      match: "primitivesurvival:snakemeat-raw",
+      type: "item",
+      outputs: [ "meat" ]
+    },
+    outputs: {
+      "meat" : [ "item" ]
+    }
+  },
+]
