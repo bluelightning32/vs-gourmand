@@ -294,12 +294,8 @@
       health: 3
     },
     {
-      points: 500,
-      health: 6
-    },
-    {
       points: 1000,
-      health: 10
+      health: 21
     }
   ]
 }
