@@ -1,0 +1,44 @@
+[
+  {
+    dependsOn: [ { modId: "floralzonesmediterraneanregion" } ],
+    code: {
+      match: "floralzonesmediterraneanregion:ciderportion-*",
+      type: "item",
+      outputs: [ "ciderportion" ]
+    },
+    attributes: [
+      {
+        path: ["waterTightContainerProps", "nutritionPropsPerLitre", "foodcategory"],
+        outputs: [ "ciderportion-category" ]
+      }
+    ]
+  },
+  {
+    dependsOn: [ { modId: "floralzoneseastasiaticregion" } ],
+    code: {
+      match: "floralzoneseastasiaticregion:ciderportion-*",
+      type: "item",
+      outputs: [ "ciderportion" ]
+    },
+    attributes: [
+      {
+        path: ["waterTightContainerProps", "nutritionPropsPerLitre", "foodcategory"],
+        outputs: [ "ciderportion-category" ]
+      }
+    ]
+  },
+  {
+    dependsOn: [ { modId: "floralzonescaribbeanregion" } ],
+    code: {
+      match: "floralzonescaribbeanregion:ciderportion-*",
+      type: "item",
+      outputs: [ "ciderportion" ]
+    },
+    attributes: [
+      {
+        path: ["waterTightContainerProps", "nutritionPropsPerLitre", "foodcategory"],
+        outputs: [ "ciderportion-category" ]
+      }
+    ]
+  },
+]

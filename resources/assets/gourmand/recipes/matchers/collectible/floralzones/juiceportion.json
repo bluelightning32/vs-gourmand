@@ -1,0 +1,44 @@
+[
+  {
+    dependsOn: [ { modId: "floralzonesmediterraneanregion" } ],
+    code: {
+      match: "floralzonesmediterraneanregion:juiceportion-*",
+      type: "item",
+      outputs: [ "juiceportion" ]
+    },
+    attributes: [
+      {
+        path: ["waterTightContainerProps", "nutritionPropsPerLitre", "foodcategory"],
+        outputs: [ "juiceportion-category" ]
+      }
+    ]
+  },
+  {
+    dependsOn: [ { modId: "floralzoneseastasiaticregion" } ],
+    code: {
+      match: "floralzoneseastasiaticregion:juiceportion-*",
+      type: "item",
+      outputs: [ "juiceportion" ]
+    },
+    attributes: [
+      {
+        path: ["waterTightContainerProps", "nutritionPropsPerLitre", "foodcategory"],
+        outputs: [ "juiceportion-category" ]
+      }
+    ]
+  },
+  {
+    dependsOn: [ { modId: "floralzonescaribbeanregion" } ],
+    code: {
+      match: "floralzonescaribbeanregion:juiceportion-*",
+      type: "item",
+      outputs: [ "juiceportion" ]
+    },
+    attributes: [
+      {
+        path: ["waterTightContainerProps", "nutritionPropsPerLitre", "foodcategory"],
+        outputs: [ "juiceportion-category" ]
+      }
+    ]
+  },
+]

@@ -1,9 +1,10 @@
 [
   {
-    code: {
-      match: "game:ciderportion-*",
-      type: "item",
-    },
+    categories: [
+      {
+        input: "ciderportion"
+      }
+    ],
     outputs: {
       "alcoholportion": [ "cider" ]
     }

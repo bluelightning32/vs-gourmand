@@ -1,0 +1,62 @@
+[
+  {
+    dependsOn: [ { modId: "floralzonesmediterraneanregion" } ],
+    code: {
+      match: "floralzonesmediterraneanregion:spiritportion-*",
+      type: "item",
+    },
+    outputs: {
+      "alcoholportion": [ "brandy" ]
+    }
+  },
+  {
+    dependsOn: [ { modId: "floralzoneseastasiaticregion" } ],
+    code: {
+      match: "floralzoneseastasiaticregion:spiritportion-*",
+      type: "item",
+    },
+    outputs: {
+      "alcoholportion": [ "brandy" ]
+    }
+  },
+  {
+    dependsOn: [ { modId: "floralzonescaribbeanregion" } ],
+    code: {
+      match: "floralzonescaribbeanregion:spiritportion-*",
+      type: "item",
+    },
+    outputs: {
+      "alcoholportion": [ "brandy" ]
+    }
+  },
+  {
+    dependsOn: [ { modId: "floralzonesmediterraneanregion" } ],
+    code: {
+      match: "floralzonesmediterraneanregion:alcoholportion",
+      type: "item",
+    },
+    outputs: {
+      "alcoholportion": [ "alcohol" ]
+    }
+  },
+  {
+    dependsOn: [ { modId: "floralzoneseastasiaticregion" } ],
+    code: {
+      match: "floralzoneseastasiaticregion:alcoholportion",
+      type: "item",
+    },
+    outputs: {
+      "alcoholportion": [ "alcohol" ]
+    }
+  },
+  {
+    dependsOn: [ { modId: "floralzonescaribbeanregion" } ],
+    code: {
+      match: "floralzonescaribbeanregion:alcoholportion",
+      type: "item",
+    },
+    outputs: {
+      "alcoholportion": [ "alcohol" ]
+    }
+  },
+]

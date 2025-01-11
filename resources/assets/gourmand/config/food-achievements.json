@@ -197,7 +197,30 @@
     "juice" : {
       points: 2,
       bonusAt: 12,
-      bonus: 100
+      bonus: 100,
+      add: [
+        {
+          dependsOn: [ { modId: "floralzonesmediterraneanregion" } ],
+          // contains apple cactus, mexican breadfruit, palmetto, dragon fruit, and agavetequilana (aquamiel).
+          points: 0,
+          bonusAt: 5,
+          bonus: 40
+        },
+        {
+          dependsOn: [ { modId: "floralzoneseastasiaticregion" } ],
+          // contains goji.
+          points: 0,
+          bonusAt: 1,
+          bonus: 5
+        },
+        {
+          dependsOn: [ { modId: "floralzonescaribbeanregion" } ],
+          // contains red grape and write grape
+          points: 0,
+          bonusAt: 2,
+          bonus: 10
+        },
+      ]
     },
     "vegetablejuice" : {
       points: 2,
@@ -207,7 +230,30 @@
     "cider" : {
       points: 3,
       bonusAt: 18,
-      bonus: 100
+      bonus: 100,
+      add: [
+        {
+          dependsOn: [ { modId: "floralzonesmediterraneanregion" } ],
+          // contains apple cactus, mexican breadfruit, palmetto, dragon fruit, and agavetequilana (aquamiel).
+          points: 0,
+          bonusAt: 5,
+          bonus: 40
+        },
+        {
+          dependsOn: [ { modId: "floralzoneseastasiaticregion" } ],
+          // contains goji.
+          points: 0,
+          bonusAt: 1,
+          bonus: 5
+        },
+        {
+          dependsOn: [ { modId: "floralzonescaribbeanregion" } ],
+          // contains red grape and write grape
+          points: 0,
+          bonusAt: 2,
+          bonus: 10
+        },
+      ]
     },
     "alcohol" : {
       points: 5,
