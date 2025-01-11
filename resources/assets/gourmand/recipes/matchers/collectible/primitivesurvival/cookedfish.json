@@ -1,0 +1,10 @@
+[
+  {
+    dependsOn: [ { modId: "primitivesurvival" } ],
+    code : {
+      match: "primitivesurvival:psfish-*-cooked",
+      type: "item",
+      outputs: [ "cookedfish" ]
+    },
+  },
+]

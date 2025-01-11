@@ -77,6 +77,9 @@
   "alcohol-cat-desc": "Cider, brandy, and aqua vitae.",
   "expandedfoods-alcohol-desc": "Every type of alcoholic drink, including: fine wine, strong wine, cider, brandy, aged brandy, vintage brandy, vodka, and aqua vitae.",
 
+  "cookedfish-cat-name": "Fish monger",
+  "cookedfish-cat-desc": "Every kind of grilled fish from primitive survival.",
+
   "poison-cat-name": "Poisons",
-  "poison-cat-desc": "Foods that remove health points when eaten.",
+  "poison-cat-desc": "Foods that remove health points when eaten."
 }

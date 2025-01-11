@@ -226,6 +226,12 @@
     "poison" : {
       points: 5,
     },
+    "cookedfish" : {
+      dependsOn: [ { modId: "primitivesurvival" } ],
+      points: 2,
+      bonusAt: 10,
+      bonus: 30,
+    },
     "food" : {
       points: 1
     }
