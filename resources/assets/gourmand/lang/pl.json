@@ -1,0 +1,85 @@
+{
+  "gourmand:playerinfo-nutrition-Gourmand": "Smakosz",
+  "new-food-eaten": "Zdobyto punkty za nowe jedzenie: {0}",
+  "tabname-gourmand": "Smakosz",
+
+  // Tekst w zakładce "Smakosz".
+  "earned-points":          "Zdobyte punkty:",
+  "lost-foods-count":       "Utracone potrawy wskutek śmierci:",
+  "earned-health":          "Zdobyte zdrowie:",
+  "points-for-next-health": "Punkty potrzebne do kolejnego wzrostu zdrowia:",
+  "until-points":           "Do uzyskania punktów:",
+  "lost-foods":             "Utracone potrawy",
+  "lost-foods-desc":        "To są wcześniej zdobyte potrawy, które zostały utracone w wyniku śmierci.",
+  "lost-foods-none":        "Brak",
+  "missing-foods-none":     "Wszystko już zjedzone",
+  "eaten-foods":            "Zjedzone potrawy: {0}/{1}",
+  "eaten-foods-no-bonus":   "Zjedzone potrawy: {0}",
+  "points-per-food":        "Punkty za każdą potrawę: {0}",
+  "completion-bonus":       "Premia za ukończenie: {0}",
+  "missing":                "Brakuje: ",
+  "more-entries":           "więcej",
+  "back-to-overview":       "powrót",
+
+  // Pokazywane w informacjach o przedmiocie
+  "available-points": "Dostępne punkty Smakosza: {0}",
+
+  // Nazwy i opisy kategorii jedzenia
+  "food-cat-name": "Ogólne",
+  "food-cat-desc": "Wszelkiego rodzaju jedzenie, sklasyfikowane według jego kodu przedmiotu lub bloku.",
+
+  "pie-category-cat-name": "Ciasta",
+  "pie-category-cat-desc": "Różne rodzaje ciast, sklasyfikowane według ich nazw.",
+
+  "meal-category-cat-name": "Posiłki",
+  "meal-category-cat-desc": "Ugotowane posiłki, podzielone na kategorie przepisów: gulasz mięsny, gulasz warzywny, zupa, owsianka, dżem i jajecznica",
+  "expandedfoods-meal-desc": "Ugotowane posiłki, sklasyfikowane według ich kategorii przepisu: gulasz mięsny, gulasz warzywny, zupa, owsianka, dżem i jajecznica.\nDania z Expanded Foods również zawarte <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Meals\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide3\">[handbook]</a>: zapiekanka ziemniaczana (au gratin), kompot, sałatka, makaron na zimno, makaron na ciepło, pilaw i jogurt.",
+
+  // Tylko z zainstalowanym expandedfoods
+  "hardtack-bake-cat-name": "Suchary",
+  "hardtack-bake-cat-desc": "Łatwe jak chleb, ale o dłuższej przydatności do spożycia. <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Hardtack\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
+  "sweetsavory-cat-name": "Słodkie i wytrawne",
+  "sweetsavory-cat-desc": "Różne słodkie i słone przysmaki.",
+  "sushi-cat-name": "Sushi",
+  "sushi-cat-desc": "Japońskie danie z wodorostów, ryżu i opcjonalnie kawałków ryby lub warzyw. <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Sushi\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
+  "fried-cat-name": "Potrawy smażone",
+  "fried-cat-desc": "Przygotowane i panierowane, a następnie smażone do perfekcji. <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Breaded_Food\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
+  "deluxe-cat-name": "Smażone Potrawy Deluxe",
+  "deluxe-cat-desc": "Smażone potrawy, polane różnymi sosami i syropami. <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Breaded_Food\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
+  "vegetablejuice-cat-name": "Soki warzywne",
+  "vegetablejuice-cat-desc": "Wszelkiego rodzaju soki warzywne. Można je pić z dowolnego pojemnika nadającego się do picia.",
+
+  "pickled-food-cat-name": "Marynowane",
+  "pickled-food-cat-desc": "Warzywa, które zostały zamarynowane.",
+
+  "bread-perfect-cat-name": "Chleby",
+  "bread-perfect-cat-desc": "Idealnie wypieczone chleby.",
+
+  "floralzones-fruit-cat-name": "Owoce z różnych stref roślinnych",
+  "floralzones-fruit-cat-desc": "Zbieraj i jedz owoce z całego świata.",
+
+  "floralzones-vegetable-cat-name": "Warzywa z różnych stref roślinnych",
+  "floralzones-vegetable-cat-desc": "Zbieraj i jedz warzywa z całego świata.",
+
+  "climate-spanning-cat-name": "Żywność z różnych klimatów",
+  "climate-spanning-cat-desc": "Kilka wybranych potraw, wymagających składników zarówno z gorących, jak i zimnych stref klimatycznych.",
+
+  "mushroom-cat-name": "Grzyby",
+  "mushroom-cat-desc": "Wszelkiego rodzaju grzyby, które można znaleźć podczas zbieractwa.",
+
+  "juice-cat-name": "Soki owocowe",
+  "juice-cat-desc": "Wszelkiego rodzaju soki owocowe. Można je pić z dowolnego pojemnika nadającego się do picia.",
+
+  "cider-cat-name": "Cydry",
+  "cider-cat-desc": "Alkoholowe napoje powstałe w pierwszym etapie fermentacji: cydry i miody pitne.",
+
+  "alcohol-cat-name": "Rodzaje alkoholu",
+  "alcohol-cat-desc": "Cydr, brandy i aqua vitae.",
+  "expandedfoods-alcohol-desc": "Każdy rodzaj napoju alkoholowego, włącznie z: wytrawnym winem, mocnym winem, cydrem, brandy, starzoną brandy, starożytną brandy, wódką i aqua vitae.",
+
+  "cookedfish-cat-name": "Sprzedawca ryb",
+  "cookedfish-cat-desc": "Każdy rodzaj grillowanej ryby z Primitive Survival.",
+  
+  "poison-cat-name": "Trucizny",
+  "poison-cat-desc": "Potrawy, które odbierają punkty zdrowia przy spożyciu.",
+}
