@@ -1,0 +1,85 @@
+{
+  "gourmand:playerinfo-nutrition-Gourmand": "Gourmand",
+  "new-food-eaten": "Verdiente Punkte durch neues Essen: {0}",
+  "tabname-gourmand" : "Gourmand",
+
+  // Text in the gourmand tab.
+  "earned-points": "Verdiente Punkte:",
+  "lost-foods-count": "Durch Tod verlorene Lebensmittel:",
+  "earned-health": "Erhaltene Gesundheit:",
+  "points-for-next-health": "Notwendige Punkte für die nächste Gesundheit:",
+  "until-points": "Punkte zur nächsten Stufe:",
+  "lost-foods": "Verlorene Lebensmittel",
+  "lost-foods-desc": "Dabei handelt es sich um zuvor verdiente Nahrungsmittel, die durch den Tod verloren gingen.",
+  "lost-foods-none": "Keine",
+  "missing-foods-none": "Alles schon aufgegessen",
+  "eaten-foods": "Gegessene Lebensmittel: {0}/{1}",
+  "eaten-foods-no-bonus": "Gegessene Lebensmittel: {0}",
+  "points-per-food": "Punkte pro Lebenslmittel: {0}",
+  "completion-bonus": "Sammelbonus: {0}",
+  "missing": "Fehlend: ",
+  "more-entries": "Mehr",
+  "back-to-overview": "Zurück",
+
+  // Shown in the item info
+  "available-points": "Verfügbare Gourmandpunkte: {0}",
+
+  // Food category names and descriptions
+  "food-cat-name": "Alles nehmen",
+  "food-cat-desc": "Jede Art von Lebensmitteln, klassifiziert nach ihrem Artikel- oder Blockcode.",
+
+  "pie-category-cat-name": "Kuchen",
+  "pie-category-cat-desc": "Verschiedene Kuchensorten, sortiert nach ihren Namen.",
+
+  "meal-category-cat-name": "Gerichte",
+  "meal-category-cat-desc": "Gekochte Mahlzeiten, klassifiziert nach ihrer Rezeptkategorie: Fleischeintopf, Gemüseeintopf, Suppe, Brei, Marmelade und Rührei",
+  "expandedfoods-meal-desc": "Gekochte Mahlzeiten, klassifiziert nach ihrer Rezeptkategorie: Fleischeintopf, Gemüseeintopf, Suppe, Brei, Marmelade und Rührei.\nDie Mahlzeiten von Expanded Foods sind ebenfalls enthalten <a href=\"vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Meals\">[wiki]</a> <a href=\"handbook://expandedfoodsguide3\">[handbook]</a>: Augratin, Kompott, Salat, kalte Nudeln, heiße Nudeln, Pilaw und Joghurt.",
+
+  // Only with expandedfoods installed
+  "hardtack-bake-cat-name": "Hardtack",
+  "hardtack-bake-cat-desc": "So einfach wie Brot, aber länger haltbar. <a href=\"vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Hardtack\">[wiki]</a> <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
+  "sweetsavory-cat-name": "Süß und herzhaft",
+  "sweetsavory-cat-desc": "Verschiedene süße und herzhafte Leckereien.",
+  "sushi-cat-name": "Sushi",
+  "sushi-cat-desc": "Japanisches Essen aus Algen, Reis und wahlweise Fischnuggets oder Gemüse. <a href=\"vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Sushi\">[wiki]</a> <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
+  "fried-cat-name": "Frittierte Lebensmittel",
+  "fried-cat-desc": "Prepared and breaded, then fried to perfection. <a href=\"vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Breaded_Food\">[wiki]</a> <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
+  "deluxe-cat-name": "Deluxe Fried Foods",
+  "deluxe-cat-desc": "Fried foods drizzled with various sauces and syrups. <a href=\"vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Breaded_Food\">[wiki]</a> <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
+  "vegetablejuice-cat-name": "Gemüsesäfte",
+  "vegetablejuice-cat-desc": "Jede Art von Gemüsesaft. Sie können aus jedem trinkbaren Behälter getrunken werden.",
+
+  "pickled-food-cat-name": "Eingelegte Lebensmittel",
+  "pickled-food-cat-desc": "Eingelegte Gemüse.",
+
+  "bread-perfect-cat-name": "Brote",
+  "bread-perfect-cat-desc": "Perfekt gebackene Brote.",
+
+  "floralzones-fruit-cat-name": "Früchte aus Blumenregionen",
+  "floralzones-fruit-cat-desc": "Sammle und esse die Früchte aus der ganzen Welt.",
+
+  "floralzones-vegetable-cat-name": "Gemüse aus Blumenregionen",
+  "floralzones-vegetable-cat-desc": "Sammle und esse das Gemüse aus der ganzen Welt.",
+
+  "climate-spanning-cat-name": "Klimaübergreifende Lebensmittel",
+  "climate-spanning-cat-desc": "Einige ausgewählte Lebensmittel, die Zutaten aus heißen und kalten Klimazonen erfordern.",
+
+  "mushroom-cat-name": "Pilze",
+  "mushroom-cat-desc": "Jede Art von Pilz, der gesammelt werden kann.",
+
+  "juice-cat-name": "Fruchtsäfte",
+  "juice-cat-desc": "Jede Art von Fruchtsaft. Sie können aus jedem trinkbaren Behälter getrunken werden.",
+
+  "cider-cat-name": "Cider",
+  "cider-cat-desc": "Alkoholische Getränke, die aus der ersten Stufe der Fermentation hergestellt werden: Cider und Met.",
+
+  "alcohol-cat-name": "Alkoholarten",
+  "alcohol-cat-desc": "Cider, Brandy und Aqua Vitae.",
+  "expandedfoods-alcohol-desc": "Jede Art von alkoholischem Getränk, einschließlich: feiner Wein, starker Wein, Cider, Brandy, gereifter Brandy, Jahrgangsbrandy, Wodka und Aqua Vitae.",
+
+  "cookedfish-cat-name": "Fischhändler",
+  "cookedfish-cat-desc": "Jede Art von gegrilltem Fisch aus dem primitiven Überleben.",
+
+  "poison-cat-name": "Gifte",
+  "poison-cat-desc": "Lebensmittel, die beim Verzehr Gesundheitspunkte entfernen."
+}
