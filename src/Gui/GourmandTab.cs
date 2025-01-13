@@ -242,7 +242,7 @@ public class GourmandTab {
   private void SetScrollHeight(GuiComposer composer, float scrollTo) {
     GuiElementScrollbar scrollbar = composer.GetScrollbar("scrollbar");
     GuiElementRichtext text = composer.GetRichtext("richtext");
-    scrollbar.SetHeights((float)scrollbar.Bounds.OuterHeight,
+    scrollbar.SetHeights((float)scrollbar.Bounds.fixedHeight,
                          (float)text.Bounds.fixedHeight + _shrinkParentPadding);
     if (scrollTo != 0) {
       scrollbar.CurrentYPosition = scrollTo;
