@@ -527,4 +527,8 @@ public class FoodAchievements {
     }
     return lostPoints;
   }
+
+  public static implicit operator FoodAchievements(AchievementPoints v) {
+    throw new NotImplementedException();
+  }
 }

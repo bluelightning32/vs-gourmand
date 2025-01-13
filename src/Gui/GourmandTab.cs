@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -63,6 +64,10 @@ public class GourmandTab {
   private CachedGuiElementRichtext _overview = null;
   private float _cachedOverviewScroll = 0;
   private GuiElementScrollbar _scrollbar;
+  private Dictionary<string, List<ItemStack>> _focusedMissing;
+  private AchievementPoints _focusedAchievement;
+  private AssetLocation _focusedCategory;
+  private int _focusedEaten;
 
   public GourmandTab(ICoreClientAPI capi) {
     _capi = capi;
@@ -87,6 +92,45 @@ public class GourmandTab {
         dialogBounds.fixedWidth + 2 * _shrinkParentPadding - scrollWidth,
         dialogBounds.fixedHeight + 2 * _shrinkParentPadding -
             GuiStyle.TitleBarHeight);
+
+    void Redraw() {
+      var tabs = composer.GetHorizontalTabs("tabs");
+      tabs.SetValue(tabs.activeElement, true);
+    }
+
+    if (_focusCategory != null) {
+      float searchHeight = 30;
+      ElementBounds buttonBounds = clipBounds.FlatCopy();
+      buttonBounds.fixedX -= _shrinkParentPadding;
+      buttonBounds.fixedHeight = searchHeight;
+      buttonBounds.fixedWidth = 60;
+
+      ElementBounds searchBounds = clipBounds.FlatCopy();
+      searchBounds.fixedHeight = searchHeight;
+      float buttonRightPadding = 20;
+      searchBounds.fixedX =
+          buttonBounds.fixedX + buttonBounds.fixedWidth + buttonRightPadding;
+      float searchRightPadding = 2;
+      searchBounds.fixedWidth = dialogBounds.fixedWidth +
+                                2 * _shrinkParentPadding - searchBounds.fixedX -
+                                searchRightPadding;
+
+      composer.AddSmallButton(Lang.Get("general-back"), () => {
+        BackToOverview(Redraw);
+        return true;
+      }, buttonBounds, EnumButtonStyle.Normal, "back");
+
+      GuiElementTextInput search =
+          new(_capi, searchBounds, (text) => FilterFoods(composer, text),
+              CairoFont.WhiteSmallishText());
+      search.SetPlaceHolderText(Lang.Get("Search..."));
+      composer.AddInteractiveElement(search, "search");
+
+      float searchPadding = 3 + _shrinkParentPadding;
+      clipBounds.fixedY += searchBounds.fixedHeight + searchPadding;
+      clipBounds.fixedHeight -= searchBounds.fixedHeight + searchPadding;
+    }
+
     // The inset takes up the entire clip bounds.
     ElementBounds insetBounds =
         ElementBounds.FixedSize(clipBounds.fixedWidth, clipBounds.fixedHeight);
@@ -100,11 +144,6 @@ public class GourmandTab {
 
     _overview?.KeepCache(false);
 
-    void Redraw() {
-      var tabs = composer.GetHorizontalTabs("tabs");
-      tabs.SetValue(tabs.activeElement, true);
-    }
-
     _scrollbar = new GuiElementScrollbar(
         _capi, value => OnTextScroll(composer, value), scrollBounds);
 
@@ -116,6 +155,34 @@ public class GourmandTab {
         .AddInteractiveElement(_scrollbar, "scrollbar");
 
     composer.OnComposed += () => SetScrollHeight(composer, scrollTo);
+  }
+
+  private void FilterFoods(GuiComposer composer, string search) {
+    Dictionary<string, List<ItemStack>> missing = new();
+    CompareInfo compareInfo = CultureInfo.CurrentUICulture.CompareInfo;
+    foreach (KeyValuePair<string, List<ItemStack>> foods in _focusedMissing) {
+      List<ItemStack> matching = new();
+      foreach (ItemStack food in foods.Value) {
+        // See if the food name contains the search string, ignoring case, and
+        // ignoring diacritics. See
+        // https://stackoverflow.com/questions/32827945/linq-contains-without-considering-accents.
+        if (compareInfo.IndexOf(food.GetName(), search,
+                                CompareOptions.IgnoreNonSpace |
+                                    CompareOptions.IgnoreCase) != -1) {
+          matching.Add(food);
+        }
+      }
+      if (matching.Count > 0) {
+        missing.Add(foods.Key, matching);
+      }
+    }
+
+    List<RichTextComponentBase> components = new();
+    AddFoodCategory(null, components, _focusedCategory, _focusedEaten,
+                    _focusedAchievement, missing, false);
+    GuiElementRichtext richtext = composer.GetRichtext("richtext");
+    richtext.Components = components.ToArray();
+    richtext.CalcHeightAndPositions();
   }
 
   private GuiElementRichtext GetRichtext(ElementBounds textBounds,
@@ -154,14 +221,22 @@ public class GourmandTab {
       GourmandSystem gourmand = _capi.ModLoader.GetModSystem<GourmandSystem>();
       FoodAchievements foodAchievements = gourmand.FoodAchievements;
       List<RichTextComponentBase> components = new();
-      AddCategoryFocusComponents(redraw, components, _focusCategory, gourmand,
+      AddCategoryFocusComponents(components, _focusCategory, gourmand,
                                  foodAchievements, modData);
       scrollTo = 0;
       CachedGuiElementRichtext text =
           new(_capi, components.ToArray(),
-              textBounds) { OnDispose = () => _overview?.Dispose() };
+              textBounds) { OnDispose = OnFocusedCategoryClosed };
       return text;
     }
+  }
+
+  private void OnFocusedCategoryClosed() {
+    _overview?.Dispose();
+    _focusedCategory = null;
+    _focusedEaten = -1;
+    _focusedMissing = null;
+    _focusedAchievement = null;
   }
 
   private void SetScrollHeight(GuiComposer composer, float scrollTo) {
@@ -202,7 +277,7 @@ public class GourmandTab {
     foreach (var category in achievements) {
       AddFoodAchievement(redraw, components, gourmand, foodAchievements,
                          modData, category.Key, category.Value.Item1,
-                         category.Value.Item2, rand, MaxShowPreview);
+                         category.Value.Item2, rand, MaxShowPreview, false);
     }
   }
 
@@ -210,35 +285,41 @@ public class GourmandTab {
   AddFoodAchievement(Action redraw, List<RichTextComponentBase> components,
                      GourmandSystem gourmand, FoodAchievements foodAchievements,
                      ITreeAttribute modData, AssetLocation category, int eaten,
-                     AchievementPoints achievement, Random rand, int maxShow) {
+                     AchievementPoints achievement, Random rand, int maxShow,
+                     bool cacheMissing) {
     Stopwatch stopwatch = new();
     stopwatch.Start();
     bool more = foodAchievements.GetMissingDict(
         _capi.World, gourmand.CatDict, category, modData, maxShow,
         out Dictionary<string, List<ItemStack>> missing);
+    foreach (KeyValuePair<string, List<ItemStack>> foods in missing) {
+      foods.Value.Shuffle(rand);
+    }
+    if (cacheMissing) {
+      _focusedCategory = category;
+      _focusedEaten = eaten;
+      _focusedMissing = missing;
+      _focusedAchievement = achievement;
+    }
     stopwatch.Stop();
     GetDebugLogger()?.Debug("Enumerated category {0} with {1} values in {2}.",
                             category, missing.Sum(m => m.Value.Count),
                             stopwatch.Elapsed);
-    AddFoodCategory(redraw, components, category, eaten, achievement, rand,
-                    missing, more);
+    AddFoodCategory(redraw, components, category, eaten, achievement, missing,
+                    more);
   }
 
   private void AddCategoryFocusComponents(
-      Action redraw, List<RichTextComponentBase> components,
-      AssetLocation focusCategory, GourmandSystem gourmand,
-      FoodAchievements foodAchievements, ITreeAttribute modData) {
-    LinkTextComponent link =
-        new(_capi, Lang.Get("gourmand:back-to-overview") + "\n",
-            CairoFont.WhiteSmallText(), (l) => BackToOverview(redraw));
-    components.Add(link);
-
+      List<RichTextComponentBase> components, AssetLocation focusCategory,
+      GourmandSystem gourmand, FoodAchievements foodAchievements,
+      ITreeAttribute modData) {
     Random rand = new();
     Dictionary<AssetLocation, Tuple<int, AchievementPoints>> achievements =
         foodAchievements.GetAchievementStats(modData);
-    AddFoodAchievement(redraw, components, gourmand, foodAchievements, modData,
+    AddFoodAchievement(null, components, gourmand, foodAchievements, modData,
                        focusCategory, achievements[focusCategory].Item1,
-                       achievements[focusCategory].Item2, rand, int.MaxValue);
+                       achievements[focusCategory].Item2, rand, int.MaxValue,
+                       true);
   }
 
   private ILogger GetDebugLogger() {
@@ -326,7 +407,7 @@ public class GourmandTab {
   private void AddFoodCategory(Action redraw,
                                List<RichTextComponentBase> components,
                                AssetLocation category, int eaten,
-                               AchievementPoints achievement, Random rand,
+                               AchievementPoints achievement,
                                Dictionary<string, List<ItemStack>> missing,
                                bool more) {
     AssetLocation categoryName =
@@ -355,13 +436,13 @@ public class GourmandTab {
     components.AddRange(VtmlUtil.Richtextify(_capi, text.ToString(),
                                              CairoFont.WhiteDetailText()));
 
-    AddMissingIcons(redraw, components, category, rand, missing, more);
+    AddMissingIcons(redraw, components, category, missing, more);
     components.Add(new RichTextComponent(_capi, "\n", _headerFont));
   }
 
   private void AddMissingIcons(Action redraw,
                                List<RichTextComponentBase> components,
-                               AssetLocation category, Random rand,
+                               AssetLocation category,
                                Dictionary<string, List<ItemStack>> missing,
                                bool more) {
     if (missing.Count == 0) {
@@ -371,7 +452,6 @@ public class GourmandTab {
     } else {
       foreach (KeyValuePair<string, List<ItemStack>> foods in missing) {
         ItemStack[] foodsArray = foods.Value.ToArray();
-        foodsArray.Shuffle(rand);
         components.Add(new SlideshowItemstackTextComponent(
             _capi, foodsArray, _itemSize, EnumFloat.Inline));
       }
