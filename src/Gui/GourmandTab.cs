@@ -12,17 +12,26 @@ using Vintagestory.API.Util;
 
 namespace Gourmand.Gui;
 
-public class DiposeNotifyingLink : LinkTextComponent {
-  public Action OnDispose;
-  public DiposeNotifyingLink(ICoreClientAPI api, string displayText,
-                             CairoFont font,
-                             Action<LinkTextComponent> onLinkClicked)
-      : base(api, displayText, font, onLinkClicked) {}
+public class CachedGuiElementRichtext : GuiElementRichtext {
+  private bool _keepCache = false;
+  public Action OnDispose = null;
+  public Action OnRedraw = null;
+  public CachedGuiElementRichtext(ICoreClientAPI capi,
+                                  RichTextComponentBase[] components,
+                                  ElementBounds bounds)
+      : base(capi, components, bounds) {}
+
+  public void KeepCache(bool keep) { _keepCache = keep; }
 
   public override void Dispose() {
-    base.Dispose();
-    OnDispose();
+    if (!_keepCache) {
+      OnDispose();
+      base.Dispose();
+      GC.SuppressFinalize(this);
+    }
   }
+
+  public void Redraw() { OnRedraw(); }
 }
 
 public class GourmandTab {
@@ -51,8 +60,9 @@ public class GourmandTab {
   // Shows up to two rows of icons
   private static readonly int MaxShowPreview = 16;
   private AssetLocation _focusCategory = null;
-  private RichTextComponentBase[] _cachedOverviewComponents = null;
+  private CachedGuiElementRichtext _overview = null;
   private float _cachedOverviewScroll = 0;
+  private GuiElementScrollbar _scrollbar;
 
   public GourmandTab(ICoreClientAPI capi) {
     _capi = capi;
@@ -66,6 +76,7 @@ public class GourmandTab {
   }
 
   private void ComposeTab(GuiComposer composer) {
+    GetDebugLogger()?.Debug("ComposeTab");
     ElementBounds dialogBounds = composer.CurParentBounds;
     float scrollWidth = 20;
     // The parent bounds were not offset by the dialog title, so do that now.
@@ -87,21 +98,81 @@ public class GourmandTab {
     ElementBounds scrollBounds =
         clipBounds.RightCopy().WithFixedWidth(scrollWidth);
 
+    _overview?.KeepCache(false);
+
+    void Redraw() {
+      var tabs = composer.GetHorizontalTabs("tabs");
+      tabs.SetValue(tabs.activeElement, true);
+    }
+
+    _scrollbar = new GuiElementScrollbar(
+        _capi, value => OnTextScroll(composer, value), scrollBounds);
+
     composer.BeginClip(clipBounds)
         .AddInset(insetBounds, 3)
-        .AddRichtext(GetComponents(composer).ToArray(), textBounds, "richtext")
+        .AddInteractiveElement(
+            GetRichtext(textBounds, Redraw, out float scrollTo), "richtext")
         .EndClip()
-        .AddVerticalScrollbar(value => OnTextScroll(composer, value),
-                              scrollBounds, "scrollbar");
+        .AddInteractiveElement(_scrollbar, "scrollbar");
 
-    composer.OnComposed += () => SetScrollHeight(composer);
+    composer.OnComposed += () => SetScrollHeight(composer, scrollTo);
   }
 
-  private void SetScrollHeight(GuiComposer composer) {
+  private GuiElementRichtext GetRichtext(ElementBounds textBounds,
+                                         Action redraw, out float scrollTo) {
+    if (_focusCategory == null) {
+      if (_overview == null) {
+        ITreeAttribute modData =
+            FoodAchievements.GetModData(_capi.World.Player.Entity);
+        GourmandSystem gourmand =
+            _capi.ModLoader.GetModSystem<GourmandSystem>();
+        FoodAchievements foodAchievements = gourmand.FoodAchievements;
+
+        _overview = new CachedGuiElementRichtext(_capi, null, textBounds) {
+          OnRedraw = () => redraw(),
+          OnDispose =
+              () => {
+                GetDebugLogger()?.Debug("Clearing overview cache.");
+                _overview = null;
+              },
+        };
+        List<RichTextComponentBase> components = new();
+        AddOverviewComponents(_overview.Redraw, components, gourmand,
+                              foodAchievements, modData);
+        _overview.Components = components.ToArray();
+
+        _cachedOverviewScroll = 0;
+        scrollTo = 0;
+      } else {
+        GetDebugLogger()?.Debug("Using cached overview.");
+        scrollTo = _cachedOverviewScroll;
+      }
+      return _overview;
+    } else {
+      ITreeAttribute modData =
+          FoodAchievements.GetModData(_capi.World.Player.Entity);
+      GourmandSystem gourmand = _capi.ModLoader.GetModSystem<GourmandSystem>();
+      FoodAchievements foodAchievements = gourmand.FoodAchievements;
+      List<RichTextComponentBase> components = new();
+      AddCategoryFocusComponents(redraw, components, _focusCategory, gourmand,
+                                 foodAchievements, modData);
+      scrollTo = 0;
+      CachedGuiElementRichtext text =
+          new(_capi, components.ToArray(),
+              textBounds) { OnDispose = () => _overview?.Dispose() };
+      return text;
+    }
+  }
+
+  private void SetScrollHeight(GuiComposer composer, float scrollTo) {
     GuiElementScrollbar scrollbar = composer.GetScrollbar("scrollbar");
     GuiElementRichtext text = composer.GetRichtext("richtext");
     scrollbar.SetHeights((float)scrollbar.Bounds.OuterHeight,
                          (float)text.Bounds.fixedHeight + _shrinkParentPadding);
+    if (scrollTo != 0) {
+      scrollbar.CurrentYPosition = scrollTo;
+      OnTextScroll(composer, scrollTo);
+    }
   }
 
   private void OnTextScroll(GuiComposer composer, float value) {
@@ -110,24 +181,7 @@ public class GourmandTab {
     text.Bounds.CalcWorldBounds();
   }
 
-  private List<RichTextComponentBase> GetComponents(GuiComposer composer) {
-    ITreeAttribute modData =
-        FoodAchievements.GetModData(_capi.World.Player.Entity);
-    GourmandSystem gourmand = _capi.ModLoader.GetModSystem<GourmandSystem>();
-    FoodAchievements foodAchievements = gourmand.FoodAchievements;
-
-    List<RichTextComponentBase> components = new();
-    if (_focusCategory == null) {
-      AddOverviewComponents(composer, components, gourmand, foodAchievements,
-                            modData);
-    } else {
-      AddCategoryFocusComponents(composer, components, _focusCategory, gourmand,
-                                 foodAchievements, modData);
-    }
-    return components;
-  }
-
-  private void AddOverviewComponents(GuiComposer composer,
+  private void AddOverviewComponents(Action redraw,
                                      List<RichTextComponentBase> components,
                                      GourmandSystem gourmand,
                                      FoodAchievements foodAchievements,
@@ -146,15 +200,14 @@ public class GourmandTab {
         foodAchievements.GetAchievementStats(modData);
     Random rand = new();
     foreach (var category in achievements) {
-      AddFoodAchievement(composer, components, gourmand, foodAchievements,
+      AddFoodAchievement(redraw, components, gourmand, foodAchievements,
                          modData, category.Key, category.Value.Item1,
                          category.Value.Item2, rand, MaxShowPreview);
     }
   }
 
   private void
-  AddFoodAchievement(GuiComposer composer,
-                     List<RichTextComponentBase> components,
+  AddFoodAchievement(Action redraw, List<RichTextComponentBase> components,
                      GourmandSystem gourmand, FoodAchievements foodAchievements,
                      ITreeAttribute modData, AssetLocation category, int eaten,
                      AchievementPoints achievement, Random rand, int maxShow) {
@@ -167,38 +220,25 @@ public class GourmandTab {
     GetDebugLogger()?.Debug("Enumerated category {0} with {1} values in {2}.",
                             category, missing.Sum(m => m.Value.Count),
                             stopwatch.Elapsed);
-    AddFoodCategory(composer, components, category, eaten, achievement, rand,
+    AddFoodCategory(redraw, components, category, eaten, achievement, rand,
                     missing, more);
   }
 
   private void AddCategoryFocusComponents(
-      GuiComposer composer, List<RichTextComponentBase> components,
+      Action redraw, List<RichTextComponentBase> components,
       AssetLocation focusCategory, GourmandSystem gourmand,
       FoodAchievements foodAchievements, ITreeAttribute modData) {
-    DiposeNotifyingLink link =
+    LinkTextComponent link =
         new(_capi, Lang.Get("gourmand:back-to-overview") + "\n",
-            CairoFont.WhiteSmallText(), (l) => BackToOverview(composer));
-    link.OnDispose += () => ClearCache();
+            CairoFont.WhiteSmallText(), (l) => BackToOverview(redraw));
     components.Add(link);
 
     Random rand = new();
     Dictionary<AssetLocation, Tuple<int, AchievementPoints>> achievements =
         foodAchievements.GetAchievementStats(modData);
-    AddFoodAchievement(composer, components, gourmand, foodAchievements,
-                       modData, focusCategory,
-                       achievements[focusCategory].Item1,
+    AddFoodAchievement(redraw, components, gourmand, foodAchievements, modData,
+                       focusCategory, achievements[focusCategory].Item1,
                        achievements[focusCategory].Item2, rand, int.MaxValue);
-  }
-
-  private void ClearCache() {
-    if (_cachedOverviewComponents != null) {
-      GetDebugLogger()?.Debug("Clearing overview cache");
-      foreach (RichTextComponentBase component in _cachedOverviewComponents) {
-        component.Dispose();
-      }
-      _cachedOverviewComponents = null;
-      _cachedOverviewScroll = 0;
-    }
   }
 
   private ILogger GetDebugLogger() {
@@ -283,7 +323,7 @@ public class GourmandTab {
         new RichTextComponent(_capi, "\n", CairoFont.WhiteDetailText()));
   }
 
-  private void AddFoodCategory(GuiComposer composer,
+  private void AddFoodCategory(Action redraw,
                                List<RichTextComponentBase> components,
                                AssetLocation category, int eaten,
                                AchievementPoints achievement, Random rand,
@@ -315,11 +355,11 @@ public class GourmandTab {
     components.AddRange(VtmlUtil.Richtextify(_capi, text.ToString(),
                                              CairoFont.WhiteDetailText()));
 
-    AddMissingIcons(composer, components, category, rand, missing, more);
+    AddMissingIcons(redraw, components, category, rand, missing, more);
     components.Add(new RichTextComponent(_capi, "\n", _headerFont));
   }
 
-  private void AddMissingIcons(GuiComposer composer,
+  private void AddMissingIcons(Action redraw,
                                List<RichTextComponentBase> components,
                                AssetLocation category, Random rand,
                                Dictionary<string, List<ItemStack>> missing,
@@ -339,53 +379,24 @@ public class GourmandTab {
         components.Add(
             new LinkTextComponent(_capi, Lang.Get("gourmand:more-entries"),
                                   CairoFont.WhiteSmallText(),
-                                  (l) => FocusOnCategory(category, composer)));
+                                  (l) => FocusOnCategory(category, redraw)));
       }
     }
     components.Add(
         new RichTextComponent(_capi, "\n", CairoFont.WhiteDetailText()));
   }
 
-  private void FocusOnCategory(AssetLocation category, GuiComposer composer) {
-    bool wasNull = _focusCategory == null;
+  private void FocusOnCategory(AssetLocation category, Action redraw) {
     _focusCategory = category;
-    Redraw(composer, wasNull);
+    _overview?.KeepCache(true);
+    _cachedOverviewScroll = _scrollbar.CurrentYPosition;
+
+    redraw();
   }
 
-  private void BackToOverview(GuiComposer composer) {
+  private void BackToOverview(Action redraw) {
+    _overview?.KeepCache(true);
     _focusCategory = null;
-    Redraw(composer, false);
-  }
-
-  private void Redraw(GuiComposer composer, bool saveOverview) {
-    GuiElementRichtext text = composer.GetRichtext("richtext");
-    RichTextComponentBase[] oldComponents = text.Components;
-    float scrollTo = 0;
-    if (_focusCategory == null && _cachedOverviewComponents != null) {
-      GetDebugLogger()?.Debug("Using cached overview.");
-
-      text.Components = _cachedOverviewComponents;
-      scrollTo = _cachedOverviewScroll;
-      // Clear _cachedOverviewComponents so that the DiposeNotifyingLink can't
-      // dispose it when it is disposed.
-      _cachedOverviewComponents = null;
-    } else {
-      text.Components = GetComponents(composer).ToArray();
-    }
-
-    GuiElementScrollbar scrollbar = composer.GetScrollbar("scrollbar");
-    if (saveOverview && oldComponents != null && oldComponents.Length > 0) {
-      _cachedOverviewComponents = oldComponents;
-      _cachedOverviewScroll = scrollbar.CurrentYPosition;
-    } else {
-      foreach (RichTextComponentBase component in oldComponents) {
-        component.Dispose();
-      }
-    }
-
-    text.RecomposeText();
-    SetScrollHeight(composer);
-    scrollbar.CurrentYPosition = scrollTo;
-    OnTextScroll(composer, scrollTo);
+    redraw();
   }
 }
