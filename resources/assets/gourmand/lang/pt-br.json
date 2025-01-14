@@ -1,0 +1,84 @@
+{
+  "gourmand:playerinfo-nutrition-Gourmand": "Gourmand",
+  "new-food-eaten": "Pontos recebidos de novas comidas: {0}",
+  "tabname-gourmand" : "Gourmand",
+
+  // Text in the gourmand tab.
+  "earned-points":          "Pontos ganhos:",
+  "lost-foods-count":       "Alimentos perdidos por morte:",
+  "earned-health":          "Saúde ganha:",
+  "points-for-next-health": "Pontos necessários para o próximo incremento:",
+  "until-points":           "Pontos até:",
+  "lost-foods":             "Alimentos perdidos",
+  "lost-foods-desc":             "Estas são alimentos ingeridos que foram perdidos por morte.",
+  "lost-foods-none":             "Nenhum",
+  "missing-foods-none":             "Já comeu de tudo",
+  "eaten-foods": "Alimentos comidos: {0}/{1}",
+  "eaten-foods-no-bonus": "Alimentos comidos: {0}",
+  "points-per-food": "Pontos por alimento: {0}",
+  "completion-bonus": "Pontos por completar: {0}",
+  "missing": "Faltando: ",
+  "more-entries": "mais",
+
+  // Shown in the item info
+  "available-points": "Pontos Gourmand disponíveis: {0}",
+
+  // Food category names and descriptions
+  "food-cat-name": "Pegue todos",
+  "food-cat-desc": "Todo tipo de alimento, classificado por seu código de item ou bloco.",
+
+  "pie-category-cat-name": "Tortas",
+  "pie-category-cat-desc": "Diferentes tipos de tortas, classificadas por seus nomes.",
+
+  "meal-category-cat-name": "Refeições",
+  "meal-category-cat-desc": "Refeições preparadas, classificadas por sua categoria de receita: cozido de carne, cozido de legumes, sopa, mingau, compota, e ovos mexidos",
+  "expandedfoods-meal-desc": "Refeições preparadas, classificadas por sua categoria de receita: cozido de carne, cozido de legumes, sopa, mingau, compota, e ovos mexidos.\nAs refeições de Expanded Foods também estão inclusas <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Meals\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide3\">[handbook]</a>: gratinado, compota, salada, macarrão frio, macarrão quente, pilaf, e iogurte.",
+
+  // Only with expandedfoods installed
+  "hardtack-bake-cat-name": "Hardtack",
+  "hardtack-bake-cat-desc": "Tão fácil quanto pão, mas com maior durabilidade. <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Hardtack\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
+  "sweetsavory-cat-name": "Doce e saboroso",
+  "sweetsavory-cat-desc": "Várias sobremesas doces e saborosas.",
+  "sushi-cat-name": "Sushi",
+  "sushi-cat-desc": "Alimento oriental feito de alga, arroz, e opcionalmente peixe em cubos e legumes. <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Sushi\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
+  "fried-cat-name": "Alimentos fritos",
+  "fried-cat-desc": "Preparados e empanados, então fritos com perfeição. <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Breaded_Food\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
+  "deluxe-cat-name": "Alimentos fritos deluxe",
+  "deluxe-cat-desc": "Alimentos fritos com cobertura de molhos e caldas variados. <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Breaded_Food\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
+  "vegetablejuice-cat-name": "Suco de legumes",
+  "vegetablejuice-cat-desc": "Todo tipo de suco de legume. Eles podem ser bebidos de qualquer recipiente potável.",
+
+  "pickled-food-cat-name": "Alimentos em conserva",
+  "pickled-food-cat-desc": "Legumes conservados em salmoura.",
+
+  "bread-perfect-cat-name": "Pães",
+  "bread-perfect-cat-desc": "Pães perfeitamente assados.",
+
+  "floralzones-fruit-cat-name": "Frutas de Floral Zones",
+  "floralzones-fruit-cat-desc": "Colete e coma frutas de todo o globo.",
+
+  "floralzones-vegetable-cat-name": "Legumes de Floral Zones",
+  "floralzones-vegetable-cat-desc": "Colete e coma legumes de todo o globo.",
+
+  "climate-spanning-cat-name": "Alimentos de climas cantrastantes",
+  "climate-spanning-cat-desc": "Algumas poucas receitas que necessitam de ingredientes tanto de climas quentes quanto frios.",
+
+  "mushroom-cat-name": "Cogumelos",
+  "mushroom-cat-desc": "Todo tipo de cogumelo que pode ser forrageados.",
+
+  "juice-cat-name": "Suco de frutas",
+  "juice-cat-desc": "Todo tipo de suco de fruta. Podem ser bebidos de qualquer recipiente potável.",
+
+  "cider-cat-name": "Cidras",
+  "cider-cat-desc": "Bebidas alcoólicas feitas do primeiro nível de fermentação: cidras e hidromel",
+
+  "alcohol-cat-name": "Tipos de álcool",
+  "alcohol-cat-desc": "Cidra, conhaque, e aqua vitae.",
+  "expandedfoods-alcohol-desc": "Todo tipo de bebida alcoólica, incluindo: vinho fino, vinho forte, cidra, conhaque, conhaque envelhecido, conhaque vintage, vodka, e aqua vitae.",
+
+  "cookedfish-cat-name": "Peixeiro",
+  "cookedfish-cat-desc": "Todo tipo de peixe grelhado de Primitive Survival.",
+
+  "poison-cat-name": "Venenos",
+  "poison-cat-desc": "Alimentos que removem saúde quando comidos."
+}
