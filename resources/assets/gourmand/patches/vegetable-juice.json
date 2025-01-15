@@ -1,0 +1,63 @@
+[
+  // Work around https://github.com/l33tmaan/EFRecipes/issues/46
+  {
+    "op": "addmerge",
+    "path": "/attributesByType/*-onion/juiceableProperties",
+    "value": {
+      "litresPerItem": 0.3125,
+      "liquidStack": {
+        "type": "item",
+        "code": "expandedfoods:vegetablejuiceportion-onion",
+        "stacksize": 1
+      },
+      "pressedStack": {
+        "type": "item",
+        "code": "game:pressedmash-onion",
+        "stacksize": 1
+      }
+    },
+    "side": "server",
+    "file": "game:itemtypes/food/vegetable.json",
+    "dependsOn": [{ "modid": "expandedfoods" }]
+  },
+  {
+    "op": "addmerge",
+    "path": "/attributesByType/*-cassava/juiceableProperties",
+    "value": {
+      "litresPerItem": 0.3125,
+      "liquidStack": {
+        "type": "item",
+        "code": "expandedfoods:vegetablejuiceportion-cassava",
+        "stacksize": 1
+      },
+      "pressedStack": {
+        "type": "item",
+        "code": "game:pressedmash-cassava",
+        "stacksize": 1
+      }
+    },
+    "side": "server",
+    "file": "game:itemtypes/food/vegetable.json",
+    "dependsOn": [{ "modid": "expandedfoods" }]
+  },
+  {
+    "op": "addmerge",
+    "path": "/attributesByType/*-bellpepper/juiceableProperties",
+    "value": {
+      "litresPerItem": 0.3125,
+      "liquidStack": {
+        "type": "item",
+        "code": "expandedfoods:vegetablejuiceportion-bellpepper",
+        "stacksize": 1
+      },
+      "pressedStack": {
+        "type": "item",
+        "code": "game:pressedmash-bellpepper",
+        "stacksize": 1
+      }
+    },
+    "side": "server",
+    "file": "game:itemtypes/food/vegetable.json",
+    "dependsOn": [{ "modid": "expandedfoods" }]
+  },
+]
