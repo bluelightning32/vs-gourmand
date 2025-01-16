@@ -20,6 +20,9 @@ class UpdateFoodAchievements : EntityBehavior {
   public override void AfterInitialized(bool onFirstSpawn) {
     base.AfterInitialized(onFirstSpawn);
     _healthBehavior = entity.GetBehavior<EntityBehaviorHealth>();
+
+    GourmandSystem gourmand = GetGourmandSystem();
+    MarkDirty(gourmand);
   }
 
   public void SetCurrentFood(ItemStack food) {

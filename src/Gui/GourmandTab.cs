@@ -81,7 +81,6 @@ public class GourmandTab {
   }
 
   private void ComposeTab(GuiComposer composer) {
-    GetDebugLogger()?.Debug("ComposeTab");
     ElementBounds dialogBounds = composer.CurParentBounds;
     float scrollWidth = 20;
     // The parent bounds were not offset by the dialog title, so do that now.
