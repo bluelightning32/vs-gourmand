@@ -241,7 +241,7 @@ public class MatchRule : MatchRuleJson {
 
     List<SlotCondition> slots = new(Slots ?? Array.Empty<SlotCondition>());
     HashSet<string> initialSlots = new(slots.Select(s => s.Code));
-    int requiredEnumerateMax = 40;
+    int requiredEnumerateMax = 10;
     foreach (CookingRecipeIngredient ingred in recipe.Ingredients) {
       implictCategories.Add(ingred.Code);
       if (!initialSlots.Contains(ingred.Code)) {
