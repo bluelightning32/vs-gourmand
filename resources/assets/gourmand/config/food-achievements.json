@@ -53,9 +53,9 @@
         {
           dependsOn: [ { modId: "expandedfoods" } ],
           points: 0,
-          // There are 237 possible pies with Expanded Foods installed. In
-          // total the completion bonus allows 20 of them to be skipped.
-          bonusAt: 185,
+          // There are a total of 241 possible pies with Expanded Foods installed.
+          // In total the completion bonus allows 20 of them to be skipped.
+          bonusAt: 189,
           bonus: 200
         },
         {
@@ -64,6 +64,16 @@
           // Adds 135 pies
           bonusAt: 115,
           bonus: 350
+        },
+        {
+          dependsOn: [ { modId: "expandedfoods" }, { modId: "wildcraftfruit" } ],
+          points: 0,
+          // There are a total of 663 possible pies with Expanded Foods and
+          // Wildcraft Fruits and Nuts installed. That is 287 more than with
+          // either mod installed alone.
+          // In total the completion bonus allows 40 of them to be skipped.
+          bonusAt: 287,
+          bonus: 850
         }
       ]
     },
@@ -102,8 +112,8 @@
     "deluxe" : {
       dependsOn: [ { modId: "expandedfoods" } ],
       points: 3,
-      bonusAt: 3,
-      bonus: 50,
+      bonusAt: 9,
+      bonus: 100,
     },
     "floralzones-fruit" : {
       points: 2,
