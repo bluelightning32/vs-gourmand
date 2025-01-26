@@ -424,8 +424,14 @@ public class GourmandTab {
     }
     text.AppendLine(Lang.Get(categoryDesc.ToString()));
     if (achievement.BonusAt != 0) {
-      text.AppendLine(
-          Lang.Get("gourmand:eaten-foods", eaten, achievement.BonusAt));
+      if (_capi.Settings.Bool["extendedDebugInfo"]) {
+        text.AppendLine(
+            Lang.Get("gourmand:eaten-foods", eaten,
+                     $"{achievement.BonusAt} [{eaten + missing.Count}]"));
+      } else {
+        text.AppendLine(
+            Lang.Get("gourmand:eaten-foods", eaten, achievement.BonusAt));
+      }
     } else {
       text.AppendLine(Lang.Get("gourmand:eaten-foods-no-bonus", eaten));
     }
