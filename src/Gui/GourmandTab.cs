@@ -10,6 +10,7 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.Util;
+using Vintagestory.GameContent;
 
 namespace Gourmand.Gui;
 
@@ -159,13 +160,24 @@ public class GourmandTab {
   private void FilterFoods(GuiComposer composer, string search) {
     Dictionary<string, List<ItemStack>> missing = new();
     CompareInfo compareInfo = CultureInfo.CurrentUICulture.CompareInfo;
+    DummySlot slot = new();
+    StringBuilder builder = new();
     foreach (KeyValuePair<string, List<ItemStack>> foods in _focusedMissing) {
       List<ItemStack> matching = new();
       foreach (ItemStack food in foods.Value) {
+        slot.Itemstack = food;
+        string foodText;
+        if (food.Collectible is BlockLiquidContainerBase liquidContainer) {
+          liquidContainer.GetContentInfo(slot, builder, _capi.World);
+          foodText = builder.ToString();
+          builder.Clear();
+        } else {
+          foodText = food.GetName();
+        }
         // See if the food name contains the search string, ignoring case, and
         // ignoring diacritics. See
         // https://stackoverflow.com/questions/32827945/linq-contains-without-considering-accents.
-        if (compareInfo.IndexOf(food.GetName(), search,
+        if (compareInfo.IndexOf(foodText, search,
                                 CompareOptions.IgnoreNonSpace |
                                     CompareOptions.IgnoreCase) != -1) {
           matching.Add(food);
