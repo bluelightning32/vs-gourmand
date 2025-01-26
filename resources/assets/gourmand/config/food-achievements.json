@@ -344,7 +344,8 @@
     "cookedfish" : {
       dependsOn: [ { modId: "primitivesurvival" } ],
       points: 2,
-      bonusAt: 10,
+      // Leave out mutant fish, because it is too hard to obtain.
+      bonusAt: 9,
       bonus: 30,
     },
     "food" : {
