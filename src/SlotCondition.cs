@@ -176,7 +176,8 @@ public class SlotCondition {
   private bool
   IsEnumerateDistinctMaxOk(Dictionary<List<IAttribute>, int>[] distinct) {
     for (int distIndex = 0; distIndex < Categories.Length; ++distIndex) {
-      if (!Categories[distIndex].IsDistinctMaxOk(distinct[distIndex].Count)) {
+      if (!Categories[distIndex].IsEnumerateDistinctMaxOk(
+              distinct[distIndex].Count)) {
         return false;
       }
     }

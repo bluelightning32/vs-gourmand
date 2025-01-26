@@ -21,6 +21,13 @@ public class AchievementPoints {
   public ModDependency[] DependsOn { get; private set; }
 
   /// <summary>
+  /// Only include this achievement if at least one of the mods in the list is
+  /// installed. DependsOnAny is ignored when it is null.
+  /// </summary>
+  [JsonProperty("dependsOnAny")]
+  public ModDependency[] DependsOnAny { get; private set; }
+
+  /// <summary>
   /// Ignore this achievement if the total BonusAs is 0. This is useful for
   /// setting the default BonusAs to 0, then adding to the bonus if any of
   /// several mods are installed. If none of the mods are installed, the bonus
@@ -56,9 +63,11 @@ public class AchievementPoints {
   [JsonProperty("add")]
   public AchievementPoints[] Add { get; private set; }
 
-  public AchievementPoints(ModDependency[] dependsOn, int points, int bonusAt,
-                           int bonus, AchievementPoints[] add) {
+  public AchievementPoints(ModDependency[] dependsOn,
+                           ModDependency[] dependsOnAny, int points,
+                           int bonusAt, int bonus, AchievementPoints[] add) {
     DependsOn = dependsOn ?? Array.Empty<ModDependency>();
+    DependsOnAny = dependsOnAny;
     Points = points;
     BonusAt = bonusAt;
     Bonus = bonus;
@@ -74,6 +83,9 @@ public class AchievementPoints {
   }
 
   public bool DependsOnSatisified(IModLoader loader) {
+    if (DependsOnAny != null && !DependsOn.Any(d => d.IsSatisified(loader))) {
+      return false;
+    }
     return DependsOn.All(d => d.IsSatisified(loader));
   }
 

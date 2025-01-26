@@ -17,6 +17,7 @@
     },
     "bread-perfect" : {
       points: 2,
+      // 7 total
       bonusAt: 7,
       bonus: 50,
       add: [
@@ -24,7 +25,15 @@
           dependsOn: [ { modId: "expandedfoods" } ],
           points: 0,
           // fruitbread, fruitbread-syrup, muffin, and muffin-syrup
-          bonusAt: 4
+          bonusAt: 4,
+          bonus: 30,
+        },
+        {
+          dependsOn: [ { modId: "wildcraftfruit" } ],
+          points: 0,
+          // acorn bread
+          bonusAt: 1,
+          bonus: 10
         }
       ]
     },
@@ -36,6 +45,7 @@
     },
     "pie-category" : {
       points: 2,
+      // 45 total
       bonusAt: 32,
       bonus: 100,
       add: [
@@ -46,6 +56,13 @@
           // total the completion bonus allows 20 of them to be skipped.
           bonusAt: 185,
           bonus: 200
+        },
+        {
+          dependsOn: [ { modId: "wildcraftfruit" } ],
+          points: 0,
+          // Adds 135 pies
+          bonusAt: 115,
+          bonus: 350
         }
       ]
     },
@@ -63,6 +80,7 @@
     },
     "pickled-food" : {
       points: 10,
+      // 9 total
       bonusAt: 8,
       bonus: 100,
       add: [
@@ -186,16 +204,42 @@
         },
       ]
     },
+    "wildcraftfruit-fruit" : {
+      dependsOn: [ { modId: "wildcraftfruit" } ],
+      points: 2,
+      // 103 total foods
+      bonusAt: 100,
+      // About 2 points per food
+      bonus: 150
+    },
+    "wildcraftfruit-nut" : {
+      dependsOn: [ { modId: "wildcraftfruit" } ],
+      points: 2,
+      // 25 total foods
+      bonusAt: 23,
+      // About 10 points per 3 foods
+      bonus: 80
+    },
+    "granola-bar" : {
+      dependsOn: [ { modId: "wildcraftfruit" } ],
+      points: 2,
+      // 19 total foods
+      bonusAt: 15,
+      // About 10 points per 3 foods
+      bonus: 50
+    },
     "climate-spanning" : {
       points: 50,
     },
     "mushroom" : {
       points: 2,
+      // 37 total
       bonusAt: 30,
       bonus: 100
     },
     "juice" : {
       points: 2,
+      // 16 total in base game
       bonusAt: 12,
       bonus: 100,
       add: [
@@ -220,15 +264,24 @@
           bonusAt: 2,
           bonus: 10
         },
+        {
+          dependsOn: [ { modId: "wildcraftfruit" } ],
+          // contains 97 juices
+          points: 0,
+          bonusAt: 90,
+          bonus: 900
+        },
       ]
     },
     "vegetablejuice" : {
+      dependsOn: [ { modId: "expandedfoods" } ],
       points: 2,
       bonusAt: 8,
       bonus: 30
     },
     "cider" : {
       points: 3,
+      // 22 in base game
       bonusAt: 18,
       bonus: 100,
       add: [
@@ -253,18 +306,33 @@
           bonusAt: 2,
           bonus: 10
         },
+        {
+          dependsOn: [ { modId: "wildcraftfruit" } ],
+          // contains 98 ciders
+          points: 0,
+          bonusAt: 90,
+          bonus: 450
+        },
       ]
     },
     "alcohol" : {
       points: 5,
+      // 3 total in base game
       bonusAt: 3,
       bonus: 50,
       add: [
         {
+          // Both expandedfoods and wildcraftfruit provide fine wine.
+          dependsOnAny: [ { modId: "expandedfoods" }, { modId: "wildcraftfruit" } ],
+          points: 0,
+          bonusAt: 1,
+          bonus: 10
+        },
+        {
           dependsOn: [ { modId: "expandedfoods" } ],
           points: 0,
-          bonusAt: 4,
-          bonus: 50,
+          bonusAt: 3,
+          bonus: 40,
           description: "expandedfoods-alcohol-desc"
         }
       ]

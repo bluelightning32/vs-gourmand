@@ -1,0 +1,16 @@
+[
+  {
+    dependsOn: [ { modId: "wildcraftfruit" } ],
+    code: {
+      match: "wildcraftfruit:ciderportion-*",
+      type: "item",
+      outputs: [ "ciderportion" ]
+    },
+    attributes: [
+      {
+        path: ["waterTightContainerProps", "nutritionPropsPerLitre", "foodcategory"],
+        outputs: [ "ciderportion-category" ]
+      }
+    ]
+  }
+]

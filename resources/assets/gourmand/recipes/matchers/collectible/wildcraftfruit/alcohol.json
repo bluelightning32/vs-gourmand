@@ -1,0 +1,22 @@
+[
+  {
+    dependsOn: [ { modId: "wildcraftfruit" } ],
+    code: {
+      match: "wildcraftfruit:spiritportion-*",
+      type: "item",
+    },
+    outputs: {
+      "alcoholportion": [ "brandy" ]
+    }
+  },
+  {
+    dependsOn: [ { modId: "wildcraftfruit" } ],
+    code: {
+      match: "wildcraftfruit:fineciderportion-*",
+      type: "item",
+    },
+    outputs: {
+      "alcoholportion": [ "fine-wine" ]
+    }
+  },
+]

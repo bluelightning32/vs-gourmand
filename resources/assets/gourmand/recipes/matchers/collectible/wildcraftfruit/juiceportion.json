@@ -1,0 +1,16 @@
+[
+  {
+    dependsOn: [ { modId: "wildcraftfruit" } ],
+    code: {
+      match: "wildcraftfruit:juiceportion-*",
+      type: "item",
+      outputs: [ "juiceportion" ]
+    },
+    attributes: [
+      {
+        path: ["waterTightContainerProps", "nutritionPropsPerLitre", "foodcategory"],
+        outputs: [ "juiceportion-category" ]
+      }
+    ]
+  }
+]

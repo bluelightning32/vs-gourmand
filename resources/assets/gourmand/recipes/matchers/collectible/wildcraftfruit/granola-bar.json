@@ -1,0 +1,66 @@
+[
+  {
+    // Priority 2 to override the nut match rule
+    priority: 2,
+    dependsOn: [ { modId: "wildcraftfruit" } ],
+    code : {
+      match: "wildcraftfruit:nut-*bar",
+      type: "item",
+    },
+    categories: [
+      {
+        input: "food",
+        outputs: [ "granola-bar" ]
+      },
+    ],
+    deletes: [ "wildcraftfruit-nut" ]
+  },
+  {
+    // Priority 2 to override the nut match rule
+    priority: 2,
+    dependsOn: [ { modId: "wildcraftfruit" } ],
+    code : {
+      match: "wildcraftfruit:nut-halva",
+      type: "item",
+    },
+    categories: [
+      {
+        input: "food",
+        outputs: [ "granola-bar" ]
+      },
+    ],
+    deletes: [ "wildcraftfruit-nut" ]
+  },
+  {
+    // Priority 2 to override the nut match rule
+    priority: 2,
+    dependsOn: [ { modId: "wildcraftfruit" } ],
+    code : {
+      match: "wildcraftfruit:nut-pacoca",
+      type: "item",
+    },
+    categories: [
+      {
+        input: "food",
+        outputs: [ "granola-bar" ]
+      },
+    ],
+    deletes: [ "wildcraftfruit-nut" ]
+  },
+  {
+    // Priority 2 to override the nut match rule
+    priority: 2,
+    dependsOn: [ { modId: "wildcraftfruit" } ],
+    code : {
+      match: "wildcraftfruit:nut-marzipan",
+      type: "item",
+    },
+    categories: [
+      {
+        input: "food",
+        outputs: [ "granola-bar" ]
+      },
+    ],
+    deletes: [ "wildcraftfruit-nut" ]
+  }
+]

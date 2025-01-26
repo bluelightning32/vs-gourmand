@@ -30,7 +30,7 @@
         slotEnd: 5,
         min: 4,
         max: 4,
-        enumerateMax: 400,
+        enumerateMax: 500,
         enumArrangement: "Repeated",
         categories: [
           {

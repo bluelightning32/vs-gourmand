@@ -1,0 +1,15 @@
+[
+  {
+    dependsOn: [ { modId: "wildcraftfruit" } ],
+    code : {
+      match: "wildcraftfruit:nut-*",
+      type: "item",
+    },
+    categories: [
+      {
+        input: "food",
+        outputs: [ "wildcraftfruit-nut" ]
+      },
+    ]
+  }
+]

@@ -1,0 +1,10 @@
+[
+  {
+    dependsOn: [ { modId: "wildcraftfruit" } ],
+    code : {
+      match: "wildcraftfruit:bread-*-perfect",
+      type: "item",
+      outputs: [ "bread-perfect" ]
+    },
+  }
+]
