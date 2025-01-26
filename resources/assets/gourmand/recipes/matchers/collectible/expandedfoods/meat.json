@@ -1,0 +1,24 @@
+[
+  {
+    dependsOn: [ { modId: "expandedfoods" } ],
+    code : {
+      match: "expandedfoods:agedmeat-*",
+      type: "item",
+      outputs: [ "meat" ]
+    },
+    outputs: {
+      "meat" : [ "item" ]
+    }
+  },
+  {
+    dependsOn: [ { modId: "expandedfoods" } ],
+    code : {
+      match: "expandedfoods:meatnugget-*",
+      type: "item",
+      outputs: [ "meat" ]
+    },
+    outputs: {
+      "meat" : [ "item" ]
+    }
+  },
+]
