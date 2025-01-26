@@ -195,6 +195,11 @@ public class PointBreakdown {
 
 [JsonObject(MemberSerialization.OptIn)]
 public class FoodAchievements {
+  [JsonProperty("hints")]
+  public readonly string[] RawHints;
+
+  private readonly List<AssetLocation> _hints;
+
   [JsonProperty("achievements")]
   public readonly IReadOnlyDictionary<string, AchievementPoints>
       RawAchievements;
@@ -204,10 +209,13 @@ public class FoodAchievements {
   private readonly SortedSet<HealthFunctionPiece> _healthFunc;
 
   public FoodAchievements(
+      [JsonProperty("hints")] string[] rawHints,
       [
         JsonProperty("achievements")
       ] Dictionary<string, AchievementPoints> rawAchievements,
       [JsonProperty("healthPoints")] HealthFunctionPiece[] healthPoints) {
+    RawHints = rawHints ?? Array.Empty<string>();
+    _hints = new();
     RawAchievements = rawAchievements;
     _achievements = new();
     HealthPoints = healthPoints;
@@ -216,6 +224,11 @@ public class FoodAchievements {
   }
 
   public void Resolve(string domain, IModLoader loader) {
+    _hints.Clear();
+    foreach (string hint in RawHints) {
+      _hints.Add(AssetLocation.Create(hint, domain));
+    }
+
     _achievements.Clear();
     foreach (var entry in RawAchievements) {
       if (!entry.Value.Resolve(loader)) {
@@ -352,6 +365,21 @@ public class FoodAchievements {
                    entry.Value.GetPoints(eatenValues.Count);
     }
     return isFood ? newPoints : -1;
+  }
+
+  public List<string> GetHints(IWorldAccessor resolver, CategoryDict catdict,
+                               ItemStack food) {
+    List<string> hints = new();
+    foreach (AssetLocation hint in _hints) {
+      CategoryValue value = catdict.GetValue(resolver, hint, food);
+      if (value == null || value.Value == null) {
+        continue;
+      }
+      string categoryValue =
+          string.Join("-", value.Value.Select(a => a.ToString()));
+      hints.Add(categoryValue);
+    }
+    return hints;
   }
 
   /// <summary>

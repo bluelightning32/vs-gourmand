@@ -1,0 +1,17 @@
+[
+  {
+    // Grains that can be cooked
+    categories: [
+      {
+        input: "cookable-food",
+        outputs: [ "cookable-grain" ]
+      },
+    ],
+    attributes: [
+      {
+        path: ["nutritionPropsWhenInMeal", "foodcategory"],
+        value: "Grain"
+      }
+    ]
+  },
+]

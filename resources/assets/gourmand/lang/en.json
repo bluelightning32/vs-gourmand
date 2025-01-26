@@ -89,5 +89,7 @@
   "cookedfish-cat-desc": "Every kind of grilled fish from primitive survival.",
 
   "poison-cat-name": "Poisons",
-  "poison-cat-desc": "Foods that remove health points when eaten."
+  "poison-cat-desc": "Foods that remove health points when eaten.",
+
+  "hint-pie-mixed-grain": "Filled with nuts"
 }

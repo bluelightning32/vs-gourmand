@@ -1,4 +1,5 @@
-{
+[
+  {
     category: {
       input: "pie-perfect"
     },
@@ -60,5 +61,50 @@
         ]
       },
     ]
+  },
+  {
+    category: {
+      input: "pie-perfect"
+    },
+    contents: [
+      {
+        slotBegin: 0,
+        slotEnd: 1,
+        categories: [
+          {
+            input: "pie-dough"
+          }
+        ]
+      },
+      {
+        slotBegin: 1,
+        slotEnd: 5,
+        min: 4,
+        max: 4,
+        enumerateMax: 100,
+        enumArrangement: "SortedWithRepeats",
+        categories: [
+          {
+            input: "pie-filling-mixable-code",
+            distinctMin: 2
+          },
+          {
+            input: "cookable-grain",
+          }
+        ]
+      },
+      {
+        slotBegin: 5,
+        slotEnd: 6,
+        categories: [
+          {
+            input: "pie-dough"
+          }
+        ]
+      },
+    ],
+    outputs: {
+      "hint-pie": [ "gourmand:hint-pie-mixed-grain" ]
+    }
   }
-  
+]

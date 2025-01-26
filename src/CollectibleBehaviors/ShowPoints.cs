@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text;
 
 using Vintagestory.API.Client;
@@ -33,5 +34,10 @@ public class ShowPoints : CollectibleBehavior {
       return;
     }
     dsc.AppendLine(Lang.Get("gourmand:available-points", addPoints));
+    List<string> hints = gourmand.FoodAchievements.GetHints(
+        world, gourmand.CatDict, inSlot.Itemstack);
+    foreach (string hint in hints) {
+      dsc.AppendLine(Lang.Get(hint));
+    }
   }
 }
