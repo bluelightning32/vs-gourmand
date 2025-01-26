@@ -1,4 +1,5 @@
-{
+[
+  {
     category: {
       input: "pie-perfect"
     },
@@ -30,7 +31,7 @@
         slotEnd: 5,
         min: 4,
         max: 4,
-        enumerateMax: 500,
+        enumerateMax: 1000,
         enumArrangement: "Repeated",
         categories: [
           {
@@ -53,5 +54,51 @@
         ]
       },
     ]
-  }
-  
+  },
+  {
+    category: {
+      input: "pie-perfect"
+    },
+    contents: [
+      {
+        slotBegin: 0,
+        slotEnd: 1,
+        enumerateMax: 1,
+        categories: [
+          {
+            input: "pie-dough"
+          }
+        ]
+      },
+      {
+        slotBegin: 1,
+        slotEnd: 5,
+        min: 4,
+        max: 4,
+        enumerateMax: 1000,
+        enumArrangement: "Repeated",
+        categories: [
+          {
+            input: "pie-filling-code",
+            distinctMax: 1
+          },
+          {
+            input: "pie-filling-single-hint",
+            distinctMax: 1,
+            distinctOutputs: [ "hint-pie" ]
+          }
+        ]
+      },
+      {
+        slotBegin: 5,
+        slotEnd: 6,
+        enumerateMax: 1,
+        categories: [
+          {
+            input: "pie-dough"
+          }
+        ]
+      },
+    ]
+  },
+]

@@ -91,5 +91,7 @@
   "poison-cat-name": "Poisons",
   "poison-cat-desc": "Foods that remove health points when eaten.",
 
-  "hint-pie-mixed-grain": "Filled with nuts"
+  "hint-pie-mixed-grain": "Filled with nuts",
+  "hint-pie-pitted": "Filled with pitted fruit",
+  "hint-pie-ground-nut": "Filled with ground nuts",
 }

@@ -1,0 +1,31 @@
+[
+  {
+    dependsOn: [ { modId: "wildcraftfruit" } ],
+    code : {
+      match: "wildcraftfruit:fruit-pitted*",
+      type: "item",
+    },
+    categories: [
+      {
+        input: "pie-filling-code"
+      }
+    ],
+    outputs: {
+      "pie-filling-single-hint": [ "gourmand:hint-pie-pitted" ]
+    }
+  },
+  {
+    dependsOn: [ { modId: "wildcraftfruit" } ],
+    categories: [
+      {
+        input: "pie-filling-code"
+      },
+      {
+        input: "ground-nut"
+      }
+    ],
+    outputs: {
+      "pie-filling-single-hint": [ "gourmand:hint-pie-ground-nut" ]
+    }
+  }
+]
