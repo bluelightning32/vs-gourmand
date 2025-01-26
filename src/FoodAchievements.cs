@@ -175,6 +175,12 @@ public class HealthFunctionPiece : IComparable<HealthFunctionPiece> {
   }
 }
 
+public class PointBreakdown {
+  public Dictionary<string, int> GrantedPoints = new();
+  public Dictionary<string, int> AvailablePoints = new();
+  public Dictionary<string, int> AvailableBonus = new();
+}
+
 [JsonObject(MemberSerialization.OptIn)]
 public class FoodAchievements {
   [JsonProperty("achievements")]
@@ -334,6 +340,43 @@ public class FoodAchievements {
                    entry.Value.GetPoints(eatenValues.Count);
     }
     return isFood ? newPoints : -1;
+  }
+
+  /// <summary>
+  /// Returns the points that can be earned by eating the food
+  /// </summary>
+  /// <param name="resolver">resolver</param>
+  /// <param name="catdict">catdict</param>
+  /// <param name="moddata">the player's food data</param>
+  /// <param name="food">the food to get the stats for</param>
+  /// <returns>0 if the food is already eaten, a positive value if it has not
+  /// been eaten yet, or -1 if it does not match any achievements</returns>
+  public PointBreakdown GetFoodPoints(IWorldAccessor resolver,
+                                      CategoryDict catdict,
+                                      ITreeAttribute moddata, ItemStack food) {
+    PointBreakdown result = new();
+    ITreeAttribute achieved = moddata.GetOrAddTreeAttribute("achieved");
+    foreach (var entry in _achievements) {
+      CategoryValue value = catdict.GetValue(resolver, entry.Key, food);
+      if (value == null || value.Value == null) {
+        continue;
+      }
+      // This is indexed by the category value as a string, and the value is an
+      // item stack.
+      ITreeAttribute eatenValues =
+          achieved.GetOrAddTreeAttribute(entry.Key.ToString());
+      string categoryValue =
+          string.Join(",", value.Value.Select(a => a.ToString()));
+      if (eatenValues.HasAttribute(categoryValue)) {
+        result.GrantedPoints.Add(entry.Key.ToString(), entry.Value.Points);
+      } else {
+        result.AvailablePoints.Add(entry.Key.ToString(), entry.Value.Points);
+        if (eatenValues.Count + 1 == entry.Value.BonusAt) {
+          result.AvailableBonus.Add(entry.Key.ToString(), entry.Value.Bonus);
+        }
+      }
+    }
+    return result;
   }
 
   public int RemoveAchievements(IWorldAccessor resolver, CategoryDict catdict,

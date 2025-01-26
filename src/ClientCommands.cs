@@ -43,6 +43,10 @@ public class ClientCommands {
         .EndSub()
         .BeginSub("chargui")
         .HandleWith(CharGui)
+        .EndSub()
+        .BeginSub("points")
+        .WithDesc("Describe how the points were calculated for the held item.")
+        .HandleWith(FindModData(GetFoodPoints))
         .EndSub();
   }
 
@@ -100,6 +104,39 @@ public class ClientCommands {
       result.AppendLine($"    Points per food: {category.Value.Item2.Points}");
       result.AppendLine($"    Completion Bonus: {category.Value.Item2.Bonus}");
     }
+    return TextCommandResult.Success(result.ToString());
+  }
+
+  private TextCommandResult GetFoodPoints(ITreeAttribute modData,
+                                          TextCommandCallingArgs args) {
+    GourmandSystem gourmand = _capi.ModLoader.GetModSystem<GourmandSystem>();
+    FoodAchievements foodAchievements = gourmand.FoodAchievements;
+
+    ItemStack held = args.Caller.Player.Entity.ActiveHandItemSlot.Itemstack;
+    if (held == null) {
+      return TextCommandResult.Error("No item currently held.");
+    }
+    PointBreakdown breakdown = foodAchievements.GetFoodPoints(
+        _capi.World, gourmand.CatDict, modData, held);
+    StringBuilder result = new();
+    result.AppendLine("Already granted:");
+    foreach (KeyValuePair<string, int> achievement in breakdown.GrantedPoints) {
+      result.AppendLine($"  {achievement.Key}: {achievement.Value}");
+    }
+    int total = 0;
+    result.AppendLine("Available points:");
+    foreach (KeyValuePair<string, int> achievement in breakdown
+                 .AvailablePoints) {
+      result.AppendLine($"  {achievement.Key}: {achievement.Value}");
+      total += achievement.Value;
+    }
+    result.AppendLine("Available bonus:");
+    foreach (KeyValuePair<string, int> achievement in breakdown
+                 .AvailableBonus) {
+      result.AppendLine($"  {achievement.Key}: {achievement.Value}");
+      total += achievement.Value;
+    }
+    result.AppendLine($"Total available: {total}");
     return TextCommandResult.Success(result.ToString());
   }
 
