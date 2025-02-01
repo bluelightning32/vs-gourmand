@@ -15,6 +15,7 @@
   ],
   importRecipe: "pastahot",
   outputs: {
-    "meal-category": [ "pastahot" ]
+    "meal-category": [ "pastahot" ],
+    "hint-meal": ["gourmand:hint-meal-pastahot"]
   }
 }

@@ -1,5 +1,5 @@
 {
-  hints: [ "hint-pie" ],
+  hints: [ "hint-pie", "hint-meal" ],
   achievements: {
     "meal-category" : {
       points: 10,
