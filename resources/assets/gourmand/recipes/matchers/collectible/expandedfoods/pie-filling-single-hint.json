@@ -2,6 +2,21 @@
   {
     dependsOn: [ { modId: "expandedfoods" },  ],
     code : {
+      match: "expandedfoods:choppedmushroom-*",
+      type: "item",
+    },
+    categories: [
+      {
+        input: "pie-filling-code"
+      }
+    ],
+    outputs: {
+      "pie-filling-single-hint": [ "gourmand:hint-pie-choppedvegetable" ]
+    }
+  },
+  {
+    dependsOn: [ { modId: "expandedfoods" },  ],
+    code : {
       match: "expandedfoods:choppedvegetable-*",
       type: "item",
     },
