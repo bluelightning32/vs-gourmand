@@ -123,11 +123,12 @@ class UpdateFoodAchievements : EntityBehavior {
   public override void OnEntityDeath(DamageSource source) {
     float deathPenalty =
         entity.Api.World.Config.GetFloat("gourmandDeathPenalty", 0.3f);
+    float deathPenaltyMax =
+        entity.Api.World.Config.GetFloat("gourmandDeathPenaltyMax", 0.5f);
     GourmandSystem gourmand = GetGourmandSystem();
     int removedPoints = gourmand.FoodAchievements.ApplyDeath(
-        entity.Api.World, gourmand.CatDict, GetModData(), deathPenalty);
-    gourmand.Mod.Logger.Debug("Lost {0} points on death due to penality {1}",
-                              removedPoints, deathPenalty);
+        gourmand.Mod.Logger, entity.GetName(), entity.Api.World,
+        gourmand.CatDict, GetModData(), deathPenalty, deathPenaltyMax);
     if (removedPoints > 0) {
       MarkDirty(gourmand);
     }

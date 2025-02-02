@@ -589,8 +589,32 @@ public class FoodAchievements {
     return entity.WatchedAttributes.GetOrAddTreeAttribute(ModDataPath);
   }
 
-  public int ApplyDeath(IWorldAccessor resolver, CategoryDict catDict,
-                        ITreeAttribute moddata, float deathPenalty) {
+  /// <summary>
+  /// Moves foods from the player's eaten list and moves them to their lost list
+  /// according to the dealth penalty. Initially a large death penalty is
+  /// applied, then subsequent penalties are reduced as the result approaches
+  /// the max dealth penalty. After more foods are eaten, the max death penalty
+  /// increases again.
+  /// </summary>
+  /// <param name="logger"></param>
+  /// <param name="entityName"></param>
+  /// <param name="resolver"></param>
+  /// <param name="catDict"></param>
+  /// <param name="moddata"></param>
+  /// <param name="deathPenalty">
+  /// Ratio of foods are moved from eaten to lost, as long as the total moved
+  /// foods does not exceed the value calculated from deathPenaltyMax.</param>
+  /// <param name="deathPenaltyMax">
+  /// Ratio of foods ever eaten (currently eaten foods plus lost foods) that can
+  /// be lost, no matter how many times the player has died. This should range
+  /// between 0 and 1. The value 1 means everything can be lost with enough
+  /// deaths. The value 0 means nothing can be lost.
+  /// </param>
+  /// <returns>total points lost</returns>
+  public int ApplyDeath(ILogger logger, string entityName,
+                        IWorldAccessor resolver, CategoryDict catDict,
+                        ITreeAttribute moddata, float deathPenalty,
+                        float deathPenaltyMax) {
     Dictionary<ItemStack, bool> foodDecision = new(new ItemStackComparer(
         resolver, GlobalConstants.IgnoredStackAttributes));
     foreach (ItemStack stack in GetEaten(resolver, moddata)) {
@@ -601,13 +625,28 @@ public class FoodAchievements {
     }
     ITreeAttribute achieved = moddata.GetOrAddTreeAttribute("achieved");
     ITreeAttribute lost = moddata.GetOrAddTreeAttribute("lost");
+    Random rand = new();
+    int oldLostCount = GetLost(resolver, moddata).Count();
     int lostPoints = 0;
-    foreach (var entry in foodDecision) {
+    int addtionalLostCount = 0;
+    int loseAtMost =
+        (int)((foodDecision.Count + oldLostCount) * deathPenaltyMax) -
+        oldLostCount;
+    var loseFoods = foodDecision.Where((kv) => kv.Value)
+                        .OrderBy((kv) => rand.Next())
+                        .Take(loseAtMost);
+    foreach (var entry in loseFoods) {
       if (entry.Value) {
         lostPoints +=
             RemoveAchievements(resolver, catDict, achieved, lost, entry.Key);
+        addtionalLostCount++;
       }
     }
+    logger.Audit(
+        "{0} started with {1} eaten foods and {2} lost foods. Lost {3} " +
+            "more foods for {4} points, due to penalty ({5}, {6}).",
+        entityName, foodDecision.Count, oldLostCount, addtionalLostCount,
+        lostPoints, deathPenalty, deathPenaltyMax);
     return lostPoints;
   }
 
