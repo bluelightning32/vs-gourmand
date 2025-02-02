@@ -470,7 +470,7 @@ public class GourmandTab {
       foreach (KeyValuePair<string, List<ItemStack>> foods in missing) {
         ItemStack[] foodsArray = foods.Value.ToArray();
         components.Add(new SlideshowItemstackTextComponent(
-            _capi, foodsArray, _itemSize, EnumFloat.Inline));
+            _capi, foodsArray, _itemSize, EnumFloat.Inline, OnFoodClicked));
       }
       if (more) {
         components.Add(
@@ -481,6 +481,14 @@ public class GourmandTab {
     }
     components.Add(
         new RichTextComponent(_capi, "\n", CairoFont.WhiteDetailText()));
+  }
+
+  private void OnFoodClicked(ItemStack stack) {
+    if (_capi.Settings.Bool["extendedDebugInfo"]) {
+      _capi.Forms.SetClipboardText(new ItemstackAttribute(stack).ToJsonToken());
+      _capi.TriggerIngameError(this, "clipboardcopied",
+                               "Item stack json copied to clipboard");
+    }
   }
 
   private void FocusOnCategory(AssetLocation category, Action redraw) {
