@@ -46,4 +46,22 @@
       }
     ]
   },
+  {
+    // In vanilla eggs can be cooked in meals (but not cooked in stoves or
+    // firepits). Expanded Foods also allows them to be put in pies as
+    // quiches. The pie-filling matcher only searches cookable foods. So add
+    // egg here so that the pie matcher finds it.
+    categories: [
+      {
+        input: "egg",
+        outputs: [ "cookable-food" ]
+      },
+    ],
+    attributes: [
+      {
+        path: ["nutritionPropsWhenInMeal", "foodcategory"],
+        outputs: ["cookable-food-category"]
+      }
+    ]
+  },
 ]

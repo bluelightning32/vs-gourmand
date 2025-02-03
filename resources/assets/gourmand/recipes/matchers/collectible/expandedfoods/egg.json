@@ -1,0 +1,28 @@
+[
+  {
+    dependsOn: [ { modId: "aculinaryartillery" } ],
+    code : {
+      match: "aculinaryartillery:eggyolkportion-*",
+      type: "item",
+      outputs: [ "egg" ]
+    },
+    attributes: [
+      {
+        path: ["nutritionPropsWhenInMeal", "foodcategory"],
+      }
+    ]
+  },
+  {
+    dependsOn: [ { modId: "aculinaryartillery" } ],
+    code : {
+      match: "aculinaryartillery:eggyolkfullportion-*",
+      type: "item",
+      outputs: [ "egg" ]
+    },
+    attributes: [
+      {
+        path: ["nutritionPropsWhenInMeal", "foodcategory"],
+      }
+    ]
+  }
+]

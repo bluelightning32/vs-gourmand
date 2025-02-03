@@ -1,0 +1,16 @@
+[
+  {
+    code : {
+      match: "game:egg-*-boiled",
+      type: "item",
+    },
+    categories: [
+      {
+        input: "pie-filling-code"
+      }
+    ],
+    outputs: {
+      "pie-filling-single-hint": [ "gourmand:hint-pie-boiled" ]
+    }
+  },
+]

@@ -1,0 +1,15 @@
+// match any kind of egg that can be put in a meal.
+[
+  {
+    code : {
+      match: "game:egg-*",
+      type: "item",
+      outputs: [ "egg" ]
+    },
+    attributes: [
+      {
+        path: ["nutritionPropsWhenInMeal", "foodcategory"],
+      }
+    ]
+  }
+]
