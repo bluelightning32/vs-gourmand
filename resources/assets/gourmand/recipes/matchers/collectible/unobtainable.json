@@ -1,0 +1,22 @@
+[
+  {
+    code : {
+      match: "game:fish-smoked",
+      type: "item",
+      outputs: [ "unobtainable" ]
+    },
+    outputs: {
+      "unobtainable" : [ "item" ]
+    }
+  },
+  {
+    code : {
+      match: "game:fish-cured-smoked",
+      type: "item",
+      outputs: [ "unobtainable" ]
+    },
+    outputs: {
+      "unobtainable" : [ "item" ]
+    }
+  },
+]
