@@ -13,6 +13,9 @@ using System.ComponentModel;
 namespace Gourmand;
 
 public class CategoryCondition : ICondition {
+  [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+  [DefaultValue(false)]
+  public bool IgnoreMissing;
   [JsonProperty(Required = Required.Always)]
   readonly public AssetLocation Input;
   [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
@@ -81,7 +84,7 @@ public class CategoryCondition : ICondition {
 
   public bool Validate(IWorldAccessor resolver, ILogger logger,
                        IReadonlyCategoryDict catdict) {
-    if (!catdict.IsRegistered(Input)) {
+    if (!catdict.IsRegistered(Input) && !IgnoreMissing) {
       logger.Error($"Category {Input} is not registered.");
       return false;
     }

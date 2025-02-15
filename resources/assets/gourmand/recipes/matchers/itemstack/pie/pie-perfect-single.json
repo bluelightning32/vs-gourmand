@@ -84,6 +84,7 @@
           },
           {
             input: "pie-filling-single-hint",
+            ignoreMissing: true,
             distinctMax: 1,
             distinctOutputs: [ "hint-pie" ]
           }
