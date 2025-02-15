@@ -13,7 +13,8 @@ public interface ICondition {
   /// <param name="match">the collectible to check</param>
   /// <returns>an enumerable of all the categories and their values</returns>
   public IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>>
-  GetCategories(IReadonlyCategoryDict catdict, CollectibleObject match);
+  GetCategories(IWorldAccessor resolver, IReadonlyCategoryDict catdict,
+                CollectibleObject match);
 
   /// <summary>
   /// The categories outputed by this condition. The enumerable may contain

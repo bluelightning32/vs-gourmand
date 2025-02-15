@@ -5,27 +5,14 @@
       {
         input: "food",
         outputs: [ "cookable-food" ]
-      },
-      {
-        input: "food-category",
+      }
+    ],
+    nutritionProps : {
+      category: {
+        cooked: true,
         outputs: [ "cookable-food-category" ]
       }
-    ],
-  },
-  {
-    priority: 2,
-    categories: [
-      {
-        input: "food",
-        outputs: [ "cookable-food" ]
-      },
-    ],
-    attributes: [
-      {
-        path: ["nutritionPropsWhenInMeal", "foodcategory"],
-        outputs: ["cookable-food-category"]
-      }
-    ]
+    }
   },
   {
     // For efficiency reasons, the above rules only looked at items in the
@@ -39,12 +26,12 @@
         outputs: [ "cookable-food" ]
       },
     ],
-    attributes: [
-      {
-        path: ["nutritionPropsWhenInMeal", "foodcategory"],
-        outputs: ["cookable-food-category"]
+    nutritionProps : {
+      category: {
+        cooked: true,
+        outputs: [ "cookable-food-category" ]
       }
-    ]
+    }
   },
   {
     // In vanilla eggs can be cooked in meals (but not cooked in stoves or
@@ -57,11 +44,11 @@
         outputs: [ "cookable-food" ]
       },
     ],
-    attributes: [
-      {
-        path: ["nutritionPropsWhenInMeal", "foodcategory"],
-        outputs: ["cookable-food-category"]
+    nutritionProps : {
+      category: {
+        cooked: true,
+        outputs: [ "cookable-food-category" ]
       }
-    ]
+    }
   },
 ]

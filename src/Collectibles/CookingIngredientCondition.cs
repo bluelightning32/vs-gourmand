@@ -161,7 +161,8 @@ public class CookingIngredientCondition : ICondition {
   }
 
   public IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>>
-  GetCategories(IReadonlyCategoryDict catdict, CollectibleObject match) {
+  GetCategories(IWorldAccessor resolver, IReadonlyCategoryDict catdict,
+                CollectibleObject match) {
     foreach (AssetLocation category in Outputs) {
       yield return new KeyValuePair<AssetLocation, IAttribute[]>(
           category,

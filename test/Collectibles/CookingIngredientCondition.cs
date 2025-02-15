@@ -137,8 +137,9 @@ public class CookingIngredientCondition {
     Real.CookingIngredientCondition cond =
         JsonObject.FromJson(json).AsObject<Real.CookingIngredientCondition>(
             null, "gourmand");
-    Dictionary<AssetLocation, IAttribute[]> categories = new(cond.GetCategories(
-        _resolver.CatDict, LoadAssets.GetItem("game", "vegetable-cabbage")));
+    Dictionary<AssetLocation, IAttribute[]> categories = new(
+        cond.GetCategories(_resolver.Resolver, _resolver.CatDict,
+                           LoadAssets.GetItem("game", "vegetable-cabbage")));
     LoadAssets.AssertCategoriesEqual(
         new Dictionary<AssetLocation, IAttribute> {
           { new AssetLocation("gourmand", "category1"),

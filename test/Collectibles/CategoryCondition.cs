@@ -101,8 +101,9 @@ public class CategoryCondition {
         JsonObject.FromJson(json).AsObject<Real.CategoryCondition>(null,
                                                                    "gourmand");
 
-    Dictionary<AssetLocation, IAttribute[]> categories = new(cond.GetCategories(
-        _resolver.CatDict, LoadAssets.GetItem("game", "fruit-pineapple")));
+    Dictionary<AssetLocation, IAttribute[]> categories =
+        new(cond.GetCategories(_resolver.Resolver, _resolver.CatDict,
+                               LoadAssets.GetItem("game", "fruit-pineapple")));
     CollectionAssert.AreEqual(
         categories, Array.Empty<KeyValuePair<AssetLocation, IAttribute[]>>());
   }
@@ -119,8 +120,9 @@ public class CategoryCondition {
         JsonObject.FromJson(json).AsObject<Real.CategoryCondition>(null,
                                                                    "gourmand");
 
-    Dictionary<AssetLocation, IAttribute[]> categories = new(cond.GetCategories(
-        _resolver.CatDict, LoadAssets.GetItem("game", "fruit-pineapple")));
+    Dictionary<AssetLocation, IAttribute[]> categories =
+        new(cond.GetCategories(_resolver.Resolver, _resolver.CatDict,
+                               LoadAssets.GetItem("game", "fruit-pineapple")));
     LoadAssets.AssertCategoriesEqual(
         new Dictionary<AssetLocation, IAttribute> {
           { new AssetLocation("gourmand", "output1"), new LongAttribute(11) },

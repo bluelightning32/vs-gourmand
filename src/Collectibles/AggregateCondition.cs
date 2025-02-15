@@ -22,11 +22,13 @@ abstract public class AggregateCondition : ICondition {
   }
 
   public IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>>
-  GetCategories(IReadonlyCategoryDict catdict, CollectibleObject match) {
+  GetCategories(IWorldAccessor resolver, IReadonlyCategoryDict catdict,
+                CollectibleObject match) {
     IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>> result =
         Enumerable.Empty<KeyValuePair<AssetLocation, IAttribute[]>>();
     foreach (ICondition cond in Conditions) {
-      result = Enumerable.Concat(result, cond.GetCategories(catdict, match));
+      result = Enumerable.Concat(result,
+                                 cond.GetCategories(resolver, catdict, match));
     }
     return result;
   }

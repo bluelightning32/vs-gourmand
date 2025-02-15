@@ -119,8 +119,9 @@ public class AttributeCondition {
     Real.AttributeCondition cond =
         JsonObject.FromJson(json).AsObject<Real.AttributeCondition>(null,
                                                                     "gourmand");
-    Dictionary<AssetLocation, IAttribute[]> categories = new(cond.GetCategories(
-        _resolver.CatDict, LoadAssets.GetItem("game", "fruit-pineapple")));
+    Dictionary<AssetLocation, IAttribute[]> categories =
+        new(cond.GetCategories(_resolver.Resolver, _resolver.CatDict,
+                               LoadAssets.GetItem("game", "fruit-pineapple")));
     LoadAssets.AssertCategoriesEqual(
         new Dictionary<AssetLocation, IAttribute> {
           { new AssetLocation("gourmand", "category1"),

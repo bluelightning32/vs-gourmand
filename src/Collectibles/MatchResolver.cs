@@ -258,7 +258,8 @@ public class MatchResolver {
         }
         foreach (CollectibleObject collectible in entry.Rule.EnumerateMatches(
                      this)) {
-          entry.Rule.UpdateCategories(collectible, CatDict, accum, emitted);
+          entry.Rule.UpdateCategories(Resolver, collectible, CatDict, accum,
+                                      emitted);
         }
       }
       if (entry.Category != null) {

@@ -122,6 +122,52 @@
     }
   },
   {
+    dependsOn: [ { modId: "expandedfoods" },  ],
+    code : {
+      match: "expandedfoods:sausage*-cured",
+      type: "item",
+    },
+    categories: [
+      {
+        input: "pie-filling-code"
+      }
+    ],
+    outputs: {
+      "pie-filling-single-hint": [ "gourmand:hint-pie-meat-cured" ]
+    }
+  },
+  {
+    dependsOn: [ { modId: "expandedfoods" },  ],
+    code : {
+      match: "expandedfoods:sausage*-dried",
+      type: "item",
+    },
+    categories: [
+      {
+        input: "pie-filling-code"
+      }
+    ],
+    outputs: {
+      "pie-filling-single-hint": [ "gourmand:hint-pie-meat-dried" ]
+    }
+  },
+  {
+    // Expanded foods patches boiled eggs into the base game.
+    dependsOn: [ { modId: "expandedfoods" },  ],
+    code : {
+      match: "game:egg-*-boiled",
+      type: "item",
+    },
+    categories: [
+      {
+        input: "pie-filling-code"
+      }
+    ],
+    outputs: {
+      "pie-filling-single-hint": [ "gourmand:hint-pie-boiled" ]
+    }
+  },
+  {
     dependsOn: [ { modId: "wildcraftfruit" }, { modId: "expandedfoods" }, ],
     code : {
       match: "expandedfoods:wilddehydratedfruit-pitted*",
@@ -149,22 +195,6 @@
     ],
     outputs: {
       "pie-filling-single-hint": [ "gourmand:hint-pie-pitted" ]
-    }
-  },
-  {
-    // Expanded foods patches boiled eggs into the base game.
-    dependsOn: [ { modId: "expandedfoods" },  ],
-    code : {
-      match: "game:egg-*-boiled",
-      type: "item",
-    },
-    categories: [
-      {
-        input: "pie-filling-code"
-      }
-    ],
-    outputs: {
-      "pie-filling-single-hint": [ "gourmand:hint-pie-boiled" ]
     }
   },
 ]

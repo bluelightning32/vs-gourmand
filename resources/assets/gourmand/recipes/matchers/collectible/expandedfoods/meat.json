@@ -21,4 +21,26 @@
       "meat" : [ "item" ]
     }
   },
+  {
+    dependsOn: [ { modId: "expandedfoods" } ],
+    code : {
+      match: "expandedfoods:sausagefish-*",
+      type: "item",
+      outputs: [ "meat" ]
+    },
+    outputs: {
+      "meat" : [ "item" ]
+    }
+  },
+  {
+    dependsOn: [ { modId: "expandedfoods" } ],
+    code : {
+      match: "expandedfoods:sausage-*",
+      type: "item",
+      outputs: [ "meat" ]
+    },
+    outputs: {
+      "meat" : [ "item" ]
+    }
+  },
 ]

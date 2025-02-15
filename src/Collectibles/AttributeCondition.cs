@@ -29,7 +29,8 @@ public class AttributeCondition : ICondition {
   }
 
   public IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>>
-  GetCategories(IReadonlyCategoryDict catdict, CollectibleObject match) {
+  GetCategories(IWorldAccessor resolver, IReadonlyCategoryDict catdict,
+                CollectibleObject match) {
     JsonObject found = match.Attributes;
     foreach (string name in Path) {
       found = found[name];

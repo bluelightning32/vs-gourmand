@@ -11,14 +11,41 @@ using Vintagestory.API.Datastructures;
 namespace Gourmand.Collectibles;
 
 abstract public class NutritionConditionBase : ICondition {
+  /// <summary>
+  /// When true, try to get the nutritional properties of the item when it is
+  /// cooked, and fallback to the uncooked nutritional properties if there are
+  /// no cooked properties.
+  ///
+  /// When false, get the nutritional properties of the raw item.
+  /// </summary>
+  [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+  [DefaultValue(false)]
+  public readonly bool Cooked;
+
   [JsonProperty]
   public readonly AssetLocation[] Outputs;
 
   [JsonIgnore]
   public IEnumerable<AssetLocation> Categories => Outputs;
 
-  public NutritionConditionBase(AssetLocation[] outputs) {
+  public NutritionConditionBase(bool cooked, AssetLocation[] outputs) {
+    Cooked = cooked;
     Outputs = outputs ?? Array.Empty<AssetLocation>();
+  }
+
+  public FoodNutritionProperties GetProps(IWorldAccessor resolver,
+                                          CollectibleObject c) {
+    if (Cooked) {
+      if (c.CombustibleProps?.SmeltedStack != null) {
+        c.CombustibleProps.SmeltedStack.Resolve(resolver, "gourmand");
+        c = c.CombustibleProps.SmeltedStack.ResolvedItemstack.Collectible;
+      }
+      JsonObject inMeal = c.Attributes?["nutritionPropsWhenInMeal"];
+      if (inMeal?.Exists == true) {
+        return inMeal.AsObject<FoodNutritionProperties>();
+      }
+    }
+    return c.NutritionProps;
   }
 
   public void EnumerateMatches(MatchResolver resolver,
@@ -26,7 +53,7 @@ abstract public class NutritionConditionBase : ICondition {
     matches ??= resolver.Resolver.Blocks
                     .Concat<CollectibleObject>(resolver.Resolver.Items)
                     .ToList();
-    matches.RemoveAll((c) => !IsMatch(c.NutritionProps));
+    matches.RemoveAll((c) => !IsMatch(GetProps(resolver.Resolver, c)));
   }
 
   abstract public bool IsMatch(FoodNutritionProperties nutrition);
@@ -35,11 +62,12 @@ abstract public class NutritionConditionBase : ICondition {
   GetCategoryValue(FoodNutritionProperties nutrition);
 
   public IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>>
-  GetCategories(IReadonlyCategoryDict catdict, CollectibleObject match) {
+  GetCategories(IWorldAccessor resolver, IReadonlyCategoryDict catdict,
+                CollectibleObject match) {
     foreach (AssetLocation category in Outputs) {
       yield return new KeyValuePair<AssetLocation, IAttribute[]>(
           category,
-          new IAttribute[] { GetCategoryValue(match.NutritionProps) });
+          new IAttribute[] { GetCategoryValue(GetProps(resolver, match)) });
     }
   }
 }
@@ -48,9 +76,9 @@ public class NutritionCategoryCondition : NutritionConditionBase {
   [JsonProperty]
   public readonly EnumFoodCategory? Value;
 
-  public NutritionCategoryCondition(EnumFoodCategory? value,
+  public NutritionCategoryCondition(bool cooked, EnumFoodCategory? value,
                                     AssetLocation[] outputs)
-      : base(outputs) {
+      : base(cooked, outputs) {
     Value = value;
   }
 
@@ -78,9 +106,9 @@ public class NutritionSatietyCondition : NutritionConditionBase {
   [DefaultValue(float.PositiveInfinity)]
   public readonly float Max;
 
-  public NutritionSatietyCondition(float min, float max,
+  public NutritionSatietyCondition(bool cooked, float min, float max,
                                    AssetLocation[] outputs)
-      : base(outputs) {
+      : base(cooked, outputs) {
     Min = min;
     Max = max;
   }
@@ -106,8 +134,9 @@ public class NutritionHealthCondition : NutritionConditionBase {
   [DefaultValue(float.PositiveInfinity)]
   public readonly float Max;
 
-  public NutritionHealthCondition(float min, float max, AssetLocation[] outputs)
-      : base(outputs) {
+  public NutritionHealthCondition(bool cooked, float min, float max,
+                                  AssetLocation[] outputs)
+      : base(cooked, outputs) {
     Min = min;
     Max = max;
   }

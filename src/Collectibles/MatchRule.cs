@@ -216,7 +216,8 @@ public class MatchRule : MatchRuleJson {
   /// output)</param>
   /// <exception cref="FormatException">a delete category
   /// conflicts with an output category</exception>
-  public void UpdateCategories(CollectibleObject collectible,
+  public void UpdateCategories(IWorldAccessor resolver,
+                               CollectibleObject collectible,
                                IReadonlyCategoryDict existingCategories,
                                CategoryDict accum,
                                HashSet<AssetLocation> emitted) {
@@ -226,7 +227,7 @@ public class MatchRule : MatchRuleJson {
     }
     foreach (ICondition condition in Conditions) {
       foreach (KeyValuePair<AssetLocation, IAttribute[]> p in condition
-                   .GetCategories(existingCategories, collectible)) {
+                   .GetCategories(resolver, existingCategories, collectible)) {
         UpdateCategory(accum, p.Key, collectible, p.Value, emitted);
       }
     }

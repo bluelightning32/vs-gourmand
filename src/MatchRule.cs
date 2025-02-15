@@ -182,7 +182,8 @@ public class MatchRule : MatchRuleJson {
           // Expanded Matter adds a recipe for glueportion-pitch-hot, and leaves
           // the base game recipe.
           "glueportion-pitch-hot",
-          // The allclasses mod adds several recipes for boilingwaterportion. The base game does not have any recipes for it.
+          // The allclasses mod adds several recipes for boilingwaterportion.
+          // The base game does not have any recipes for it.
           "boilingwaterportion",
         };
         if (!expectedDuplicates.Contains(recipe.Code)) {

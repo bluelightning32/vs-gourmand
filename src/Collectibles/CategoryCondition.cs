@@ -24,7 +24,8 @@ public class CategoryCondition : ICondition {
   }
 
   public IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>>
-  GetCategories(IReadonlyCategoryDict catdict, CollectibleObject match) {
+  GetCategories(IWorldAccessor resolver, IReadonlyCategoryDict catdict,
+                CollectibleObject match) {
     CategoryValue value = catdict.GetValue(Input, match);
     foreach (AssetLocation category in Outputs) {
       yield return new KeyValuePair<AssetLocation, IAttribute[]>(

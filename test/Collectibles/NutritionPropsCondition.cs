@@ -104,6 +104,42 @@ public class NutritionPropsCondition {
   }
 
   [TestMethod]
+  public void EnumerateMatchesCookedSatiety() {
+    Item fishRaw = LoadAssets.GetItem("game", "fish-raw");
+    Item fishCooked = LoadAssets.GetItem("game", "fish-cooked");
+    // fish-raw cooks into fish-cooked.
+    Assert.AreEqual(EnumSmeltType.Cook, fishRaw.CombustibleProps.SmeltingType);
+    Assert.AreEqual(fishCooked.Code,
+                    fishRaw.CombustibleProps.SmeltedStack.Code);
+    Assert.AreNotEqual(fishCooked.NutritionProps.Satiety,
+                       fishRaw.NutritionProps.Satiety);
+    int cookedSatiety =
+        fishCooked.Attributes["nutritionPropsWhenInMeal"]["satiety"].AsInt();
+    Assert.AreNotEqual(fishCooked.NutritionProps.Satiety, cookedSatiety);
+    string json = $@"
+    {{
+      satiety: {{
+        cooked: true,
+        min: {cookedSatiety},
+        max: {cookedSatiety}
+      }}
+    }}";
+    Real.NutritionPropsCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.NutritionPropsCondition>(
+            null, "gourmand");
+    List<CollectibleObject> matches = null;
+    cond.EnumerateMatches(_resolver, ref matches);
+
+    CollectionAssert.Contains(matches, LoadAssets.GetItem("game", "fish-raw"));
+    CollectionAssert.Contains(matches,
+                              LoadAssets.GetItem("game", "fish-cooked"));
+    CollectionAssert.DoesNotContain(
+        matches, LoadAssets.GetItem("game", "fruit-pineapple"));
+    CollectionAssert.DoesNotContain(matches,
+                                    LoadAssets.GetItem("game", "firestarter"));
+  }
+
+  [TestMethod]
   public void EnumerateMatchesHealth() {
     string json = @"
     {
@@ -222,7 +258,7 @@ public class NutritionPropsCondition {
         JsonObject.FromJson(json).AsObject<Real.NutritionPropsCondition>(
             null, "gourmand");
     IEnumerable<KeyValuePair<AssetLocation, IAttribute[]>> categories =
-        cond.GetCategories(_resolver.CatDict,
+        cond.GetCategories(_resolver.Resolver, _resolver.CatDict,
                            LoadAssets.GetItem("game", "fruit-pineapple"));
     LoadAssets.AssertCategoriesEqual(
         new List<KeyValuePair<AssetLocation, IAttribute>> {
