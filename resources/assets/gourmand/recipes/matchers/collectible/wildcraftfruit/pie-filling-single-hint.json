@@ -27,5 +27,38 @@
     outputs: {
       "pie-filling-single-hint": [ "gourmand:hint-pie-ground-nut" ]
     }
-  }
+  },
+  {
+    // The pickled caper vegetable pie is just called a caper pie. So give a hint that the player should pickle the capers first.
+    // Override the general wildcraft hint
+    priority: 2,
+    dependsOn: [ { modId: "wildcraftfruit" } ],
+    code : {
+      match: "wildcraftfruit:pickledvegetable-caper",
+      type: "item",
+    },
+    categories: [
+      {
+        input: "pie-filling-code"
+      },
+    ],
+    outputs: {
+      "pie-filling-single-hint": [ "gourmand:hint-pie-wildcraft-pickled" ]
+    }
+  },
+  {
+    // Wildcraft and Floral zones both have capers
+    dependsOn: [ { modId: "wildcraftfruit" }, { modId: "floralzonesmediterraneanregion"} ],
+    categories: [
+      {
+        input: "pie-filling-code"
+      },
+      {
+        input: "wildcraft-caper"
+      }
+    ],
+    outputs: {
+      "pie-filling-single-hint": [ "gourmand:hint-pie-wildcraft" ]
+    }
+  },
 ]

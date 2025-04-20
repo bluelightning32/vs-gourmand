@@ -1,0 +1,35 @@
+[
+  {
+    // The pickled caper vegetable pie is just called a caper pie. So give a hint that the player should pickle the capers first.
+    // Override the general caper hint
+    priority: 2,
+    dependsOn: [ { modId: "floralzonesmediterraneanregion" } ],
+    code : {
+      match: "floralzonesmediterraneanregion:pickledvegetable-capparisspinosa",
+      type: "item",
+    },
+    categories: [
+      {
+        input: "pie-filling-code"
+      },
+    ],
+    outputs: {
+      "pie-filling-single-hint": [ "gourmand:hint-pie-floralzones-pickled" ]
+    }
+  },
+  {
+    // Wildcraft and Floral zones both have capers
+    dependsOn: [ { modId: "wildcraftfruit" }, { modId: "floralzonesmediterraneanregion"} ],
+    categories: [
+      {
+        input: "pie-filling-code"
+      },
+      {
+        input: "floralzones-caper"
+      }
+    ],
+    outputs: {
+      "pie-filling-single-hint": [ "gourmand:hint-pie-floralzones" ]
+    }
+  },
+]
