@@ -1,0 +1,10 @@
+[
+  {
+    dependsOn: [ { modId: "clayworks" } ],
+    code: {
+      match: "clayworks:bowl-meal-*-*",
+      type: "block",
+      outputs: [ "edible-meal-container" ]
+    }
+  }
+]

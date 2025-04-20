@@ -3,5 +3,11 @@
     side: "server",
     file: "game:blocktypes/clay/bowl-meal", op: "replace", path: "/class",
     value: "NotifyingMeal"
+  },
+  {
+    side: "server",
+    file: "clayworks:blocktypes/clay/bowl_meal", op: "replace", path: "/class",
+    value: "NotifyingMeal",
+    "dependsOn": [{ "modid": "clayworks" }]
   }
 ]
