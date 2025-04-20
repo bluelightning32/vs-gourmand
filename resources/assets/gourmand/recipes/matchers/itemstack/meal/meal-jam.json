@@ -13,6 +13,7 @@
     },
   ],
   importRecipe: "jam",
+  enumerateMax: 20,
   outputs: {
     "meal-category": [ "jam" ]
   }

@@ -13,6 +13,7 @@
     },
   ],
   importRecipe: "porridge",
+  enumerateMax: 20,
   outputs: {
     "meal-category": [ "porridge" ]
   }

@@ -13,6 +13,7 @@
     },
   ],
   importRecipe: "vegetablestew",
+  enumerateMax: 20,
   outputs: {
     "meal-category": [ "vegetablestew" ]
   }

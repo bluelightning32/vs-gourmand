@@ -114,7 +114,7 @@ public class CookingIngredientCondition : ICondition {
     Dictionary<string, List<CookingRecipe>> result = new();
     foreach (CookingRecipe recipe in recipes) {
       if (!result.TryGetValue(recipe.Code,
-                             out List<CookingRecipe> recipesForCode)) {
+                              out List<CookingRecipe> recipesForCode)) {
         recipesForCode = new();
         result.Add(recipe.Code, recipesForCode);
       }

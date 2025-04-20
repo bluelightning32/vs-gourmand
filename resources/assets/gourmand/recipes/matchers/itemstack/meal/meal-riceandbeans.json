@@ -15,6 +15,7 @@
   ],
   // The meal namer calls this Pilaf.
   importRecipe: "riceandbeans",
+  enumerateMax: 20,
   outputs: {
     "meal-category": [ "riceandbeans" ]
   }

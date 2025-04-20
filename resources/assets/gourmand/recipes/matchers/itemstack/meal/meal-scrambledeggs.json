@@ -13,6 +13,7 @@
     },
   ],
   importRecipe: "scrambledeggs",
+  enumerateMax: 20,
   outputs: {
     "meal-category": [ "scrambledeggs" ]
   }

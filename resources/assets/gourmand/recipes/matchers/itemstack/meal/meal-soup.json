@@ -13,6 +13,7 @@
     },
   ],
   importRecipe: "soup",
+  enumerateMax: 20,
   outputs: {
     "meal-category": [ "soup" ]
   }

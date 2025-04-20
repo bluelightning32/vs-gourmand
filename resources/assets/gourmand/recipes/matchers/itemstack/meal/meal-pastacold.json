@@ -14,6 +14,7 @@
     },
   ],
   importRecipe: "pastacold",
+  enumerateMax: 20,
   outputs: {
     "meal-category": [ "pastacold" ],
     "hint-meal": ["gourmand:hint-meal-pastacold"]

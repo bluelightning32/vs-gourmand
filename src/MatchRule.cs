@@ -33,6 +33,13 @@ public class MatchRuleJson {
   [JsonProperty]
   public readonly AssetLocation[] Deletes;
 
+  /// <summary>
+  /// Enumerate up to this many matches total.
+  /// </summary>
+  [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+  [DefaultValue(int.MaxValue)]
+  public readonly int EnumerateMax;
+
   [JsonProperty]
   public readonly CategoryCondition Category;
   [JsonProperty]
@@ -46,13 +53,14 @@ public class MatchRuleJson {
   public MatchRuleJson(
       ModDependency[] dependsOn, float priority,
       [JsonProperty("outputs")] Dictionary<string, JToken[]> rawOutputs,
-      AssetLocation[] deletes, CategoryCondition category,
+      AssetLocation[] deletes, int enumerateMax, CategoryCondition category,
       AttributeCondition[] attributes, string importRecipe,
       SlotCondition[] slots) {
     DependsOn = dependsOn ?? Array.Empty<ModDependency>();
     Priority = priority;
     _rawOutputs = rawOutputs ?? new Dictionary<string, JToken[]>();
     Deletes = deletes ?? Array.Empty<AssetLocation>();
+    EnumerateMax = enumerateMax;
     Category = category;
     Attributes = attributes ?? Array.Empty<AttributeCondition>();
     ImportRecipe = importRecipe;
@@ -64,6 +72,7 @@ public class MatchRuleJson {
     Priority = copy.Priority;
     _rawOutputs = copy._rawOutputs;
     Deletes = copy.Deletes;
+    EnumerateMax = copy.EnumerateMax;
     Category = copy.Category;
     Attributes = copy.Attributes;
     ImportRecipe = copy.ImportRecipe;
@@ -203,6 +212,9 @@ public class MatchRule : MatchRuleJson {
     IEnumerable<ItemStack> matches = null;
     foreach (ICondition condition in Conditions) {
       matches = condition.EnumerateMatches(resolver, catdict, matches);
+    }
+    if (EnumerateMax != int.MaxValue) {
+      matches = matches.Take(EnumerateMax);
     }
     return matches;
   }
