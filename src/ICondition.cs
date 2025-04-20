@@ -38,7 +38,8 @@ public interface ICondition {
                           List<IAttribute> result);
 
   /// <summary>
-  /// All categories outputted by this condition for matches.
+  /// All categories outputted by this condition for matches. This may contain
+  /// duplicates.
   /// </summary>
   public IEnumerable<AssetLocation> Categories { get; }
 

@@ -217,4 +217,28 @@ public class CategoryDict : IReadonlyCategoryDict, IByteSerializable {
                                                         string code) {
     return new("gourmandimportrecipe", recipe + "." + code);
   }
+
+  public void ValidateSubsetOf(CategoryDict other) {
+    foreach (KeyValuePair<AssetLocation,
+                          Dictionary<CollectibleObject, CategoryValue>>
+                 catEntry in _byCat) {
+      if (!other._byCat.TryGetValue(
+              catEntry.Key,
+              out Dictionary<CollectibleObject, CategoryValue> otherDict)) {
+        throw new ArgumentException(
+            $"gourmand: the new collectibles dictionary contains category {catEntry.Key}, which is missing in the loaded collectibles dictionary. Likely a mod added assets to the client without adding them to the server.");
+      }
+      foreach (KeyValuePair<CollectibleObject, CategoryValue> entry in catEntry
+                   .Value) {
+        if (!otherDict.TryGetValue(entry.Key, out CategoryValue otherValue)) {
+          throw new ArgumentException(
+              $"gourmand: the new collectibles dictionary contains collectible {entry.Key.Code}, which is missing in the loaded collectibles dictionary. Likely a mod added assets to the client without adding them to the server.");
+        }
+        if (!entry.Value.Equals(otherValue)) {
+          throw new ArgumentException(
+              $"gourmand: the new collectibles dictionary contains a different value for collectible {entry.Key.Code}. Likely a mod added assets to the client without adding them to the server.");
+        }
+      }
+    }
+  }
 }

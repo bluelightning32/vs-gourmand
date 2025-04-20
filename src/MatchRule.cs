@@ -3,16 +3,12 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-
-using Gourmand.Collectibles;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
-using Vintagestory.API.Server;
 using Vintagestory.GameContent;
 
 namespace Gourmand;
@@ -114,6 +110,7 @@ public class MatchRule : MatchRuleJson {
 
   private Dictionary<AssetLocation, List<ICondition>> _conditionsByCategory;
   private ContentsCondition _contentsCondition;
+  private RecipeCondition _recipeCondition;
 
   /// <summary>
   /// Construct a CollectibleMatchRule. To create this from json, call
@@ -145,6 +142,9 @@ public class MatchRule : MatchRuleJson {
     if (Category != null) {
       conditions.Add(Category);
     }
+    if (_recipeCondition != null) {
+      conditions.Add(_recipeCondition);
+    }
     conditions.AddRange(Attributes);
     if (Slots != null) {
       _contentsCondition = new ContentsCondition(Slots);
@@ -169,54 +169,6 @@ public class MatchRule : MatchRuleJson {
     }
   }
 
-  public static Dictionary<string, List<CookingRecipe>>
-  GetRecipeDict(IEnumerable<CookingRecipe> recipes, ICoreServerAPI sapi,
-                ILogger logger) {
-    Dictionary<string, List<CookingRecipe>> result = new();
-    foreach (CookingRecipe recipe in recipes) {
-      if (result.TryGetValue(recipe.Code,
-                             out List<CookingRecipe> recipesForCode)) {
-        HashSet<string> expectedDuplicates = new() {
-          // The base game has two recipes for sturdy leather.
-          "leather-sturdy-plain",
-          // Expanded Matter adds a recipe for glueportion-pitch-hot, and leaves
-          // the base game recipe.
-          "glueportion-pitch-hot",
-          // The allclasses mod adds several recipes for boilingwaterportion.
-          // The base game does not have any recipes for it.
-          "boilingwaterportion",
-        };
-        if (!expectedDuplicates.Contains(recipe.Code)) {
-          StringBuilder sb = new();
-          sb.AppendLine(
-              $"Two recipes with the same code name of {recipe.Code} were found. Maybe you copied files within the game's asset folder? All recipe codes:");
-          foreach (CookingRecipe entry in recipes) {
-            sb.AppendLine(entry.Code);
-          }
-          if (sapi != null) {
-            sb.AppendLine("All recipe files:");
-            foreach (KeyValuePair<AssetLocation, JToken> file in sapi.Assets
-                         .GetMany<JToken>(logger, "recipes/cooking")) {
-              sb.AppendLine(file.Key.ToString());
-            }
-          }
-          logger.Warning(sb.ToString());
-        }
-      } else {
-        recipesForCode = new();
-        result.Add(recipe.Code, recipesForCode);
-      }
-      recipesForCode.Add(recipe);
-    }
-    return result;
-  }
-
-  public static Dictionary<string, List<CookingRecipe>>
-  GetRecipeDict(IModLoader loader, ICoreServerAPI sapi, ILogger logger) {
-    return GetRecipeDict(CookingIngredientCondition.GetRecipes(loader, sapi),
-                         sapi, logger);
-  }
-
   /// <summary>
   /// Processes the <see cref="ImportRecipe"/> field and merges any slots it
   /// creates with the existing slots.
@@ -227,37 +179,13 @@ public class MatchRule : MatchRuleJson {
   public List<string>
   ResolveImports(Dictionary<string, List<CookingRecipe>> recipes,
                  ILogger logger) {
-    List<string> implictCategories = new();
     if (ImportRecipe == null) {
-      return implictCategories;
+      return new();
     }
-    if (!recipes.TryGetValue(ImportRecipe,
-                             out List<CookingRecipe> recipesForCode)) {
-      logger.Warning("Could not find recipe {0}", ImportRecipe);
-      return implictCategories;
-    }
-    if (recipesForCode.Count > 1) {
-      logger.Error("There are {recipesForCode.Count} recipes for " +
-                   "{ImportRecipe}. Only the first will be used.");
-    }
-    CookingRecipe recipe = recipesForCode[0];
-
-    List<SlotCondition> slots = new(Slots ?? Array.Empty<SlotCondition>());
-    HashSet<string> initialSlots = new(slots.Select(s => s.Code));
-    int requiredEnumerateMax = 10;
-    foreach (CookingRecipeIngredient ingred in recipe.Ingredients) {
-      implictCategories.Add(ingred.Code);
-      if (!initialSlots.Contains(ingred.Code)) {
-        slots.Add(new SlotCondition(recipe.Code, ingred, requiredEnumerateMax));
-        if (slots[^1].Min > 0) {
-          requiredEnumerateMax = 3;
-        }
-      }
-    }
-    Slots = slots.ToArray();
-    ImportRecipe = null;
+    _recipeCondition = new(ImportRecipe);
+    List<string> result = _recipeCondition.Resolve(recipes, logger);
     SetConditions();
-    return implictCategories;
+    return result;
   }
 
   /// <summary>
@@ -272,9 +200,6 @@ public class MatchRule : MatchRuleJson {
   public IEnumerable<ItemStack>
   EnumerateMatches(IWorldAccessor resolver,
                    Collectibles.IReadonlyCategoryDict catdict) {
-    if (ImportRecipe != null) {
-      return Array.Empty<ItemStack>();
-    }
     IEnumerable<ItemStack> matches = null;
     foreach (ICondition condition in Conditions) {
       matches = condition.EnumerateMatches(resolver, catdict, matches);
@@ -292,9 +217,6 @@ public class MatchRule : MatchRuleJson {
   public bool IsMatch(IWorldAccessor resolver,
                       Collectibles.IReadonlyCategoryDict catdict,
                       ItemStack stack) {
-    if (ImportRecipe != null) {
-      return false;
-    }
     return Conditions.All(c => c.IsMatch(resolver, catdict, stack));
   }
 

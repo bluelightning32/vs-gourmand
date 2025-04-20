@@ -27,7 +27,8 @@ public class LoadAssets {
                     new() { "bowl-meal.json", "egg.json", "mushroom.json",
                             "pie.json" },
                 [AssetCategory.recipes] =
-                    new() { "meatystew.json", "vegetablestew.json" } };
+                    new() { "leather.json", "meatystew.json",
+                            "vegetablestew.json" } };
     Server = ServerApiWithAssets.Create(allow);
   }
 

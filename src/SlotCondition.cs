@@ -106,6 +106,10 @@ public class SlotCondition {
   [DefaultValue(5)]
   public int EnumerateMax;
 
+  /// <summary>
+  /// For matching input stacks, the corresponding slot must match all of these
+  /// categories.
+  /// </summary>
   [JsonProperty]
   public readonly ContentCategory[] Categories;
 

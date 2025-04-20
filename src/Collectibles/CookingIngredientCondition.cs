@@ -4,11 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
+
+using Newtonsoft.Json.Linq;
 
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.Server;
-using Vintagestory.Common;
 using Vintagestory.GameContent;
 
 namespace Gourmand.Collectibles;
@@ -104,6 +106,26 @@ public class CookingIngredientCondition : ICondition {
         loader.GetModSystem<RecipeRegistrySystem>().CookingRecipes;
     List<CookingRecipe> mixing = GetAcaMixingRecipes(loader, sapi);
     return mixing == null ? vanilla : vanilla.Concat(mixing);
+  }
+
+  public static Dictionary<string, List<CookingRecipe>>
+  GetRecipeDict(IEnumerable<CookingRecipe> recipes, ICoreServerAPI sapi,
+                ILogger logger) {
+    Dictionary<string, List<CookingRecipe>> result = new();
+    foreach (CookingRecipe recipe in recipes) {
+      if (!result.TryGetValue(recipe.Code,
+                             out List<CookingRecipe> recipesForCode)) {
+        recipesForCode = new();
+        result.Add(recipe.Code, recipesForCode);
+      }
+      recipesForCode.Add(recipe);
+    }
+    return result;
+  }
+
+  public static Dictionary<string, List<CookingRecipe>>
+  GetRecipeDict(IModLoader loader, ICoreServerAPI sapi, ILogger logger) {
+    return GetRecipeDict(GetRecipes(loader, sapi), sapi, logger);
   }
 
   public CookingRecipeIngredient

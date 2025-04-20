@@ -1,11 +1,10 @@
+using Gourmand.Collectibles;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using PrefixClassName.MsTest;
 
 using Vintagestory.API.Common;
-
-using Gourmand.Collectibles;
-using Vintagestory.Common;
 
 namespace Gourmand.Test.Collectibles;
 

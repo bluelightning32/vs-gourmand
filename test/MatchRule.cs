@@ -1,3 +1,5 @@
+using Gourmand.Collectibles;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using PrefixClassName.MsTest;
@@ -5,7 +7,6 @@ using PrefixClassName.MsTest;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.Server;
-using Vintagestory.Common;
 using Vintagestory.GameContent;
 
 namespace Gourmand.Test;
@@ -431,97 +432,20 @@ public class MatchRule {
       category: {
         input: ""edible-meal-container"",
       },
-      importRecipe: ""meatystew"",
-      contents: [
-        {
-          code: ""fruit-extra"",
-          min: 1,
-          max: 100,
-          categories: [
-            {
-              input: ""gourmandimportrecipe:meatystew.fruit-extra"",
-            },
-          ],
-        },
-        {
-          min: 0,
-          max: 101,
-          categories: [
-            {
-              input: ""meal-fruit"",
-              outputs: [ ""contains-meal-fruit"" ]
-            },
-          ],
-          enumerateMax: 20,
-        },
-      ],
-    }
-    ";
-    Real.MatchRule rule =
-        JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
-    Dictionary<string, List<CookingRecipe>> cooking =
-        Real.MatchRule.GetRecipeDict(LoadAssets.Server.Api.ModLoader,
-                                     LoadAssets.Server.Api as ICoreServerAPI,
-                                     LoadAssets.Server.Api.Logger);
-    List<string> implicits =
-        rule.ResolveImports(cooking, LoadAssets.Server.Api.Logger);
-
-    CollectionAssert.Contains(implicits, "protein-base");
-
-    Real.SlotCondition protein_base =
-        rule.Slots.First(s => s.Code == "protein-base");
-    Assert.AreEqual(1, protein_base.Categories.Length);
-    Assert.AreEqual(Real.Collectibles.CategoryDict.ImplictIngredientCategory(
-                        "meatystew", "protein-base"),
-                    protein_base.Categories[0].Input);
-    Assert.AreEqual(2, protein_base.Min);
-    Assert.AreEqual(2, protein_base.Max);
-    Assert.IsTrue(protein_base.Categories[0].EnumeratePerDistinct > 0);
-
-    Real.SlotCondition fruit_extra =
-        rule.Slots.First(s => s.Code == "fruit-extra");
-    Assert.AreEqual(1, fruit_extra.Categories.Length);
-    Assert.AreEqual(Real.Collectibles.CategoryDict.ImplictIngredientCategory(
-                        "meatystew", "fruit-extra"),
-                    fruit_extra.Categories[0].Input);
-    Assert.AreEqual(100, fruit_extra.Max);
-
-    Real.SlotCondition meal_fruit = rule.Slots.First(s => s.Max == 101);
-    Assert.AreEqual(1, meal_fruit.Categories.Length);
-    Assert.AreEqual(new AssetLocation("gourmand", "meal-fruit"),
-                    meal_fruit.Categories[0].Input);
-    Assert.IsNull(meal_fruit.Code);
-  }
-
-  [TestMethod]
-  public void ResolveImportsNoContents() {
-    string json = @"
-    {
-      category: {
-        input: ""edible-meal-container"",
-      },
       importRecipe: ""meatystew""
     }
     ";
     Real.MatchRule rule =
         JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
     Dictionary<string, List<CookingRecipe>> cooking =
-        Real.MatchRule.GetRecipeDict(LoadAssets.Server.Api.ModLoader,
-                                     LoadAssets.Server.Api as ICoreServerAPI,
-                                     LoadAssets.Server.Api.Logger);
+        CookingIngredientCondition.GetRecipeDict(
+            LoadAssets.Server.Api.ModLoader,
+            LoadAssets.Server.Api as ICoreServerAPI,
+            LoadAssets.Server.Api.Logger);
     List<string> implicits =
         rule.ResolveImports(cooking, LoadAssets.Server.Api.Logger);
 
     CollectionAssert.Contains(implicits, "protein-base");
-
-    Real.SlotCondition protein_base =
-        rule.Slots.First(s => s.Code == "protein-base");
-    Assert.AreEqual(1, protein_base.Categories.Length);
-    Assert.AreEqual(Real.Collectibles.CategoryDict.ImplictIngredientCategory(
-                        "meatystew", "protein-base"),
-                    protein_base.Categories[0].Input);
-    Assert.AreEqual(2, protein_base.Min);
-    Assert.AreEqual(2, protein_base.Max);
   }
 
   [TestMethod]
@@ -537,9 +461,10 @@ public class MatchRule {
     Real.MatchRule rule =
         JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
     Dictionary<string, List<CookingRecipe>> cooking =
-        Real.MatchRule.GetRecipeDict(LoadAssets.Server.Api.ModLoader,
-                                     LoadAssets.Server.Api as ICoreServerAPI,
-                                     LoadAssets.Server.Api.Logger);
+        CookingIngredientCondition.GetRecipeDict(
+            LoadAssets.Server.Api.ModLoader,
+            LoadAssets.Server.Api as ICoreServerAPI,
+            LoadAssets.Server.Api.Logger);
     List<string> implicits =
         rule.ResolveImports(cooking, LoadAssets.Server.Api.Logger);
     Assert.AreEqual(0, implicits.Count);

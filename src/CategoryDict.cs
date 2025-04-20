@@ -50,8 +50,9 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
   private IEnumerable<Collectibles.MatchRule>
   LoadStackRules(IWorldAccessor resolver, ILogger logger,
                  IEnumerable<MatchRule> stackRules) {
-    Dictionary<string, List<CookingRecipe>> cooking = MatchRule.GetRecipeDict(
-        resolver.Api.ModLoader, resolver.Api as ICoreServerAPI, logger);
+    Dictionary<string, List<CookingRecipe>> cooking =
+        CookingIngredientCondition.GetRecipeDict(
+            resolver.Api.ModLoader, resolver.Api as ICoreServerAPI, logger);
     HashSet<Tuple<string, string>> implicits = new();
 
     Dictionary<AssetLocation, HashSet<MatchRule>> rules = new();
@@ -59,10 +60,8 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
       if (!rule.DependsOnSatisified(resolver.Api.ModLoader)) {
         continue;
       }
-      // Make a backup, because ResolveImports nulls out ImportRecipe.
-      string recipe = rule.ImportRecipe;
       foreach (string ingred in rule.ResolveImports(cooking, logger)) {
-        implicits.Add(new(recipe, ingred));
+        implicits.Add(new(rule.ImportRecipe, ingred));
       }
       foreach (AssetLocation category in rule.OutputCategories) {
         if (!rules.TryGetValue(category,
@@ -185,13 +184,25 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
           JsonConvert.DeserializeObject<MatchRule>(reader.ReadString()));
     }
     _rules.Clear();
-    int newCollectibleRules =
-        LoadStackRules(resolver, resolver.Logger, stackRules).Count();
-    if (newCollectibleRules != 0) {
-      throw new ArgumentException("gourmand: the stack rules should have " +
-                                  "been resolved before serialization.");
-    }
+    IEnumerable<Collectibles.MatchRule> newCollectibleRules =
+        LoadStackRules(resolver, resolver.Logger, stackRules);
+    ValidateRulesAlreadyLoaded(resolver, newCollectibleRules);
     Validate(resolver, resolver.Logger);
+  }
+
+  private void ValidateRulesAlreadyLoaded(
+      IWorldAccessor resolver,
+      IEnumerable<Collectibles.MatchRule> newCollectibleRules) {
+    MatchResolver matchResolver = new(resolver, resolver.Logger);
+    HashSet<AssetLocation> emitted = new();
+    Collectibles.CategoryDict accum = new();
+    foreach (Collectibles.MatchRule rule in newCollectibleRules) {
+      List<CollectibleObject> objs = rule.EnumerateMatches(matchResolver);
+      foreach (CollectibleObject obj in objs) {
+        rule.UpdateCategories(resolver, obj, _collectibleDict, accum, emitted);
+      }
+    }
+    accum.ValidateSubsetOf(_collectibleDict);
   }
 
   public override void ToBytes(IWorldAccessor resolver, out byte[] data,
@@ -224,12 +235,9 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
           JsonConvert.DeserializeObject<MatchRule>(reader.ReadString()));
     }
     _rules.Clear();
-    int newCollectibleRules =
-        LoadStackRules(resolver, resolver.Logger, stackRules).Count();
-    if (newCollectibleRules != 0) {
-      throw new ArgumentException("gourmand: the stack rules should have " +
-                                  "been resolved before serialization.");
-    }
+    IEnumerable<Collectibles.MatchRule> newCollectibleRules =
+        LoadStackRules(resolver, resolver.Logger, stackRules);
+    ValidateRulesAlreadyLoaded(resolver, newCollectibleRules);
     Validate(resolver, resolver.Logger);
   }
 

@@ -301,6 +301,24 @@ public class CategoryDict {
   }
 
   [TestMethod]
+  public void EnumerateMatchesImportedRecipe() {
+    AssetLocation importedRecipeCat = new("gourmand", "importedrecipe");
+    List<ItemStack> matches =
+        CatDict.EnumerateMatches(LoadAssets.Server.World, importedRecipeCat)
+            .ToList();
+    Assert.IsTrue(matches.Count > 2);
+    Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
+    CollectionAssert.AreEquivalent(
+        new CollectibleObject[] { bowl },
+        matches.Select(s => s.Collectible).ToHashSet().ToList());
+    CollectionAssert.AreEquivalent(
+        new string[] { "meatystew" },
+        matches.Select(s => s.Attributes["recipeCode"].GetValue())
+            .ToHashSet()
+            .ToList());
+  }
+
+  [TestMethod]
   public void Serialize() {
 
     using (MemoryStream ms = new()) {
