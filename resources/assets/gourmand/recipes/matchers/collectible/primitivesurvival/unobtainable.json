@@ -1,0 +1,13 @@
+[
+  {
+    dependsOn: [ { modId: "primitivesurvival" } ],
+    code : {
+      match: "primitivesurvival:curedsmokedmeat-fish-raw",
+      type: "item",
+      outputs: [ "unobtainable" ]
+    },
+    outputs: {
+      "unobtainable" : [ "item" ]
+    }
+  },
+]
