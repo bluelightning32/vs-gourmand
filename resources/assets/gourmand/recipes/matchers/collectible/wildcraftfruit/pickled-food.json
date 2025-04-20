@@ -1,0 +1,10 @@
+[
+  {
+    dependsOn: [ { modId: "wildcraftfruit" } ],
+    code : {
+      match: "wildcraftfruit:pickledvegetable-*",
+      type: "item",
+      outputs: [ "pickled-food" ]
+    }
+  },
+]

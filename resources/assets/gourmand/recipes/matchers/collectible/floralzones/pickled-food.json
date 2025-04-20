@@ -1,0 +1,10 @@
+[
+  {
+    dependsOn: [ { modId: "floralzonesmediterraneanregion" } ],
+    code : {
+      match: "floralzonesmediterraneanregion:pickledvegetable-*",
+      type: "item",
+      outputs: [ "pickled-food" ]
+    }
+  },
+]

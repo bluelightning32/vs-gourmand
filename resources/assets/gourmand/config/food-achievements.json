@@ -100,6 +100,27 @@
           // Pickled egg
           points: 0,
           bonusAt: 1,
+        },
+        {
+          dependsOn: [ { modId: "newworldcrops" } ],
+          // Pickled corn, greenbeans, cauliflower, and beats
+          points: 0,
+          bonusAt: 3,
+          bonus: 36,
+        },
+        {
+          dependsOn: [ { modId: "floralzonesmediterraneanregion" } ],
+          // Adds 2
+          points: 0,
+          bonusAt: 2,
+          bonus: 24,
+        },
+        {
+          dependsOn: [ { modId: "wildcraftfruit" } ],
+          // Adds 3
+          points: 0,
+          bonusAt: 3,
+          bonus: 36,
         }
       ]
     },
