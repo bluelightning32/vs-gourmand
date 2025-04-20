@@ -1,0 +1,26 @@
+[
+  {
+    dependsOn: [ { modId: "newworldcrops" } ],
+    code : {
+      match: "newworldcrops:pickledgrain-*",
+      type: "item",
+      outputs: [ "pickled-food" ]
+    }
+  },
+  {
+    dependsOn: [ { modId: "newworldcrops" } ],
+    code : {
+      match: "newworldcrops:pickledlegume-*",
+      type: "item",
+      outputs: [ "pickled-food" ]
+    }
+  },
+  {
+    dependsOn: [ { modId: "newworldcrops" } ],
+    code : {
+      match: "newworldcrops:pickledvegetable-*",
+      type: "item",
+      outputs: [ "pickled-food" ]
+    }
+  },
+]

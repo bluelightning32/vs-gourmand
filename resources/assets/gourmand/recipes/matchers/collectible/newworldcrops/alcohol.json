@@ -1,0 +1,12 @@
+[
+  {
+    dependsOn: [ { modId: "newworldcrops" } ],
+    code: {
+      match: "newworldcrops:spiritportion-*",
+      type: "item",
+    },
+    outputs: {
+      "alcoholportion": [ "brandy" ]
+    }
+  },
+]

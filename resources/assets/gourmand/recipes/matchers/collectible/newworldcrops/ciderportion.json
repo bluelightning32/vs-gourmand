@@ -1,0 +1,16 @@
+[
+  {
+    dependsOn: [ { modId: "newworldcrops" } ],
+    code: {
+      match: "newworldcrops:ciderportion-*",
+      type: "item",
+      outputs: [ "ciderportion" ]
+    },
+    attributes: [
+      {
+        path: ["waterTightContainerProps", "nutritionPropsPerLitre", "foodcategory"],
+        outputs: [ "ciderportion-category" ]
+      }
+    ]
+  }
+]
