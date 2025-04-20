@@ -1,0 +1,48 @@
+[
+  {
+    dependsOn: [ { modId: "expandedfoods" } ],
+    code : {
+      match: "expandedfoods:fishnugget-curedsmashed",
+      type: "item",
+      outputs: [ "unobtainable" ]
+    },
+    outputs: {
+      "unobtainable" : [ "item" ]
+    }
+  },
+  {
+    // Pressing a red apple just turns it into apple mash, which then turns into dehydrated yellow apple.
+    dependsOn: [ { modId: "expandedfoods" } ],
+    code : {
+      match: "expandedfoods:dehydratedfruit-redapple",
+      type: "item",
+      outputs: [ "unobtainable" ]
+    },
+    outputs: {
+      "unobtainable" : [ "item" ]
+    }
+  },
+  {
+    // Pressing a pink apple just turns it into apple mash, which then turns into dehydrated yellow apple.
+    dependsOn: [ { modId: "expandedfoods" } ],
+    code : {
+      match: "expandedfoods:dehydratedfruit-pinkapple",
+      type: "item",
+      outputs: [ "unobtainable" ]
+    },
+    outputs: {
+      "unobtainable" : [ "item" ]
+    }
+  },
+  {
+    dependsOn: [ { modId: "expandedfoods" } ],
+    code : {
+      match: "expandedfoods:fishnugget-curedchopped",
+      type: "item",
+      outputs: [ "unobtainable" ]
+    },
+    outputs: {
+      "unobtainable" : [ "item" ]
+    }
+  },
+]
