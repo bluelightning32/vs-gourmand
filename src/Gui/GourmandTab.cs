@@ -51,6 +51,10 @@ public class GourmandTab {
       Description = description;
       Value = value.ToString(format);
     }
+    public HeaderLine(string description, string value) {
+      Description = description;
+      Value = value;
+    }
   }
   private readonly ICoreClientAPI _capi;
   private readonly GuiDialogCharacterBase _dialog;
@@ -353,6 +357,7 @@ public class GourmandTab {
     if (gainRate != 0) {
       gainRate = 1 / gainRate;
     }
+    string untilStr = untilPoints < int.MaxValue ? untilPoints.ToString() : Lang.Get("gourmand:infinite-points");
 
     // Generate two columns of text. The first column has the descriptions of
     // the fields and the second column has the values of the fields.
@@ -361,7 +366,7 @@ public class GourmandTab {
       new(Lang.Get("gourmand:lost-foods-count"), lost.Count),
       new(Lang.Get("gourmand:earned-health"), health, "F2"),
       new(Lang.Get("gourmand:points-for-next-health"), gainRate, "F2"),
-      new(Lang.Get("gourmand:until-points"), untilPoints),
+      new(Lang.Get("gourmand:until-points"), untilStr),
     };
 
     // Find the width of the description of each field.
