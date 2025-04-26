@@ -1,0 +1,22 @@
+[
+  {
+    // Unmark the bell pepper as unobtainable.
+    dependsOn: [ { modId: "newworldcrops" } ],
+    priority: 2,
+    code : {
+      match: "game:vegetable-bellpepper",
+      type: "item",
+    },
+    deletes: [ "unobtainable" ]
+  },
+  {
+    // Unmark the bell pepper as unobtainable.
+    dependsOn: [ { modId: "newworldcrops" } ],
+    priority: 2,
+    code : {
+      match: "game:pickledvegetable-bellpepper",
+      type: "item",
+    },
+    deletes: [ "unobtainable" ]
+  },
+]

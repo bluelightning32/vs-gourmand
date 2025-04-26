@@ -13,4 +13,14 @@
       outputs: [ "pickled-food" ]
     }
   },
+  {
+    // Remove unobtainable foods
+    priority: 2,
+    categories: [
+      {
+        input: "unobtainable",
+      },
+    ],
+    deletes: [ "pickled-food" ]
+  },
 ]

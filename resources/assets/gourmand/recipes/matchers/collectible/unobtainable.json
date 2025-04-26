@@ -19,4 +19,59 @@
       "unobtainable" : [ "item" ]
     }
   },
+  {
+    // Mushroom blocks that have nutritional stats but are unobtainable in survival mode.
+    code : {
+      match: "game:mushroom-*-harvested",
+      type: "block",
+      outputs: [ "unobtainable" ]
+    },
+    outputs: {
+      "unobtainable" : [ "block" ]
+    }
+  },
+  {
+    // At low priority, mark all sided variants of the mushrooms as unobtainable. At high priority, remove the mark for the north normal variants.
+    priority: 1,
+    code : {
+      match: "game:mushroom-*-*-*",
+      type: "block",
+      outputs: [ "unobtainable" ]
+    },
+    outputs: {
+      "unobtainable" : [ "block" ]
+    }
+  },
+  {
+    priority: 2,
+    code : {
+      match: "game:mushroom-*-normal-north",
+      type: "block",
+    },
+    deletes: [ "unobtainable" ]
+  },
+  {
+    // At low priority, mark the bell pepper as unobtainable. Mods may override this.
+    priority: 1,
+    code : {
+      match: "game:vegetable-bellpepper",
+      type: "item",
+      outputs: [ "unobtainable" ]
+    },
+    outputs: {
+      "unobtainable" : [ "item" ]
+    }
+  },
+  {
+    // At low priority, mark the pickled bell pepper as unobtainable. Mods may override this.
+    priority: 1,
+    code : {
+      match: "game:pickledvegetable-bellpepper",
+      type: "item",
+      outputs: [ "unobtainable" ]
+    },
+    outputs: {
+      "unobtainable" : [ "item" ]
+    }
+  },
 ]

@@ -30,37 +30,13 @@
     }
   },
   {
-    // Remove the mushroom blocks that have nutritional stats but are unobtainable in survival mode.
+    // Remove unobtainable foods
     priority: 2,
-    code : {
-      match: "game:mushroom-*-harvested",
-      type: "block",
-    },
-    deletes: [ "food", "food-category" ]
-  },
-  {
-    // At medium priority, remove all sided variants of the mushrooms. At high priority, add back the north normal variants.
-    priority: 2,
-    code : {
-      match: "game:mushroom-*-*-*",
-      type: "block",
-    },
-    deletes: [ "food", "food-category" ]
-  },
-  {
-    priority: 3,
-    code : {
-      match: "game:mushroom-*-normal-north",
-      type: "block",
-      outputs: [ "food" ]
-    },
-    nutritionProps : {
-      category: {
-        outputs: [ "food-category" ]
-      }
-    },
-    outputs: {
-      "food" : [ "block" ]
-    }
+    categories: [
+      {
+        input: "unobtainable",
+      },
+    ],
+    deletes: [ "food" ]
   },
 ]

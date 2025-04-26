@@ -91,8 +91,8 @@
     },
     "pickled-food" : {
       points: 10,
-      // 9 total
-      bonusAt: 8,
+      // 8 total
+      bonusAt: 7,
       bonus: 100,
       add: [
         {
@@ -103,10 +103,10 @@
         },
         {
           dependsOn: [ { modId: "newworldcrops" } ],
-          // Pickled corn, greenbeans, cauliflower, and beats
+          // Pickled corn, greenbeans, cauliflower, beats, and bell pepper
           points: 0,
-          bonusAt: 3,
-          bonus: 36,
+          bonusAt: 4,
+          bonus: 48,
         },
         {
           dependsOn: [ { modId: "floralzonesmediterraneanregion" } ],

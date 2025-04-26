@@ -17,14 +17,4 @@
       }
     ]
   },
-  {
-    // Priority 2 to override the nut match rule
-    priority: 2,
-    categories: [
-      {
-        input: "unobtainable",
-        deletes: [ "pie-filling-code", "pie-filling-category" ]
-      },
-    ]
-  }
 ]
