@@ -267,7 +267,16 @@
       points: 2,
       // 37 total
       bonusAt: 30,
-      bonus: 100
+      bonus: 100,
+      add: [
+        {
+          dependsOn: [ { modId: "mycodiversity" } ],
+          // adds 37 mushrooms
+          points: 0,
+          bonusAt: 30,
+          bonus: 100
+        },
+      ]
     },
     "juice" : {
       points: 2,
