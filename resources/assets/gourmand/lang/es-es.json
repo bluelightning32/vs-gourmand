@@ -1,0 +1,120 @@
+{
+  "_comentario-1": "Gourmand v1.6.7 || Enlace del Mod: https://mods.vintagestory.at/show/mod/14390 ",
+  "_comentario-2": "Traducido por C4BR3R4 || Última Modificación: 27/04/2025 || Publicación: https://c4br3r4.es/index.php?topic=1343.0 ",
+
+  "gourmand:playerinfo-nutrition-Gourmand": "Gastronomía",
+  "new-food-eaten": "<font color='orange'>Has obtenido <strong>{0}</strong> puntos Gastronómicos por comer nuevos alimentos.</font>",
+  "tabname-gourmand" : "Gastronomía",
+
+  // Texto en la pestaña de Gastronomía
+  "earned-points": "Puntos Conseguidos:",
+  "lost-foods-count": "Alimentos Perdidos:",
+  "earned-health": "Salud Obtenida:",
+  "points-for-next-health": "Puntos para Bonificación:",
+  "until-points": "Puntos Máximos:",
+  "lost-foods": "Alimentos Perdidos",
+  "lost-foods-desc": "Los alimentos consumidos que se han perdido al morir.",
+  "lost-foods-none": "¡No has perido ningún alimento!",
+  "missing-foods-none": "Todos los alimentos consumidos",
+  "eaten-foods": "Alimentos Ingeridos: {0}/{1}",
+  "eaten-foods-no-bonus": "Alimentos Ingeridos: {0}",
+  "points-per-food": "Puntos por Alimento: {0}",
+  "completion-bonus": "Bonificación de Salud: {0}",
+  "missing": "<font color='lightcoral'>Pendiente de Consumir: </font>",
+  "more-entries": "más",
+  "infinite-points": "infinitos",
+
+  // Mostrado en la información del elemento
+  "available-points": "Puntos Gastronómicos a Obtener: {0}",
+
+  // Nombres y descripciones de las categorías de alimentos
+  "food-cat-name": "Resto de Alimentos",
+  "food-cat-desc": "<font opacity='0.6'><i>Cada uno de los tipos de alimentos, clasificado por su código de Objeto o Bloque.</i></font>",
+
+  "pie-category-cat-name": "Pasteles",
+  "pie-category-cat-desc": "<font opacity='0.6'><i>Diferentes tipos de tartas, clasificadas por su nombre.</i></font>",
+
+  "meal-category-cat-name": "Comidas",
+  "meal-category-cat-desc": "<font opacity='0.6'><i>Comidas cocinadas, clasificadas por su categoría de elaboración: Estofado de Carne, Estofado de Verduras, Sopa, Gachas, Mermelada y Huevos Revueltos.</i></font>",
+  "expandedfoods-meal-desc": "<font opacity='0.6'><i>Comidas cocinadas, clasificadas por su categoría de elaboración: Estofado de Carne, Estofado de Verduras, Sopa, Gachas, Mermelada y Huevos Revueltos.\nTambién se incluyen los alimentos del mod 'Expanded Foods' <a href='https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Meals'>[wiki]</a>  <a href='handbook://expandedfoodsguide3'>[Manual]</a>: Gratinados, Compota, Ensalada, Pasta Fría, Pasta Caliente, Pilaf y Yogur.</i></font>",
+
+  // Solo con el Mod Expanded Foods https://mods.vintagestory.at/expandedfoods
+  "hardtack-bake-cat-name": "Pastas Duras",
+  "hardtack-bake-cat-desc": "<font opacity='0.6'><i>Tan fácil como el pan, pero con una vida útil más larga. <a href='https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Hardtack'>[wiki]</a>  <a href='handbook://expandedfoodsguide2'>[Manual]</a></i></font>",
+  "sweetsavory-cat-name": "Dulces y Salados",
+  "sweetsavory-cat-desc": "<font opacity='0.6'><i>Diversas delicias dulces y saladas.</i></font>",
+  "sushi-cat-name": "Sushi",
+  "sushi-cat-desc": "<font opacity='0.6'><i>Comida Japonesa a base de Algas, arroz y, como opción, trocitos de Pescado o Verduras. <a href='https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Sushi'>[wiki]</a>  <a href='handbook://expandedfoodsguide2'>[Manual]</a></i></font>",
+  "fried-cat-name": "Fritos",
+  "fried-cat-desc": "<font opacity='0.6'><i>Preparado y empanado, luego frito a la perfección. <a href='https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Breaded_Food'>[wiki]</a>  <a href='handbook://expandedfoodsguide2'>[Manual]</a></i></font>",
+  "deluxe-cat-name": "Fritos Exquisitos",
+  "deluxe-cat-desc": "<font opacity='0.6'><i>Alimentos fritos rociados con diversas Salsas y Siropes. <a href='https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Breaded_Food'>[wiki]</a>  <a href='handbook://expandedfoodsguide2'>[Manual]</a></i></font>",
+  "vegetablejuice-cat-name": "Zumo de Vegetales",
+  "vegetablejuice-cat-desc": "<font opacity='0.6'><i>Todo tipo de zumos vegetales. Se pueden beber en cualquier recipiente potable.</i></font>",
+
+  "pickled-food-cat-name": "Alimentos Encurtidos",
+  "pickled-food-cat-desc": "<font opacity='0.6'><i>Verduras Encurtidas.</i></font>",
+
+  "bread-perfect-cat-name": "Panes",
+  "bread-perfect-cat-desc": "<font opacity='0.6'><i>Panes perfectamente cocidos.</i></font>",
+
+  "floralzones-fruit-cat-name": "Frutas de las Zonas Florales",
+  "floralzones-fruit-cat-desc": "<font opacity='0.6'><i>Recoge y cómete las frutas de todo el mundo.</i></font>",
+
+  "floralzones-vegetable-cat-name": "Verduras de las Zonas Florales",
+  "floralzones-vegetable-cat-desc": "<font opacity='0.6'><i>Recoge y come verduras de todo el mundo.</i></font>",
+
+  "wildcraftfruit-fruit-cat-name": "Frutas Silvestres",
+  "wildcraftfruit-fruit-cat-desc": "<font opacity='0.6'><i>Recoge y come las frutas silvestres de todo el mundo.</i></font>",
+
+  "wildcraftfruit-nut-cat-name": "Frutos Secos Silvestres",
+  "wildcraftfruit-nut-cat-desc": "<font opacity='0.6'><i>Recoge y come las nueces silvestres de todo el mundo.</i></font>",
+
+  "granola-bar-cat-name": "Barritas de Cereales",
+  "granola-bar-cat-desc": "<font opacity='0.6'><i>Mezcla de Frutos Secos, Cereales y Miel.</i></font>",
+
+  "climate-spanning-cat-name": "Comidas Climáticas",
+  "climate-spanning-cat-desc": "<font opacity='0.6'><i>Algunos alimentos selectos que requieren ingredientes tanto de climas cálidos como fríos.</i></font>",
+
+  "mushroom-cat-name": "Setas",
+  "mushroom-cat-desc": "<font opacity='0.6'><i>Todo tipo de setas que se puedan recolectar.</i></font>",
+
+  "juice-cat-name": "Zumos de Fruta",
+  "juice-cat-desc": "<font opacity='0.6'><i>Todo tipo de zumos de frutas. Se pueden beber en cualquier recipiente potable.</i></font>",
+
+  "cider-cat-name": "Sidras e Hidromieles",
+  "cider-cat-desc": "<font opacity='0.6'><i>Bebidas alcohólicas elaboradas a partir del primer nivel de fermentación.</i></font>",
+
+  "alcohol-cat-name": "Bebidas Alcohólicas",
+  "alcohol-cat-desc": "<font opacity='0.6'><i>Sidra, Coñac y Aqua Vitae.</i></font>",
+  "expandedfoods-alcohol-desc": "<font opacity='0.6'><i>Todo tipo de bebidas alcohólicas, incluidos: Vino Blanco, Vino Tinto, Sidra, Coñac, Coñac Añejo, Aguardiente, Vodka y Aqua Vitae.</i></font>",
+
+  "cookedfish-cat-name": "Pescados",
+  "cookedfish-cat-desc": "<font opacity='0.6'><i>Todo tipo de pescado a la parrilla del mod 'Primitive Survival'.</i></font>",
+
+  "poison-cat-name": "Venenos",
+  "poison-cat-desc": "<font opacity='0.6'><i>Alimentos que eliminan puntos de salud al comerlos.</i></font>",
+
+  "hint-pie-mixed-grain": "Relleno de Frutos Secos",
+  "hint-pie-pitted": "Relleno de Fruta Deshuesada",
+  "hint-pie-ground-nut": "Relleno de Frutos Secos Molidos",
+  "hint-pie-choppedvegetable": "Relleno de Verduras Picadas",
+  "hint-pie-meatnugget-smashed": "Relleno de Carne Triturada",
+  "hint-pie-meatnugget-raw": "Lleno de Pepitas",
+  "hint-pie-meatnugget-cured": "Relleno de Pepitas Curadas",
+  "hint-pie-meat-dried": "Relleno de Carne Seca",
+  "hint-pie-meat-cured": "Relleno de Carne Curada",
+  "hint-pie-boiled": "Relleno Hervido",
+  "hint-pie-wildcraft-pickled": "Relleno de Encurtidos de «Wildcraft»",
+  "hint-pie-wildcraft": "Relleno de «Wildcraft»",
+  "hint-pie-floralzones-pickled": "Relleno de Encurtidos de «Floral Zones»",
+  "hint-pie-floralzones": "Relleno de «Floral Zones»",
+
+  "hint-meal-pastacold": "Ensalada de Pasta Fría",
+  "hint-meal-pastahot": "Pasta Cocinada Caliente",
+
+  "_obsoleto-1.6.7": "Las siguientes cadenas ya no existen en el Archivo de Idioma de la v1.6.7",
+  "gourmand:new-food-eaten": "<font color='orange'>Has obtenido <strong>{0}</strong> puntos Gastronómicos por comer nuevos alimentos.</font>",
+
+  "_fin": "Línea final para evitar que se dañe el Archivo de Idioma."
+}
