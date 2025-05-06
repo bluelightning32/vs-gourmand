@@ -357,7 +357,9 @@ public class GourmandTab {
     if (gainRate != 0) {
       gainRate = 1 / gainRate;
     }
-    string untilStr = untilPoints < int.MaxValue ? untilPoints.ToString() : Lang.Get("gourmand:infinite-points");
+    string untilStr = untilPoints < int.MaxValue
+                          ? untilPoints.ToString()
+                          : Lang.Get("gourmand:infinite-points");
 
     // Generate two columns of text. The first column has the descriptions of
     // the fields and the second column has the values of the fields.

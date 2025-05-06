@@ -101,11 +101,42 @@ public class ContentBuilder {
     return value;
   }
 
+  public void PushMinOutput(int minSlots) {
+    if (minSlots < 1) {
+      return;
+    }
+    while (_minOutputCounts.Count < minSlots) {
+      _minOutputCounts.Add(0);
+    }
+    _minOutputCounts[minSlots - 1]++;
+    _minOutput = _minOutputCounts.Count;
+    while (_contents.Count < _minOutput) {
+      _contents.Add(null);
+    }
+  }
+
+  public void PopMinOutput(int oldMinSlots) {
+    if (oldMinSlots < 1) {
+      return;
+    }
+    _minOutputCounts[oldMinSlots - 1]--;
+    while (_minOutputCounts.Count > 0 &&
+           _minOutputCounts[_minOutputCounts.Count - 1] == 0) {
+      _minOutputCounts.RemoveAt(_minOutputCounts.Count - 1);
+    }
+    _minOutput = _minOutputCounts.Count;
+  }
+
   public void Set(IWorldAccessor resolver, ItemStack s) {
     _base = s;
     _contents.Clear();
     _contents.AddRange(GetContents(resolver, s));
-    _minOutput = _contents.Count;
+    PopMinOutput(_importedMinOutput);
+    _importedMinOutput = _contents.Count;
+    PushMinOutput(_importedMinOutput);
+    while (_contents.Count < _minOutput) {
+      _contents.Add(null);
+    }
     _baseUsed = false;
     ResetUsed();
   }
@@ -151,4 +182,9 @@ public class ContentBuilder {
   private ItemStack _base = null;
   private bool _baseUsed = false;
   private int _minOutput = 0;
+  private int _importedMinOutput = 0;
+
+  // _minOutput should be set to (_minOutputCounts.Count - 1). If the last entry
+  // in the list becomes 0, it is removed.
+  private readonly List<int> _minOutputCounts = new();
 }

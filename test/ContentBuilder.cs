@@ -71,4 +71,42 @@ public class ContentBuilder {
     Assert.AreEqual(cranberry, builder.Contents[1]);
     Assert.AreEqual(2, builder.HighestUsed);
   }
+
+  [TestMethod]
+  public void PushPopMinOutput() {
+    Real.ContentBuilder builder = new(Array.Empty<ItemStack>());
+    Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
+    builder.Set(LoadAssets.Server, new ItemStack(bowl));
+
+    Assert.AreEqual(0, Real.ContentBuilder
+                           .GetContents(LoadAssets.Server,
+                                        builder.GetItemStack(LoadAssets.Server))
+                           .Length);
+
+    builder.PushMinOutput(1);
+    builder.PushMinOutput(2);
+    builder.PushMinOutput(3);
+    Assert.AreEqual(3, Real.ContentBuilder
+                           .GetContents(LoadAssets.Server,
+                                        builder.GetItemStack(LoadAssets.Server))
+                           .Length);
+
+    builder.PopMinOutput(2);
+    Assert.AreEqual(3, Real.ContentBuilder
+                           .GetContents(LoadAssets.Server,
+                                        builder.GetItemStack(LoadAssets.Server))
+                           .Length);
+
+    builder.PopMinOutput(3);
+    Assert.AreEqual(1, Real.ContentBuilder
+                           .GetContents(LoadAssets.Server,
+                                        builder.GetItemStack(LoadAssets.Server))
+                           .Length);
+
+    builder.PopMinOutput(1);
+    Assert.AreEqual(0, Real.ContentBuilder
+                           .GetContents(LoadAssets.Server,
+                                        builder.GetItemStack(LoadAssets.Server))
+                           .Length);
+  }
 }

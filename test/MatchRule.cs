@@ -252,6 +252,53 @@ public class MatchRule {
   }
 
   [TestMethod]
+  public void EnumerateMatchesNullForEmptySlot() {
+    string json = @"
+    {
+      category: {
+        input: ""edible-meal-container""
+      },
+      attributes: [
+        {
+          path: [ ""recipeCode"" ],
+          enumerateValues: [ ""meatystew"" ]
+        },
+      ],
+      contents: [
+        {
+          slotBegin: 0,
+          slotEnd: 6,
+          min: 2,
+          max: 2,
+          nullForEmptySlot: true,
+          categories: [
+            {
+              input: ""meal-protein-base"",
+            },
+          ],
+          enumerateMax: 1
+        },
+      ]
+    }
+    ";
+    Real.MatchRule rule =
+        JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
+    Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
+
+    List<ItemStack> matches =
+        rule.EnumerateMatches(Resolver.Resolver, Resolver.CatDict).ToList();
+    Assert.IsTrue(matches.Count > 0);
+    Assert.IsTrue(matches.Select(s => s.Collectible).All(c => c == bowl));
+
+    List<List<ItemStack>> matchContents =
+        matches
+            .Select(s => Real.ContentBuilder.GetContents(Resolver.Resolver, s)
+                             .ToList())
+            .ToList();
+    Assert.IsTrue(matchContents.All(c => c.Count == 6));
+  }
+
+  [TestMethod]
   public void OutputCategories() {
     string json = @"
     {

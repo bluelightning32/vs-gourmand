@@ -63,7 +63,8 @@ public class ServerCommands {
                         CmdPlayer.Each(args, FindBehavior(GiveMissing)))
         .EndSub()
         .BeginSub("grantmissing")
-        .WithDesc("Grants achievements to the caller for foods within the specified category " +
+        .WithDesc("Grants achievements to the caller for foods within the " +
+                  "specified category " +
                   "that the target player has not achieved yet.")
         .WithArgs(_sapi.ChatCommands.Parsers.Word("category"),
                   _sapi.ChatCommands.Parsers.OptionalInt("max", 5))
@@ -166,7 +167,7 @@ public class ServerCommands {
   }
 
   private TextCommandResult GrantMissing(UpdateFoodAchievements from,
-                                        TextCommandCallingArgs args) {
+                                         TextCommandCallingArgs args) {
     AssetLocation category = new((string)args[1]);
     int max = (int)args[2];
     int gavePoints = 0;
