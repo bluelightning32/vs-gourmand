@@ -11,9 +11,11 @@ namespace Gourmand;
 
 public class ContentsCondition : ICondition {
   public readonly SlotCondition[] Slots;
+  public readonly int MinSlots;
 
-  public ContentsCondition(SlotCondition[] slots) {
+  public ContentsCondition(SlotCondition[] slots, int minSlots) {
     Slots = slots ?? Array.Empty<SlotCondition>();
+    MinSlots = minSlots;
   }
 
   public IEnumerable<AssetLocation> Categories =>
@@ -35,7 +37,7 @@ public class ContentsCondition : ICondition {
                      IEnumerable<ItemStack> matches) {
     matches ??= Array.Empty<ItemStack>();
     foreach (ItemStack s in matches) {
-      builder.Set(resolver, s);
+      builder.Set(resolver, s, MinSlots);
       yield return new();
     }
   }

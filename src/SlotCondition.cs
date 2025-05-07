@@ -90,10 +90,6 @@ public class SlotCondition {
   readonly public int SlotEnd;
 
   [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
-  [DefaultValue(false)]
-  readonly public bool NullForEmptySlot = false;
-
-  [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
   [DefaultValue(1)]
   public int Min;
   [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
@@ -121,12 +117,10 @@ public class SlotCondition {
   public readonly AssetLocation[] CountOutputs;
 
   [JsonConstructor]
-  public SlotCondition(int slotBegin, int slotEnd, bool nullForEmptySlot,
-                       ContentCategory[] categories,
+  public SlotCondition(int slotBegin, int slotEnd, ContentCategory[] categories,
                        AssetLocation[] countOutputs) {
     SlotBegin = slotBegin;
     SlotEnd = slotEnd < 0 ? int.MaxValue : slotEnd;
-    NullForEmptySlot = nullForEmptySlot;
     if (SlotBegin < 0) {
       throw new ArgumentException("slotBegin must be non-negative.");
     }
@@ -298,13 +292,7 @@ public class SlotCondition {
   EnumerateMatchContents(IWorldAccessor resolver, IReadonlyCategoryDict catdict,
                          ContentBuilder builder,
                          IEnumerable<ValueTuple> input) {
-    if (NullForEmptySlot) {
-      builder.PushMinOutput(SlotEnd);
-    }
     if (EnumerateMax == 0) {
-      if (NullForEmptySlot) {
-        builder.PopMinOutput(SlotEnd);
-      }
       yield break;
     }
     // This holds the ItemStacks that can possibly be arranged in builder to
@@ -399,9 +387,6 @@ public class SlotCondition {
       Debug.Assert(contentIndices.Count == 0);
       Debug.Assert(added == 0);
       Debug.Assert(distinct.All(d => d.Count == 0));
-    }
-    if (NullForEmptySlot) {
-      builder.PopMinOutput(SlotEnd);
     }
   }
 

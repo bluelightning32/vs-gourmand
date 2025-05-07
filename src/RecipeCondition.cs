@@ -43,7 +43,7 @@ public class RecipeCondition : ICondition {
           requiredEnumerateMax = 3;
         }
       }
-      ContentConditions.Add(new ContentsCondition(slots.ToArray()));
+      ContentConditions.Add(new ContentsCondition(slots.ToArray(), -1));
     }
     return implictCategories;
   }

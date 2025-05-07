@@ -252,7 +252,7 @@ public class MatchRule {
   }
 
   [TestMethod]
-  public void EnumerateMatchesNullForEmptySlot() {
+  public void EnumerateMatchesMinContentsSlots() {
     string json = @"
     {
       category: {
@@ -264,13 +264,13 @@ public class MatchRule {
           enumerateValues: [ ""meatystew"" ]
         },
       ],
+      contentsMinSlots: 6,
       contents: [
         {
           slotBegin: 0,
           slotEnd: 6,
           min: 2,
           max: 2,
-          nullForEmptySlot: true,
           categories: [
             {
               input: ""meal-protein-base"",

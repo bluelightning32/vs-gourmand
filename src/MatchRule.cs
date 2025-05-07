@@ -48,6 +48,9 @@ public class MatchRuleJson {
   public string ImportRecipe { get; protected set; }
   [JsonProperty("contents")]
   public SlotCondition[] Slots { get; protected set; }
+  [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+  [DefaultValue(-1)]
+  public int ContentsMinSlots { get; protected set; }
 
   [JsonConstructor]
   public MatchRuleJson(
@@ -55,7 +58,7 @@ public class MatchRuleJson {
       [JsonProperty("outputs")] Dictionary<string, JToken[]> rawOutputs,
       AssetLocation[] deletes, int enumerateMax, CategoryCondition category,
       AttributeCondition[] attributes, string importRecipe,
-      SlotCondition[] slots) {
+      SlotCondition[] slots, int contentsMinSlots) {
     DependsOn = dependsOn ?? Array.Empty<ModDependency>();
     Priority = priority;
     _rawOutputs = rawOutputs ?? new Dictionary<string, JToken[]>();
@@ -65,6 +68,7 @@ public class MatchRuleJson {
     Attributes = attributes ?? Array.Empty<AttributeCondition>();
     ImportRecipe = importRecipe;
     Slots = slots;
+    ContentsMinSlots = contentsMinSlots;
   }
 
   public MatchRuleJson(MatchRuleJson copy) {
@@ -77,6 +81,7 @@ public class MatchRuleJson {
     Attributes = copy.Attributes;
     ImportRecipe = copy.ImportRecipe;
     Slots = copy.Slots;
+    ContentsMinSlots = copy.ContentsMinSlots;
   }
 
   public bool DependsOnSatisified(IModLoader modLoader) {
@@ -155,8 +160,9 @@ public class MatchRule : MatchRuleJson {
       conditions.Add(_recipeCondition);
     }
     conditions.AddRange(Attributes);
-    if (Slots != null) {
-      _contentsCondition = new ContentsCondition(Slots);
+    if (Slots != null || ContentsMinSlots >= 0) {
+      _contentsCondition = new ContentsCondition(
+          Slots ?? Array.Empty<SlotCondition>(), ContentsMinSlots);
       conditions.Add(_contentsCondition);
     } else {
       _contentsCondition = null;
