@@ -45,4 +45,15 @@
       "unobtainable" : [ "item" ]
     }
   },
+  {
+    dependsOn: [ { modId: "expandedfoods" }, { modId: "wildcraftfruit" } ],
+    code : {
+      match: "expandedfoods:wilddehydratedfruit-pittedcherry",
+      type: "item",
+      outputs: [ "unobtainable" ]
+    },
+    outputs: {
+      "unobtainable" : [ "item" ]
+    }
+  },
 ]
