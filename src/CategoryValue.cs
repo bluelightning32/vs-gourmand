@@ -46,15 +46,15 @@ public class CategoryValue : IEquatable<CategoryValue>, IByteSerializable {
     StringBuilder builder = new();
     builder.Append($"{{ priority: {Priority}, value:");
     if (Value == null) {
-      builder.Append(" null");
+      builder.Append(" null }");
     } else {
       builder.Append("[");
       foreach (IAttribute value in Value) {
         builder.Append(value.ToString());
         builder.Append(", ");
       }
+      builder.Append(" ]}");
     }
-    builder.Append("]}");
     return builder.ToString();
   }
 

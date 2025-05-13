@@ -436,4 +436,18 @@ public class SlotCondition {
     }
     return result;
   }
+
+  public string ExplainMismatch(IWorldAccessor resolver,
+                                IReadonlyCategoryDict catdict,
+                                ItemStack[] contents) {
+    List<int> matches =
+        GetMatchingSlots(resolver, catdict, contents, out var _);
+    if (matches == null) {
+      return "Distinct count condition not met";
+    }
+    foreach (int i in matches) {
+      contents[i] = null;
+    }
+    return null;
+  }
 }

@@ -90,4 +90,13 @@ public class CategoryCondition : ICondition {
     }
     return true;
   }
+
+  public string ExplainMismatch(IWorldAccessor resolver,
+                                IReadonlyCategoryDict catdict,
+                                ItemStack stack) {
+    if (!catdict.InCategory(Input, stack.Collectible)) {
+      return $"Collectible {stack.Collectible} is not in category {Input}";
+    }
+    return null;
+  }
 }

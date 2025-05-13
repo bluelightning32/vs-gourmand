@@ -71,6 +71,16 @@ public class ServerCommands {
         .HandleWith((TextCommandCallingArgs args) =>
                         CmdPlayer.Each(args, FindBehavior(GrantMissing)))
         .EndSub();
+
+    _sapi.ChatCommands.GetOrCreate("gourmand")
+        .RequiresPrivilege(Privilege.chat)
+        .WithDesc("Debug commands for the Gourmand mod. See also the " +
+                  "'/player s[] gourmand' and '.gourmand' commands.")
+        .BeginSub("ismatch")
+        .WithDesc("Explains whether the held item matches a category.")
+        .WithArgs(_sapi.ChatCommands.Parsers.Word("category"))
+        .HandleWith(IsMatch)
+        .EndSub();
   }
 
   /// <summary>
@@ -175,5 +185,16 @@ public class ServerCommands {
       gavePoints += from.OnFoodEaten(stack);
     }
     return TextCommandResult.Success($"Granted {gavePoints} point(s)");
+  }
+
+  private TextCommandResult IsMatch(TextCommandCallingArgs args) {
+    AssetLocation category = new((string)args[0]);
+    ItemStack held = args.Caller.Player.Entity.ActiveHandItemSlot.Itemstack;
+    if (held == null) {
+      return TextCommandResult.Error(Lang.Get("Nothing held"));
+    }
+    GourmandSystem gourmand = _sapi.ModLoader.GetModSystem<GourmandSystem>();
+    return TextCommandResult.Success(
+        gourmand.CatDict.ExplainMatch(_sapi.World, category, held));
   }
 }

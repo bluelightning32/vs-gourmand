@@ -120,7 +120,9 @@ public class MatchRuleConverter : JsonConverter<MatchRule> {
 public class MatchRule : MatchRuleJson {
   public readonly IReadOnlyDictionary<AssetLocation, List<IAttribute>> Outputs;
 
-  public IReadOnlyList<ICondition> Conditions { set; private get; }
+  public IReadOnlyList<Tuple<string, ICondition>> Conditions {
+    set; private get;
+  }
 
   private Dictionary<AssetLocation, List<ICondition>> _conditionsByCategory;
   private ContentsCondition _contentsCondition;
@@ -152,18 +154,20 @@ public class MatchRule : MatchRuleJson {
   }
 
   private void SetConditions() {
-    List<ICondition> conditions = new();
+    List<Tuple<string, ICondition>> conditions = new();
     if (Category != null) {
-      conditions.Add(Category);
+      conditions.Add(new("category", Category));
     }
     if (_recipeCondition != null) {
-      conditions.Add(_recipeCondition);
+      conditions.Add(new("recipe", _recipeCondition));
     }
-    conditions.AddRange(Attributes);
+    foreach (AttributeCondition attribute in Attributes) {
+      conditions.Add(new("attribute", attribute));
+    }
     if (Slots != null || ContentsMinSlots >= 0) {
       _contentsCondition = new ContentsCondition(
           Slots ?? Array.Empty<SlotCondition>(), ContentsMinSlots);
-      conditions.Add(_contentsCondition);
+      conditions.Add(new("contents", _contentsCondition));
     } else {
       _contentsCondition = null;
     }
@@ -179,7 +183,9 @@ public class MatchRule : MatchRuleJson {
       } else {
         _conditionsByCategory.Add(
             category,
-            Conditions.Where(c => c.Categories.Contains(category)).ToList());
+            Conditions.Where(c => c.Item2.Categories.Contains(category))
+                .Select(c => c.Item2)
+                .ToList());
       }
     }
   }
@@ -210,14 +216,14 @@ public class MatchRule : MatchRuleJson {
   public IEnumerable<AssetLocation> OutputCategories =>
       Outputs.Select(p => p.Key)
           .Concat(Deletes)
-          .Concat(Conditions.SelectMany(c => c.Categories));
+          .Concat(Conditions.SelectMany(c => c.Item2.Categories));
 
   public IEnumerable<ItemStack>
   EnumerateMatches(IWorldAccessor resolver,
                    Collectibles.IReadonlyCategoryDict catdict) {
     IEnumerable<ItemStack> matches = null;
-    foreach (ICondition condition in Conditions) {
-      matches = condition.EnumerateMatches(resolver, catdict, matches);
+    foreach (Tuple<string, ICondition> condition in Conditions) {
+      matches = condition.Item2.EnumerateMatches(resolver, catdict, matches);
     }
     if (EnumerateMax != int.MaxValue) {
       matches = matches.Take(EnumerateMax);
@@ -235,7 +241,7 @@ public class MatchRule : MatchRuleJson {
   public bool IsMatch(IWorldAccessor resolver,
                       Collectibles.IReadonlyCategoryDict catdict,
                       ItemStack stack) {
-    return Conditions.All(c => c.IsMatch(resolver, catdict, stack));
+    return Conditions.All(c => c.Item2.IsMatch(resolver, catdict, stack));
   }
 
   /// <summary>
@@ -272,9 +278,21 @@ public class MatchRule : MatchRuleJson {
   public bool Validate(IWorldAccessor resolver, ILogger logger,
                        Collectibles.IReadonlyCategoryDict catdict) {
     bool result = true;
-    foreach (ICondition condition in Conditions) {
-      result &= condition.Validate(resolver, logger, catdict);
+    foreach (Tuple<string, ICondition> condition in Conditions) {
+      result &= condition.Item2.Validate(resolver, logger, catdict);
     }
     return result;
+  }
+
+  public string ExplainMismatch(IWorldAccessor resolver,
+                                Collectibles.IReadonlyCategoryDict catdict,
+                                ItemStack stack) {
+    foreach (Tuple<string, ICondition> c in Conditions) {
+      string mismatch = c.Item2.ExplainMismatch(resolver, catdict, stack);
+      if (mismatch != null) {
+        return "Mismatch condition " + c.Item1 + ": " + mismatch;
+      }
+    }
+    return null;
   }
 }

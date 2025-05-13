@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 using Gourmand.Collectibles;
 
@@ -249,5 +250,54 @@ public class CategoryDict : RecipeRegistryBase, IByteSerializable {
       }
     }
     return result;
+  }
+
+  public string ExplainMatch(IWorldAccessor resolver, AssetLocation category,
+                             ItemStack stack) {
+    CategoryValue current =
+        _collectibleDict.GetValue(category, stack.Collectible);
+    bool modifiable = false;
+    StringBuilder explanation = new();
+    if (current == null) {
+      if (_collectibleDict.IsRegistered(category)) {
+        explanation.AppendLine(
+            "No collectible matchers registered for category.");
+      } else {
+        explanation.AppendLine("Collectible matcher does not match.");
+      }
+    } else {
+      explanation.AppendLine(
+          $"Collectible matcher matched at priority {current.Priority}");
+    }
+    if (!_rules.TryGetValue(category, out List<MatchRule> categoryRules)) {
+      explanation.AppendLine("No registered item stack matchers for category");
+      return explanation.ToString();
+    }
+    foreach (MatchRule m in categoryRules) {
+      if (current != null && m.Priority < current.Priority) {
+        explanation.AppendLine(
+            $"Match priority {current.Priority} is greater than the max of the remaining item stack matcher priorities of {m.Priority}");
+        return explanation.ToString();
+      }
+      string mismatch = m.ExplainMismatch(resolver, _collectibleDict, stack);
+      if (mismatch == null) {
+        List<IAttribute> value =
+            m.GetValue(resolver, _collectibleDict, category, stack);
+        if (!modifiable) {
+          current = new(m.Priority, value);
+          modifiable = true;
+        } else {
+          current.Priority = m.Priority;
+          current.Value = value;
+        }
+        explanation.AppendLine($"Matched item stack rule: {current}.");
+      } else {
+        explanation.AppendLine("Failed item stack matcher: " + mismatch);
+      }
+    }
+    if (current != null && current.Value == null) {
+      explanation.AppendLine("The last matching rule was a delete rule.");
+    }
+    return explanation.ToString();
   }
 }

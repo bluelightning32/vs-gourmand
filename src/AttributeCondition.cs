@@ -143,4 +143,37 @@ public class AttributeCondition : ICondition {
                        IReadonlyCategoryDict catdict) {
     return true;
   }
+
+  public string ExplainMismatch(IWorldAccessor resolver,
+                                IReadonlyCategoryDict catdict,
+                                ItemStack stack) {
+    IAttribute attribute = stack.Attributes;
+    for (int i = 0; i < Path.Length; ++i) {
+      string name = Path[i];
+      attribute = (attribute as ITreeAttribute)?[name];
+      if (attribute == null) {
+        return "missing attribute: " + string.Join(",", Path.Take(i + 1));
+      }
+    }
+    if (attribute == null) {
+      return "item has no attributes";
+    }
+    if (Value == null) {
+      return null;
+    }
+    object compareValue = Value.GetValue();
+    object stackValue = attribute.GetValue();
+    if (AllowCast && compareValue is IConvertible) {
+      try {
+        compareValue = Convert.ChangeType(compareValue, stackValue.GetType());
+      } catch (InvalidCastException) {
+        // After the cast failed, perform the comparison with the original value
+        // anyway.
+      }
+    }
+    if (!compareValue.Equals(stackValue)) {
+      return $"collectible value {stackValue} does not equal condition value {compareValue}";
+    }
+    return null;
+  }
 }

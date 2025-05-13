@@ -80,4 +80,23 @@ public class ContentsCondition : ICondition {
     }
     return result;
   }
+
+  public string ExplainMismatch(IWorldAccessor resolver,
+                                IReadonlyCategoryDict catdict,
+                                ItemStack stack) {
+    ItemStack[] contents = ContentBuilder.GetContents(resolver, stack);
+    for (int i = 0; i < Slots.Length; ++i) {
+      SlotCondition s = Slots[i];
+      string mismatch = s.ExplainMismatch(resolver, catdict, contents);
+      if (mismatch != null) {
+        return $"Slot condition {i} does not match: {mismatch}";
+      }
+    }
+    for (int i = 0; i < contents.Length; ++i) {
+      if (contents[i] != null) {
+        return $"Content index {i} contents {contents[i].Collectible} was not matched.";
+      }
+    }
+    return null;
+  }
 }

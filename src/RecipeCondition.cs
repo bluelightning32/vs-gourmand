@@ -79,4 +79,17 @@ public class RecipeCondition : ICondition {
                        IReadonlyCategoryDict catdict) {
     return ContentConditions.All(c => c.Validate(resolver, logger, catdict));
   }
+
+  public string ExplainMismatch(IWorldAccessor resolver,
+                                IReadonlyCategoryDict catdict,
+                                ItemStack stack) {
+    for (int i = 0; i < ContentConditions.Count; ++i) {
+      string mismatch =
+          ContentConditions[i].ExplainMismatch(resolver, catdict, stack);
+      if (mismatch != null) {
+        return $"Content condition {i} failed: {mismatch}";
+      }
+    }
+    return null;
+  }
 }

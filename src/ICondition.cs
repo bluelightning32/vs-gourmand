@@ -21,6 +21,18 @@ public interface ICondition {
                Collectibles.IReadonlyCategoryDict catdict, ItemStack stack);
 
   /// <summary>
+  /// Returns a string explaining why the stack does not match the condition, or
+  /// null if the stack does match.
+  /// </summary>
+  /// <param name="resolver"></param>
+  /// <param name="catdict"></param>
+  /// <param name="stack"></param>
+  /// <returns></returns>
+  string ExplainMismatch(IWorldAccessor resolver,
+                         Collectibles.IReadonlyCategoryDict catdict,
+                         ItemStack stack);
+
+  /// <summary>
   /// Appends the value of a category of a match to an existing list. The result
   /// is undefined if the given stack is not a match, or if this condition does
   /// not output the given category.
