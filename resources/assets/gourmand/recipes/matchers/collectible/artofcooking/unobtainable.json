@@ -1,0 +1,24 @@
+[
+  {
+    dependsOn: [ { modId: "artofcooking" } ],
+    code : {
+      match: "artofcooking:cookedvegetable-*",
+      type: "item",
+      outputs: [ "unobtainable" ]
+    },
+    outputs: {
+      "unobtainable" : [ "item" ]
+    }
+  },
+  {
+    dependsOn: [ { modId: "artofcooking" } ],
+    code : {
+      match: "artofcooking:pickledvegetable-potato",
+      type: "item",
+      outputs: [ "unobtainable" ]
+    },
+    outputs: {
+      "unobtainable" : [ "item" ]
+    }
+  },
+]

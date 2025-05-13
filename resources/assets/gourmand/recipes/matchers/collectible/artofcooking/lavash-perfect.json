@@ -1,0 +1,10 @@
+[
+  {
+    dependsOn: [ { modId: "artofcooking" } ],
+    code : {
+      match: "artofcooking:lavash-*-perfect",
+      type: "item",
+      outputs: [ "lavash-perfect" ]
+    },
+  }
+]

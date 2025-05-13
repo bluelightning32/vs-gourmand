@@ -36,6 +36,14 @@
   "expandedfoods-meal-desc": "Cooked meals, classified by their recipe category: meaty stew, vegetable stew, soup, porridge, jam, and scrambled eggs.\nThe Expanded Foods meals are also included <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Meals\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide3\">[handbook]</a>: augratin, compote, salad, cold pasta, hot pasta, pilaf, and yogurt.",
 
   // Only with expandedfoods installed
+  "flatbread-perfect-cat-name": "Flat Bread",
+  "flatbread-perfect-cat-desc": "Perfectly flat bread.",
+  "lavash-perfect-cat-name": "Lavash",
+  "lavash-perfect-cat-desc": "Perfectly cooked lavash.",
+  "shawarma-perfect-cat-name": "Shawarma",
+  "shawarma-perfect-cat-desc": "Every kind of shawarma wrapper, each with any delicious filling.",
+
+  // Only with expandedfoods installed
   "hardtack-bake-cat-name": "Hardtack",
   "hardtack-bake-cat-desc": "As easy as bread, but with a longer shelf life. <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Hardtack\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
   "sweetsavory-cat-name": "Sweet and Savory",

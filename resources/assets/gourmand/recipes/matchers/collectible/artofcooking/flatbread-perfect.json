@@ -1,0 +1,10 @@
+[
+  {
+    dependsOn: [ { modId: "artofcooking" } ],
+    code : {
+      match: "artofcooking:flatbread-*-perfect",
+      type: "item",
+      outputs: [ "flatbread-perfect" ]
+    },
+  }
+]

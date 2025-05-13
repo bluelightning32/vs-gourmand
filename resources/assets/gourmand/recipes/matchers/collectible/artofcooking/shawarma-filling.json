@@ -1,0 +1,17 @@
+[
+  {
+    dependsOn: [ { modId: "artofcooking" } ],
+    categories: [
+      {
+        input: "cookable-food",
+        outputs: [ "shawarma-filling-code" ]
+      },
+    ],
+    attributes: [
+      {
+        path: ["inCookedMealProperties", "partType"],
+        value: "Filling"
+      }
+    ]
+  },
+]

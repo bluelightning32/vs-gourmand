@@ -1,0 +1,10 @@
+[
+  {
+    dependsOn: [ { modId: "artofcooking" } ],
+    code : {
+      match: "artofcooking:shawarma-perfect",
+      type: "block",
+      outputs: [ "shawarma-perfect-block" ]
+    },
+  }
+]

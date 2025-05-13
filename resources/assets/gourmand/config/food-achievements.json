@@ -38,6 +38,27 @@
         }
       ]
     },
+    "flatbread-perfect" : {
+      dependsOn: [ { modId: "artofcooking" } ],
+      points: 2,
+      // 7 total
+      bonusAt: 7,
+      bonus: 50
+    },
+    "lavash-perfect" : {
+      dependsOn: [ { modId: "artofcooking" } ],
+      points: 2,
+      // 7 total
+      bonusAt: 7,
+      bonus: 50
+    },
+    "shawarma-perfect" : {
+      dependsOn: [ { modId: "artofcooking" } ],
+      points: 2,
+      // 7 total
+      bonusAt: 7,
+      bonus: 50
+    },
     "hardtack-bake" : {
       dependsOn: [ { modId: "expandedfoods" } ],
       points: 2,

@@ -1,0 +1,51 @@
+[
+  {
+    dependsOn: [ { modId: "artofcooking" } ],
+    category: {
+      input: "shawarma-perfect-block"
+    },
+    attributes: [
+      {
+        path: [ "quantityServings" ],
+        enumerateValues: [ 1 ]
+      },
+      {
+        path: [ "wrapped" ],
+        value: true
+      },
+      {
+        path: [ "finished" ],
+        value: true
+      },
+    ],
+    contentsMinSlots: 6,
+    contents: [
+      {
+        slotBegin: 0,
+        slotEnd: 1,
+        min: 1,
+        max: 1,
+        enumerateMax: 100,
+        categories: [
+          {
+            input: "lavash-perfect",
+            outputs: [ "shawarma-perfect" ]
+          }
+        ]
+      },
+      {
+        slotBegin: 1,
+        slotEnd: 5,
+        min: 4,
+        max: 4,
+        enumerateMax: 30,
+        enumArrangement: "Repeated",
+        categories: [
+          {
+            input: "shawarma-filling-code"
+          }
+        ]
+      },
+    ]
+  }
+]
