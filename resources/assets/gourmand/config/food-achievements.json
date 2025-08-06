@@ -67,7 +67,7 @@
     },
     "pie-category" : {
       points: 2,
-      // 45 total
+      // 42 total in the base game as of 1.21.0 rc3.
       bonusAt: 32,
       bonus: 100,
       add: [
@@ -95,7 +95,15 @@
           // In total the completion bonus allows 40 of them to be skipped.
           bonusAt: 287,
           bonus: 850
-        }
+        },
+        {
+          dependsOn: [ { modId: "primitivesurvival" } ],
+          points: 0,
+          // As of 1.21.0 RC3, there are 76 total pies with primitive survival installed. That's 34 additional pies.
+          // In total the completion bonus allows 4 of them to be skipped.
+          bonusAt: 30,
+          bonus: 100
+        },
       ]
     },
     "sweetsavory" : {
