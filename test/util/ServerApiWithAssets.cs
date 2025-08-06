@@ -114,7 +114,7 @@ class ServerApiWithAssets {
       ModContainer modContainer =
           new(new FileInfo(modType.Assembly.Location), api.Logger, logDebug);
       object[] args = new object[] {
-        info, new List<Vintagestory.API.Common.ModDependency>(), null, null
+        info, new List<Vintagestory.API.Common.ModDependency>(), null
       };
       ModInfo modInfo =
           (ModInfo)loadModInfoFromModInfoAttribute.Invoke(modContainer, args);
@@ -131,7 +131,8 @@ class ServerApiWithAssets {
         (List<ModSystem>)enabledSystemsField.GetValue(loader);
 
     // Skip because it tries to register a game tick listener.
-    enabledSystems.Remove(loader.GetModSystem<ModSystemDormancyStateChecker>());
+    enabledSystems.Remove(
+        loader.GetModSystem<ModSystemItemRendererOptimizer>());
     // Skip because it tries to register a game tick listener.
     enabledSystems.Remove(loader.GetModSystem<Vintagestory.GameContent.Mechanics
                                                   .MechanicalPowerMod>());

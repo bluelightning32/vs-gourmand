@@ -4,6 +4,7 @@ using PrefixClassName.MsTest;
 
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
+using Vintagestory.Server;
 
 namespace Gourmand.Test.Collectibles;
 
@@ -33,15 +34,15 @@ public class AttributeCondition {
   }
 
   [TestMethod]
-  [ExpectedException(typeof(Newtonsoft.Json.JsonSerializationException),
-                     "Required property 'Path' not found in JSON")]
   public void JsonParsePathRequired() {
     string json = @"
     {
     }
     ";
-    JsonObject.FromJson(json).AsObject<Real.AttributeCondition>(null,
-                                                                "gourmand");
+    var ex = Assert.ThrowsExactly<Newtonsoft.Json.JsonSerializationException>(
+        () => JsonObject.FromJson(json).AsObject<Real.AttributeCondition>(
+            null, "gourmand"));
+    Assert.Contains("Required property 'Path' not found in JSON", ex.Message);
   }
 
   [TestMethod]

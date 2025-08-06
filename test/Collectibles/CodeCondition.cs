@@ -33,14 +33,15 @@ public class CodeCondition {
   }
 
   [TestMethod]
-  [ExpectedException(typeof(Newtonsoft.Json.JsonSerializationException),
-                     "Required property 'Match' not found in JSON")]
   public void JsonParseMatchRequired() {
     string json = @"
     {
     }
     ";
-    JsonObject.FromJson(json).AsObject<Real.CodeCondition>(null, "gourmand");
+    var ex = Assert.Throws<Newtonsoft.Json.JsonSerializationException>(
+        () => JsonObject.FromJson(json).AsObject<Real.CodeCondition>(
+            null, "gourmand"));
+    Assert.Contains("Required property 'Match' not found in JSON", ex.Message);
   }
 
   [TestMethod]

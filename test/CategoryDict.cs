@@ -20,7 +20,7 @@ public class CategoryDict {
     [
       {
         code : {
-          match: ""game:bowl-meal"",
+          match: ""game:bowl-*-meal"",
           type: ""block"",
           outputs: [ ""edible-meal-container"" ]
         }
@@ -67,6 +67,7 @@ public class CategoryDict {
         dependsOn: [ { modId:""survival"" } ],
         category: {
           input: ""edible-meal-container"",
+          outputs: [ ""edible"" ],
         },
         attributes: [
           {
@@ -99,9 +100,6 @@ public class CategoryDict {
             enumerateMax: 20,
           },
         ],
-        outputs: {
-          ""edible"": [ ""game:bowl-meal"" ]
-        }
       },
       {
         priority: 2,
@@ -176,7 +174,7 @@ public class CategoryDict {
 
   [TestMethod]
   public void InCategory() {
-    Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
+    Block bowl = LoadAssets.GetBlock("game", "bowl-blue-meal");
     ItemStack meal = new(bowl);
     meal.Attributes["recipeCode"] = new StringAttribute("meatystew");
     Item fish_raw = LoadAssets.GetItem("game", "fish-raw");
@@ -221,7 +219,7 @@ public class CategoryDict {
   }
 
   private static void TestGetValue(Real.CategoryDict catDict) {
-    Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
+    Block bowl = LoadAssets.GetBlock("game", "bowl-blue-meal");
     ItemStack meal = new(bowl);
     meal.Attributes["recipeCode"] = new StringAttribute("meatystew");
     Item fish_raw = LoadAssets.GetItem("game", "fish-raw");
@@ -251,7 +249,7 @@ public class CategoryDict {
         catDict.GetValue(LoadAssets.Server.World, edible, meal);
     Assert.IsNotNull(value);
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(
-        new IAttribute[] { new StringAttribute("game:bowl-meal") },
+        new IAttribute[] { new StringAttribute("game:bowl-blue-meal") },
         value.Value));
 
     // Test an imported stack rule
@@ -279,12 +277,13 @@ public class CategoryDict {
     AssetLocation edible = new("gourmand", "edible");
     List<ItemStack> matches =
         CatDict.EnumerateMatches(LoadAssets.Server.World, edible).ToList();
-    Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
+    Block bowl = LoadAssets.GetBlock("game", "bowl-blue-meal");
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
     Item cranberry = LoadAssets.GetItem("game", "fruit-cranberry");
 
     Assert.IsTrue(matches.Select(s => s.Collectible)
-                      .All(c => c == bowl || c.NutritionProps != null));
+                      .All(c => c.Code.Path.StartsWith("bowl-") ||
+                                c.NutritionProps != null));
     CollectionAssert.Contains(matches.Select(s => s.Collectible).ToList(),
                               pineapple);
 
@@ -307,10 +306,7 @@ public class CategoryDict {
         CatDict.EnumerateMatches(LoadAssets.Server.World, importedRecipeCat)
             .ToList();
     Assert.IsTrue(matches.Count > 2);
-    Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
-    CollectionAssert.AreEquivalent(
-        new CollectibleObject[] { bowl },
-        matches.Select(s => s.Collectible).ToHashSet().ToList());
+    Assert.IsTrue(matches.All(s => s.Collectible.Code.PathStartsWith("bowl-")));
     CollectionAssert.AreEquivalent(
         new string[] { "meatystew" },
         matches.Select(s => s.Attributes["recipeCode"].GetValue())

@@ -23,7 +23,7 @@ public class CategoryDict {
     [
       {
         code : {
-          match: ""game:bowl-meal"",
+          match: ""game:bowl-*-meal"",
           type: ""block"",
           outputs: [ ""edible-meal-container"" ]
         }
@@ -66,7 +66,10 @@ public class CategoryDict {
       }
     }
 
-    Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
+    Block bowl = LoadAssets.GetBlock("game", "bowl-blue-meal");
+    Assert.IsNotNull(bowl);
+    Assert.IsNotNull(CatDict.GetValue(
+        new AssetLocation("gourmand", "edible-meal-container"), bowl));
     Assert.AreEqual(
         CatDict.GetValue(new AssetLocation("gourmand", "edible-meal-container"),
                          bowl),

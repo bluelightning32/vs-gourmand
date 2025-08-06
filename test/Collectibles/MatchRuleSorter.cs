@@ -114,8 +114,6 @@ public class MatchRuleSorter {
   }
 
   [TestMethod]
-  [ExpectedException(typeof(InvalidOperationException),
-                     "Cycle in category dependencies")]
   public void DetectCycle() {
     string json = @"
     [
@@ -133,8 +131,10 @@ public class MatchRuleSorter {
       }
     ]";
     List<Real.MatchRule> rules = ParseRules(json);
-    _ = new Real.MatchRuleSorter(rules.AsEnumerable().Reverse(),
-                                 LoadAssets.Server.Api.ModLoader);
+    var ex = Assert.Throws<InvalidOperationException>(
+        () => _ = new Real.MatchRuleSorter(rules.AsEnumerable().Reverse(),
+                                           LoadAssets.Server.Api.ModLoader));
+    Assert.Contains("Cycle in category dependencies", ex.Message);
   }
 
   [TestMethod]

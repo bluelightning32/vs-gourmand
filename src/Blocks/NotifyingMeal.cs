@@ -20,15 +20,4 @@ class NotifyingMeal : BlockMeal {
     behavior?.SetCurrentFood(null);
     return remaining;
   }
-
-  public override void GetHeldItemInfo(ItemSlot inSlot, StringBuilder dsc,
-                                       IWorldAccessor world,
-                                       bool withDebugInfo) {
-    base.GetHeldItemInfo(inSlot, dsc, world, withDebugInfo);
-    // The base class skips calling the behaviors. So call all the behaviors
-    // after getting the base text, so that the ShowPoints behavior is called.
-    foreach (var bh in CollectibleBehaviors) {
-      bh.GetHeldItemInfo(inSlot, dsc, world, withDebugInfo);
-    }
-  }
 }

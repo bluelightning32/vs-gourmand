@@ -74,13 +74,16 @@ public class ContentBuilder {
 
   [TestMethod]
   public void SetMinSlots() {
+    ItemStack pineapple = new(LoadAssets.GetItem("game", "fruit-pineapple"));
     Real.ContentBuilder builder = new(Array.Empty<ItemStack>());
-    Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
+    Block bowl = LoadAssets.GetBlock("game", "bowl-blue-meal");
+    Assert.IsNotNull(bowl);
     builder.Set(LoadAssets.Server, new ItemStack(bowl), 3);
+    Assert.IsTrue(builder.PushValue(pineapple, 0, 5));
 
-    Assert.AreEqual(3, Real.ContentBuilder
-                           .GetContents(LoadAssets.Server,
-                                        builder.GetItemStack(LoadAssets.Server))
-                           .Length);
+    var contents = Real.ContentBuilder.GetContents(
+        LoadAssets.Server, builder.GetItemStack(LoadAssets.Server));
+    Assert.HasCount(3, contents);
+    Assert.Contains(pineapple, contents);
   }
 }

@@ -75,7 +75,8 @@ public class RecipeCondition {
         condition.Resolve(cooking, LoadAssets.Server.Api.Logger);
     Assert.AreEqual(0, implicits.Count);
 
-    Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
+    Block bowl = LoadAssets.GetBlock("game", "bowl-blue-meal");
+    Assert.IsNotNull(bowl);
     ItemStack meal = new(bowl);
     meal.Attributes["recipeCode"] = new StringAttribute("meatystew");
     // The rule should not match anything, because its recipe is missing.

@@ -7,6 +7,7 @@ using PrefixClassName.MsTest;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.Server;
+using Vintagestory.API.Util;
 using Vintagestory.GameContent;
 
 namespace Gourmand.Test;
@@ -24,7 +25,7 @@ public class MatchRule {
     [
       {
         code : {
-          match: ""game:bowl-meal"",
+          match: ""game:bowl-*-meal"",
           type: ""block"",
           outputs: [ ""edible-meal-container"" ]
         }
@@ -69,7 +70,8 @@ public class MatchRule {
     ";
     Real.MatchRule rule =
         JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
-    Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
+    Block bowl = LoadAssets.GetBlock("game", "bowl-blue-meal");
+    Assert.IsNotNull(bowl);
     Assert.IsTrue(
         rule.IsMatch(Resolver.Resolver, Resolver.CatDict, new ItemStack(bowl)));
 
@@ -91,7 +93,8 @@ public class MatchRule {
     ";
     Real.MatchRule rule =
         JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
-    Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
+    Block bowl = LoadAssets.GetBlock("game", "bowl-blue-meal");
+    Assert.IsNotNull(bowl);
 
     Assert.IsFalse(
         rule.IsMatch(Resolver.Resolver, Resolver.CatDict, new ItemStack(bowl)));
@@ -137,7 +140,8 @@ public class MatchRule {
     ";
     Real.MatchRule rule =
         JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
-    Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
+    Block bowl = LoadAssets.GetBlock("game", "bowl-blue-meal");
+    Assert.IsNotNull(bowl);
     ItemStack meal = new(bowl);
     meal.Attributes["recipeCode"] = new StringAttribute("meatystew");
     Item fish_raw = LoadAssets.GetItem("game", "fish-raw");
@@ -167,6 +171,12 @@ public class MatchRule {
 
   [TestMethod]
   public void EnumerateMatches() {
+    List<CollectibleObject> allBowls =
+        Resolver.CatDict.EnumerateMatches("gourmand:edible-meal-container")
+            .ToList();
+    Assert.IsTrue(allBowls.All(c => c.Code.BeginsWith("game", "bowl-")));
+    Assert.IsGreaterThan(1, allBowls.Count);
+
     string json = @"
     {
       category: {
@@ -182,14 +192,15 @@ public class MatchRule {
     ";
     Real.MatchRule rule =
         JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
-    Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
+    Block bowl = LoadAssets.GetBlock("game", "bowl-blue-meal");
+    Assert.IsNotNull(bowl);
     List<ItemStack> matches =
         rule.EnumerateMatches(Resolver.Resolver, Resolver.CatDict).ToList();
-    CollectionAssert.AreEquivalent(new CollectibleObject[] { bowl, bowl },
-                                   matches.Select(s => s.Collectible).ToList());
-    CollectionAssert.AreEquivalent(
-        new string[] { "meatystew", "vegetablestew" },
-        matches.Select(s => s.Attributes["recipeCode"].GetValue()).ToList());
+    Assert.IsTrue(matches.All(s => allBowls.Contains(s.Collectible)));
+    foreach (ItemStack s in matches) {
+      Assert.IsTrue(new string[] { "meatystew", "vegetablestew" }.Contains(
+          s.Attributes["recipeCode"].GetValue()));
+    }
   }
 
   [TestMethod]
@@ -231,12 +242,13 @@ public class MatchRule {
     ";
     Real.MatchRule rule =
         JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
-    Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
 
     List<ItemStack> matches =
         rule.EnumerateMatches(Resolver.Resolver, Resolver.CatDict).ToList();
-    Assert.IsTrue(matches.Select(s => s.Collectible).All(c => c == bowl));
+    Assert.IsTrue(matches.Select(s => s.Collectible)
+                      .All(c => c.Code.Path.StartsWith("bowl-") &&
+                                c.Code.Path.EndsWith("-meal")));
     Assert.IsTrue(
         matches.Select(s => (string)s.Attributes["recipeCode"].GetValue())
             .All(r => r == "meatystew"));
@@ -283,12 +295,15 @@ public class MatchRule {
     ";
     Real.MatchRule rule =
         JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
-    Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
+    Block bowl = LoadAssets.GetBlock("game", "bowl-blue-meal");
+    Assert.IsNotNull(bowl);
 
     List<ItemStack> matches =
         rule.EnumerateMatches(Resolver.Resolver, Resolver.CatDict).ToList();
     Assert.IsTrue(matches.Count > 0);
-    Assert.IsTrue(matches.Select(s => s.Collectible).All(c => c == bowl));
+    Assert.IsTrue(matches.Select(s => s.Collectible)
+                      .All(c => c.Code.Path.StartsWith("bowl-") &&
+                                c.Code.Path.EndsWith("-meal")));
 
     List<List<ItemStack>> matchContents =
         matches
@@ -407,7 +422,8 @@ public class MatchRule {
     ";
     Real.MatchRule rule =
         JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
-    Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
+    Block bowl = LoadAssets.GetBlock("game", "bowl-blue-meal");
+    Assert.IsNotNull(bowl);
     ItemStack meal = new(bowl);
     meal.Attributes["recipeCode"] = new StringAttribute("meatystew");
     Item fish_raw = LoadAssets.GetItem("game", "fish-raw");
@@ -463,7 +479,8 @@ public class MatchRule {
     ";
     Real.MatchRule rule =
         JsonObject.FromJson(json).AsObject<Real.MatchRule>(null, "gourmand");
-    Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
+    Block bowl = LoadAssets.GetBlock("game", "bowl-blue-meal");
+    Assert.IsNotNull(bowl);
     ItemStack meal = new(bowl);
 
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(
@@ -516,7 +533,8 @@ public class MatchRule {
         rule.ResolveImports(cooking, LoadAssets.Server.Api.Logger);
     Assert.AreEqual(0, implicits.Count);
 
-    Block bowl = LoadAssets.GetBlock("game", "bowl-meal");
+    Block bowl = LoadAssets.GetBlock("game", "bowl-blue-meal");
+    Assert.IsNotNull(bowl);
     ItemStack meal = new(bowl);
     meal.Attributes["recipeCode"] = new StringAttribute("meatystew");
     // The rule should not match anything, because its recipe is missing.

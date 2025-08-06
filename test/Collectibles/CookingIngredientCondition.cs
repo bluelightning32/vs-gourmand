@@ -34,29 +34,32 @@ public class CookingIngredientCondition {
   }
 
   [TestMethod]
-  [ExpectedException(typeof(Newtonsoft.Json.JsonSerializationException),
-                     "Required property 'Match' not found in JSON")]
   public void JsonParseRecipeRequired() {
     string json = @"
     {
       ingredient: ""ingredient""
     }
     ";
-    JsonObject.FromJson(json).AsObject<Real.CookingIngredientCondition>(
-        null, "gourmand");
+    var ex = Assert.Throws<Newtonsoft.Json.JsonSerializationException>(
+        () =>
+            JsonObject.FromJson(json).AsObject<Real.CookingIngredientCondition>(
+                null, "gourmand"));
+    Assert.Contains("Required property 'Recipe' not found in JSON", ex.Message);
   }
 
   [TestMethod]
-  [ExpectedException(typeof(Newtonsoft.Json.JsonSerializationException),
-                     "Required property 'Match' not found in JSON")]
   public void JsonParseIngredientRequired() {
     string json = @"
     {
       recipe: ""recipe""
     }
     ";
-    JsonObject.FromJson(json).AsObject<Real.CookingIngredientCondition>(
-        null, "gourmand");
+    var ex = Assert.Throws<Newtonsoft.Json.JsonSerializationException>(
+        () =>
+            JsonObject.FromJson(json).AsObject<Real.CookingIngredientCondition>(
+                null, "gourmand"));
+    Assert.Contains("Required property 'Ingredient' not found in JSON",
+                    ex.Message);
   }
 
   [TestMethod]

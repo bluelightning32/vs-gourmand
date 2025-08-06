@@ -98,7 +98,7 @@ public class MatchResolver {
   public void SearchAllItems() {
     IReadOnlyList<Item> items =
         _resolver.GetMatchingItems(new AssetLocation("*", "*"));
-    Assert.AreEqual(_resolver.Resolver.Items, items);
+    Assert.AreEqual(_resolver.AllItems, items);
     _mock.Verify(x => x.SearchItems(It.IsAny<AssetLocation>()), Times.Never);
   }
 }
