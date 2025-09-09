@@ -31,12 +31,10 @@ public class GourmandSystem : ModSystem {
   public CategoryDict CatDict { get; private set; }
 
   public override double ExecuteOrder() {
-    // This must be greater than RecipeRegistrySystem.ExecuteOrder(), which is
-    // 0.6.
-    //
-    // This must be greater than ACulinaryArtillery's order
-    // (ACARecipeRegistrySystem.ExecuteOrder()), which is 1.0.
-    return 1.1;
+    // This this mod built the category dict in the AssetsLoaded stage, this mod
+    // had to run at an order greater than 1.0. Now that it builds the category
+    // dict in the AssetsFinalize stage, there are no known dependencies.
+    return 1.0;
   }
 
   public override void Start(ICoreAPI api) {
@@ -72,15 +70,11 @@ public class GourmandSystem : ModSystem {
     _ = new ServerCommands(sapi);
   }
 
-  public override void AssetsLoaded(ICoreAPI api) {
-    base.AssetsLoaded(api);
-    if (api is ICoreServerAPI sapi) {
-      LoadCategories(sapi);
-    }
-  }
+  public override void AssetsLoaded(ICoreAPI api) { base.AssetsLoaded(api); }
 
   public override void AssetsFinalize(ICoreAPI api) {
     base.AssetsFinalize(api);
+
     FoodAchievements = api.Assets
                            .Get(new AssetLocation(
                                Mod.Info.ModID, "config/food-achievements.json"))
@@ -90,6 +84,11 @@ public class GourmandSystem : ModSystem {
                      FoodAchievements.RawAchievements.Count);
 
     if (api is ICoreServerAPI sapi) {
+      // Other mods, such as "ACulinaryArtillery" and "Hydrate Or Diedrate" add
+      // meal recipes in the AssetsLoaded stage. So load the categories here
+      // after they are done with their modifications.
+      LoadCategories(sapi);
+
       foreach (CollectibleObject c in sapi.World.Collectibles) {
         if (c.NutritionProps != null ||
             c.GetType().GetMethod("GetNutritionProperties").DeclaringType !=
