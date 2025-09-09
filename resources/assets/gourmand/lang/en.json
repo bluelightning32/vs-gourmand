@@ -57,6 +57,10 @@
   "vegetablejuice-cat-name": "Vegetable Juices",
   "vegetablejuice-cat-desc": "Every kind of vegetable juice. They can be drunk from any potable container.",
 
+  // Only with maketeaforked installed
+  "tea-cat-name": "Teas",
+  "tea-cat-desc": "Every kind of tea. They can be drunk from any potable container.",
+
   "pickled-food-cat-name": "Pickled Foods",
   "pickled-food-cat-desc": "Vegetables that were pickled.",
 

@@ -1,0 +1,16 @@
+[
+  {
+    dependsOn: [ { modId: "maketeaforked" } ],
+    code: {
+      match: "maketea:teaportion-*",
+      type: "item",
+      outputs: [ "teaportion" ]
+    },
+    attributes: [
+      {
+        path: ["waterTightContainerProps", "nutritionPropsPerLitre", "foodcategory"],
+        outputs: [ "teaportion-category" ]
+      }
+    ]
+  },
+]

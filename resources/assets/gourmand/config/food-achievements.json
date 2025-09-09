@@ -349,6 +349,13 @@
       bonusAt: 8,
       bonus: 30
     },
+    "tea" : {
+      dependsOn: [ { modId: "maketeaforked" } ],
+      points: 2,
+      // Contains 17 teas
+      bonusAt: 15,
+      bonus: 50
+    },
     "cider" : {
       points: 3,
       // 22 in base game

@@ -1,0 +1,30 @@
+// Checking the capacityLitres attribute below is not strictly necessary; it's
+// an extra safety check.
+[
+  {
+    dependsOn: [ { modId: "maketeaforked" } ],
+    code: {
+      match: "maketea:teapot-*-fired-*",
+      type: "block",
+      outputs: [ "potable-container" ]
+    },
+    attributes: [
+      {
+        path: ["liquidContainerProps", "capacityLitres"],
+      }
+    ]
+  },
+  {
+    dependsOn: [ { modId: "maketeaforked" } ],
+    code: {
+      match: "maketea:mug-*-fired-*",
+      type: "block",
+      outputs: [ "potable-container" ]
+    },
+    attributes: [
+      {
+        path: ["liquidContainerProps", "capacityLitres"],
+      }
+    ]
+  },
+]
