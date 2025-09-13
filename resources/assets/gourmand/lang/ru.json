@@ -1,0 +1,124 @@
+{
+  "gourmand:playerinfo-nutrition-Gourmand": "Гурман",
+  "new-food-eaten": "Заработанные баллы за новую еду: {0}",
+  "tabname-gourmand": "Гурман",
+
+  // Текст на вкладке "Гурман".
+  "earned-points":          "Заработанные баллы:",
+  "lost-foods-count":       "Утраченные продукты после смерти:",
+  "earned-health":          "Заработанное здоровье:",
+  "points-for-next-health": "Очки, необходимые для роста здоровья:",
+  "until-points":           "Рост при:",
+  "lost-foods":             "Потерянные продукты",
+  "lost-foods-desc":             "Это ранее употреблённые продукты, которые были утрачены из-за смерти.",
+  "lost-foods-none":             "Нет",
+  "missing-foods-none":             "Всё уже съедено.",
+  "eaten-foods": "Употреблённые продукты: {0}/{1}",
+  "eaten-foods-no-bonus": "Употреблённые продукты: {0}",
+  "points-per-food": "Баллы за еду: {0}",
+  "completion-bonus": "Конечный бонус: {0}",
+  "missing": "Отсутствует: ",
+  "more-entries": "больше",
+  "infinite-points": "бесконечность",
+
+  // Показано в информации о предмете
+  "available-points": "Доступные баллы гурмана: {0}",
+
+  // Названия и описания категорий продуктов питания
+  "food-cat-name": "Поймай всё",
+  "food-cat-desc": "Все виды продуктов питания, классифицированные по виду продукта или коду блока.",
+
+  "pie-category-cat-name": "Пироги",
+  "pie-category-cat-desc": "Различные виды пирогов, классифицированные по их названиям.",
+
+  "meal-category-cat-name": "Блюда",
+  "meal-category-cat-desc": "Приготовленные блюда, классифицированные по категории рецептов: мясное рагу, овощное рагу, суп, каша, варенье и яичница",
+  "expandedfoods-meal-desc": "Приготовленные блюда, классифицированные по категории рецептов: мясное рагу, овощное рагу, суп, каша, варенье и яичница.\nБлюда Expanded Foods также включены <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Meals\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide3\">[handbook]</a>: запеканка, компот, салат, холодные макароны, горячие макароны, плов и йогурт.",
+
+  // Только с установленными расширенными продуктами
+  "flatbread-perfect-cat-name": "Лепёшка",
+  "flatbread-perfect-cat-desc": "Идеально плоский хлеб.",
+  "lavash-perfect-cat-name": "Лаваш",
+  "lavash-perfect-cat-desc": "Прекрасно приготовленный лаваш.",
+  "shawarma-perfect-cat-name": "Шаурма",
+  "shawarma-perfect-cat-desc": "Каждый вид обертки шаурмы, каждая с любой вкусной начинкой.",
+
+  // Только с установленными расширенными продуктами
+  "hardtack-bake-cat-name": "Сухарь",
+  "hardtack-bake-cat-desc": "Так же просто, как хлеб, но с более длительным сроком хранения. <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Hardtack\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
+  "sweetsavory-cat-name": "Сладкое и солёное",
+  "sweetsavory-cat-desc": "Различные сладкие и солёные лакомства.",
+  "sushi-cat-name": "Суши",
+  "sushi-cat-desc": "Японская еда из морских водорослей, риса и, необязательно, рыбных наггетсов или овощей. <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Sushi\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
+  "fried-cat-name": "Жареные продукты",
+  "fried-cat-desc": "Подготовленные и панированные, затем обжаренные до готовности. <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Breaded_Food\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
+  "deluxe-cat-name": "Роскошные жареные блюда",
+  "deluxe-cat-desc": "Жареные продукты, политые различными соусами и сиропами. <a href=\"https://vsaculinaryartillery.miraheze.org/wiki/EF:Expanded_Foods#Breaded_Food\">[wiki]</a>  <a href=\"handbook://expandedfoodsguide2\">[handbook]</a>",
+  "vegetablejuice-cat-name": "Овощные соки",
+  "vegetablejuice-cat-desc": "Все виды овощных соков. Их можно пить из любой ёмкости.",
+
+// Только с установленным maketeaforked
+  "tea-cat-name": "Чаи",
+  "tea-cat-desc": "Все виды чая. Их можно выпить из любой ёмкости для питья.",
+
+  "pickled-food-cat-name": "Маринованные продукты",
+  "pickled-food-cat-desc": "Маринованные овощи.",
+
+  "bread-perfect-cat-name": "Хлеб",
+  "bread-perfect-cat-desc": "Идеально выпеченный хлеб.",
+
+  "floralzones-fruit-cat-name": "Фрукты",
+  "floralzones-fruit-cat-desc": "Собирайте и ешьте фрукты со всего мира.",
+
+  "floralzones-vegetable-cat-name": "Овощи",
+  "floralzones-vegetable-cat-desc": "Собирайте и ешьте овощи со всего мира.",
+
+  "wildcraftfruit-fruit-cat-name": "Дикорастущие фрукты",
+  "wildcraftfruit-fruit-cat-desc": "Собирайте и ешьте дикорастущие фрукты со всего мира.",
+
+  "wildcraftfruit-nut-cat-name": "Дикорастущие орехи",
+  "wildcraftfruit-nut-cat-desc": "Собирайте и ешьте дикорастущие орехи со всего мира.",
+
+  "granola-bar-cat-name": "Батончики гранолы",
+  "granola-bar-cat-desc": "Смешайте орехи, зерно и мёд.",
+
+  "climate-spanning-cat-name": "Блюда из разных климатов",
+  "climate-spanning-cat-desc": "Несколько избранных продуктов, для приготовления которых требуются ингредиенты как из жаркого, так и из холодного климата.",
+
+  "mushroom-cat-name": "Грибы",
+  "mushroom-cat-desc": "Все виды грибов, которые можно собрать.",
+
+  "juice-cat-name": "Фруктовые соки",
+  "juice-cat-desc": "Все виды фруктовых соков. Их можно пить из любой ёмкости.",
+
+  "cider-cat-name": "Сидры",
+  "cider-cat-desc": "Алкогольные напитки, полученные в результате первого уровня брожения: сидры и медовухи.",
+
+  "alcohol-cat-name": "Виды алкоголя",
+  "alcohol-cat-desc": "Сидр, бренди и aqua vitae.",
+  "expandedfoods-alcohol-desc": "Все виды алкогольных напитков, включая: изысканное вино, крепкое вино, сидр, бренди, выдержанный бренди, винтажный бренди, водка и aqua vitae.",
+
+  "cookedfish-cat-name": "Торговец рыбой",
+  "cookedfish-cat-desc": "Все виды рыбы на гриле времён первобытного выживания.",
+
+  "poison-cat-name": "Яды",
+  "poison-cat-desc": "Продукты, которые при употреблении в пищу снимают очки здоровья.",
+
+  "hint-pie-mixed-grain": "ореховая начинка",
+  "hint-pie-pitted": "С начинкой из фруктов без косточек",
+  "hint-pie-ground-nut": "С начинкой из молотых орехов",
+  "hint-pie-choppedvegetable": "С начинкой из нарезанных овощей",
+  "hint-pie-meatnugget-smashed": "С мясной начинкой",
+  "hint-pie-meatnugget-raw": "Начинён кусочками мяса",
+  "hint-pie-meatnugget-cured": "Начинка из кусочков вяленного мяса",
+  "hint-pie-meat-dried": "Начинка из сушённого мяса",
+  "hint-pie-meat-cured": "Начинка из вяленного мяса",
+  "hint-pie-boiled": "Отварная начинка",
+  "hint-pie-wildcraft-pickled": "Маринованная начинка Wildcraft",
+  "hint-pie-wildcraft": "Начинка Wildcraft",
+  "hint-pie-floralzones-pickled": "Маринованная начинка цветочных зон",
+  "hint-pie-floralzones": "Фруктовая начинка",
+
+  "hint-meal-pastacold": "Холодный салат из макарон",
+  "hint-meal-pastahot": "Горячая паста",
+}
