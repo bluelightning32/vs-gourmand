@@ -1,4 +1,5 @@
 {
+  hideExactFoodPoints: false,
   hints: [ "hint-pie", "hint-meal" ],
   achievements: {
     "meal-category" : {
@@ -416,6 +417,7 @@
     },
     "poison" : {
       points: 5,
+      hideMissing: false
     },
     "cookedfish" : {
       dependsOn: [ { modId: "primitivesurvival" } ],

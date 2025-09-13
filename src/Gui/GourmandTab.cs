@@ -456,11 +456,15 @@ public class GourmandTab {
     }
     text.AppendLine(Lang.Get("gourmand:points-per-food", achievement.Points));
     text.AppendLine(Lang.Get("gourmand:completion-bonus", achievement.Bonus));
-    text.AppendLine(Lang.Get("gourmand:missing"));
+    if (!achievement.HideMissing) {
+      text.AppendLine(Lang.Get("gourmand:missing"));
+    }
     components.AddRange(VtmlUtil.Richtextify(_capi, text.ToString(),
                                              CairoFont.WhiteDetailText()));
 
-    AddMissingIcons(redraw, components, category, missing, more);
+    if (!achievement.HideMissing) {
+      AddMissingIcons(redraw, components, category, missing, more);
+    }
     components.Add(new RichTextComponent(_capi, "\n", _headerFont));
   }
 

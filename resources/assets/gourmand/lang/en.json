@@ -23,6 +23,8 @@
 
   // Shown in the item info
   "available-points": "Available Gourmand points: {0}",
+  "available-points-vague": "Gourmand points available",
+  "gourmand:already-eaten": "Gourmand points already awarded",
 
   // Food category names and descriptions
   "food-cat-name": "Catch All",

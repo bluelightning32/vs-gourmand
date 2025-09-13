@@ -33,7 +33,15 @@ public class ShowPoints : CollectibleBehavior {
       // It didn't match any achievements.
       return;
     }
-    dsc.AppendLine(Lang.Get("gourmand:available-points", addPoints));
+    if (gourmand.FoodAchievements.HideExactFoodPoints) {
+      if (addPoints > 0) {
+        dsc.AppendLine(Lang.Get("gourmand:available-points-vague"));
+      } else {
+        dsc.AppendLine(Lang.Get("gourmand:already-eaten"));
+      }
+    } else {
+      dsc.AppendLine(Lang.Get("gourmand:available-points", addPoints));
+    }
     List<string> hints = gourmand.FoodAchievements.GetHints(
         world, gourmand.CatDict, inSlot.Itemstack);
     foreach (string hint in hints) {

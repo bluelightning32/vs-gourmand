@@ -55,6 +55,11 @@ public class AchievementPoints {
   [JsonProperty("description")]
   public string Description { get; private set; }
 
+  [JsonProperty("hideMissing",
+                DefaultValueHandling = DefaultValueHandling.Populate)]
+  [DefaultValue(false)]
+  public bool HideMissing { get; private set; }
+
   /// <summary>
   /// The Points, BonusAt, and Bonus values will get the sum of all the
   /// corresponding fields of the entries in this list. The intention is that
@@ -207,17 +212,22 @@ public class FoodAchievements {
   [JsonProperty]
   public readonly HealthFunctionPiece[] HealthPoints;
   private readonly SortedSet<HealthFunctionPiece> _healthFunc;
+  [JsonProperty]
+  [DefaultValue(false)]
+  public readonly bool HideExactFoodPoints = false;
 
   public FoodAchievements(
       [JsonProperty("hints")] string[] rawHints,
       [
         JsonProperty("achievements")
       ] Dictionary<string, AchievementPoints> rawAchievements,
+      [JsonProperty("hideExactFoodPoints")] bool hideExactFoodPoints,
       [JsonProperty("healthPoints")] HealthFunctionPiece[] healthPoints) {
     RawHints = rawHints ?? Array.Empty<string>();
     _hints = new();
     RawAchievements = rawAchievements;
     _achievements = new();
+    HideExactFoodPoints = hideExactFoodPoints;
     HealthPoints = healthPoints;
 
     _healthFunc = new(healthPoints);
