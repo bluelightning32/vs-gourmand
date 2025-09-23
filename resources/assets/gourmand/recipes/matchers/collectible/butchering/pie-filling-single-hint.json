@@ -1,0 +1,17 @@
+[
+  {
+    dependsOn: [ { modId: "butchering" },  ],
+    code : {
+      match: "butchering:primemeat-curedhealing",
+      type: "item",
+    },
+    categories: [
+      {
+        input: "pie-filling-code"
+      }
+    ],
+    outputs: {
+      "pie-filling-single-hint": [ "gourmand:hint-pie-meat-cured" ]
+    }
+  },
+]

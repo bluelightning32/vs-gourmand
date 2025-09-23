@@ -1,0 +1,13 @@
+[
+  {
+    dependsOn: [ { modId: "butchering" } ],
+    code : {
+      match: "butchering:primemeat-*",
+      type: "item",
+      outputs: [ "meat" ]
+    },
+    outputs: {
+      "meat" : [ "item" ]
+    }
+  },
+]

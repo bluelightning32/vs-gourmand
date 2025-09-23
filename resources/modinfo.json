@@ -2,7 +2,7 @@
 	"type": "code",
 	"name": "Gourmand",
 	"modid": "gourmand",
-	"version": "1.7.4",
+	"version": "1.7.5",
 	
 	"description" : "Health buff for eating a greater variety of foods.",
 	"website": "https://github.com/bluelightning32/vs-gourmand",
