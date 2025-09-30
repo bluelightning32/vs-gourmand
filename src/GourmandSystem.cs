@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-using Gourmand.Blocks;
-using Gourmand.CollectibleBehaviors;
 using Gourmand.EntityBehaviors;
 
 using HarmonyLib;
 
 using Newtonsoft.Json.Linq;
 
+using Vintagestory;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
@@ -26,6 +25,7 @@ public class GourmandSystem : ModSystem {
   private Harmony _harmony;
 
   public static string Domain { get; private set; }
+  public static ILogger Logger { get; private set; }
   public FoodAchievements FoodAchievements { get; private set; }
   public ServerConfig ServerConfig { get; private set; }
   public CategoryDict CatDict { get; private set; }
@@ -40,6 +40,7 @@ public class GourmandSystem : ModSystem {
   public override void Start(ICoreAPI api) {
     Domain = Mod.Info.ModID;
     base.Start(api);
+    Logger = Mod.Logger;
 
     string patchId = Mod.Info.ModID;
     if (!Harmony.HasAnyPatches(patchId)) {
@@ -49,12 +50,14 @@ public class GourmandSystem : ModSystem {
 
     _api = api;
     CatDict = api.RegisterRecipeRegistry<CategoryDict>("CategoryDict");
-    api.RegisterCollectibleBehaviorClass("notifyeaten", typeof(NotifyEaten));
-    api.RegisterCollectibleBehaviorClass("showpoints", typeof(ShowPoints));
+    api.RegisterCollectibleBehaviorClass(
+        "notifyeaten", typeof(CollectibleBehaviors.NotifyEaten));
+    api.RegisterCollectibleBehaviorClass(
+        "showpoints", typeof(CollectibleBehaviors.ShowPoints));
     api.RegisterEntityBehaviorClass("updatefoodachievements",
                                     typeof(UpdateFoodAchievements));
-    api.RegisterBlockClass(nameof(NotifyingMeal), typeof(NotifyingMeal));
-    api.RegisterBlockClass(nameof(NotifyingPie), typeof(NotifyingPie));
+    api.RegisterBlockBehaviorClass("notifyeaten",
+                                   typeof(BlockBehaviors.NotifyEaten));
   }
 
   public override void StartClientSide(ICoreClientAPI capi) {
@@ -89,12 +92,27 @@ public class GourmandSystem : ModSystem {
       // after they are done with their modifications.
       LoadCategories(sapi);
 
-      foreach (CollectibleObject c in sapi.World.Collectibles) {
-        if (c.NutritionProps != null ||
-            c.GetType().GetMethod("GetNutritionProperties").DeclaringType !=
+      // These behaviors are added on the server side, but the server will
+      // transfer over its list of behaviors to the client. So effectively these
+      // behaviors are added to the blocks and collectibles on both the server
+      // and client sides.
+      foreach (Block b in sapi.World.Blocks) {
+        if (b.NutritionProps != null ||
+            b.GetType().GetMethod("GetNutritionProperties").DeclaringType !=
                 typeof(CollectibleObject)) {
-          c.CollectibleBehaviors =
-              c.CollectibleBehaviors.Append(new NotifyEaten(c));
+          BlockBehaviors.NotifyEaten behavior = new(b);
+          // In order to follow the logic in BlockType.InitBlock, block
+          // behaviors go in both the collectible list and the block list.
+          b.CollectibleBehaviors = b.CollectibleBehaviors.Append(behavior);
+          b.BlockBehaviors = b.BlockBehaviors.Append(behavior);
+        }
+      }
+      foreach (Item i in sapi.World.Items) {
+        if (i.NutritionProps != null ||
+            i.GetType().GetMethod("GetNutritionProperties").DeclaringType !=
+                typeof(CollectibleObject)) {
+          i.CollectibleBehaviors = i.CollectibleBehaviors.Append(
+              new CollectibleBehaviors.NotifyEaten(i));
         }
       }
 
@@ -107,8 +125,8 @@ public class GourmandSystem : ModSystem {
     if (api is ICoreClientAPI capi) {
       foreach (CollectibleObject c in capi.World.Collectibles) {
         if (ShouldAddShowPointsBehavior(c)) {
-          c.CollectibleBehaviors =
-              c.CollectibleBehaviors.Append(new ShowPoints(c));
+          c.CollectibleBehaviors = c.CollectibleBehaviors.Append(
+              new CollectibleBehaviors.ShowPoints(c));
         }
       }
     }

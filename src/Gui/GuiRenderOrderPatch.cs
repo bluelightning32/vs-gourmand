@@ -15,6 +15,16 @@ namespace Gourmand.Gui;
 // This is a workaround for
 // https://github.com/anegostudios/VintageStory-Issues/issues/4085.
 class GuiDialogPatch {
+  [HarmonyPrepare]
+  public static bool Prepare() {
+    if (Harmony.GetPatchInfo(
+            typeof(GuiDialogCharacter).GetMethod("OnRenderGUI")) != null) {
+      FileLog.Log("GuiDialog is already patched. Skipping Gourmand's patch.");
+      return false;
+    }
+    return true;
+  }
+
   [HarmonyPrefix]
   [HarmonyPatch("OnRenderGUI")]
   public static bool OnRenderGUI(GuiDialogCharacter __instance, float deltaTime,

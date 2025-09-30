@@ -1,7 +1,0 @@
-[
-  {
-    side: "server",
-    file: "game:blocktypes/food/pie", op: "replace", path: "/class",
-    value: "NotifyingPie"
-  }
-]
