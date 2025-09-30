@@ -39,20 +39,6 @@ class BlockMealPatch {
     return (bool)_PlacedBlockEating.Invoke(instance, null);
   }
 
-  private delegate void BlockBehaviorDelegate<T>(BlockBehavior behavior,
-                                                 ref T result,
-                                                 ref EnumHandling handling);
-  private delegate void
-  CollectibleBehaviorDelegate<T>(CollectibleBehavior behavior, ref T result,
-                                 ref EnumHandling handling);
-
-  public struct BehaviorResult<T> {
-    public T Result;
-    public EnumHandling Handled = EnumHandling.PassThrough;
-
-    public BehaviorResult(T defaultResult) { Result = defaultResult; }
-  }
-
   [HarmonyPrefix]
   [HarmonyPatch("OnBlockInteractStart")]
   public static bool
@@ -66,8 +52,8 @@ class BlockMealPatch {
       __state = new(true);
       return true;
     }
-    return WalkBlockBehaviors(
-        __instance, true,
+    return __instance.WalkBlockBehaviors(
+        true,
         (BlockBehavior behavior, ref bool result, ref EnumHandling handled) => {
           bool behaviorResult = behavior.OnBlockInteractStart(
               world, byPlayer, blockSel, ref handled);
@@ -103,8 +89,8 @@ class BlockMealPatch {
       __state = new(true);
       return true;
     }
-    return WalkBlockBehaviors(
-        __instance, true,
+    return __instance.WalkBlockBehaviors(
+        true,
         (BlockBehavior behavior, ref bool result, ref EnumHandling handled) => {
           bool behaviorResult = behavior.OnBlockInteractStep(
               secondsUsed, world, byPlayer, blockSel, ref handled);
@@ -139,8 +125,8 @@ class BlockMealPatch {
       // extra level of calling behaviors in that case.
       return true;
     }
-    return WalkBlockBehaviors(
-        __instance, true,
+    return __instance.WalkBlockBehaviors(
+        true,
         (BlockBehavior behavior, ref bool result, ref EnumHandling handled) => {
           behavior.OnBlockInteractStop(secondsUsed, world, byPlayer, blockSel,
                                        ref handled);
@@ -156,8 +142,8 @@ class BlockMealPatch {
                                               BlockEntityContainer be,
                                               ItemSlot slot, IPlayer byPlayer,
                                               BlockSelection blockSel) {
-    return WalkCollectibleBehaviors(
-        __instance, false,
+    return __instance.WalkCollectibleBehaviors(
+        false,
         (CollectibleBehavior behavior, ref bool result,
          ref EnumHandling handled) => {
           if (behavior is IContainedInteractable interactable) {
@@ -188,8 +174,8 @@ class BlockMealPatch {
                           out BehaviorResult<bool> __state, float secondsUsed,
                           BlockEntityContainer be, ItemSlot slot,
                           IPlayer byPlayer, BlockSelection blockSel) {
-    return WalkCollectibleBehaviors(
-        __instance, false,
+    return __instance.WalkCollectibleBehaviors(
+        false,
         (CollectibleBehavior behavior, ref bool result,
          ref EnumHandling handled) => {
           if (behavior is IContainedInteractable interactable) {
@@ -219,8 +205,8 @@ class BlockMealPatch {
                                              BlockEntityContainer be,
                                              ItemSlot slot, IPlayer byPlayer,
                                              BlockSelection blockSel) {
-    return WalkCollectibleBehaviors(
-        __instance, false,
+    return __instance.WalkCollectibleBehaviors(
+        false,
         (CollectibleBehavior behavior, ref bool result,
          ref EnumHandling handled) => {
           if (behavior is IContainedInteractable interactable) {
@@ -240,8 +226,8 @@ class BlockMealPatch {
                       ItemSlot slot, EntityAgent byEntity,
                       BlockSelection blockSel, EntitySelection entitySel,
                       bool firstEvent, ref EnumHandHandling handHandling) {
-    return WalkCollectibleBehaviors(
-        __instance, EnumHandHandling.NotHandled,
+    return __instance.WalkCollectibleBehaviors(
+        EnumHandHandling.NotHandled,
         (CollectibleBehavior behavior, ref EnumHandHandling result,
          ref EnumHandling handled) => {
           behavior.OnHeldInteractStart(slot, byEntity, blockSel, entitySel,
@@ -270,8 +256,8 @@ class BlockMealPatch {
                                         EntityAgent byEntity,
                                         BlockSelection blockSel,
                                         EntitySelection entitySel) {
-    return WalkCollectibleBehaviors(
-        __instance, true,
+    return __instance.WalkCollectibleBehaviors(
+        true,
         (CollectibleBehavior behavior, ref bool result,
          ref EnumHandling handled) => {
           bool behaviorResult = behavior.OnHeldInteractStep(
@@ -300,74 +286,14 @@ class BlockMealPatch {
                                         ItemSlot slot, EntityAgent byEntity,
                                         BlockSelection blockSel,
                                         EntitySelection entitySel) {
-    return WalkCollectibleBehaviors(
-        __instance, true,
+    return __instance.WalkCollectibleBehaviors(
+        true,
         (CollectibleBehavior behavior, ref bool result,
          ref EnumHandling handled) => {
           behavior.OnHeldInteractStop(secondsUsed, slot, byEntity, blockSel,
                                       entitySel, ref handled);
         },
         out BehaviorResult<bool> unused, out bool unused2);
-  }
-
-  /// <summary>
-  /// Walk the behaviors on the block, and return whether the default action
-  /// should be run.
-  /// </summary>
-  /// <param name="block">the block to traverse</param>
-  /// <param name="initialResult">the value to initialize the result in the
-  /// state</param> <param name="callBehavior">delegate to run on every behavior
-  /// on the block (unless handled says to end the traversal early)</param>
-  /// <param name="state">the final result and handling</param>
-  /// <returns>true if the default action should be run.</returns>
-  private static bool
-  WalkBlockBehaviors<T>(Block block, T initialResult,
-                        BlockBehaviorDelegate<T> callBehavior,
-                        out BehaviorResult<T> state, out T result) {
-    state = new(initialResult);
-    foreach (BlockBehavior behavior in block.BlockBehaviors) {
-      EnumHandling behaviorHandled = EnumHandling.PassThrough;
-      callBehavior(behavior, ref state.Result, ref behaviorHandled);
-      if (behaviorHandled != EnumHandling.PassThrough) {
-        state.Handled = behaviorHandled;
-      }
-      if (behaviorHandled == EnumHandling.PreventSubsequent) {
-        result = state.Result;
-        return false;
-      }
-    }
-    result = state.Result;
-    return state.Handled != EnumHandling.PreventDefault;
-  }
-
-  /// <summary>
-  /// Walk the behaviors on the collectible, and return whether the default
-  /// action should be run.
-  /// </summary>
-  /// <param name="collectible">the block to traverse</param>
-  /// <param name="initialResult">the value to initialize the result in the
-  /// state</param> <param name="callBehavior">delegate to run on every behavior
-  /// on the block (unless handled says to end the traversal early)</param>
-  /// <param name="state">the final result and handling</param>
-  /// <returns>true if the default action should be run.</returns>
-  private static bool
-  WalkCollectibleBehaviors<T>(CollectibleObject collectible, T initialResult,
-                              CollectibleBehaviorDelegate<T> callBehavior,
-                              out BehaviorResult<T> state, out T result) {
-    state = new(initialResult);
-    foreach (CollectibleBehavior behavior in collectible.CollectibleBehaviors) {
-      EnumHandling behaviorHandled = EnumHandling.PassThrough;
-      callBehavior(behavior, ref state.Result, ref behaviorHandled);
-      if (behaviorHandled != EnumHandling.PassThrough) {
-        state.Handled = behaviorHandled;
-      }
-      if (behaviorHandled == EnumHandling.PreventSubsequent) {
-        result = state.Result;
-        return false;
-      }
-    }
-    result = state.Result;
-    return state.Handled != EnumHandling.PreventDefault;
   }
 }
 
