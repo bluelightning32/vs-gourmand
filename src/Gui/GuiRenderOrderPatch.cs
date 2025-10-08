@@ -19,7 +19,8 @@ class GuiDialogPatch {
   public static bool Prepare() {
     if (Harmony.GetPatchInfo(
             typeof(GuiDialogCharacter).GetMethod("OnRenderGUI")) != null) {
-      FileLog.Log("GuiDialog is already patched. Skipping Gourmand's patch.");
+      GourmandSystem.Logger.Debug(
+          "GuiDialog is already patched. Skipping Gourmand's patch.");
       return false;
     }
     return true;
