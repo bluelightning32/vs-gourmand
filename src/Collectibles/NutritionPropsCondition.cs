@@ -38,7 +38,15 @@ abstract public class NutritionConditionBase : ICondition {
     if (Cooked) {
       if (c.CombustibleProps?.SmeltedStack != null) {
         c.CombustibleProps.SmeltedStack.Resolve(resolver, "gourmand");
-        c = c.CombustibleProps.SmeltedStack.ResolvedItemstack.Collectible;
+        var resolved = c.CombustibleProps.SmeltedStack.ResolvedItemstack;
+        if (resolved != null) {
+          c = resolved.Collectible;
+        } else {
+          GourmandSystem.Logger.Warning(
+              $"Failed to resolve {c.CombustibleProps.SmeltedStack.Code}, " +
+              $"which is the cooked form of {c.Code}. Treating it as an " +
+              "uncookable food instead.");
+        }
       }
       JsonObject inMeal = c.Attributes?["nutritionPropsWhenInMeal"];
       if (inMeal?.Exists == true) {
