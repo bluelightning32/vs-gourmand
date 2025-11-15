@@ -600,6 +600,18 @@ public class FoodAchievements {
   }
 
   /// <summary>
+  /// Gets the gourmand tree attributes for the entity, they are already
+  /// attached to the entity.
+  /// </summary>
+  /// <param name="entity">the player to get the attributes for</param>
+  /// <returns>The Gourmand attributes if they are already attached to the
+  /// entity, or null if the entity does not have Gourmand attributes attached
+  /// yet.</returns>
+  public static ITreeAttribute GetNoCreateModData(Entity entity) {
+    return entity.WatchedAttributes.GetTreeAttribute(ModDataPath);
+  }
+
+  /// <summary>
   /// Moves foods from the player's eaten list and moves them to their lost list
   /// according to the dealth penalty. Initially a large death penalty is
   /// applied, then subsequent penalties are reduced as the result approaches

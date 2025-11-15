@@ -24,7 +24,8 @@ public class ShowPoints : CollectibleBehavior {
       return;
     }
     ITreeAttribute modData =
-        FoodAchievements.GetModData(capi.World.Player.Entity);
+        FoodAchievements.GetNoCreateModData(capi.World.Player.Entity) ??
+        new TreeAttribute();
     GourmandSystem gourmand = capi.ModLoader.GetModSystem<GourmandSystem>();
 
     int addPoints = gourmand.FoodAchievements.GetAvailableFoodPoints(
