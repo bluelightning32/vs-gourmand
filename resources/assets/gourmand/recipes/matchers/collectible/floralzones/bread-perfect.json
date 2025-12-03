@@ -1,0 +1,34 @@
+[
+  {
+    dependsOn: [ { modId: "floralzonescaribbeanregion" } ],
+    code : {
+      match: "floralzonescaribbeanregion:bread-*-perfect",
+      type: "item",
+      outputs: [ "bread-perfect" ]
+    },
+  },
+  {
+    dependsOn: [ { modId: "floralzoneseastasiaticregion" } ],
+    code : {
+      match: "floralzoneseastasiaticregion:bread-*-perfect",
+      type: "item",
+      outputs: [ "bread-perfect" ]
+    },
+  },
+  {
+    dependsOn: [ { modId: "floralzonescentralaustralianregion" } ],
+    code : {
+      match: "floralzonescentralaustralianregion:bread-*-perfect",
+      type: "item",
+      outputs: [ "bread-perfect" ]
+    },
+  },
+  {
+    dependsOn: [ { modId: "floralzonescosmopolitanregion" } ],
+    code : {
+      match: "floralzonescosmopolitanregion:bread-*-perfect",
+      type: "item",
+      outputs: [ "bread-perfect" ]
+    },
+  }
+]

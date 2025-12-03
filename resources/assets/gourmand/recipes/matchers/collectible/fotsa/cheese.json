@@ -1,0 +1,18 @@
+[
+  {
+    dependsOn: [ { modId: "capreolinae" } ],
+    code : {
+      match: "capreolinae:cheese-*-1slice",
+      type: "item",
+      outputs: [ "cheese" ]
+    },
+  },
+  {
+    dependsOn: [ { modId: "capreolinae" } ],
+    code : {
+      match: "capreolinae:cottagecheeseportion-*",
+      type: "item",
+      outputs: [ "cheeseportion" ]
+    },
+  },
+]

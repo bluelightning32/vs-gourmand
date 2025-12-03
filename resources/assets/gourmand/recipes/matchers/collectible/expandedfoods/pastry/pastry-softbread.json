@@ -1,0 +1,10 @@
+[
+  {
+    dependsOn: [ { modId: "expandedfoods" } ],
+    code : {
+      match: "expandedfoods:plaindoughball-bread",
+      type: "item",
+      outputs: [ "pastry", "bread-perfect" ]
+    },
+  },
+]

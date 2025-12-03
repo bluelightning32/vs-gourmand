@@ -1,0 +1,16 @@
+[
+  {
+    code : {
+      match: "game:cheese-*-1slice",
+      type: "item",
+      outputs: [ "cheese" ]
+    },
+  },
+  {
+    code : {
+      match: "game:cottagecheeseportion",
+      type: "item",
+      outputs: [ "cheeseportion" ]
+    },
+  },
+]
