@@ -77,6 +77,14 @@ public class MatchResolver {
   }
 
   [TestMethod]
+  public void GetMatchingItemsWildcardStartWildcardDomain() {
+    IReadOnlyList<Item> items =
+        _resolver.GetMatchingItems(new AssetLocation("*", "*starter"));
+    Assert.IsTrue(items.Any((item) => item.Code.Path == "firestarter"));
+    Assert.IsTrue(items.All((block) => block.Code.Path.EndsWith("starter")));
+  }
+
+  [TestMethod]
   public void ResolveAcceleratedWildcardBlock() {
     IReadOnlyList<Block> blocks =
         _resolver.GetMatchingBlocks(new AssetLocation("game", "egg-*"));
@@ -92,6 +100,27 @@ public class MatchResolver {
     Assert.AreNotEqual(0, chickenEgg.Id);
     IReadOnlyList<Block> blocks =
         _resolver.GetMatchingBlocks(new AssetLocation("game", "*-chicken-1"));
+    Assert.IsTrue(blocks.Any((block) => block.Id == chickenEgg.Id));
+    Assert.IsTrue(
+        blocks.All((block) => block.Code.Path.EndsWith("-chicken-1")));
+  }
+
+  [TestMethod]
+  public void ResolveAcceleratedWildcardBlockWildcardDomain() {
+    IReadOnlyList<Block> blocks =
+        _resolver.GetMatchingBlocks(new AssetLocation("*", "egg-*"));
+    Assert.IsTrue(blocks.Any((block) => block.Code.Path == "egg-chicken-1"));
+    _mock.Verify(x => x.SearchBlocks(It.IsAny<AssetLocation>()), Times.Never);
+  }
+
+  [TestMethod]
+  public void GetMatchingBlocksWildcardStartWildcardDomain() {
+    Block chickenEgg = LoadAssets.Server.World.GetBlock(
+        new AssetLocation("game", "egg-chicken-1"));
+    Assert.IsNotNull(chickenEgg);
+    Assert.AreNotEqual(0, chickenEgg.Id);
+    IReadOnlyList<Block> blocks =
+        _resolver.GetMatchingBlocks(new AssetLocation("*", "*-chicken-1"));
     Assert.IsTrue(blocks.Any((block) => block.Id == chickenEgg.Id));
     Assert.IsTrue(
         blocks.All((block) => block.Code.Path.EndsWith("-chicken-1")));

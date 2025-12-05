@@ -225,9 +225,25 @@ public class MatchResolver {
     return result;
   }
 
+  private IReadOnlyList<Block>
+  UnacceleratedGetMatchingBlocks(AssetLocation wildcard) {
+    if (wildcard.Domain == "*") {
+      // The base game sometimes supports wildcards in the domain, but not in
+      // the SearchBlocks method. So this code needs to do it directly.
+      List<Block> result = [];
+      foreach (Block block in Resolver.Blocks) {
+        if (WildcardUtil.Match(wildcard, block.Code)) {
+          result.Add(block);
+        }
+      }
+      return result;
+    }
+    return Resolver.SearchBlocks(wildcard);
+  }
+
   public IReadOnlyList<Block> GetMatchingBlocks(AssetLocation wildcard) {
     return GetMatchingCollectibles(wildcard, AcceleratedGetMatchingBlocks,
-                                   AllBlocks, Resolver.SearchBlocks,
+                                   AllBlocks, UnacceleratedGetMatchingBlocks,
                                    GetMatchingBlocksWithoutWildcard);
   }
 
