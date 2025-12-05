@@ -159,7 +159,7 @@ public class MatchResolver {
         return getDirect(wildcard);
       }
       if (wildcard.Path[pos] == '*') {
-        if (pos == 0 && wildcard.Domain == "*") {
+        if (pos == 0 && wildcard.Path.Length == 1 && wildcard.Domain == "*") {
           return all;
         } else {
           // The asterisk came before the hyphen. This cannot be accelerated.
