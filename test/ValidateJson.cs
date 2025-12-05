@@ -13,19 +13,9 @@ public class ValidateJson {
   // https://learn.microsoft.com/en-us/visualstudio/test/how-to-create-a-data-driven-unit-test?view=vs-2022#add-a-testcontext-to-the-test-class
   public TestContext TestContext { get; set; } = null!;
 
-  private string ResourcesPath() {
-    string path = (string)TestContext.Properties["ResourcesPath"];
-    if (path is null) {
-      return null;
-    }
-
-    return Path.GetFullPath(
-        Path.Combine(TestContext.DeploymentDirectory, path));
-  }
-
   [TestMethod]
   public void Validate() {
-    string resources = ResourcesPath();
+    string resources = ServerApiWithAssets.GourmandResourcesPath;
     Assert.IsNotNull(resources);
     TestContext.WriteLine($"Json path: {resources}");
     int validated = 0;

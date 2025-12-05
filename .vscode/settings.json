@@ -1,3 +1,5 @@
 {
-  "dotnet-test-explorer.testProjectPath": "test/test.csproj"
+  "dotnet-test-explorer.testProjectPath": "test/test.csproj",
+  "dotnet-test-explorer.testArguments": "--settings:test.runsettings",
+  "dotnet.unitTests.runSettingsPath": "test/test.runsettings"
 }

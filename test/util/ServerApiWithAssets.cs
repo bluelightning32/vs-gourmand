@@ -47,6 +47,17 @@ public class FilterOrigin : IAssetOrigin {
 }
 
 class ServerApiWithAssets {
+  public static string GourmandResourcesPath {
+    get {
+      string path = File.ReadAllText("resourcespath.txt").Trim();
+      int length = path.Length;
+      if (length > 2 && path[0] == '"' && path[length - 1] == '"') {
+        path = path.Substring(1, length - 2);
+      }
+      return path;
+    }
+  }
+
   public static ServerMain
   Create(Dictionary<AssetCategory, HashSet<string>> allowAssetFiles,
          bool disallowByDefault = true, bool logDebug = false) {

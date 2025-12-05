@@ -6,6 +6,7 @@
 
     <IsPackable>false</IsPackable>
     <TestingPlatformDotnetTestSupport>false</TestingPlatformDotnetTestSupport>
+    <RunSettingsFilePath>test.runsettings</RunSettingsFilePath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -36,41 +37,25 @@
     <ProjectReference Include="../gourmand.csproj">
       <Targets>Build</Targets>
     </ProjectReference>
+    <ResourcesPath Include="../resources"/>
   </ItemGroup>
 
   <!--
-    Copy test.runsettings config to the output directory and set its
-    ResourcesPath property to the path of the resources directory relative to
-    the test build directory. The test will use this to find and validate the
-    json files in the resources directory.
+    Write the location of the resources source directory to the output
+    directory. The test will use this to find and validate the json files in
+    the resources directory.
   -->
-  <Target Name="testconfig" AfterTargets="Build" Inputs="test.runsettings" Outputs="$(OutputPath)test.runsettings">
-    <Copy
-      SourceFiles="test.runsettings"
-      DestinationFiles="$(OutputPath)test.runsettings"/>
-    <XmlPoke
-      XmlInputPath="$(OutputPath)test.runsettings"
-      Query="/RunSettings/TestRunParameters/Parameter[@name='ResourcesPath']/@value"
-      Value="$([System.IO.Path]::GetRelativePath('$(OutputPath)', '../resources'))"
-      />
+  <Target Name="resourcespath" BeforeTargets="VSTest" Inputs="../resources/" Outputs="$(OutputPath)resourcespath.txt">
+    <WriteLinesToFile
+        File="$(OutputPath)resourcespath.txt"
+        Lines="&quot;%(ResourcesPath.FullPath)&quot;"
+        Overwrite="true"
+        Encoding="Unicode"/>
   </Target>
 
   <!--
     Add an empty target so that DllOnly builds just the main dll when run for
     the solution. -->
   <Target Name="DllOnly" />
-
-  <Target Name="setproperties" BeforeTargets="VSTest">
-    <PropertyGroup>
-      <!--
-        This property references the OutputPath property. However, the
-        OutputPath property is only set after all of the top level properties in
-        this file are evaluated. So the RunSettingsFilePath must be set inside
-        of a target so that it is evaluated after OutputPath is set, and before
-        the test is run.
-      -->
-      <RunSettingsFilePath>$(OutputPath)test.runsettings</RunSettingsFilePath>
-    </PropertyGroup>
-  </Target>
 
 </Project>
