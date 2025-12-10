@@ -64,6 +64,13 @@
           // corn bread, coconut bread, sweet potato bread,
           bonusAt: 3,
           bonus: 20
+        },
+        {
+          dependsOn: [ { modId: "newworldcrops" } ],
+          points: 0,
+          // oat bread, corn bread, and potato
+          bonusAt: 3,
+          bonus: 20
         }
       ]
     },
