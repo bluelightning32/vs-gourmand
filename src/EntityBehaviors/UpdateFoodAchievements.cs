@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 using Vintagestory.API.Common;
@@ -29,9 +30,15 @@ class UpdateFoodAchievements : EntityBehavior {
     GourmandSystem gourmand = GetGourmandSystem();
     if (gourmand.ServerConfig.DebugLogging) {
       IServerPlayer player = (IServerPlayer)((EntityPlayer)entity).Player;
-      gourmand.Mod.Logger.Audit("{0} set current food to {1}",
-                                player.PlayerName,
-                                food?.Collectible?.Code.ToString() ?? "none");
+      string name;
+      try {
+        name = food?.GetName() ?? "none";
+      } catch (Exception) {
+        name = "exception";
+      }
+      gourmand.Mod.Logger.Audit(
+          "{0} set current food to {1} - {2}", player.PlayerName,
+          food?.Collectible?.Code.ToString() ?? "none", name);
     }
     _eating = food;
   }
