@@ -1,0 +1,16 @@
+[
+  {
+    dependsOn: [ { modId: "aculinaryartillery" } ],
+    code: {
+      match: "aculinaryartillery:bottle-*",
+      type: "block",
+      outputs: [ "potable-container" ]
+    },
+    attributes: [
+      {
+        // Use the container props to exclude raw (unfired) bottles
+        path: ["liquidContainerProps", "capacityLitres"],
+      }
+    ]
+  },
+]
