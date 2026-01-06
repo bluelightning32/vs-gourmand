@@ -51,6 +51,14 @@ class UpdateFoodAchievements : EntityBehavior {
     if (_eating != null) {
       OnFoodEaten(_eating);
       _eating = null;
+    } else {
+      GourmandSystem gourmand = GetGourmandSystem();
+      if (gourmand.ServerConfig.DebugLogging) {
+        IServerPlayer player = (IServerPlayer)((EntityPlayer)entity).Player;
+        gourmand.Mod.Logger.Audit(
+            "{0} received {1} saturation of {2} without a current food",
+            player.PlayerName, saturation, foodCat);
+      }
     }
   }
 
