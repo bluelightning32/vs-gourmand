@@ -1,0 +1,29 @@
+// The capacityLitres attribute below filters out the unfired ceramics.
+[
+  {
+    dependsOn: [ { modId: "bricklayers" } ],
+    code: {
+      match: "bricklayers:vatliquidsmall-*",
+      type: "block",
+      outputs: [ "potable-container" ]
+    },
+    attributes: [
+      {
+        path: ["liquidContainerProps", "capacityLitres"],
+      }
+    ]
+  },
+  {
+    dependsOn: [ { modId: "bricklayers" } ],
+    code: {
+      match: "bricklayers:coloredcup-burnt-*",
+      type: "block",
+      outputs: [ "potable-container" ]
+    },
+    attributes: [
+      {
+        path: ["liquidContainerProps", "capacityLitres"],
+      }
+    ]
+  },
+]
