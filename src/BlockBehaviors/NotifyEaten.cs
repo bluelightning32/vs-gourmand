@@ -67,6 +67,6 @@ public class NotifyEaten : BlockBehavior, IContainedInteractable {
   public WorldInteraction[] GetContainedInteractionHelp(
       BlockEntityContainer be, ItemSlot slot, IPlayer byPlayer,
       BlockSelection blockSel) {
-    throw new System.NotImplementedException();
+    return null;
   }
 }
