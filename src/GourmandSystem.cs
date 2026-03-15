@@ -9,7 +9,6 @@ using HarmonyLib;
 
 using Newtonsoft.Json.Linq;
 
-using Vintagestory;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;

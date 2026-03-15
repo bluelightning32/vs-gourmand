@@ -1,5 +1,6 @@
 using Gourmand.EntityBehaviors;
 
+using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.GameContent;
 
@@ -61,5 +62,11 @@ public class NotifyEaten : BlockBehavior, IContainedInteractable {
       byPlayer.Entity.GetBehavior<UpdateFoodAchievements>()?.SetCurrentFood(
           stack);
     }
+  }
+
+  public WorldInteraction[] GetContainedInteractionHelp(
+      BlockEntityContainer be, ItemSlot slot, IPlayer byPlayer,
+      BlockSelection blockSel) {
+    throw new System.NotImplementedException();
   }
 }

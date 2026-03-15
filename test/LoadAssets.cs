@@ -1,5 +1,3 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using PrefixClassName.MsTest;
 
 using Vintagestory.API.Common;
@@ -21,8 +19,14 @@ public class LoadAssets {
   public static void AssemblyInitialize(TestContext context) {
     Dictionary<AssetCategory, HashSet<string>> allow =
         new() { [AssetCategory.itemtypes] =
-                    new() { "fruit.json", "firestarter.json", "fish.json",
-                            "tongs.json", "vegetable.json" },
+                    new() { "fruit.json", "firestarter.json", "fishfillet.json",
+                            "tongs.json", "vegetable.json",
+                            // Allow meatystew.topping to be loaded to prevent a
+                            // Gourmand warning during the unit tests.
+                            "jamhoneyportion.json", "honeyportion.json",
+                            // Allow meatystew.egg-base to be loaded to prevent
+                            // a Gourmand warning during the unit tests.
+                            "egg.json" },
                 [AssetCategory.blocktypes] =
                     new() { "bowl-meal.json", "egg.json", "mushroom.json",
                             "pie.json" },
@@ -50,6 +54,29 @@ public class LoadAssets {
     Assert.IsNotNull(pineapple);
     Assert.AreEqual(EnumFoodCategory.Fruit,
                     pineapple.NutritionProps.FoodCategory);
+  }
+
+  [TestMethod]
+  public void FishLoaded() {
+    Item fishRaw = Server.World.GetItem(new AssetLocation("game:fish-raw"));
+    Assert.IsNotNull(fishRaw);
+    Item fishCooked =
+        Server.World.GetItem(new AssetLocation("game:fish-cooked"));
+    Assert.IsNotNull(fishCooked);
+    Assert.AreEqual(EnumFoodCategory.Protein,
+                    fishCooked.NutritionProps.FoodCategory);
+  }
+
+  [TestMethod]
+  public void EggChickenItemLoaded() {
+    Item egg = Server.World.GetItem(new AssetLocation("game:egg-chicken-raw"));
+    Assert.IsNotNull(egg);
+  }
+
+  [TestMethod]
+  public void HoneyPortionLoaded() {
+    Item item = Server.World.GetItem(new AssetLocation("game:honeyportion"));
+    Assert.IsNotNull(item);
   }
 
   public static void AssertCategoriesEqual(

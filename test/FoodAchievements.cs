@@ -1,5 +1,3 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using PrefixClassName.MsTest;
 
 using Vintagestory.API.Common;
@@ -155,8 +153,9 @@ public class FoodAchievements {
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
     Item cranberry = LoadAssets.GetItem("game", "fruit-cranberry");
     Item blueberry = LoadAssets.GetItem("game", "fruit-blueberry");
-    Item fish_raw = LoadAssets.GetItem("game", "fish-raw");
-    Item fish_cooked = LoadAssets.GetItem("game", "fish-cooked");
+    Item fishRaw = LoadAssets.GetItem("game", "fish-raw");
+    Assert.IsNotNull(fishRaw);
+    Item fishCooked = LoadAssets.GetItem("game", "fish-cooked");
     TreeAttribute achieved = new();
     int points = 0;
 
@@ -190,14 +189,14 @@ public class FoodAchievements {
 
     Assert.AreNotEqual(0, LoadedAchievements.AddAchievements(
                               LoadAssets.Server.World, CatDict, achieved,
-                              new ItemStack(fish_raw)));
+                              new ItemStack(fishRaw)));
     points += 1;
     Assert.AreEqual(
         points, LoadedAchievements.GetPointsForAchievements(null, achieved));
 
     Assert.AreNotEqual(0, LoadedAchievements.AddAchievements(
                               LoadAssets.Server.World, CatDict, achieved,
-                              new ItemStack(fish_cooked)));
+                              new ItemStack(fishCooked)));
     points += 1;
     Assert.AreEqual(
         points, LoadedAchievements.GetPointsForAchievements(null, achieved));

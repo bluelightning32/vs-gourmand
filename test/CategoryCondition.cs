@@ -1,5 +1,3 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using PrefixClassName.MsTest;
 
 using Vintagestory.API.Common;
@@ -160,7 +158,7 @@ public class CategoryCondition {
         foods++;
         break;
       default:
-        Assert.Fail("Unexpected category value {0}", value.Value[0].ToString());
+        Assert.Fail($"Unexpected category value {value.Value[0].ToString()}");
         break;
       }
     }

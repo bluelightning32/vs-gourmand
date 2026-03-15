@@ -1,5 +1,3 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using Newtonsoft.Json;
 
 using PrefixClassName.MsTest;

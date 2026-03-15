@@ -13,6 +13,10 @@
   },
   {
     priority: 2,
+    // This rule applied to the base game in version 1.21.0 for the legume.
+    // The rule is left here, because as of 1.22.0-rc.2 allowMixing is still a
+    // property in the InPieProperties class.
+    ignoreNoMatches: true,
     categories: [
       {
         input: "pie-filling-code",
@@ -31,6 +35,7 @@
     // foods would cause a crash when rendered. See
     // https://github.com/bluelightning32/vs-gourmand/issues/2.
     priority: 2,
+    ignoreNoMatches: true,
     categories: [
       {
         input: "cookable-no-nutrition",

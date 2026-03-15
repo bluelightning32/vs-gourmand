@@ -30,7 +30,7 @@
 
             https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props#targetframework
         -->
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <DefaultItemExcludes>$(DefaultItemExcludes);test/**</DefaultItemExcludes>
     </PropertyGroup>
     

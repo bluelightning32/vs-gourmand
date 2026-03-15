@@ -1,5 +1,3 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -28,7 +26,7 @@ public class ValidateJson {
         string remaining = stream.ReadToEnd();
         Assert.AreEqual("", remaining, $"Extra text at the end of {file}");
       } catch (JsonException ex) {
-        Assert.Fail("Validation failed for JSON file: {0}\n{1}", file, ex);
+        Assert.Fail($"Validation failed for JSON file: {file}\n{ex}");
       }
 
       ++validated;

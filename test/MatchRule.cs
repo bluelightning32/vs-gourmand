@@ -1,7 +1,5 @@
 using Gourmand.Collectibles;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using PrefixClassName.MsTest;
 
 using Vintagestory.API.Common;
@@ -144,7 +142,7 @@ public class MatchRule {
     Assert.IsNotNull(bowl);
     ItemStack meal = new(bowl);
     meal.Attributes["recipeCode"] = new StringAttribute("meatystew");
-    Item fish_raw = LoadAssets.GetItem("game", "fish-raw");
+    Item fishRaw = LoadAssets.GetItem("game", "fish-raw");
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
 
     // Not a match without contents
@@ -152,8 +150,8 @@ public class MatchRule {
 
     Real.ContentBuilder.SetContents(Resolver.Resolver, meal,
                                     new ItemStack[] {
-                                      new(fish_raw),
-                                      new(fish_raw),
+                                      new(fishRaw),
+                                      new(fishRaw),
                                       new(pineapple),
                                     });
     Assert.IsTrue(rule.IsMatch(Resolver.Resolver, Resolver.CatDict, meal));
@@ -161,8 +159,8 @@ public class MatchRule {
     // Not a match with too much fruit.
     Real.ContentBuilder.SetContents(Resolver.Resolver, meal,
                                     new ItemStack[] {
-                                      new(fish_raw),
-                                      new(fish_raw),
+                                      new(fishRaw),
+                                      new(fishRaw),
                                       new(pineapple),
                                       new(pineapple),
                                     });
@@ -426,16 +424,16 @@ public class MatchRule {
     Assert.IsNotNull(bowl);
     ItemStack meal = new(bowl);
     meal.Attributes["recipeCode"] = new StringAttribute("meatystew");
-    Item fish_raw = LoadAssets.GetItem("game", "fish-raw");
+    Item fishRaw = LoadAssets.GetItem("game", "fish-raw");
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
 
     Real.ContentBuilder.SetContents(Resolver.Resolver, meal,
                                     new ItemStack[] {
-                                      new(fish_raw),
-                                      new(fish_raw),
+                                      new(fishRaw),
+                                      new(fishRaw),
                                     });
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(
-        new IAttribute[] { new StringAttribute(fish_raw.Code.ToString()) },
+        new IAttribute[] { new StringAttribute(fishRaw.Code.ToString()) },
         rule.GetValue(
             Resolver.Resolver, Resolver.CatDict,
             new AssetLocation("gourmand", "contains-meal-protein-base"),
@@ -448,12 +446,12 @@ public class MatchRule {
 
     Real.ContentBuilder.SetContents(Resolver.Resolver, meal,
                                     new ItemStack[] {
-                                      new(fish_raw),
-                                      new(fish_raw),
+                                      new(fishRaw),
+                                      new(fishRaw),
                                       new(pineapple),
                                     });
     Assert.IsTrue(Real.CategoryValue.ValuesEqual(
-        new IAttribute[] { new StringAttribute(fish_raw.Code.ToString()) },
+        new IAttribute[] { new StringAttribute(fishRaw.Code.ToString()) },
         rule.GetValue(
             Resolver.Resolver, Resolver.CatDict,
             new AssetLocation("gourmand", "contains-meal-protein-base"),

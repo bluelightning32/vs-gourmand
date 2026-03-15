@@ -2,7 +2,9 @@ using System.Reflection;
 
 using HarmonyLib;
 
+using Vintagestory.API.Client;
 using Vintagestory.API.Common;
+using Vintagestory.API.Util;
 using Vintagestory.GameContent;
 
 namespace Gourmand.Blocks;
@@ -294,6 +296,42 @@ class BlockMealPatch {
                                       entitySel, ref handled);
         },
         out BehaviorResult<bool> unused, out bool unused2);
+  }
+
+  [HarmonyPrefix]
+  [HarmonyPatch("GetContainedInteractionHelp")]
+  public static bool GetContainedInteractionHelp(
+      BlockMeal __instance, ref WorldInteraction[] __result,
+      out BehaviorResult<WorldInteraction[]> __state, BlockEntityContainer be,
+      ItemSlot slot, IPlayer byPlayer, BlockSelection blockSel) {
+    return __instance.WalkCollectibleBehaviors(
+        null,
+        (CollectibleBehavior behavior, ref WorldInteraction[] result,
+         ref EnumHandling handled) => {
+          if (behavior is IContainedInteractable interactable) {
+            WorldInteraction[] interactions =
+                interactable.GetContainedInteractionHelp(be, slot, byPlayer,
+                                                         blockSel);
+            if (interactions != null) {
+              result =
+                  result == null ? interactions : result.Append(interactions);
+              handled = EnumHandling.Handled;
+            }
+          }
+        },
+        out __state, out __result);
+  }
+
+  [HarmonyPostfix]
+  [HarmonyPatch("GetContainedInteractionHelp")]
+  public static void GetContainedInteractionHelpPostfix(
+      BlockMeal __instance, ref WorldInteraction[] __result,
+      BehaviorResult<WorldInteraction[]> __state, BlockEntityContainer be,
+      ItemSlot slot, IPlayer byPlayer, BlockSelection blockSel) {
+    if (__state.Handled == EnumHandling.Handled) {
+      __result =
+          __result == null ? __state.Result : __result.Append(__state.Result);
+    }
   }
 }
 

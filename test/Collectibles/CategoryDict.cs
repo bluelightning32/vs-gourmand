@@ -1,11 +1,8 @@
 using System.Text;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using PrefixClassName.MsTest;
 
 using Vintagestory.API.Common;
-using Vintagestory.Common;
 
 namespace Gourmand.Test.Collectibles;
 

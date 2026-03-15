@@ -36,18 +36,21 @@ class GuiDialogPatch {
                                  ref bool ___rotateCharacter) {
     foreach (var val in __instance.Composers) {
       val.Value.Render(deltaTime);
-      if (val.Key == "playercharacter" && ___curTab == 0) {
-        // Render the avatar after rendering the playercharacter composer to
-        // which is belongs. The base game instead renders it after all of the
-        // composers, which causes it to go on top of other character dialog
-        // composers such as the environment and playerstats composers.
-        RenderAvatar(__instance, deltaTime, val.Value.Api, ___mat, ___lighPos,
-                     ___insetSlotBounds, ref ___yaw, ___rotateCharacter);
+      float depth = val.Value.zDepth;
+      if (val.Key == "playercharacter") {
+        if (___curTab == 0) {
+          // Render the avatar after rendering the playercharacter composer to
+          // which is belongs. The base game instead renders it after all of the
+          // composers, which causes it to go on top of other character dialog
+          // composers such as the environment and playerstats composers.
+          RenderAvatar(__instance, deltaTime, val.Value.Api, ___mat, ___lighPos,
+                       ___insetSlotBounds, ref ___yaw, ___rotateCharacter);
+        }
+        // The zDepth isn't initialized correctly for this dialog. Directly overwriting zDepth at this point causes the player character inventory slots to be rendered wrong. So just set it locally for the GlTranslate call below. If this large value is used for all dialogs (not just the character dialog), then the subsequent dialogs end up too far in the z direction and they are rendered on top of the hover cards for items in the player character dialog.
+        depth = __instance.ZSize;
       }
-      // Translate the z position so that the next composer does not z fight
-      // with the previous one. Ideally this would use val.Value.zDepth, but
-      // that isn't initialized correctly by the game.
-      val.Value.Api.Render.GlTranslate(0, 0, __instance.ZSize);
+      // Translate the z position so that the next composer is rendered on top of this one, instead of z fighting with this one.
+      val.Value.Api.Render.GlTranslate(0, 0, depth);
 
       __instance.MouseOverCursor = val.Value.MouseOverCursor;
     }

@@ -1,10 +1,7 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using PrefixClassName.MsTest;
 
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
-using Vintagestory.Common;
 
 namespace Gourmand.Test.Collectibles;
 
@@ -106,6 +103,7 @@ public class NutritionPropsCondition {
   [TestMethod]
   public void EnumerateMatchesCookedSatiety() {
     Item fishRaw = LoadAssets.GetItem("game", "fish-raw");
+    Assert.IsNotNull(fishRaw);
     Item fishCooked = LoadAssets.GetItem("game", "fish-cooked");
     // fish-raw cooks into fish-cooked.
     Assert.AreEqual(EnumSmeltType.Cook, fishRaw.CombustibleProps.SmeltingType);
@@ -166,6 +164,7 @@ public class NutritionPropsCondition {
   [TestMethod]
   public void EnumerateMatchesRefine() {
     Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
+    Assert.IsNotNull(pineapple);
     string json = $@"
     {{
       category: {{ value: ""Fruit"" }},

@@ -1,9 +1,6 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using PrefixClassName.MsTest;
 
 using Vintagestory.API.Common;
-using Vintagestory.API.Datastructures;
 
 namespace Gourmand.Test;
 

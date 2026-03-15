@@ -2,13 +2,13 @@
 	"type": "code",
 	"name": "Gourmand",
 	"modid": "gourmand",
-	"version": "1.8.6",
+	"version": "1.8.7",
 	
 	"description" : "Health buff for eating a greater variety of foods.",
 	"website": "https://github.com/bluelightning32/vs-gourmand",
 	"authors": [ "bluelightning32" ],
 	
 	"dependencies": {
-		"game": "1.21.5"
+		"game": "1.22.0-rc.2"
 	}
 }
