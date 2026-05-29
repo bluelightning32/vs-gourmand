@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Reflection;
 
 using HarmonyLib;
@@ -19,6 +20,17 @@ namespace Gourmand.Blocks;
 class BlockMealPatch {
   private static MethodInfo _PlacedBlockEating;
 
+  public static bool ShouldSkipPatch(string name, Patches existing) {
+    ReadOnlyCollection<string> existingOwners = existing?.Owners;
+    if (existingOwners != null && existingOwners.Count > 0) {
+      GourmandSystem.Logger.Debug("{0} is already patched by [{1}]. " +
+                                      "Skipping Gourmand's patch.",
+                                  name, string.Join(", ", existingOwners));
+      return true;
+    }
+    return false;
+  }
+
   [HarmonyPrepare]
   public static bool Prepare(MethodBase original) {
     if (original != null) {
@@ -26,11 +38,9 @@ class BlockMealPatch {
       // every method.
       return true;
     }
-    if (Harmony.GetPatchInfo(
-            typeof(BlockMeal).GetMethod("OnBlockInteractStop")) != null) {
-      GourmandSystem.Logger.Debug(
-          "BlockMeal.OnBlockInteractStop is already patched. " +
-          "Skipping Gourmand's patch.");
+    if (ShouldSkipPatch("BlockMeal.OnBlockInteractStop",
+                        Harmony.GetPatchInfo(typeof(BlockMeal).GetMethod(
+                            "OnBlockInteractStop")))) {
       return false;
     }
     _PlacedBlockEating = typeof(BlockMeal).PropertyGetter("PlacedBlockEating");

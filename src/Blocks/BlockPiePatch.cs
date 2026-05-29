@@ -22,11 +22,10 @@ class BlockPiePatch {
       // every method.
       return true;
     }
-    if (Harmony.GetPatchInfo(typeof(BlockMeal).GetMethod("GetHeldItemInfo")) !=
-        null) {
-      GourmandSystem.Logger.Debug(
-          "BlockPie.GetHeldItemInfo is already patched. " +
-          "Skipping Gourmand's patch.");
+    if (BlockMealPatch.ShouldSkipPatch(
+            "BlockPie.GetHeldItemInfo",
+            Harmony.GetPatchInfo(
+                typeof(BlockMeal).GetMethod("GetHeldItemInfo")))) {
       return false;
     }
     return true;
