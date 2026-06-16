@@ -40,7 +40,12 @@ class UpdateFoodAchievements : EntityBehavior {
           "{0} set current food to {1} - {2}", player.PlayerName,
           food?.Collectible?.Code.ToString() ?? "none", name);
     }
-    _eating = food;
+    // Clone the food in case it gets modified before the
+    // `OnEntityReceiveSaturation` call. This happens when drinking from bowl.
+    // BlockLiquidContainerBase removes the container contents from the original
+    // stack before calling `OnEntityReceiveSaturation`. So the orignal item
+    // appears empty when `OnEntityReceiveSaturation` is called.
+    _eating = food.Clone();
   }
 
   public override void OnEntityReceiveSaturation(
