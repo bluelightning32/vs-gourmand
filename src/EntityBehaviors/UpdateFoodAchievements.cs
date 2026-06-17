@@ -45,7 +45,7 @@ class UpdateFoodAchievements : EntityBehavior {
     // BlockLiquidContainerBase removes the container contents from the original
     // stack before calling `OnEntityReceiveSaturation`. So the orignal item
     // appears empty when `OnEntityReceiveSaturation` is called.
-    _eating = food.Clone();
+    _eating = food?.Clone();
   }
 
   public override void OnEntityReceiveSaturation(
