@@ -1,4 +1,5 @@
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 using HarmonyLib;
@@ -21,8 +22,20 @@ class BlockMealPatch {
   private static MethodInfo _PlacedBlockEating;
 
   public static bool ShouldSkipPatch(string name, Patches existing) {
-    ReadOnlyCollection<string> existingOwners = existing?.Owners;
-    if (existingOwners != null && existingOwners.Count > 0) {
+    HashSet<string> existingOwners = [..existing?.Owners ?? []];
+
+    // Do not apply the Gourmand patch if the target method is already patched
+    // by any mod that isn't allowlisted.
+    //
+    // attributerenderinglibrary patches every method that takes an ItemStack.
+    existingOwners.Remove("attributerenderinglibrary");
+    // HydrateOrDiedrate patches BlockMeal.GetHeldItemInfo. Somehow that gets
+    // reported as a patch for BlockPie.GetHeldItemInfo. The HydrateOrDiedrate
+    // does not duplicate the Gourmand patch's function of forwarding to the
+    // behaviors.
+    existingOwners.Remove("com.chronolegionnaire.hydrateordiedrate");
+
+    if (existingOwners.Count > 0) {
       GourmandSystem.Logger.Debug("{0} is already patched by [{1}]. " +
                                       "Skipping Gourmand's patch.",
                                   name, string.Join(", ", existingOwners));

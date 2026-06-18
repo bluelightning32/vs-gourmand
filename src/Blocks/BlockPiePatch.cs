@@ -38,7 +38,7 @@ class BlockPiePatch {
                                      bool withDebugInfo) {
     if (__instance.Class == "NotifyingPie") {
       // The NotifyingPie class from Novelty already forwards GetHeldItemInfo to
-      // behaviors. So return here to avoid calling the behaviors twice.z`
+      // behaviors. So return here to avoid calling the behaviors twice.
       return;
     }
     // The base class skips calling the behaviors. So call all the behaviors
