@@ -1,0 +1,10 @@
+[
+  {
+    dependsOn: [ { modId: "deartibusrusticis" } ],
+    code : {
+      match: "deartibusrusticis:herbalbread-*-perfect",
+      type: "item",
+      outputs: [ "bread-perfect" ]
+    },
+  },
+]

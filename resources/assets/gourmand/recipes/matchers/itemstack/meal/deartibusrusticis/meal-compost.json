@@ -1,0 +1,21 @@
+{
+  dependsOn: [ { modId: "deartibusrusticis" } ],
+  category: {
+    input: "edible-meal-container"
+  },
+  attributes: [
+    {
+      path: [ "recipeCode" ],
+      value: "compostmeal"
+    },
+    {
+      path: [ "quantityServings" ],
+      enumerateValues: [ 1 ]
+    },
+  ],
+  importRecipe: "compostmeal",
+  enumerateMax: 20,
+  outputs: {
+    "meal-category": [ "compostmeal" ]
+  }
+}

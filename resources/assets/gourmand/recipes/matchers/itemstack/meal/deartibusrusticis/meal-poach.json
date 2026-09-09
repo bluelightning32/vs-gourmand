@@ -1,0 +1,21 @@
+{
+  dependsOn: [ { modId: "deartibusrusticis" } ],
+  category: {
+    input: "edible-meal-container"
+  },
+  attributes: [
+    {
+      path: [ "recipeCode" ],
+      value: "poachmeal"
+    },
+    {
+      path: [ "quantityServings" ],
+      enumerateValues: [ 1 ]
+    },
+  ],
+  importRecipe: "poachmeal",
+  enumerateMax: 20,
+  outputs: {
+    "meal-category": [ "poachmeal" ]
+  }
+}

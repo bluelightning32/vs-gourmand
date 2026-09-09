@@ -14,6 +14,13 @@
           bonusAt: 7,
           bonus: 50,
           description: "expandedfoods-meal-desc"
+        },
+        {
+          dependsOn: [ { modId: "deartibusrusticis" }],
+          // Adds 4 meals
+          points: 0,
+          bonusAt: 4,
+          bonus: 25
         }
       ]
     },
@@ -71,6 +78,13 @@
           // oat bread, corn bread, and potato
           bonusAt: 3,
           bonus: 20
+        },
+        {
+          dependsOn: [ { modId: "deartibusrusticis" } ],
+          points: 0,
+          // 7 kinds of herb bread and 7 kinds of gingerbread
+          bonusAt: 14,
+          bonus: 100
         }
       ]
     },
@@ -155,6 +169,13 @@
           bonusAt: 30,
           bonus: 100
         },
+        {
+          dependsOn: [ { modId: "deartibusrusticis" } ],
+          points: 0,
+          // Adds 14 pies
+          bonusAt: 14,
+          bonus: 50
+        },
       ]
     },
     "sweetsavory" : {
@@ -201,6 +222,13 @@
           points: 0,
           bonusAt: 3,
           bonus: 36,
+        },
+        {
+          dependsOn: [ { modId: "deartibusrusticis" } ],
+          // Adds 6
+          points: 0,
+          bonusAt: 6,
+          bonus: 72,
         }
       ]
     },
@@ -339,6 +367,14 @@
       bonusAt: 15,
       // About 10 points per 3 foods
       bonus: 50
+    },
+    "spice" : {
+      dependsOn: [ { modId: "deartibusrusticis" } ],
+      points: 2,
+      // 9 total foods
+      bonusAt: 7,
+      // About 10 points per 3 foods
+      bonus: 25
     },
     "climate-spanning" : {
       points: 50,
