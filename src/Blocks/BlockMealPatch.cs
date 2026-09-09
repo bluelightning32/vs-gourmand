@@ -29,6 +29,8 @@ class BlockMealPatch {
     //
     // attributerenderinglibrary patches every method that takes an ItemStack.
     existingOwners.Remove("attributerenderinglibrary");
+    // The attributerenderinglibrary harmony name was updated to this on 2026-08-06.
+    existingOwners.Remove("ARL (Ignore this, look at stacktrace instead! in 99.9% cases the crash is not related to ARL)");
     // HydrateOrDiedrate patches BlockMeal.GetHeldItemInfo. Somehow that gets
     // reported as a patch for BlockPie.GetHeldItemInfo. The HydrateOrDiedrate
     // does not duplicate the Gourmand patch's function of forwarding to the
