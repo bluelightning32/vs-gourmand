@@ -1,0 +1,10 @@
+[
+  {
+    dependsOn: [ { modId: "wetcrops" } ],
+    code : {
+      match: "wetcrops:dough-*",
+      type: "item",
+      outputs: [ "dough" ]
+    },
+  }
+]

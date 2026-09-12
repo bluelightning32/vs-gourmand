@@ -1,0 +1,10 @@
+[
+  {
+    dependsOn: [ { modId: "wetcrops" } ],
+    code : {
+      match: "wetcrops:bread-*-perfect",
+      type: "item",
+      outputs: [ "bread-perfect" ]
+    },
+  },
+]

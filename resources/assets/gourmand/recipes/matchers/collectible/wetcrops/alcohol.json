@@ -1,0 +1,12 @@
+[
+  {
+    dependsOn: [ { modId: "wetcrops" } ],
+    code: {
+      match: "wetcrops:spiritportion-*",
+      type: "item",
+    },
+    outputs: {
+      "alcoholportion": [ "brandy" ]
+    }
+  },
+]

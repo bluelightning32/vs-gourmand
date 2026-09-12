@@ -26,7 +26,7 @@
     },
     "bread-perfect" : {
       points: 2,
-      // 7 total
+      // 7 total as of 1.22.2.
       bonusAt: 7,
       bonus: 50,
       add: [
@@ -85,7 +85,14 @@
           // 7 kinds of herb bread and 7 kinds of gingerbread
           bonusAt: 14,
           bonus: 100
-        }
+        },
+        {
+          dependsOn: [ { modId: "wetcrops" } ],
+          points: 0,
+          // 3 breads
+          bonusAt: 3,
+          bonus: 30,
+        },
       ]
     },
     "cheese" : {
@@ -132,9 +139,9 @@
     },
     "pie-category" : {
       points: 2,
-      // 42 total in the base game as of 1.21.0 rc3.
-      bonusAt: 32,
-      bonus: 100,
+      // 50 total in the base game as of 1.22.2.
+      bonusAt: 40,
+      bonus: 125,
       add: [
         {
           dependsOn: [ { modId: "expandedfoods" } ],
@@ -176,6 +183,13 @@
           bonusAt: 14,
           bonus: 50
         },
+        {
+          dependsOn: [ { modId: "wetcrops" } ],
+          points: 0,
+          // Adds 15 pies
+          bonusAt: 15,
+          bonus: 50
+        },
       ]
     },
     "sweetsavory" : {
@@ -192,8 +206,8 @@
     },
     "pickled-food" : {
       points: 10,
-      // 8 total
-      bonusAt: 7,
+      // 9 total as of 1.22.2.
+      bonusAt: 8,
       bonus: 100,
       add: [
         {
@@ -225,6 +239,13 @@
         },
         {
           dependsOn: [ { modId: "deartibusrusticis" } ],
+          // Adds 6
+          points: 0,
+          bonusAt: 6,
+          bonus: 72,
+        },
+        {
+          dependsOn: [ { modId: "wetcrops" } ],
           // Adds 6
           points: 0,
           bonusAt: 6,
@@ -381,9 +402,9 @@
     },
     "mushroom" : {
       points: 2,
-      // 37 total
-      bonusAt: 30,
-      bonus: 100,
+      // 45 total as of 1.22.2.
+      bonusAt: 38,
+      bonus: 125,
       add: [
         {
           dependsOn: [ { modId: "mycodiversity" } ],
@@ -396,9 +417,9 @@
     },
     "juice" : {
       points: 2,
-      // 16 total in base game
-      bonusAt: 12,
-      bonus: 100,
+      // 21 total in base game as of 1.22.2.
+      bonusAt: 17,
+      bonus: 130,
       add: [
         {
           dependsOn: [ { modId: "floralzonesmediterraneanregion" } ],
@@ -445,9 +466,9 @@
     },
     "cider" : {
       points: 3,
-      // 22 in base game
-      bonusAt: 18,
-      bonus: 100,
+      // 27 in base game as of 1.22.2.
+      bonusAt: 23,
+      bonus: 125,
       add: [
         {
           dependsOn: [ { modId: "floralzonesmediterraneanregion" } ],
@@ -476,6 +497,13 @@
           points: 0,
           bonusAt: 90,
           bonus: 450
+        },
+        {
+          dependsOn: [ { modId: "wetcrops" } ],
+          // contains 3 ciders
+          points: 0,
+          bonusAt: 3,
+          bonus: 15
         },
       ]
     },
