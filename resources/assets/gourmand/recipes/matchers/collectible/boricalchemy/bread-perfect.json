@@ -1,0 +1,10 @@
+[
+  {
+    dependsOn: [ { modId: "boricalchemy" } ],
+    code : {
+      match: "boricalchemy:bananabread-*-perfect",
+      type: "item",
+      outputs: [ "bread-perfect" ]
+    },
+  },
+]

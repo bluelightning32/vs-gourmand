@@ -93,6 +93,13 @@
           bonusAt: 3,
           bonus: 30,
         },
+        {
+          dependsOn: [ { modId: "boricalchemy" } ],
+          points: 0,
+          // 7 banana breads
+          bonusAt: 7,
+          bonus: 50,
+        },
       ]
     },
     "cheese" : {
@@ -193,10 +200,27 @@
       ]
     },
     "sweetsavory" : {
-      dependsOn: [ { modId: "expandedfoods" } ],
+      hideIfNoBonusAt: true,
       points: 2,
-      bonusAt: 7,
-      bonus: 100,
+      bonusAt: 0,
+      bonus: 0,
+      add: [
+        {
+          dependsOn: [ { modId: "expandedfoods" } ],
+          points: 0,
+          bonusAt: 7,
+          bonus: 100
+        },
+        {
+          dependsOn: [ { modId: "boricalchemy" } ],
+          points: 0,
+          // 3 ice creams
+          // 8 candies, but one is too deadly to require
+          // 2 jellies
+          bonusAt: 9,
+          bonus: 120
+        },
+      ]
     },
     "sushi" : {
       dependsOn: [ { modId: "expandedfoods" } ],

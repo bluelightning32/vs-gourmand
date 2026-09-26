@@ -1,0 +1,11 @@
+[
+  {
+    dependsOn: [ { modId: "boricalchemy" } ],
+    code : {
+      match: "boricalchemy:jelly_*-*",
+      type: "item",
+      trimstartparts: 1,
+      outputs: [ "sweetsavory" ]
+    }
+  }
+]

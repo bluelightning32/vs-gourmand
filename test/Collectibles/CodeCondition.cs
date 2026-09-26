@@ -145,4 +145,27 @@ public class CodeCondition {
         },
         cond.Categories.ToList());
   }
+
+  [TestMethod]
+  public void GetCategoriesTrimStartParts() {
+    string json = @"
+    {
+      match: ""game:fruit-*"", type: ""item"",
+      trimstartparts: 1,
+      outputs: [""category1""]
+    }
+    ";
+    Real.CodeCondition cond =
+        JsonObject.FromJson(json).AsObject<Real.CodeCondition>(null,
+                                                               "gourmand");
+    Dictionary<AssetLocation, IAttribute[]> categories =
+        new(cond.GetCategories(_resolver.Resolver, _resolver.CatDict,
+                               LoadAssets.GetItem("game", "fruit-pineapple")));
+    LoadAssets.AssertCategoriesEqual(
+        new Dictionary<AssetLocation, IAttribute> {
+          { new AssetLocation("gourmand", "category1"),
+            new StringAttribute("game:pineapple") },
+        },
+        categories);
+  }
 }
