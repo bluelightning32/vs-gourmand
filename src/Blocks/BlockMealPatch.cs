@@ -38,6 +38,10 @@ class BlockMealPatch {
     // does not duplicate the Gourmand patch's function of forwarding to the
     // behaviors.
     existingOwners.Remove("com.chronolegionnaire.hydrateordiedrate");
+    // Food Preferences intercepts many of the block interations. It forwards
+    // the interactions to the FoodPreferenceService. It does not forward the
+    // operations to behaviors.
+    existingOwners.Remove("com.justu.foodpreferences");
 
     if (existingOwners.Count > 0) {
       GourmandSystem.Logger.Debug("{0} is already patched by [{1}]. " +
