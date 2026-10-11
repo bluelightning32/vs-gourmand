@@ -45,12 +45,15 @@ public class CodeCondition : ICondition {
   }
 
   public bool IsMatch(CollectibleObject c) {
-    if (c.ItemClass != Type) return false;
-    if (!WildcardUtil.Match(Match, c.Code)) return false;
+    if (c.ItemClass != Type)
+      return false;
+    if (!WildcardUtil.Match(Match, c.Code))
+      return false;
     int pos = 0;
     for (int i = 0; i < TrimStartParts; ++i) {
       pos = c.Code.Path.IndexOf('-', pos);
-      if (pos == -1) return false;
+      if (pos == -1)
+        return false;
       ++pos;
     }
     return true;
@@ -72,8 +75,7 @@ public class CodeCondition : ICondition {
         matchString = match.Code.ToString();
       }
       yield return new KeyValuePair<AssetLocation, IAttribute[]>(
-          category,
-          [new StringAttribute(matchString)]);
+          category, [new StringAttribute(matchString)]);
     }
   }
 }
