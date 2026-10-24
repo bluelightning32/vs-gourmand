@@ -672,6 +672,45 @@ public class FoodAchievements {
     return lostPoints;
   }
 
+  public int ClearUnknownLost(IWorldAccessor resolver, CategoryDict catdict,
+                              ITreeAttribute moddata) {
+    ITreeAttribute lost = moddata.GetOrAddTreeAttribute("lost");
+    List<string> removeAchievements = [];
+    int removed = 0;
+    foreach (KeyValuePair<string, IAttribute> entry in lost) {
+      AssetLocation achievementAsset = new(entry.Key);
+      if (!_achievements.TryGetValue(achievementAsset,
+                                     out AchievementPoints achievement)) {
+        removeAchievements.Add(entry.Key);
+        continue;
+      }
+      List<string> removeFoods = [];
+      ITreeAttribute lostValues = (ITreeAttribute)entry.Value;
+      foreach (KeyValuePair<string, IAttribute> lostEntry in lostValues) {
+        ItemStack stack = ((ItemstackAttribute)lostEntry.Value).value;
+        // Prevent foods that were added in legacy versions of the mod from
+        // showing up as rotten. Current versions of the mod clear this
+        // attribute before adding it to the eaten or lost food lists.
+        ClearFoodCreatedTime(stack);
+        stack.ResolveBlockOrItem(resolver);
+
+        CategoryValue value = catdict.GetValue(resolver, entry.Key, stack);
+        if (value == null || value.Value == null) {
+          removeFoods.Add(lostEntry.Key);
+        }
+      }
+      foreach (string categoryValue in removeFoods) {
+        lostValues.RemoveAttribute(categoryValue);
+        ++removed;
+      }
+    }
+    foreach (string achievement in removeAchievements) {
+      lost.RemoveAttribute(achievement);
+      ++removed;
+    }
+    return removed;
+  }
+
   public static implicit operator FoodAchievements(AchievementPoints v) {
     throw new NotImplementedException();
   }

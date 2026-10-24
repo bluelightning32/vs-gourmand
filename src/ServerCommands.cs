@@ -80,6 +80,11 @@ public class ServerCommands {
         .WithDesc("Explains whether the held item matches a category.")
         .WithArgs(_sapi.ChatCommands.Parsers.Word("category"))
         .HandleWith(IsMatch)
+        .EndSub()
+        .BeginSub("clearunknownlost")
+        .WithDesc("Remove lost foods that are no longer recognized as food " +
+                  "achievements.")
+        .HandleWith(ClearUnknownLost)
         .EndSub();
   }
 
@@ -196,5 +201,14 @@ public class ServerCommands {
     GourmandSystem gourmand = _sapi.ModLoader.GetModSystem<GourmandSystem>();
     return TextCommandResult.Success(
         gourmand.CatDict.ExplainMatch(_sapi.World, category, held));
+  }
+
+  private TextCommandResult ClearUnknownLost(TextCommandCallingArgs args) {
+    Entity targetEntity = args.Caller.Entity;
+    UpdateFoodAchievements behavior =
+        targetEntity.GetBehavior<UpdateFoodAchievements>();
+    int removed = behavior.ClearUnknownLost();
+    return TextCommandResult.Success(
+        $"Removed a total of {removed} unknown food(s) and achievement(s).");
   }
 }

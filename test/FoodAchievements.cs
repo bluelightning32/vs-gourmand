@@ -216,4 +216,75 @@ public class FoodAchievements {
     Assert.AreEqual(2, fruit.Item2.BonusAt);
     Assert.AreEqual(100, fruit.Item2.Bonus);
   }
+
+  [TestMethod]
+  public void RemoveAchievements() {
+    Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
+    Item cranberry = LoadAssets.GetItem("game", "fruit-cranberry");
+
+    TreeAttribute moddata = new();
+    int firstFruitGained = LoadedAchievements.AddAchievements(
+        LoadAssets.Server.World, CatDict, moddata, new ItemStack(pineapple));
+    Assert.IsGreaterThan(0, firstFruitGained);
+    int secondFruitGained = LoadedAchievements.AddAchievements(
+        LoadAssets.Server.World, CatDict, moddata, new ItemStack(cranberry));
+    Assert.IsGreaterThan(0, secondFruitGained);
+
+    int lostPoints = LoadedAchievements.RemoveAchievements(
+        LoadAssets.Server.World, CatDict, moddata, new ItemStack(pineapple));
+    Assert.AreEqual(secondFruitGained, lostPoints);
+
+    TreeAttribute lost = (TreeAttribute)moddata.GetTreeAttribute("lost");
+    string fruitAchievement = "gourmand:achievement-fruit";
+    // The lost tree is first indexed by the achievement name.
+    CollectionAssert.AreEquivalent(new List<string>() { fruitAchievement },
+                                   lost.Keys);
+    TreeAttribute lostFruits =
+        (TreeAttribute)lost.GetTreeAttribute(fruitAchievement);
+
+    // Inside the lost achievement tree, each entry is indexed by its category
+    // value. The achievement-fruit matcher gets its value from the edible-code
+    // matcher. The edible-code matcher outputs both the item code and a fixed
+    // "item" value.
+    CollectionAssert.AreEquivalent(
+        new List<string>() { $"item,{pineapple.Code}" }, lostFruits.Keys);
+
+    ItemStack stack = ((ItemstackAttribute)lostFruits.First().Value).value;
+    stack.ResolveBlockOrItem(LoadAssets.Server.World);
+    Assert.AreEqual(pineapple.Code, stack.Collectible.Code);
+  }
+
+  [TestMethod]
+  public void ClearUnknownLost() {
+    Item pineapple = LoadAssets.GetItem("game", "fruit-pineapple");
+    Item firestarter = LoadAssets.GetItem("game", "firestarter");
+
+    TreeAttribute moddata = new();
+    int firstFruitGained = LoadedAchievements.AddAchievements(
+        LoadAssets.Server.World, CatDict, moddata, new ItemStack(pineapple));
+    Assert.IsGreaterThan(0, firstFruitGained);
+
+    LoadedAchievements.RemoveAchievements(LoadAssets.Server.World, CatDict,
+                                          moddata, new ItemStack(pineapple));
+
+    TreeAttribute lost = (TreeAttribute)moddata.GetTreeAttribute("lost");
+    string fruitAchievement = "gourmand:achievement-fruit";
+    // The lost tree is first indexed by the achievement name.
+    CollectionAssert.AreEquivalent(new List<string>() { fruitAchievement },
+                                   lost.Keys);
+    TreeAttribute lostFruits =
+        (TreeAttribute)lost.GetTreeAttribute(fruitAchievement);
+
+    CollectionAssert.AreEquivalent(
+        new List<string>() { $"item,{pineapple.Code}" }, lostFruits.Keys);
+
+    ItemStack firestarterStack = new(firestarter);
+    lostFruits.SetItemstack("gourmand:badcategoryvalue", firestarterStack);
+
+    int removed = LoadedAchievements.ClearUnknownLost(LoadAssets.Server.World,
+                                                      CatDict, moddata);
+    Assert.AreEqual(1, removed);
+    CollectionAssert.AreEquivalent(
+        new List<string>() { $"item,{pineapple.Code}" }, lostFruits.Keys);
+  }
 }

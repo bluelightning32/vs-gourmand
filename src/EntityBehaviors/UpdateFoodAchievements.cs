@@ -114,6 +114,12 @@ class UpdateFoodAchievements : EntityBehavior {
     return FoodAchievements.GetLost(entity.Api.World, GetModData());
   }
 
+  public int ClearUnknownLost() {
+    GourmandSystem gourmand = GetGourmandSystem();
+    return gourmand.FoodAchievements.ClearUnknownLost(
+        entity.Api.World, gourmand.CatDict, GetModData());
+  }
+
   public ITreeAttribute GetModData() {
     return FoodAchievements.GetModData(entity);
   }
