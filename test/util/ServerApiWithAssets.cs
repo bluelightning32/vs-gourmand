@@ -72,6 +72,10 @@ class ServerApiWithAssets {
       ServerMain.Logger = new NullLogger();
     }
 
+    Lang.ChangeLanguage("en");
+    Lang.AvailableLanguages.Add(Lang.CurrentLocale,
+                                new FakeTranslationService());
+
     StartServerArgs serverArgs = new();
     string[] rawArgs = Array.Empty<string>();
     ServerProgramArgs programArgs = new();
@@ -85,12 +89,17 @@ class ServerApiWithAssets {
     systemsField.SetValue(server, Array.Empty<ServerSystem>());
 
     server.ModEventManager = new ServerEventManager(server);
+    server.EventManager =
+        new CoreServerEventManager(server, server.ModEventManager);
+    server.PlayerDataManager = new(server) { PlayerDataByUid = new() };
+
     server.AssetManager =
         new AssetManager(GamePaths.AssetsPath, EnumAppSide.Server);
     server.AssetManager.InitAndLoadBaseAssets(logDebug ? api.Logger : null);
 
     Lang.Load(api.Logger, server.AssetManager);
     server.Config = new();
+    server.Config.InitializeRoles();
     SaveGame saveGame = SaveGame.CreateNew(server.Config);
     FieldInfo saveGameDataField = server.GetType().GetField(
         "SaveGameData", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -178,10 +187,13 @@ class ServerApiWithAssets {
       server.AssetManager.CustomModOrigins[i] = new FilterOrigin(
           server.AssetManager.CustomModOrigins[i], allowAssetFiles);
     }
+    server.AssetManager.CustomAppOrigins.Add(
+        new FolderOrigin(GourmandResourcesPath));
 
     server.AssetManager.AddExternalAssets(api.Logger, loader);
 
     loader.RunModPhase(ModRunPhase.AssetsLoaded);
+    loader.RunModPhase(ModRunPhase.AssetsFinalize);
 
     // OnLoadedNative is usually called by ServerSystemBlockSimulation, but this
     // simplified server does not start that.

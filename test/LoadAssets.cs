@@ -2,6 +2,7 @@ using PrefixClassName.MsTest;
 
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
+using Vintagestory.API.Server;
 using Vintagestory.Server;
 
 using Real = Gourmand;
@@ -14,6 +15,8 @@ public class LoadAssets {
   // https://learn.microsoft.com/en-us/visualstudio/test/how-to-create-a-data-driven-unit-test?view=vs-2022#add-a-testcontext-to-the-test-class
   public TestContext TestContext { get; set; } = null!;
   public static ServerMain Server = null;
+
+  public static ICoreServerAPI ServerApi => (ICoreServerAPI)Server.Api;
 
   [AssemblyInitialize()]
   public static void AssemblyInitialize(TestContext context) {

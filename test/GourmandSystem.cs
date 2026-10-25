@@ -8,7 +8,7 @@ namespace Gourmand.Test;
 public class GourmandSystem {
   [TestMethod]
   public void Logger() {
-    // Checking the logger also verifies that the mod was loaded.
+    // Trying to read the logger also verifies that the mod was loaded.
     Assert.IsNotNull(Real.GourmandSystem.Logger);
   }
 }
