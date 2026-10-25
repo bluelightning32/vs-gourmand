@@ -96,14 +96,23 @@ class ServerApiWithAssets {
         "SaveGameData", BindingFlags.Instance | BindingFlags.NonPublic);
     saveGameDataField.SetValue(server, saveGame);
 
-    // The mod loader is hardcoded to load libraries from
-    // AppDomain.CurrentDomain.BaseDirectory. The only way to change that
-    // property in .net 7 is to set the following variable.
-    AppContext.SetData("APP_CONTEXT_BASE_DIRECTORY", vsPath);
-    ModLoader loader =
-        new(api, Array.Empty<string>(), server.progArgs.TraceLog);
+    // AppDomain.CurrentDomain.BaseDirectory points to something like
+    // "source/test/bin/Debug/net10.0". The mod loader expects mods to either be
+    // in zip files or subdirectories with a modinfo.json. The project mod DLL
+    // and modinfo.json were copied to the net10.0 directory. Adding its parent
+    // directory to the search path causes ModLoader.LoadModInfos to view
+    // net10.0 as the mod's subdirectory and load the project DLL from there.
+    string testModDir =
+        Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..");
+
+    // The mod loader constructor loads some VS DLLs. It is hardcoded to load
+    // them from AppDomain.CurrentDomain.BaseDirectory, expecting that to be the
+    // VS installation directory. The preferred way to change that property in
+    // .net 8+ is to set the following variable.
+    AppDomain.CurrentDomain.SetData("APP_CONTEXT_BASE_DIRECTORY", vsPath);
+    ModLoader loader = new(api, [testModDir], server.progArgs.TraceLog);
     // Reset the AppDomain.CurrentDomain.BaseDirectory.
-    AppContext.SetData("APP_CONTEXT_BASE_DIRECTORY", null);
+    AppDomain.CurrentDomain.SetData("APP_CONTEXT_BASE_DIRECTORY", null);
 
     FieldInfo modLoaderField = api.GetType().GetField(
         "modLoader", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -133,6 +142,8 @@ class ServerApiWithAssets {
                                              new object[] { modInfo });
       mods.Add(modContainer);
     }
+    // Add the project's mod to the list.
+    mods.AddRange(loader.LoadModInfos());
 
     loader.LoadMods(mods);
 

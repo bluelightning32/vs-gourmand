@@ -53,6 +53,15 @@
         Encoding="Unicode"/>
   </Target>
 
+  <!-- Copy the modinfo.json file to the output directory so that the project mod
+       mod can be loaded from the test output directory. -->
+  <Target Name="modinfo" AfterTargets="Build" Inputs="../resources/modinfo.json" Outputs="$(OutputPath)modinfo.json">
+    <Copy
+      SourceFiles="../resources/modinfo.json"
+      DestinationFiles="$(OutputPath)modinfo.json"
+      SkipUnchangedFiles="true"/>
+  </Target>
+
   <!--
     Add an empty target so that DllOnly builds just the main dll when run for
     the solution. -->
