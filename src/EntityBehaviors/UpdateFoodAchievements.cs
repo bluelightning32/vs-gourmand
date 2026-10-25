@@ -10,7 +10,7 @@ using Vintagestory.GameContent;
 
 namespace Gourmand.EntityBehaviors;
 
-class UpdateFoodAchievements : EntityBehavior {
+public class UpdateFoodAchievements : EntityBehavior {
   private ItemStack _eating = null;
   private EntityBehaviorHealth _healthBehavior = null;
 
@@ -116,8 +116,12 @@ class UpdateFoodAchievements : EntityBehavior {
 
   public int ClearUnknownLost() {
     GourmandSystem gourmand = GetGourmandSystem();
-    return gourmand.FoodAchievements.ClearUnknownLost(
+    int removed = gourmand.FoodAchievements.ClearUnknownLost(
         entity.Api.World, gourmand.CatDict, GetModData());
+    if (removed > 0) {
+      MarkDirty(gourmand);
+    }
+    return removed;
   }
 
   public ITreeAttribute GetModData() {
