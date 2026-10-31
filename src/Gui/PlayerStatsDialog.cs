@@ -73,6 +73,14 @@ public class PlayerStatsDialog {
   }
 
   private void UpdateStatBars() {
+    GuiComposer playerstats = _dialog.Composers["playerstats"];
+    if (playerstats == null) {
+      // The Disorentation mod removes the playerstats dialog. In this case,
+      // there is no Gourmand status bar to update.
+      return;
+    }
+    GuiElementStatbar bar = playerstats.GetStatbar("gourmandBar");
+
     EntityPlayer entity = _capi.World.Player.Entity;
     ITreeAttribute modData = FoodAchievements.GetModData(entity);
 
@@ -83,8 +91,6 @@ public class PlayerStatsDialog {
     float health = foodAchievements.GetHealthFunctionPiece(
         points, out float gainRate, out int untilPoints);
 
-    GuiComposer playerstats = _dialog.Composers["playerstats"];
-    GuiElementStatbar bar = playerstats.GetStatbar("gourmandBar");
     float max = gourmand.FoodAchievements.HealthPoints[^1].Health;
     bar.SetLineInterval(max / 10);
     bar.SetValues(health, 0, max);
